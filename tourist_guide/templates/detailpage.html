@@ -1,0 +1,2232 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Premium Tour Details
+{% endblock %}
+
+{% block content %}
+
+<!-- ================= FLATPICKR ================= -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<section class="bg-[#f6f8fc] min-h-screen pt-28 pb-4">
+
+    <div class=" mx-auto px-4 lg:px-16">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+            <!-- ================= LEFT ================= -->
+
+            <div class="lg:col-span-8">
+
+                <!-- BREADCRUMB -->
+
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-5">
+
+
+                    <a href="#" class="hover:text-cyan-600">
+                        India
+                    </a>
+
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+
+                    <a href="#" class="hover:text-cyan-600">
+                        Hyderabad
+                    </a>
+
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+
+                    <span class="text-gray-700 font-medium">
+                        Tour Details
+                    </span>
+
+                </div>
+
+                <!-- TITLE -->
+
+                <h1 class="text-2xl lg:text-4xl font-black leading-tight text-[#0B1F44]">
+
+                    Hyderabad: Golconda Fort and Qutub Shahi Tombs Half-Day Tour
+
+                </h1>
+
+                <!-- RATING -->
+
+                <div class="flex flex-wrap items-center gap-6 mt-5">
+
+                    <div class="flex items-center gap-2">
+
+                        <div class="text-yellow-400 text-lg">
+                            ★★★★★
+                        </div>
+
+                        <span class="font-bold text-gray-800">
+                            4.8
+                        </span>
+
+                        <span class="text-gray-500">
+                            (2,350 reviews)
+                        </span>
+
+                    </div>
+
+                    <div class="flex items-center gap-2 text-gray-600">
+
+                        <i class="fa-solid fa-clock text-cyan-500"></i>
+
+                        5 Hours
+
+                    </div>
+
+                    <div class="flex items-center gap-2 text-gray-600">
+
+                        <i class="fa-solid fa-user-group text-cyan-500"></i>
+
+                        Small Group
+
+                    </div>
+
+                </div>
+
+                <!-- ================= IMAGE GALLERY ================= -->
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+
+                    <!-- BIG -->
+
+                    <div class="col-span-2 row-span-2 overflow-hidden rounded-[30px]">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1200"
+                            class="w-full h-full object-cover hover:scale-110 duration-500"
+                        >
+
+                    </div>
+
+                    <!-- SMALL -->
+
+                    <div class="overflow-hidden rounded-[30px]">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989?q=80&w=1200"
+                            class="w-full h-[220px] object-cover hover:scale-110 duration-500"
+                        >
+
+                    </div>
+
+                    {% comment %} <div class="overflow-hidden rounded-[30px]">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=1200"
+                            class="w-full h-[220px] object-cover hover:scale-110 duration-500"
+                        >
+
+                    </div>
+
+                    <div class="overflow-hidden rounded-[30px]">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1200"
+                            class="w-full h-[220px] object-cover hover:scale-110 duration-500"
+                        >
+
+                    </div> {% endcomment %}
+
+                    <!-- VIEW ALL -->
+
+                    <div class="relative overflow-hidden rounded-[30px]">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200"
+                            class="w-full h-[220px] object-cover hover:scale-110 duration-500"
+                        >
+
+                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+
+                            <button
+                                onclick="openGallery()"
+                                class="bg-white text-[#0B1F44] px-2 text-sm py-1 rounded-full font-bold shadow-xl hover:scale-105 duration-300"
+                            >
+
+                                + View All Photos
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= HIGHLIGHTS ================= -->
+
+
+                <!-- ================= SELECTED TOUR OPTION ================= -->
+
+<div
+    id="selectedTourCard"
+    class="hidden mt-8 bg-white border-2 border-[#1677e6] rounded-[28px] p-6 shadow-sm"
+>
+
+    <!-- TOP -->
+
+    <div class="flex items-start justify-between gap-5">
+
+        <div>
+
+            <h2 class="text-2xl font-bold text-[#111827]">
+
+                Join-in Tour at Meeting Point
+
+            </h2>
+
+            <p class="text-gray-500 mt-3 leading-7 max-w-3xl">
+
+                Shared tour where guests from other bookings may join.
+                Guests are requested to reach the meeting point directly.
+
+            </p>
+
+        </div>
+
+        <button
+            class="text-[#1677e6] text-xl"
+        >
+
+            <i class="fa-solid fa-chevron-up"></i>
+
+        </button>
+
+    </div>
+
+    <!-- INFO -->
+
+    <div class="flex flex-wrap gap-8 mt-6">
+
+        <div class="flex items-center gap-3 text-[#111827]">
+
+            <i class="fa-regular fa-clock text-[#1677e6]"></i>
+
+            <span class="font-medium">
+
+                Duration: 3 Hours
+
+            </span>
+
+        </div>
+
+        <div class="flex items-center gap-3 text-[#111827]">
+
+            <i class="fa-solid fa-user-group text-[#1677e6]"></i>
+
+            <span class="font-medium">
+
+                Guide: English
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- LOCATION -->
+
+    <div class="flex items-start gap-3 mt-5">
+
+        <i class="fa-solid fa-location-dot text-[#1677e6] mt-1"></i>
+
+        <p class="font-medium text-[#111827]">
+
+            Meet at Charminar Rd, Char Kaman,
+            Ghansi Bazaar, Hyderabad
+
+        </p>
+
+    </div>
+
+    <!-- DIVIDER -->
+
+    <div class="border-t border-gray-200 my-7"></div>
+
+    <!-- DATE -->
+
+    <div>
+
+        <h3 class="font-bold text-[#111827] text-lg">
+
+            Select a starting time
+
+        </h3>
+
+        <p
+            id="selectedDateText"
+            class="text-gray-500 mt-2"
+        >
+
+            Saturday, May 23, 2026
+
+        </p>
+
+    </div>
+
+    <!-- TIME BUTTONS -->
+
+    <div class="flex flex-wrap gap-4 mt-5">
+
+        <button
+            class="bg-[#071B3B] text-white font-bold px-7 py-4 rounded-2xl"
+        >
+
+            9:00 AM
+
+        </button>
+
+        <button
+            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
+        >
+
+            10:00 AM
+
+        </button>
+
+        <button
+            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
+        >
+
+            11:00 AM
+
+        </button>
+
+        <button
+            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
+        >
+
+            12:00 PM
+
+        </button>
+
+        <button
+            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
+        >
+
+            1:00 PM
+
+        </button>
+
+    </div>
+
+    <!-- DIVIDER -->
+
+    <div class="border-t border-gray-200 my-7"></div>
+
+    <!-- FEATURES -->
+
+    <div class="space-y-4">
+
+        <div class="flex items-center gap-3">
+
+            <i class="fa-regular fa-calendar-check text-[#1677e6]"></i>
+
+            <span class="text-[#111827]">
+
+                Cancel before 9:00 AM for full refund
+
+            </span>
+
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <i class="fa-regular fa-credit-card text-[#1677e6]"></i>
+
+            <span class="text-[#111827]">
+
+                Reserve now & pay later
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+
+    <div class="border-t border-gray-200 my-7"></div>
+
+    <!-- BOTTOM -->
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+        <!-- PRICE -->
+
+        <div>
+
+            <h2 class="text-4xl font-black text-[#111827]">
+
+                ₹45,500
+
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+
+                13 Adults × ₹3,500
+
+            </p>
+
+            <p class="text-sm text-gray-400 mt-1">
+
+                All taxes and fees included
+
+            </p>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="flex gap-4">
+
+
+    <a href="{% url 'payment_details' %}"
+       class="w-full bg-[#071B3B] hover:bg-[#071B3B] text-white py-2 px-2 rounded-2xl font-bold text-medium transition duration-300 shadow-lg hover:shadow-xl flex items-center justify-center">
+       
+        BOOK NOW
+
+    </a>
+{% comment %} </div> {% endcomment %}
+
+        
+
+        </div>
+
+    </div>
+
+</div>
+
+                <!-- ================= TABS + CONTENT SECTION ================= -->
+
+<div class="mt-10">
+
+    <!-- ================= STICKY TABS ================= -->
+
+    <div class="sticky top-[72px] z-40">
+
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-x-auto">
+
+            <div class="flex min-w-max">
+
+                <button onclick="showTab('overview')" id="tab-overview"
+                    class="tourTab activeTab">
+                    Overview
+                </button>
+
+                <button onclick="showTab('highlights')" id="tab-highlights"
+                    class="tourTab">
+                    Highlights
+                </button>
+
+                <button onclick="showTab('included')" id="tab-included"
+                    class="tourTab">
+                    Included
+                </button>
+
+                <button onclick="showTab('itinerary')" id="tab-itinerary"
+                    class="tourTab">
+                    Itinerary
+                </button>
+
+                <button onclick="showTab('reviews')" id="tab-reviews"
+                    class="tourTab">
+                    Reviews
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div id="overview" class="tabContent mt-8">
+
+<!-- ================= TOUR FEATURES ================= -->
+
+<div class="mt-10 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-6 lg:p-8">
+
+    <!-- TOP TITLE -->
+
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-8">
+
+        <div>
+
+            <h2 class="text-3xl font-black text-[#111827]">
+
+                Tour Features
+
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+                Everything included in your premium experience
+            </p>
+
+        </div>
+
+        <div
+            class="bg-[#f8fbff] border border-blue-100 rounded-full px-5 py-2 text-[#1677e6] font-semibold text-sm"
+        >
+
+            Premium Experience
+
+        </div>
+
+    </div>
+
+    <!-- FEATURES GRID -->
+
+    <div class="grid md:grid-cols-2 gap-5">
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1677e6] flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Free cancellation
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Cancel up to 24 hours in advance for a full refund.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-credit-card"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Reserve now & pay later
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Keep your travel plans flexible and pay nothing today.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Duration 4 - 8 hours
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Check availability to see starting times.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-pink-50 text-pink-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Skip the line entry
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Enjoy fast-track access through a separate entrance.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-user-tie"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Live tour guide
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Learn fascinating stories and insights from expert guides.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-language"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Languages offered
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        English, Hindi and Telugu available.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-yellow-50 text-yellow-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-bus"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Pickup included
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Pickup and drop available from selected locations.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div
+            class="group bg-[#fafcff] border border-gray-100 rounded-[28px] p-5 hover:border-[#1677e6] hover:shadow-lg transition-all duration-300"
+        >
+
+            <div class="flex gap-5">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition"
+                >
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-[#111827] text-lg">
+
+                        Private group available
+
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 leading-7">
+
+                        Enjoy a comfortable and personalized private tour option.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+            
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</div>
+
+    </div>
+
+    <!-- ================= HIGHLIGHTS ================= -->
+
+    <div id="highlights" class="tabContent hidden mt-8">
+
+<!-- ================= HIGHLIGHTS ================= -->
+
+<div class="mt-8 bg-white border border-gray-200 rounded-2xl p-6">
+
+    <!-- TITLE -->
+
+    <h2 class="text-2xl font-bold text-[#111827] mb-5">
+
+        Highlights
+
+    </h2>
+
+    <!-- LIST -->
+
+    <ul class="space-y-4">
+
+        <li class="flex items-start gap-3">
+
+            <i class="fa-solid fa-circle-check text-[#1677e6] mt-1 text-sm"></i>
+
+            <p class="text-gray-700 leading-7">
+
+                Explore the historic Charminar, Hyderabad’s most iconic landmark.
+
+            </p>
+
+        </li>
+
+        <li class="flex items-start gap-3">
+
+            <i class="fa-solid fa-circle-check text-[#1677e6] mt-1 text-sm"></i>
+
+            <p class="text-gray-700 leading-7">
+
+                Wander through the vibrant Laad Bazaar famous for colorful bangles and local crafts.
+
+            </p>
+
+        </li>
+
+        <li class="flex items-start gap-3">
+
+            <i class="fa-solid fa-circle-check text-[#1677e6] mt-1 text-sm"></i>
+
+            <p class="text-gray-700 leading-7">
+
+                Discover the grandeur of Chowmahalla Palace and the rich history of the Nizams.
+
+            </p>
+
+        </li>
+
+        <li class="flex items-start gap-3">
+
+            <i class="fa-solid fa-circle-check text-[#1677e6] mt-1 text-sm"></i>
+
+            <p class="text-gray-700 leading-7">
+
+                Visit the impressive Golconda Fort and learn its fascinating acoustic secrets.
+
+            </p>
+
+        </li>
+
+        <li class="flex items-start gap-3">
+
+            <i class="fa-solid fa-circle-check text-[#1677e6] mt-1 text-sm"></i>
+
+            <p class="text-gray-700 leading-7">
+
+                Admire the beautiful architecture of the Qutub Shahi Tombs and Mecca Masjid.
+
+            </p>
+
+        </li>
+
+    </ul>
+
+</div>
+
+    </div>
+
+    <!-- ================= INCLUDED ================= -->
+
+    <div id="included" class="tabContent hidden mt-8">
+
+        <div class="bg-white rounded-[30px] border border-gray-200 shadow-sm p-8">
+
+            <h2 class="text-[30px] font-extrabold text-[#111827] mb-8">
+
+                Included
+
+            </h2>
+
+            <div class="grid md:grid-cols-1 gap-6">
+
+                <div class="flex items-center gap-4">
+
+                    <i class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+
+                    <span class="text-gray-700">
+                        Hotel pickup & drop
+                    </span>
+
+                </div>
+
+                <div class="flex items-center gap-4">
+
+                    <i class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+
+                    <span class="text-gray-700">
+                        Entry tickets
+                    </span>
+
+                </div>
+
+                <div class="flex items-center gap-4">
+
+                    <i class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+
+                    <span class="text-gray-700">
+                        Professional local guide
+                    </span>
+
+                </div>
+
+                <div class="flex items-center gap-4">
+
+                    <i class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+
+                    <span class="text-gray-700">
+                        Water bottle
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= ITINERARY ================= -->
+
+    <div id="itinerary" class="tabContent hidden mt-8">
+
+<!-- ================= IMPORTANT INFO SECTION ================= -->
+
+<div class="mt-8 grid md:grid-cols-1 gap-6">
+
+
+        <div class="bg-white border border-gray-200 rounded-2xl p-6">
+
+        <!-- TITLE -->
+
+        <h2 class="text-2xl font-bold text-[#111827] mb-6">
+
+            Know before you go
+
+        </h2>
+
+        <!-- ALERT BOX -->
+
+        <div class="bg-orange-50 border border-orange-200 rounded-xl p-5">
+
+            <div class="flex items-start gap-4">
+
+                <div
+                    class="w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center shrink-0"
+                >
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-semibold text-[#111827]">
+
+                        Important Information
+
+                    </h3>
+
+                    <p class="text-gray-600 leading-7 mt-2">
+
+                        Mecca Masjid or Chowmahalla Palace may remain closed
+                        on Fridays due to weekly holidays or prayer timings.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- ================= WHAT TO BRING ================= -->
+
+    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+
+        <!-- HEADER -->
+
+        <div class="flex items-center justify-between">
+
+            <h2 class="text-2xl font-bold text-[#111827]">
+
+                What to bring
+
+            </h2>
+
+            <button
+                onclick="toggleBring()"
+                id="bringBtn"
+                class="text-[#1677e6] font-medium hover:underline"
+            >
+
+                See more
+
+            </button>
+
+        </div>
+
+        <!-- CONTENT -->
+
+        <div
+            id="bringContent"
+            class="mt-6 max-h-[180px] overflow-hidden transition-all duration-300"
+        >
+
+            <ul class="space-y-4">
+
+                <li class="flex items-start gap-3">
+
+                    <i class="fa-solid fa-passport text-[#1677e6] mt-1"></i>
+
+                    <span class="text-gray-700">
+
+                        Passport or ID card
+
+                    </span>
+
+                </li>
+
+                <li class="flex items-start gap-3">
+
+                    <i class="fa-solid fa-shoe-prints text-[#1677e6] mt-1"></i>
+
+                    <span class="text-gray-700">
+
+                        Comfortable shoes
+
+                    </span>
+
+                </li>
+
+                <li class="flex items-start gap-3">
+
+                    <i class="fa-solid fa-glasses text-[#1677e6] mt-1"></i>
+
+                    <span class="text-gray-700">
+
+                        Sunglasses
+
+                    </span>
+
+                </li>
+
+                <li class="flex items-start gap-3">
+
+                    <i class="fa-solid fa-hat-cowboy text-[#1677e6] mt-1"></i>
+
+                    <span class="text-gray-700">
+
+                        Sun hat
+
+                    </span>
+
+                </li>
+
+                <li class="flex items-start gap-3">
+
+                    <i class="fa-solid fa-camera text-[#1677e6] mt-1"></i>
+
+                    <span class="text-gray-700">
+
+                        Camera
+
+                    </span>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- ================= KNOW BEFORE YOU GO ================= -->
+
+
+
+</div>
+
+
+    </div>
+
+    <!-- ================= REVIEWS ================= -->
+
+    <div id="reviews" class="tabContent hidden mt-8">
+
+<!-- ================= REVIEWS SECTION ================= -->
+
+<div class="mt-10 bg-white rounded-2xl border border-gray-200 p-6">
+
+    <!-- TITLE -->
+
+    <div class="flex items-center justify-between mb-6">
+
+        <div>
+
+            <h2 class="text-2xl font-bold text-gray-900">
+
+                Customer Reviews
+
+            </h2>
+
+            <p class="text-sm text-gray-500 mt-1">
+
+                Real reviews from verified travelers
+
+            </p>
+
+        </div>
+
+        <button
+            class="text-blue-600 font-medium hover:underline"
+        >
+
+            See all
+
+        </button>
+
+    </div>
+
+    <!-- REVIEWS GRID -->
+
+    <div class="grid md:grid-cols-2 gap-5">
+
+        <!-- REVIEW CARD -->
+
+        <div class="border border-gray-200 rounded-xl p-5">
+
+            <!-- STARS -->
+
+            <div class="flex items-center gap-1 text-yellow-400 text-sm">
+
+                ★★★★★
+
+            </div>
+
+            <!-- USER -->
+
+            <div class="flex items-center gap-3 mt-4">
+
+                <div
+                    class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold"
+                >
+
+                    B
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-semibold text-gray-900">
+
+                        Bhupinder – Canada
+
+                    </h3>
+
+                    <p class="text-xs text-gray-500">
+
+                        April 28, 2026 · Verified booking
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- TEXT -->
+
+            <p class="text-gray-600 leading-7 mt-4">
+
+                It was a good tour. Guide Azam was very knowledgeable.
+                The AC car was very comfortable during the Hyderabad heat.
+                Highly recommended.
+
+            </p>
+
+        </div>
+
+        <!-- REVIEW CARD -->
+
+        <div class="border border-gray-200 rounded-xl p-5">
+
+            <!-- STARS -->
+
+            <div class="flex items-center gap-1 text-yellow-400 text-sm">
+
+                ★★★★★
+
+            </div>
+
+            <!-- USER -->
+
+            <div class="flex items-center gap-3 mt-4">
+
+                <div
+                    class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold"
+                >
+
+                    A
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-semibold text-gray-900">
+
+                        Aisyah – Malaysia
+
+                    </h3>
+
+                    <p class="text-xs text-gray-500">
+
+                        April 12, 2026 · Verified booking
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- TEXT -->
+
+            <p class="text-gray-600 leading-7 mt-4">
+
+                Great experience with guide Azam and driver Baba.
+                They explained Hyderabad history very clearly.
+                Friendly team and comfortable journey.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+{% comment %} 
+                <div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
+
+                    <h2 class="text-3xl font-black text-[#0B1F44] mb-8">
+
+                        Highlights
+
+                    </h2>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+                        <div class="flex gap-5 p-5 rounded-3xl hover:bg-[#f7f9fc] duration-300">
+
+                            <div class="w-14 h-14 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl">
+
+                                <i class="fa-solid fa-landmark"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="font-bold text-lg text-[#0B1F44]">
+                                    Explore Golconda Fort
+                                </h3>
+
+                                <p class="text-gray-500 mt-2 leading-7">
+                                    Discover beautiful architecture and history.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="flex gap-5 p-5 rounded-3xl hover:bg-[#f7f9fc] duration-300">
+
+                            <div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-500 text-xl">
+
+                                <i class="fa-solid fa-camera"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="font-bold text-lg text-[#0B1F44]">
+                                    Amazing Photo Spots
+                                </h3>
+
+                                <p class="text-gray-500 mt-2 leading-7">
+                                    Capture stunning heritage views.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div> {% endcomment %}
+
+                <!-- ================= DESCRIPTION ================= -->
+
+                {% comment %} <div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
+
+                    <h2 class="text-3xl font-black text-[#0B1F44] mb-6">
+
+                        Full Description
+
+                    </h2>
+
+                    <p class="text-gray-600 leading-9 text-[17px]">
+
+                        Explore Hyderabad’s iconic landmarks on this guided half-day tour.
+                        Visit Golconda Fort and admire the beautiful Qutub Shahi Tombs.
+                        Learn about fascinating history and culture while enjoying a comfortable experience.
+
+                    </p>
+
+                </div> {% endcomment %}
+
+            </div>
+
+            <!-- ================= RIGHT BOOKING ================= -->
+
+            <div class="lg:col-span-4">
+
+                <div class="sticky top-24 bg-white rounded-[35px]  overflow-hidden border border-gray-100">
+
+                    <!-- TOP -->
+
+                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-8 text-white">
+
+                        <div class="flex items-end gap-2">
+
+                            <h2 class="text-2xl font-black">
+
+                                ₹2,500
+
+
+                            </h2>
+
+                            <span class="mb-2 opacity-90">
+
+                                / person
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BODY -->
+
+                    <div class="p-4">
+                        
+
+                        <!-- DATE -->
+
+                        <div>
+
+                            <label class="font-medium text-[#212121] block mb-3">
+
+                                Select Date
+
+                            </label>
+
+                            <div class="relative cursor-pointer">
+
+                                <div class="absolute left-5 top-1/2 -translate-y-1/2 z-10">
+
+                                    <i class="fa-solid fa-calendar-days text-[#2874f0] text-lg"></i>
+
+                                </div>
+
+                                <input
+                                    type="text"
+                                    id="bookingDate"
+                                    placeholder="Choose your travel date"
+                                    class="w-full bg-[#f8faff] border border-gray-200 rounded-2xl pl-14 pr-5 py-4 text-[15px] font-medium text-[#212121] outline-none focus:border-[#2874f0] focus:ring-4 focus:ring-blue-100 shadow-sm"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <!-- GUESTS -->
+
+                        {% comment %} <div class="mt-3">
+
+                            <label class="font-semibold text-[#212121] block mb-3">
+
+                                Guests
+
+                            </label>
+
+                            <select
+                                class="w-full border border-gray-200 rounded-2xl px-5 py-4 bg-[#f8fafc] outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#2874f0]"
+                            >
+
+                                <option>1 Adult</option>
+                                <option>2 Adults</option>
+                                <option>3 Adults</option>
+                                <option>4 Adults</option>
+
+                            </select>
+
+                        </div> {% endcomment %}
+
+
+                    
+
+<!-- ================= TRAVELLERS SECTION ================= -->
+
+<div class="mt-5 relative">
+
+    <label class="font-semibold text-[#111827] block mb-3">
+
+        Travellers
+
+    </label>
+
+    <!-- SELECT BOX -->
+
+    <button
+        type="button"
+        onclick="toggleTravellers()"
+        class="w-full bg-[#f3f5fa] border border-gray-200 rounded-[24px] px-3 py-3 flex items-center justify-between hover:border-[#1677e6] duration-300"
+    >
+
+        <div class="flex items-center gap-4">
+{% comment %} 
+            <div
+                class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm text-[#071B3B] text-xl"
+            >
+
+                <i class="fa-solid fa-users"></i>
+
+            </div> {% endcomment %}
+
+            <div class="text-left">
+
+                <h3 class="font-bold text-[14px] text-[#111827]">
+
+                    Adult x <span id="adultCountText">1</span>
+                                        Child x <span id="childCountText">0</span>,
+                    Infant x <span id="infantCountText">0</span>
+
+
+                </h3>
+
+                {% comment %} <p class="text-sm text-gray-500 mt-1">
+
+
+                </p> {% endcomment %}
+
+            </div>
+
+        </div>
+
+        <i
+            id="travellerArrow"
+            class="fa-solid fa-chevron-down text-[#111827] text-lg duration-300"
+        ></i>
+
+    </button>
+
+    <!-- DROPDOWN -->
+
+    <div
+        id="travellerDropdown"
+        class="hidden absolute left-0 right-0 mt-4 bg-white rounded-[32px] border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.12)] overflow-hidden z-50"
+    >
+
+        <div class="p-4 space-y-2">
+
+            <!-- ADULT -->
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
+
+                        Adult
+
+                    </h3>   
+
+                    <p class="text-gray-500 text-sm mt-2">
+
+                        (Age 13-99)
+
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-5">
+
+                    <button
+                        onclick="updateCount('adult', -1)"
+                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
+                    >
+
+                        −
+
+                    </button>
+
+                    <div
+                        id="adultCount"
+                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
+                    >
+
+                        1
+
+                    </div>
+
+                    <button
+                        onclick="updateCount('adult', 1)"
+                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
+                    >
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- CHILD -->
+
+            <div class="border-t pt-2 flex items-center justify-between">
+
+                <div>
+
+                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
+
+                        Child
+
+                    </h3>
+
+                    <p class="text-gray-500 text-sm mt-2">
+
+                        (Age 4-12)
+
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-5">
+
+                    <button
+                        onclick="updateCount('child', -1)"
+                        class="w-8 h-8 rounded-full border-2 border-gray-300 text-gray-400 flex items-center justify-center text-medium font-bold hover:border-[#1677e6] hover:text-[#1677e6] duration-300"
+                    >
+
+                        −
+
+                    </button>
+
+                    <div
+                        id="childCount"
+                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
+                    >
+
+                        0
+
+                    </div>
+
+                    <button
+                        onclick="updateCount('child', 1)"
+                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
+                    >
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- INFANT -->
+            <div class="border-t pt-2 flex items-center justify-between">
+
+                <div>
+
+                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
+
+                        Infant
+
+                    </h3>
+
+                    <p class="text-gray-500 text-sm mt-2">
+
+                        (Age 3 and younger)
+
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-5">
+
+                    <button
+                        onclick="updateCount('infant', -1)"
+                        class="w-8 h-8 rounded-full border-2 border-gray-300 text-gray-400 flex items-center justify-center text-medium font-bold hover:border-[#1677e6] hover:text-[#1677e6] duration-300"
+                    >
+
+                        −
+
+                    </button>
+
+                    <div
+                        id="infantCount"
+                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
+                    >
+
+                        0
+
+                    </div>
+
+                    <button
+                        onclick="updateCount('infant', 1)"
+                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
+                    >
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div class="border-t bg-[#fafbff] p-6">
+
+            <button
+                onclick="toggleTravellers()"
+                class="w-full h-[48px] rounded-full bg-[#1677e6] hover:bg-[#005fe0] text-white text-medium font-bold duration-300"
+            >
+
+                Continue
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+                        <!-- FEATURES -->
+
+                        <div class="space-y-5 mt-8">
+
+                            <div class="flex items-center gap-4">
+
+                                <i class="fa-solid fa-circle-check text-green-500"></i>
+
+                                <span class="text-gray-700">
+                                    Free cancellation
+                                </span>
+
+                            </div>
+
+                            <div class="flex items-center gap-4">
+
+                                <i class="fa-solid fa-bolt text-yellow-500"></i>
+
+                                <span class="text-gray-700">
+                                    Instant confirmation
+                                </span>
+
+                            </div>
+
+                            <div class="flex items-center gap-4">
+
+                                <i class="fa-solid fa-shield-heart text-cyan-500"></i>
+
+                                <span class="text-gray-700">
+                                    Reserve now & pay later
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TOTAL -->
+
+                        <div class="mt-8 bg-[#f8fafc] rounded-2xl p-5 border border-gray-100">
+
+                            <div class="flex items-center justify-between">
+
+                                <span class="text-gray-500">
+                                    Tour Price
+                                </span>
+
+                                <span class="font-semibold text-[#212121]">
+                                    ₹2,500
+                                </span>
+
+                            </div>
+
+                            <div class="flex items-center justify-between mt-3">
+
+                                <span class="text-gray-500">
+                                    Taxes & Fees
+                                </span>
+
+                                <span class="font-semibold text-[#212121]">
+                                    ₹250
+                                </span>
+
+                            </div>
+
+                            <div class="border-t mt-4 pt-4 flex items-center justify-between">
+
+                                <span class="font-bold text-lg text-[#212121]">
+                                    Total
+                                </span>
+
+                                <span class="font-black text-2xl text-[#2874f0]">
+                                    ₹2,750
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- BUTTON -->
+          
+                        <div class="mt-8">
+                                             {% comment %} <a href="{% url 'payment_details' %}" > {% endcomment %}
+                            <button
+                                class="w-full bg-[#071B3B] hover:bg-[#f85606] text-white py-4 rounded-2xl font-bold text-lg transition duration-300 shadow-lg hover:shadow-xl"
+                            >
+
+                                BOOK NOW
+
+                            </button>
+  {% comment %} </a> {% endcomment %}
+                        </div>
+                  
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= GALLERY MODAL ================= -->
+
+<div
+    id="galleryModal"
+    class="fixed inset-0 bg-black/90 z-[9999] hidden overflow-y-auto"
+>
+
+    <div class="sticky top-0 bg-black/60 backdrop-blur-md p-5 flex items-center justify-between">
+
+        <h2 class="text-white text-2xl font-bold">
+
+            Tour Gallery
+
+        </h2>
+
+        <button
+            onclick="closeGallery()"
+            class="w-12 h-12 rounded-full bg-white text-black hover:rotate-90 duration-300"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+        <img src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+        <img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1200" class="rounded-3xl h-[350px] w-full object-cover">
+
+    </div>
+
+</div>
+
+
+<!-- ================= FLATPICKR CUSTOM CSS ================= -->
+{% comment %} 
+<style>
+
+    .flatpickr-calendar {
+
+        border: none !important;
+        border-radius: 24px !important;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+        padding: 10px;
+    }
+
+    .flatpickr-months {
+
+        padding: 10px 0;
+    }
+
+    .flatpickr-current-month {
+
+        font-size: 18px;
+        font-weight: 700;
+        color: #212121;
+    }
+
+    .flatpickr-weekday {
+
+        color: #878787 !important;
+        font-weight: 600;
+    }
+
+    .flatpickr-day {
+
+        border-radius: 14px !important;
+        height: 42px;
+        line-height: 42px;
+        font-weight: 500;
+    }
+
+    .flatpickr-day:hover {
+
+        background: #e8f0fe !important;
+        color: #2874f0 !important;
+    }
+
+    .flatpickr-day.selected {
+
+        background: #2874f0 !important;
+        border-color: #2874f0 !important;
+        color: white !important;
+    }
+
+    .flatpickr-day.today {
+
+        border-color: #2874f0 !important;
+    }
+
+    .flatpickr-day.flatpickr-disabled {
+
+        background: #fff1f0 !important;
+        color: #ff4d4f !important;
+    }
+
+</style> {% endcomment %}
+
+
+<style>
+
+.flatpickr-calendar {
+
+    border: none !important;
+    border-radius: 24px !important;
+    overflow: visible !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+    padding: 12px;
+    width: 340px !important;
+    max-width: 95vw !important;
+}
+
+.flatpickr-months {
+
+    padding: 12px 8px;
+}
+
+.flatpickr-current-month {
+
+    font-size: 18px;
+    font-weight: 700;
+    color: #212121;
+}
+
+.flatpickr-weekdays {
+
+    margin-top: 8px;
+}
+
+.flatpickr-weekday {
+
+    color: #878787 !important;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.flatpickr-days {
+
+    width: 100% !important;
+}
+
+.dayContainer {
+
+    min-width: 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.flatpickr-day {
+
+    border-radius: 14px !important;
+    height: 42px !important;
+    line-height: 42px !important;
+    width: 42px !important;
+    max-width: 42px !important;
+    font-weight: 600;
+}
+
+.flatpickr-day:hover {
+
+    background: #e8f0fe !important;
+    color: #2874f0 !important;
+}
+
+.flatpickr-day.selected {
+
+    background: #2874f0 !important;
+    border-color: #2874f0 !important;
+    color: white !important;
+}
+
+.flatpickr-day.today {
+
+    border-color: #2874f0 !important;
+}
+
+.flatpickr-input {
+
+    cursor: pointer !important;
+}
+
+</style>
+
+
+<!-- ================= CSS ================= -->
+
+<style>
+
+    .tourTab{
+
+        padding: 18px 28px;
+        font-weight: 700;
+        color: #4b5563;
+        border-bottom: 3px solid transparent;
+        transition: .3s;
+        white-space: nowrap;
+    }
+
+    .tourTab:hover{
+
+        color: #2874f0;
+        background: #f8fbff;
+    }
+
+    .activeTab{
+
+        color: #2874f0;
+        border-color: #2874f0;
+        background: #f8fbff;
+    }
+
+</style>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+    function showTab(tabId){
+
+        document.querySelectorAll('.tabContent').forEach(content => {
+
+            content.classList.add('hidden');
+
+        });
+
+        document.getElementById(tabId).classList.remove('hidden');
+
+        document.querySelectorAll('.tourTab').forEach(tab => {
+
+            tab.classList.remove('activeTab');
+
+        });
+
+        document.getElementById('tab-' + tabId).classList.add('activeTab');
+
+    }
+
+</script>
+
+
+<script>
+
+    flatpickr("#bookingDate", {
+
+        minDate: "today",
+
+        altInput: true,
+
+        altFormat: "F j, Y",
+
+        dateFormat: "Y-m-d",
+
+        disableMobile: true,
+
+        onChange: function(selectedDates, dateStr, instance) {
+
+            document
+                .getElementById('selectedTourCard')
+                .classList.remove('hidden');
+
+            const formattedDate =
+                instance.formatDate(selectedDates[0], "l, F j, Y");
+
+            document
+                .getElementById('selectedDateText')
+                .innerText = formattedDate;
+
+        }
+
+    });
+
+</script>
+
+
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+    let bringExpanded = false;
+
+    function toggleBring(){
+
+        const content = document.getElementById('bringContent');
+
+        const btn = document.getElementById('bringBtn');
+
+        if(!bringExpanded){
+
+            content.classList.remove('max-h-[180px]');
+
+            content.classList.add('max-h-[1000px]');
+
+            btn.innerText = 'See less';
+
+            bringExpanded = true;
+
+        }else{
+
+            content.classList.remove('max-h-[1000px]');
+
+            content.classList.add('max-h-[180px]');
+
+            btn.innerText = 'See more';
+
+            bringExpanded = false;
+
+        }
+
+    }
+
+</script>
+
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+    function openGallery() {
+
+        document.getElementById('galleryModal').classList.remove('hidden');
+
+        document.body.classList.add('overflow-hidden');
+
+    }
+
+    function closeGallery() {
+
+        document.getElementById('galleryModal').classList.add('hidden');
+
+        document.body.classList.remove('overflow-hidden');
+
+    }
+
+    flatpickr("#bookingDate", {
+
+        minDate: "today",
+
+        altInput: true,
+
+        altFormat: "F j, Y",
+
+        dateFormat: "Y-m-d",
+
+        disableMobile: true,
+
+        animate: true,
+
+        defaultDate: null ,
+
+        monthSelectorType: "dropdown",
+
+        nextArrow: `<i class="fa-solid fa-chevron-right"></i>`,
+
+        prevArrow: `<i class="fa-solid fa-chevron-left"></i>`,
+
+        disable: [],
+
+    });
+
+</script>
+
+
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+    let travellers = {
+
+        adult: 1,
+        child: 0,
+        infant: 0
+
+    };
+
+    function toggleTravellers(){
+
+        document.getElementById('travellerDropdown').classList.toggle('hidden');
+
+        document.getElementById('travellerArrow').classList.toggle('rotate-180');
+
+    }
+
+    function updateCount(type, change){
+
+        travellers[type] += change;
+
+        if(type === 'adult' && travellers[type] < 1){
+
+            travellers[type] = 1;
+
+        }
+
+        if(type !== 'adult' && travellers[type] < 0){
+
+            travellers[type] = 0;
+
+        }
+
+        document.getElementById(type + 'Count').innerText = travellers[type];
+
+        document.getElementById(type + 'CountText').innerText = travellers[type];
+
+    }
+
+    document.addEventListener('click', function(event){
+
+        const wrapper = document.getElementById('travellerDropdown').parentElement;
+
+        if(!wrapper.contains(event.target)){
+
+            document.getElementById('travellerDropdown').classList.add('hidden');
+
+            document.getElementById('travellerArrow').classList.remove('rotate-180');
+
+        }
+
+    });
+
+</script>
+{% endblock %}

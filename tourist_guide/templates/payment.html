@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="bg-white min-h-screen py-8"> 
+    <div class=" mx-auto px-4 md:px-14 ">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div class="text-2xl font-bold text-orange-600">GET YOUR GUIDE</div>
+            
+            <!-- Stepper -->
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">1</div>
+                    <p class="text-sm font-semibold text-gray-900">Contact</p>
+                </div>
+                <div class="w-16 h-px bg-gray-300"></div>
+                <div class="flex items-center gap-3 opacity-40">
+                    <div class="w-7 h-7 rounded-full border-2 border-gray-400 text-gray-400 flex items-center justify-center text-sm font-bold">2</div>
+                    <p class="text-sm font-medium text-gray-500">Payment</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-10">
+
+            <!-- LEFT SIDE - Form -->
+            <div class="lg:col-span-7">
+
+                <!-- Timer -->
+                <div class="bg-[#fff5f5] text-[#e11d48] px-5 py-3 rounded-2xl flex items-center gap-3 mb-8 text-sm">
+                    <i class="fa-solid fa-clock"></i>
+                    <p>We'll hold your spot for <span class="font-bold">14:10 minutes</span></p>
+                </div>
+
+                <h1 class="text-3xl font-bold text-gray-900">Check your personal details</h1>
+                <div class="flex items-center gap-2 mt-2 text-emerald-600 text-sm">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Checkout is fast and secure</span>
+                </div>
+
+                <div class="mt-8 space-y-5">
+
+                    <!-- Full Name -->
+                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                        <label class="text-xs text-gray-500 block mb-1">Full name</label>
+                        <input 
+                            type="text" 
+                            value="Anusha Muraboina"
+                            placeholder="Enter full name"
+                            class="w-full bg-transparent outline-none text-base font-medium">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                        <label class="text-xs text-gray-500 block mb-1">Email</label>
+                        <input 
+                            type="email" 
+                            value="anushamuraboina9@gmail.com"
+                            placeholder="Enter email address"
+                            class="w-full bg-transparent outline-none text-base font-medium">
+                    </div>
+
+                    <!-- Country -->
+                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                        <label class="text-xs text-gray-500 block mb-1">Country</label>
+                        <div class="flex justify-between items-center">
+                            <select class="w-full bg-transparent outline-none text-base font-medium">
+                                <option>India (+91)</option>
+                                <option>United States (+1)</option>
+                                <option>United Kingdom (+44)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                        <label class="text-xs text-gray-500 block mb-1">Mobile phone number</label>
+                        <input 
+                            type="tel" 
+                            value="099893 80114"
+                            placeholder="Enter mobile number"
+                            class="w-full bg-transparent outline-none text-base font-medium">
+                    </div>
+
+                    <p class="text-sm text-gray-500 mt-4">
+                        We'll only contact you with essential updates or changes to your booking.
+                    </p>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition">
+                        Go to payment
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE - Order Summary -->
+            <div class="lg:col-span-5">
+                <div class="bg-white border border-gray-200 rounded-2xl p-6 sticky top-8">
+
+                    <h2 class="text-xl font-bold mb-5">Order summary</h2>
+
+                    <div class="flex gap-4">
+                        <img src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989?q=80&w=400" 
+                             class="w-20 h-20 object-cover rounded-xl" alt="">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-[17px] leading-tight">
+                                Hyderabad: Heritage Walking Tour of Old City and Charminar
+                            </h3>
+                            <div class="flex items-center gap-1 mt-2">
+                                <span class="text-amber-400 text-lg">★★★★★</span>
+                                <span class="text-sm text-gray-600">4.9 (50)</span>
+                            </div>
+                            <span class="inline-block mt-2 text-xs bg-gray-900 text-white px-3 py-1 rounded">Top rated</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-7 space-y-4 text-sm text-gray-700">
+                        <div class="flex gap-3">
+                            <i class="fa-regular fa-map mt-0.5"></i>
+                            <p>Join-in Tour at Meeting Point • Language: English</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <i class="fa-regular fa-clock mt-0.5"></i>
+                            <p>Saturday, May 23, 2026, starts at 9:00 AM</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <i class="fa-solid fa-user mt-0.5"></i>
+                            <p>1 adult (Age 0 - 99)</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="text-blue-600 text-sm font-medium hover:underline block mt-5">Change date or participants</a>
+
+                    <div class="border-t my-7"></div>
+
+                    <div class="space-y-5 text-sm">
+                        <div class="flex gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                            <div>
+                                <p>Free cancellation</p>
+                                <p class="text-gray-500 text-xs">Until 9:00 AM on May 22</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <i class="fa-regular fa-thumbs-up text-emerald-500"></i>
+                            <div>
+                                <p>Great value</p>
+                                <p class="text-gray-500 text-xs">Customers rated this 4.7/5 for value</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t my-6"></div>
+
+                    <button class="text-blue-600 text-sm hover:underline w-full text-left">
+                        Enter promo or gift code
+                    </button>
+
+                    <!-- Total -->
+                    <div class="bg-gray-50 -mx-6 -mb-6 mt-8 p-6 rounded-b-2xl flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold">Total</p>
+                            <p class="text-xs text-emerald-600">All taxes and fees included</p>
+                        </div>
+                        <p class="text-3xl font-bold">₹5,750</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
