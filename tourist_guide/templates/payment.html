@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <section class="bg-white min-h-screen py-8"> 
     <div class=" mx-auto px-4 md:px-14 ">
 
@@ -40,26 +41,28 @@
                     <span>Checkout is fast and secure</span>
                 </div>
 
-                <div class="mt-8 space-y-5">
+                <div class="mt-8 space-y-5" id="contactStep">
 
                     <!-- Full Name -->
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Full name</label>
-                        <input 
-                            type="text" 
-                            value="Anusha Muraboina"
-                            placeholder="Enter full name"
-                            class="w-full bg-transparent outline-none text-base font-medium">
+                        <input
+    id="guestName"
+    type="text"
+    placeholder="Enter full name"
+    class="w-full bg-transparent outline-none text-base font-medium"
+>
                     </div>
 
                     <!-- Email -->
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Email</label>
-                        <input 
-                            type="email" 
-                            value="anushamuraboina9@gmail.com"
-                            placeholder="Enter email address"
-                            class="w-full bg-transparent outline-none text-base font-medium">
+                        <input
+    id="guestEmail"
+    type="email"
+    placeholder="Enter email address"
+    class="w-full bg-transparent outline-none text-base font-medium"
+>
                     </div>
 
                     <!-- Country -->
@@ -78,22 +81,299 @@
                     <!-- Mobile -->
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Mobile phone number</label>
-                        <input 
-                            type="tel" 
-                            value="099893 80114"
-                            placeholder="Enter mobile number"
-                            class="w-full bg-transparent outline-none text-base font-medium">
+                        <input
+    id="guestPhone"
+    type="tel"
+    placeholder="Enter mobile number"
+    class="w-full bg-transparent outline-none text-base font-medium"
+>
                     </div>
+
+
+
+
+
+
+
+
+
+       <div class="mt-4">
+
+                        <label class="block text-sm font-medium mb-2">
+                            Promo / Coupon Code
+                        </label>
+
+                        <div class="flex gap-2">
+
+                            <input
+                                type="text"
+                                id="couponCode"
+                                placeholder="Enter Coupon Code"
+                                class="flex-1 border border-gray-300 rounded-xl px-4 py-3"
+                            >
+
+                            <button
+                                type="button"
+                                id="applyCouponBtn"
+                                class="bg-blue-600 text-white px-5 py-3 rounded-xl"
+                            >
+                                Apply
+                            </button>
+
+                        </div>
+
+                        <p
+                            id="couponMessage"
+                            class="text-sm mt-2"
+                        ></p>
+
+                    </div>
+
+                    
 
                     <p class="text-sm text-gray-500 mt-4">
                         We'll only contact you with essential updates or changes to your booking.
                     </p>
 
-                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition">
-                        Go to payment
-                    </button>
+                    <button
+    id="goToPaymentBtn"
+    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
+>
+    Go to Payment
+</button>
+
+
 
                 </div>
+
+
+
+<div
+    id="guideStep"
+    class="hidden mt-10"
+>
+
+    <h2
+        class="text-3xl font-bold mb-6"
+    >
+        Select Your Guide
+    </h2>
+
+    <div
+        id="guideContainer"
+        class="grid md:grid-cols-2 gap-4"
+    >
+    </div>
+
+
+
+    <div class="flex gap-4 mt-8">
+
+        <button
+            type="button"
+            id="guideBackBtn"
+            class="w-1/2 border py-3 rounded-xl"
+        >
+            Previous
+        </button>
+
+        <button
+            type="button"
+            id="guideNextBtn"
+            class="w-1/2 bg-blue-600 text-white py-3 rounded-xl"
+        >
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+                <!-- PAYMENT STEP -->
+
+<div
+    id="paymentStep"
+    class="hidden mt-10"
+>
+
+
+
+
+    <h2
+        class="text-3xl font-bold text-gray-900 mb-6"
+    >
+        Select Payment Method
+    </h2>
+
+    <div class="space-y-4">
+
+        <label
+            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+        >
+
+            <div>
+
+                <h3
+                    class="font-semibold"
+                >
+                    Pay At Location
+                </h3>
+
+                <p
+                    class="text-sm text-gray-500"
+                >
+                    Pay when you arrive
+                </p>
+
+            </div>
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="pay_at_location"
+            >
+
+            
+
+        </label>
+
+        <label
+            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+        >
+
+            <div>
+
+                <h3
+                    class="font-semibold"
+                >
+                    Pay 30% Advance
+                </h3>
+
+                <p
+                    class="text-sm text-gray-500"
+                >
+                    Reserve now with advance payment
+                </p>
+
+            </div>
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="partial_payment"
+            >
+
+        </label>
+
+        <label
+            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+        >
+
+            <div>
+
+                <h3
+                    class="font-semibold"
+                >
+                    Full Payment
+                </h3>
+
+                <p
+                    class="text-sm text-gray-500"
+                >
+                    Pay full amount now
+                </p>
+
+            </div>
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="full_payment"
+            >
+
+        </label>
+
+    </div>
+
+    
+
+<div class="bg-gray-50 rounded-2xl p-6 mt-6">
+
+    <div class="flex justify-between mb-3">
+
+        <span class="text-gray-600">
+            Total Amount
+        </span>
+
+        <span
+            id="totalAmountDisplay"
+            class="font-bold"
+        >
+            ₹0
+        </span>
+
+    </div>
+
+    <div class="flex justify-between mb-3">
+
+        <span class="text-gray-600">
+            Pay Now
+        </span>
+
+        <span
+            id="payNowAmount"
+            class="font-bold text-green-600"
+        >
+            ₹0
+        </span>
+
+    </div>
+
+    <div class="flex justify-between">
+
+        <span class="text-gray-600">
+            Remaining Amount
+        </span>
+
+        <span
+            id="remainingAmount"
+            class="font-bold text-orange-600"
+        >
+            ₹0
+        </span>
+
+    </div>
+
+</div>
+                 
+
+    <div
+        class="flex gap-4 mt-8"
+    >
+
+        <button
+            type="button"
+            id="backBtn"
+            class="w-1/2 border border-gray-300 py-3 rounded-xl font-medium"
+        >
+            Previous
+        </button>
+
+        <button
+            type="button"
+            id="confirmBookingBtn"
+            class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium"
+        >
+            Confirm Booking
+        </button>
+
+    </div>
+
+
+
+
+
+</div>
             </div>
 
             <!-- RIGHT SIDE - Order Summary -->
@@ -106,9 +386,14 @@
                         <img src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989?q=80&w=400" 
                              class="w-20 h-20 object-cover rounded-xl" alt="">
                         <div class="flex-1">
-                            <h3 class="font-semibold text-[17px] leading-tight">
+                            {% comment %} <h3 class="font-semibold text-[17px] leading-tight">
                                 Hyderabad: Heritage Walking Tour of Old City and Charminar
-                            </h3>
+                            </h3> {% endcomment %}
+                            <h3
+    id="summaryTourTitle"
+    class="font-semibold text-[17px] leading-tight"
+>
+</h3>
                             <div class="flex items-center gap-1 mt-2">
                                 <span class="text-amber-400 text-lg">★★★★★</span>
                                 <span class="text-sm text-gray-600">4.9 (50)</span>
@@ -116,7 +401,7 @@
                             <span class="inline-block mt-2 text-xs bg-gray-900 text-white px-3 py-1 rounded">Top rated</span>
                         </div>
                     </div>
-
+{% comment %} 
                     <div class="mt-7 space-y-4 text-sm text-gray-700">
                         <div class="flex gap-3">
                             <i class="fa-regular fa-map mt-0.5"></i>
@@ -130,9 +415,137 @@
                             <i class="fa-solid fa-user mt-0.5"></i>
                             <p>1 adult (Age 0 - 99)</p>
                         </div>
+                    </div> {% endcomment %}
+
+
+
+                    <div class="mt-7 space-y-4 text-sm text-gray-700">
+
+                    <div class="flex gap-3">
+                        <i class="fa-regular fa-map mt-0.5"></i>
+                        <p id="summaryLocation"></p>
                     </div>
 
-                    <a href="#" class="text-blue-600 text-sm font-medium hover:underline block mt-5">Change date or participants</a>
+                    <div class="flex gap-3">
+                        <i class="fa-regular fa-clock mt-0.5"></i>
+                        <p id="summaryDateTime"></p>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <i class="fa-solid fa-user mt-0.5"></i>
+                        <p id="summaryTravellers"></p>
+                    </div>
+
+                </div>
+
+                    {% comment %} <a href="#" class="text-blue-600 text-sm font-medium hover:underline block mt-5">Change date or participants</a> {% endcomment %}
+<a
+    href="#"
+    id="changeBookingBtn"
+    class="text-blue-600 text-sm font-medium hover:underline block mt-5"
+>
+    Change date or participants
+</a>
+                    <div
+    id="changeBookingSection"
+    class="hidden mt-4 border rounded-2xl p-5 bg-gray-50"
+>
+
+    <h3 class="font-bold mb-4">
+        Update Booking
+    </h3>
+
+    <!-- Date -->
+
+    <div class="mb-4">
+
+        <label class="block text-sm mb-2">
+            Tour Date
+        </label>
+
+        <input
+            type="text"
+            id="updateTourDate"
+            class="w-full border rounded-xl px-4 py-3"
+        >
+
+    </div>
+
+    <!-- Time -->
+
+    <div class="mb-4">
+
+
+
+    <label class="block text-sm mb-2">
+        Tour Time
+    </label>
+
+    <select
+        id="updateTourTime"
+        class="w-full border rounded-xl px-4 py-3"
+    >
+    </select>
+
+
+    </div>
+
+    <!-- Travellers -->
+
+    <div class="grid grid-cols-3 gap-3">
+
+        <div>
+
+            <label>Adults</label>
+
+            <input
+                type="number"
+                id="updateAdults"
+                min="1"
+                class="w-full border rounded-xl px-3 py-2"
+            >
+
+        </div>
+
+        <div>
+
+            <label>Children</label>
+
+            <input
+                type="number"
+                id="updateChildren"
+                min="0"
+                class="w-full border rounded-xl px-3 py-2"
+            >
+
+        </div>
+
+        <div>
+
+            <label>Infants</label>
+
+            <input
+                type="number"
+                id="updateInfants"
+                min="0"
+                class="w-full border rounded-xl px-3 py-2"
+            >
+
+        </div>
+
+    </div>
+
+    <button
+        id="updateBookingBtn"
+        type="button"
+        class="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl"
+    >
+        Update Booking
+    </button>
+
+</div>
+
+
 
                     <div class="border-t my-7"></div>
 
@@ -155,22 +568,1468 @@
 
                     <div class="border-t my-6"></div>
 
-                    <button class="text-blue-600 text-sm hover:underline w-full text-left">
+                    {% comment %} <button class="text-blue-600 text-sm hover:underline w-full text-left">
                         Enter promo or gift code
-                    </button>
+                    </button> {% endcomment %}
 
                     <!-- Total -->
                     <div class="bg-gray-50 -mx-6 -mb-6 mt-8 p-6 rounded-b-2xl flex justify-between items-center">
+
                         <div>
                             <p class="font-semibold">Total</p>
                             <p class="text-xs text-emerald-600">All taxes and fees included</p>
                         </div>
-                        <p class="text-3xl font-bold">₹5,750</p>
+                        {% comment %} <p class="text-3xl font-bold">₹5,750</p> {% endcomment %}
+                        <p
+                            id="summaryTotal"
+                            class="text-3xl font-bold"
+                        >
+                            ₹0
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
+<script>
+
+let updateCalendar = null;
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const bookingDraft =
+            JSON.parse(
+                localStorage.getItem(
+                    "bookingDraft"
+                )
+            );
+
+        if(!bookingDraft){
+            return;
+        }
+
+        const totalAmount =
+            parseFloat(
+                bookingDraft.total_amount
+                    .replace("₹","")
+                    .replace(/,/g,"")
+            );
+
+        document.getElementById(
+            "totalAmountDisplay"
+        ).innerText =
+            `₹${totalAmount.toFixed(2)}`;
+
+        document
+        .querySelectorAll(
+            'input[name="payment_method"]'
+        )
+        .forEach(radio => {
+
+            radio.addEventListener(
+                "change",
+                function(){
+
+                    let payNow = 0;
+                    let remaining = 0;
+
+                    if(
+                        this.value ===
+                        "pay_at_location"
+                    ){
+
+                        payNow = 0;
+                        remaining = totalAmount;
+
+                    }
+
+                    else if(
+                        this.value ===
+                        "partial_payment"
+                    ){
+
+                        payNow =
+                            totalAmount * 0.30;
+
+                        remaining =
+                            totalAmount -
+                            payNow;
+
+                    }
+
+                    else if(
+                        this.value ===
+                        "full_payment"
+                    ){
+
+                        payNow =
+                            totalAmount;
+
+                        remaining = 0;
+
+                    }
+
+                    document.getElementById(
+                        "payNowAmount"
+                    ).innerText =
+                        `₹${payNow.toFixed(2)}`;
+
+                    document.getElementById(
+                        "remainingAmount"
+                    ).innerText =
+                        `₹${remaining.toFixed(2)}`;
+
+                }
+            );
+
+        });
+
+    }
+);
+
+</script>
+<script>
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const bookingDraft =
+            JSON.parse(
+                localStorage.getItem(
+                    "bookingDraft"
+                )
+            );
+
+        if(!bookingDraft){
+            return;
+        }
+
+        document.getElementById(
+            "summaryTourTitle"
+        ).innerText =
+            bookingDraft.tour_title || "";
+
+        document.getElementById(
+            "summaryDateTime"
+        ).innerText =
+            `${bookingDraft.tour_date} • ${bookingDraft.tour_time}`;
+
+        const adults =
+            bookingDraft.adults || 0;
+
+        const children =
+            bookingDraft.children || 0;
+
+        const infants =
+            bookingDraft.infants || 0;
+
+        let travellerText = [];
+
+        if(adults > 0){
+
+            travellerText.push(
+                `${adults} Adult`
+            );
+
+        }
+
+        if(children > 0){
+
+            travellerText.push(
+                `${children} Child`
+            );
+
+        }
+
+        if(infants > 0){
+
+            travellerText.push(
+                `${infants} Infant`
+            );
+
+        }
+
+        document.getElementById(
+            "summaryTravellers"
+        ).innerText =
+            travellerText.join(", ");
+
+        document.getElementById(
+            "summaryTotal"
+        ).innerText =
+            bookingDraft.total_amount;
+
+    }
+);
+
+
+    
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const bookingDraft =
+            JSON.parse(
+                localStorage.getItem(
+                    "bookingDraft"
+                )
+            );
+
+        if(!bookingDraft){
+            return;
+        }
+
+        // Tour Title
+        document.getElementById(
+            "summaryTourTitle"
+        ).innerText =
+            bookingDraft.tour_title || "";
+
+        // Location
+        document.getElementById(
+            "summaryLocation"
+        ).innerText =
+            bookingDraft.location || "";
+
+        // Date & Time
+        document.getElementById(
+            "summaryDateTime"
+        ).innerText =
+            `${bookingDraft.tour_date} • ${bookingDraft.tour_time}`;
+
+        // Travellers
+        const adults =
+            bookingDraft.adults || 0;
+
+        const children =
+            bookingDraft.children || 0;
+
+        const infants =
+            bookingDraft.infants || 0;
+
+        let travellerText = [];
+
+        if(adults > 0){
+            travellerText.push(
+                `${adults} Adult`
+            );
+        }
+
+        if(children > 0){
+            travellerText.push(
+                `${children} Child`
+            );
+        }
+
+        if(infants > 0){
+            travellerText.push(
+                `${infants} Infant`
+            );
+        }
+
+        document.getElementById(
+            "summaryTravellers"
+        ).innerText =
+            travellerText.join(", ");
+
+        // Total
+        document.getElementById(
+            "summaryTotal"
+        ).innerText =
+            bookingDraft.total_amount;
+    }
+);
+
+
+document
+.getElementById(
+    "goToPaymentBtn"
+)
+.addEventListener(
+"click",
+function(){
+
+    const guestName =
+        document.getElementById(
+            "guestName"
+        ).value.trim();
+
+    const guestEmail =
+        document.getElementById(
+            "guestEmail"
+        ).value.trim();
+
+    const guestPhone =
+        document.getElementById(
+            "guestPhone"
+        ).value.trim();
+
+    if(!guestName){
+
+        alert(
+            "Please enter name"
+        );
+
+        return;
+    }
+
+    if(!guestEmail){
+
+        alert(
+            "Please enter email"
+        );
+
+        return;
+    }
+
+    if(!guestPhone){
+
+        alert(
+            "Please enter phone number"
+        );
+
+        return;
+    }
+
+    const bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        ) || {};
+
+    const guides =
+        bookingDraft.guides || [];
+
+    if(guides.length > 0){
+
+        document
+        .getElementById(
+            "contactStep"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+        document
+        .getElementById(
+            "guideStep"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+        renderGuides(
+            guides
+        );
+
+    }else{
+
+        document
+        .getElementById(
+            "contactStep"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+        document
+        .getElementById(
+            "paymentStep"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+    }
+
+});
+
+
+let selectedGuideId = null;
+
+function renderGuides(guides){
+
+    const container =
+        document.getElementById(
+            "guideContainer"
+        );
+
+    container.innerHTML = "";
+
+    guides.forEach(
+        guide => {
+
+            container.innerHTML += `
+
+            <div
+                class="guide-card border rounded-2xl p-5 cursor-pointer"
+                data-id="${guide.id}"
+            >
+
+                <h3 class="font-bold text-lg">
+                    ${guide.name}
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                    ${guide.location || ""}
+                </p>
+
+                <p class="text-gray-500">
+                    ${guide.phone || ""}
+                </p>
+
+            </div>
+
+            `;
+        }
+    );
+
+    document
+    .querySelectorAll(
+        ".guide-card"
+    )
+    .forEach(card => {
+
+        card.addEventListener(
+            "click",
+            function(){
+
+                document
+                .querySelectorAll(
+                    ".guide-card"
+                )
+                .forEach(
+                    c => c.classList.remove(
+                        "border-blue-600",
+                        "bg-blue-50"
+                    )
+                );
+
+                this.classList.add(
+                    "border-blue-600",
+                    "bg-blue-50"
+                );
+
+                selectedGuideId =
+                    this.dataset.id;
+
+            }
+        );
+
+    });
+
+}
+
+document
+.getElementById(
+    "guideBackBtn"
+)
+.addEventListener(
+"click",
+function(){
+
+    document
+    .getElementById(
+        "guideStep"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+    document
+    .getElementById(
+        "contactStep"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+});
+
+document
+.getElementById(
+    "guideNextBtn"
+)
+.addEventListener(
+"click",
+function(){
+
+    const bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        ) || {};
+
+    bookingDraft.guide =
+        selectedGuideId;
+
+    localStorage.setItem(
+        "bookingDraft",
+        JSON.stringify(
+            bookingDraft
+        )
+    );
+
+    document
+    .getElementById(
+        "guideStep"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+    document
+    .getElementById(
+        "paymentStep"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+});
+</script>
+
+<script>
+
+document
+.getElementById(
+    "confirmBookingBtn"
+)
+.addEventListener(
+"click",
+async function(){
+
+    const paymentMethod =
+        document.querySelector(
+            'input[name="payment_method"]:checked'
+        );
+
+    if(!paymentMethod){
+
+        alert(
+            "Please select payment method"
+        );
+
+        return;
+    }
+
+    const bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        );
+
+    if(!bookingDraft){
+
+        alert(
+            "Booking data not found"
+        );
+
+        return;
+    }
+
+    const payload = {
+
+        tour: bookingDraft.tour,
+
+        adults: bookingDraft.adults,
+
+        children: bookingDraft.children,
+
+        infants: bookingDraft.infants,
+
+        tour_date: bookingDraft.tour_date,
+
+        tour_time: bookingDraft.tour_time,
+
+        guest_name:
+            document.getElementById(
+                "guestName"
+            ).value,
+
+        guest_email:
+            document.getElementById(
+                "guestEmail"
+            ).value,
+
+        guest_phone:
+            document.getElementById(
+                "guestPhone"
+            ).value,
+
+        payment_method:
+            paymentMethod.value ,
+
+        {% comment %} coupon_code:
+            document.getElementById(
+                "couponCode"
+            ).value, {% endcomment %}
+
+        coupon_code:
+            bookingDraft.coupon_code || "",
+        guide:
+            bookingDraft.guide || null,
+
+    };
+
+    console.log(
+        "Sending Payload",
+        payload
+    );
+
+    try{
+
+        const response =
+            await fetch(
+                "/booking/create-booking/",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "X-CSRFToken":
+                            getCookie(
+                                "csrftoken"
+                            )
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+
+                }
+            );
+
+        const result =
+            await response.json();
+
+        console.log(
+            result
+        );
+
+       if(result.success){
+           let bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        ) || {};
+
+        bookingDraft.booking_id =
+            result.data.id;
+
+        bookingDraft.booking_number =
+            result.data.booking_id;
+
+        localStorage.setItem(
+            "bookingDraft",
+            JSON.stringify(
+                bookingDraft
+            )
+        );
+
+        console.log(
+            "BOOKING SAVED",
+            bookingDraft
+        );
+        window.location.href =
+            `/booking/booking-success/${result.data.id}/`;
+
+}else{
+
+            alert(
+                JSON.stringify(
+                    result.errors
+                )
+            );
+
+        }
+
+    }catch(error){
+
+        console.log(
+            error
+        );
+
+        alert(
+            "Booking Failed"
+        );
+
+    }
+
+});
+
+function getCookie(name){
+    let cookieValue = null;
+    if(document.cookie){
+        const cookies =
+            document.cookie.split(";");
+
+        for(let i=0;i<cookies.length;i++){
+            const cookie =
+                cookies[i].trim();
+            if(
+                cookie.startsWith(
+                    name + "="
+                )
+            ){
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+
+{% comment %} const result =
+    await response.json();
+if(result.success){
+    localStorage.removeItem(
+        "bookingDraft"
+    );
+    document.body.innerHTML = `
+        SUCCESS PAGE HTML HERE
+    `;
+}else{
+    alert(
+        JSON.stringify(
+            result.errors
+        )
+    );
+} {% endcomment %}
+
+
+
+
+document
+.getElementById(
+    "backBtn"
+)
+.addEventListener(
+"click",
+function(){
+
+    const bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        ) || {};
+
+    const guides =
+        bookingDraft.guides || [];
+
+    document
+    .getElementById(
+        "paymentStep"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+    if(guides.length > 0){
+
+        document
+        .getElementById(
+            "guideStep"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+    }else{
+
+        document
+        .getElementById(
+            "contactStep"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+    }
+
+});
+
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const applyBtn =
+            document.getElementById(
+                "applyCouponBtn"
+            );
+
+        if(!applyBtn){
+            console.log(
+                "Coupon button not found"
+            );
+            return;
+        }
+        applyBtn.addEventListener(
+            "click",
+            async function(){
+
+                const couponCode =
+                    document.getElementById(
+                        "couponCode"
+                    ).value.trim();
+
+                const couponMessage =
+                    document.getElementById(
+                        "couponMessage"
+                    );
+
+                let bookingDraft =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "bookingDraft"
+                        )
+                    ) || {};
+
+                if(!couponCode){
+
+                    couponMessage.innerHTML =
+                        "Please enter coupon code";
+
+                    couponMessage.className =
+                        "text-red-600 text-sm mt-2";
+
+                    return;
+                }
+
+                try{
+
+                    const response =
+                        await fetch(
+                            "/booking/apply-coupon/",
+                            {
+
+                                method:"POST",
+
+                                headers:{
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "X-CSRFToken":
+                                        getCookie(
+                                            "csrftoken"
+                                        )
+                                },
+
+                                body:JSON.stringify({
+
+                                    coupon_code:
+                                        couponCode,
+
+                                    tour:
+                                        bookingDraft.tour,
+
+                                    adults:
+                                        bookingDraft.adults,
+
+                                    children:
+                                        bookingDraft.children,
+
+                                    infants:
+                                        bookingDraft.infants
+
+                                })
+
+                            }
+                        );
+
+                    const result =
+                        await response.json();
+
+                    console.log(result);
+
+                    if(result.success){
+
+                        let bookingDraft =
+                            JSON.parse(
+                                localStorage.getItem(
+                                    "bookingDraft"
+                                )
+                            ) || {};
+
+                   
+                       
+
+                        bookingDraft.coupon_code =
+                            couponCode;
+
+                        bookingDraft.sub_total =
+                            result.sub_total;
+
+                        bookingDraft.discount_amount =
+                            result.discount_amount;
+
+                        bookingDraft.total_amount =
+                            result.total_amount;
+
+                        localStorage.setItem(
+                            "bookingDraft",
+                            JSON.stringify(
+                                bookingDraft
+                            )
+                        );
+
+                        document.getElementById(
+                            "summaryTotal"
+                        ).innerText =
+                            `₹${parseFloat(result.total_amount).toFixed(2)}`;
+
+                        document.getElementById(
+                            "totalAmountDisplay"
+                        ).innerText =
+                            `₹${parseFloat(result.total_amount).toFixed(2)}`;
+
+                        couponMessage.innerHTML =
+                            `Coupon Applied Successfully`;
+
+                        couponMessage.className =
+                            "text-green-600 text-sm mt-2";
+
+                    }else{
+
+                        couponMessage.innerHTML =
+                            result.message;
+
+                        couponMessage.className =
+                            "text-red-600 text-sm mt-2";
+
+                    }
+
+                }catch(error){
+
+                    console.log(error);
+
+                    couponMessage.innerHTML =
+                        "Coupon validation failed";
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+
+
+
+
+const changeBookingBtn =
+    document.getElementById(
+        "changeBookingBtn"
+    );
+
+if(changeBookingBtn){
+
+    changeBookingBtn.addEventListener(
+    "click",
+    function(e){
+
+        e.preventDefault();
+
+        const section =
+            document.getElementById(
+                "changeBookingSection"
+            );
+
+        section.classList.toggle(
+            "hidden"
+        );
+
+        const bookingDraft =
+            JSON.parse(
+                localStorage.getItem(
+                    "bookingDraft"
+                )
+            );
+
+        if(!bookingDraft){
+            return;
+        }
+
+        // Date
+
+        if(
+    bookingDraft.tour_date &&
+    updateCalendar
+){
+
+    updateCalendar.setDate(
+        bookingDraft.tour_date,
+        true
+    );
+
+}
+        // Time Dropdown
+
+        const timeSelect =
+            document.getElementById(
+                "updateTourTime"
+            );
+
+        timeSelect.innerHTML = "";
+
+        if(
+            bookingDraft.schedules &&
+            bookingDraft.schedules.length > 0
+        ){
+
+            bookingDraft.schedules.forEach(
+                schedule => {
+
+                    timeSelect.innerHTML += `
+
+                        <option
+                            value="${schedule.start_time}"
+                        >
+                            ${formatTime(
+                                schedule.start_time
+                            )}
+                        </option>
+
+                    `;
+                }
+            );
+
+            timeSelect.value =
+                bookingDraft.tour_time;
+
+        }else{
+
+            timeSelect.innerHTML = `
+
+                <option value="">
+                    No Time Slots Available
+                </option>
+
+            `;
+        }
+
+        // Travellers
+
+        document.getElementById(
+            "updateAdults"
+        ).value =
+            bookingDraft.adults || 1;
+
+        document.getElementById(
+            "updateChildren"
+        ).value =
+            bookingDraft.children || 0;
+
+        document.getElementById(
+            "updateInfants"
+        ).value =
+            bookingDraft.infants || 0;
+
+    });
+
+}
+
+
+// Update Booking
+document
+.getElementById(
+    "updateBookingBtn"
+)
+.addEventListener(
+"click",
+async function(){
+
+    let bookingDraft =
+        JSON.parse(
+            localStorage.getItem(
+                "bookingDraft"
+            )
+        );
+
+    bookingDraft.tour_date =
+        document.getElementById(
+            "updateTourDate"
+        ).value;
+
+    bookingDraft.tour_time =
+        document.getElementById(
+            "updateTourTime"
+        ).value;
+
+    bookingDraft.adults =
+        parseInt(
+            document.getElementById(
+                "updateAdults"
+            ).value
+        ) || 0;
+
+    bookingDraft.children =
+        parseInt(
+            document.getElementById(
+                "updateChildren"
+            ).value
+        ) || 0;
+
+    bookingDraft.infants =
+        parseInt(
+            document.getElementById(
+                "updateInfants"
+            ).value
+        ) || 0;
+
+    localStorage.setItem(
+        "bookingDraft",
+        JSON.stringify(
+            bookingDraft
+        )
+    );
+
+    try{
+
+
+
+        console.log(
+            "BOOKING DRAFT =",
+            bookingDraft
+        );
+
+        if(!bookingDraft.booking_id){
+
+            // Update local storage
+            localStorage.setItem(
+                "bookingDraft",
+                JSON.stringify(
+                    bookingDraft
+                )
+            );
+
+            // Update summary immediately
+            document.getElementById(
+                "summaryDateTime"
+            ).innerText =
+                `${bookingDraft.tour_date} • ${bookingDraft.tour_time}`;
+
+            document.getElementById(
+                "summaryTravellers"
+            ).innerText =
+                `${bookingDraft.adults} Adult, ${bookingDraft.children} Child, ${bookingDraft.infants} Infant`;
+
+            // Recalculate price using coupon API
+            const couponResponse =
+                await fetch(
+                    "/booking/apply-coupon/",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCookie("csrftoken")
+                        },
+                        body: JSON.stringify({
+                            coupon_code:
+                                bookingDraft.coupon_code || "",
+                            tour:
+                                bookingDraft.tour,
+                            adults:
+                                bookingDraft.adults,
+                            children:
+                                bookingDraft.children,
+                            infants:
+                                bookingDraft.infants
+                        })
+                    }
+                );
+
+            const couponResult =
+                await couponResponse.json();
+
+            if(couponResult.success){
+
+                bookingDraft.sub_total =
+                    couponResult.sub_total;
+
+                bookingDraft.discount_amount =
+                    couponResult.discount_amount;
+
+                bookingDraft.total_amount =
+                    couponResult.total_amount;
+
+                localStorage.setItem(
+                    "bookingDraft",
+                    JSON.stringify(
+                        bookingDraft
+                    )
+                );
+
+                document.getElementById(
+                    "summaryTotal"
+                ).innerText =
+                    `₹${parseFloat(
+                        couponResult.total_amount
+                    ).toFixed(2)}`;
+
+                document.getElementById(
+                    "totalAmountDisplay"
+                ).innerText =
+                    `₹${parseFloat(
+                        couponResult.total_amount
+                    ).toFixed(2)}`;
+            }
+
+            alert(
+                "Booking Updated Successfully"
+            );
+
+            return;
+        }
+
+        {% comment %} if(!bookingDraft.booking_id){
+
+            localStorage.setItem(
+                "bookingDraft",
+                JSON.stringify(
+                    bookingDraft
+                )
+            );
+
+            alert(
+                "Booking updated locally"
+            );
+
+            return;
+        } {% endcomment %}
+
+        const response =
+            await fetch(
+
+                `/booking/update-booking/${bookingDraft.booking_id}/`,
+
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "X-CSRFToken":
+                            getCookie(
+                                "csrftoken"
+                            )
+
+                    },
+
+                    body: JSON.stringify({
+
+                        adults:
+                            bookingDraft.adults,
+
+                        children:
+                            bookingDraft.children,
+
+                        infants:
+                            bookingDraft.infants,
+
+                        tour_date:
+                            bookingDraft.tour_date,
+
+                        tour_time:
+                            bookingDraft.tour_time
+
+                    })
+
+                }
+            );
+        
+        console.log("BOOKING DRAFT =", bookingDraft);
+        console.log("BOOKING ID =", bookingDraft.booking_id);
+
+        const result =
+            await response.json();
+
+        console.log(
+            result
+        );
+        if(result.success){
+
+            bookingDraft.total_amount =
+                result.total_amount;
+
+            bookingDraft.discount_amount =
+                result.discount_amount;
+
+            bookingDraft.sub_total =
+                result.sub_total;
+
+            localStorage.setItem(
+                "bookingDraft",
+                JSON.stringify(
+                    bookingDraft
+                )
+            );
+
+            document.getElementById(
+                "summaryTotal"
+            ).innerText =
+                `₹${parseFloat(result.total_amount).toFixed(2)}`;
+
+            document.getElementById(
+                "totalAmountDisplay"
+            ).innerText =
+                `₹${parseFloat(result.total_amount).toFixed(2)}`;
+
+            document.getElementById(
+                "summaryDateTime"
+            ).innerText =
+                `${bookingDraft.tour_date} • ${bookingDraft.tour_time}`;
+
+            document.getElementById(
+                "summaryTravellers"
+            ).innerText =
+                `${bookingDraft.adults} Adult, ${bookingDraft.children} Child, ${bookingDraft.infants} Infant`;
+
+            console.log(
+                "NEW TOTAL =",
+                result.total_amount
+            );
+
+            alert(
+                "Booking Updated Successfully"
+            );
+        }else{
+
+            alert(
+                JSON.stringify(
+                    result.errors
+                )
+            );
+
+        }
+
+    }catch(error){
+
+        console.log(
+            error
+        );
+
+        alert(
+            "Update Failed"
+        );
+
+    }
+
+});
+
+
+
+
+
+
+
+
+
+
+// Time Format Function
+
+function formatTime(timeString){
+
+    if(!timeString){
+        return "";
+    }
+
+    const parts =
+        timeString.split(":");
+
+    let hour =
+        parseInt(parts[0]);
+
+    const minute =
+        parts[1];
+
+    const ampm =
+        hour >= 12
+        ? "PM"
+        : "AM";
+
+    hour =
+        hour % 12;
+
+    hour =
+        hour
+        ? hour
+        : 12;
+
+    return `${hour}:${minute} ${ampm}`;
+}
+
+
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        updateCalendar =
+            flatpickr(
+                "#updateTourDate",
+                {
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    disableMobile: true
+                }
+            );
+
+    }
+);
+
+{% comment %} document.adddocument.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        updateCalendar =
+            flatpickr(
+                "#updateTourDate",
+                {
+                    minDate: "today",
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    disableMobile: true
+                }
+            );
+
+    }
+); {% endcomment %}
+</script>
+
+
 
 {% endblock %}

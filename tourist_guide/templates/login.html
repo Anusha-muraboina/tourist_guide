@@ -1,0 +1,434 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen bg-gradient-to-br from-orange-50 to-white pt-24 flex items-center justify-center px-4 py-10">
+
+    <div class="w-full max-w-5xl bg-white rounded-[35px] shadow-2xl overflow-hidden grid lg:grid-cols-2">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="relative hidden lg:block">
+
+            <img
+                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop"
+                class="absolute inset-0 w-full h-full object-cover">
+
+            <div class="absolute inset-0 bg-black/50"></div>
+
+
+            <div class="relative z-10 h-full flex flex-col justify-between p-10 text-white">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl font-black">
+
+                        T
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-2xl font-black">
+
+                            TravelGo
+
+                        </h2>
+
+                        <p class="text-orange-200 text-sm">
+
+                            Tourist Guide Platform
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div>
+
+                    <h1 class="text-5xl font-black leading-tight mb-5">
+
+                        Welcome
+                        Back
+
+                    </h1>
+
+                    <p class="text-lg text-gray-200 leading-relaxed">
+
+                        Login to explore destinations,
+                        connect with guides,
+                        and manage your travel journey.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="grid grid-cols-3 gap-4">
+
+                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+
+                        <h3 class="text-2xl font-black">
+
+                            120+
+
+                        </h3>
+
+                        <p class="text-xs text-gray-200 mt-1">
+
+                            Destinations
+
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+
+                        <h3 class="text-2xl font-black">
+
+                            15K+
+
+                        </h3>
+
+                        <p class="text-xs text-gray-200 mt-1">
+
+                            Travelers
+
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+
+                        <h3 class="text-2xl font-black">
+
+                            500+
+
+                        </h3>
+
+                        <p class="text-xs text-gray-200 mt-1">
+
+                            Guides
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="p-8 md:p-12 flex flex-col justify-center">
+
+
+            <!-- HEADING -->
+
+            <div class="mb-8 text-center lg:text-left">
+
+                <h2 class="text-4xl font-black text-blue-900 mb-2">
+
+                    Login
+
+                </h2>
+
+                <p class="text-gray-500">
+
+                    Access your travel account
+
+                </p>
+
+            </div>
+
+
+
+            <!-- SUCCESS MESSAGE -->
+
+            <div
+                id="successMessage"
+                class="hidden mb-4 px-4 py-3 rounded-xl bg-green-100 text-green-700 font-medium text-sm">
+
+            </div>
+
+
+
+            <!-- ERROR MESSAGE -->
+
+            <div
+                id="errorMessage"
+                class="hidden mb-4 px-4 py-3 rounded-xl bg-red-100 text-red-700 font-medium text-sm">
+
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <form id="loginForm" class="space-y-5">
+
+
+                <!-- EMAIL -->
+
+                <div>
+
+                    <label class="text-sm font-bold text-gray-700 block mb-2">
+
+                        Email Address
+
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter Email Address"
+                        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-400">
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div>
+
+                    <label class="text-sm font-bold text-gray-700 block mb-2">
+
+                        Password
+
+                    </label>
+
+                    <div class="relative">
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter Password"
+                            class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-400">
+
+                        <button
+                            type="button"
+                            onclick="togglePassword()"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REMEMBER -->
+
+                <div class="flex items-center justify-between text-sm">
+
+                    <label class="flex items-center gap-2 text-gray-600">
+
+                        <input
+                            type="checkbox"
+                            class="accent-orange-500">
+
+                        Remember me
+
+                    </label>
+
+                    <a href="/user/forgot-password/"
+                       class="text-blue-500 font-bold">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="w-full h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300 shadow-lg">
+
+                    Login
+
+                </button>
+
+
+
+                <!-- REGISTER -->
+
+                <p class="text-center text-sm text-gray-500 pt-2">
+
+                    Don't have an account?
+
+                    <a href="/user/register/"
+                       class="text-blue-500 font-bold">
+
+                        Register
+
+                    </a>
+
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+
+
+<script>
+
+    // PASSWORD TOGGLE
+
+    function togglePassword() {
+
+        const password = document.getElementById('password');
+
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (password.type === 'password') {
+
+            password.type = 'text';
+
+            eyeIcon.classList.remove('fa-eye');
+
+            eyeIcon.classList.add('fa-eye-slash');
+
+        }
+
+        else {
+
+            password.type = 'password';
+
+            eyeIcon.classList.remove('fa-eye-slash');
+
+            eyeIcon.classList.add('fa-eye');
+
+        }
+
+    }
+
+
+
+    // LOGIN API
+
+    document
+        .getElementById('loginForm')
+        .addEventListener('submit', async function(e) {
+
+        e.preventDefault();
+
+        let email = document.getElementById('email').value;
+
+        let password = document.getElementById('password').value;
+
+        let successMessage = document.getElementById('successMessage');
+
+        let errorMessage = document.getElementById('errorMessage');
+
+
+
+        successMessage.classList.add('hidden');
+
+        errorMessage.classList.add('hidden');
+
+
+
+        try {
+
+            let response = await fetch('/user/api/login/', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify({
+
+                    email: email,
+                    password: password
+
+                })
+
+            });
+
+
+
+            let data = await response.json();
+
+
+
+            if (response.ok) {
+
+                successMessage.innerHTML =
+                    data.message;
+
+                successMessage.classList.remove('hidden');
+
+
+
+                setTimeout(() => {
+
+                    window.location.href = '/';
+
+                }, 1500);
+
+            }
+
+            else {
+
+                errorMessage.innerHTML =
+                    JSON.stringify(data);
+
+                errorMessage.classList.remove('hidden');
+
+            }
+
+        }
+
+        catch (error) {
+
+            errorMessage.innerHTML =
+                'Something went wrong';
+
+            errorMessage.classList.remove('hidden');
+
+        }
+
+    });
+
+</script>
+
+{% endblock %}

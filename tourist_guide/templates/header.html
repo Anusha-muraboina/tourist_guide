@@ -426,7 +426,7 @@
             <i class="fa-regular fa-bookmark text-[18px]"></i>
           </button> -->
 
-          <div class="flex items-center gap-3">
+          <!-- <div class="flex items-center gap-3">
 
 
             <img
@@ -439,12 +439,16 @@
                 Anusha
               </h3>
 
-              <p class="text-[12px] text-gray-500">
-                Traveler
-              </p>
+         
+
+              <a href="/user/register/">
+  
+   Traveler
+
+</a>
             </div>
 
-            <!-- MOBILE MENU BUTTON -->
+         
 <button
     id="mobileMenuBtn"
     class="lg:hidden w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center text-gray-700"
@@ -454,7 +458,189 @@
 
 </button>
 
-          </div>
+          </div> -->
+
+
+          <!-- RIGHT -->
+
+<div class="flex items-center gap-7">
+
+
+    {% if request.user.is_authenticated %}
+
+    <!-- USER DROPDOWN -->
+
+    <div class="relative group">
+
+        <button
+            class="flex items-center gap-3">
+
+            <img
+              src="https://i.pravatar.cc/100"
+              class="w-11 h-11 rounded-full object-cover border-2 border-cyan-500"
+            />
+
+            <div class="hidden md:block text-left">
+
+                <h3 class="text-[14px] font-semibold text-gray-800">
+
+                    {{ request.user.username }}
+
+                </h3>
+
+                <p class="text-[12px] text-gray-500 capitalize">
+
+                    {{ request.user.role }}
+
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-chevron-down text-[12px] text-gray-500"></i>
+
+        </button>
+
+
+
+        <!-- DROPDOWN -->
+
+        <div class="absolute right-0 top-[45px] w-[220px] bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 overflow-hidden">
+
+
+            <!-- TOP -->
+
+            <div class="p-5 border-b border-gray-100">
+
+                <h3 class="text-[15px] font-bold text-gray-900">
+
+                    {{ request.user.username }}
+
+                </h3>
+
+                <p class="text-[13px] text-gray-500 mt-1">
+
+                    {{ request.user.email }}
+
+                </p>
+
+            </div>
+
+
+
+            <!-- MENU -->
+
+            <div class="p-2">
+
+
+                <!-- PROFILE -->
+
+                <a href="/profile/"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
+
+                    <i class="fa-regular fa-user text-cyan-600"></i>
+
+                    <span class="text-[14px] font-medium text-gray-700">
+
+                        My Profile
+
+                    </span>
+
+                </a>
+
+
+
+                <!-- BOOKINGS -->
+
+                <a href="#"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
+
+                    <i class="fa-regular fa-bookmark text-cyan-600"></i>
+
+                    <span class="text-[14px] font-medium text-gray-700">
+
+                        My Bookings
+
+                    </span>
+
+                </a>
+
+
+
+                <!-- SETTINGS -->
+
+                <a href="#"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
+
+                    <i class="fa-solid fa-gear text-cyan-600"></i>
+
+                    <span class="text-[14px] font-medium text-gray-700">
+
+                        Settings
+
+                    </span>
+
+                </a>
+
+
+
+                <button
+    onclick="logoutUser()"
+    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition text-left">
+
+    <i class="fa-solid fa-right-from-bracket text-red-500"></i>
+
+    <span class="text-[14px] font-medium text-red-500">
+
+        Logout
+
+    </span>
+
+</button>
+
+                <!-- LOGOUT -->
+                <!-- <a href="/user/api/logout/"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition">
+                    <i class="fa-solid fa-right-from-bracket text-red-500"></i>
+                    <span class="text-[14px] font-medium text-red-500">
+                        Logout
+                    </span>
+                </a> -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    {% else %}
+
+    <!-- LOGIN BUTTON -->
+
+    <a href="/user/login/"
+       class="h-11 px-6 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center font-semibold transition">
+
+        Login
+
+    </a>
+
+    {% endif %}
+
+
+
+    <!-- MOBILE MENU BUTTON -->
+
+    <button
+        id="mobileMenuBtn"
+        class="lg:hidden w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center text-gray-700"
+    >
+
+        <i class="fa-solid fa-bars text-[18px]"></i>
+
+    </button>
+
+</div>
 
         </div>
 
@@ -667,6 +853,123 @@
 </div>
 
 
+
+
+
+
+<script>
+
+    // =========================
+    // CSRF TOKEN
+    // =========================
+
+    function getCookie(name) {
+
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== '') {
+
+            const cookies = document.cookie.split(';');
+
+            for (let i = 0; i < cookies.length; i++) {
+
+                const cookie = cookies[i].trim();
+
+                if (
+                    cookie.substring(
+                        0,
+                        name.length + 1
+                    ) === (name + '=')
+                ) {
+
+                    cookieValue = decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+        return cookieValue;
+
+    }
+
+
+
+    // =========================
+    // LOGOUT FUNCTION
+    // =========================
+
+    async function logoutUser() {
+
+        const csrftoken =
+            getCookie('csrftoken');
+
+        try {
+
+            let response = await fetch(
+
+                '/user/api/logout/',
+
+                {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json',
+
+                        'X-CSRFToken': csrftoken
+
+                    }
+
+                }
+
+            );
+
+
+
+            let data =
+                await response.json();
+
+
+
+            if (response.ok) {
+
+                window.location.href = '/';
+
+            }
+
+            else {
+
+                alert(
+                    data.message ||
+                    'Logout failed'
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+            alert(
+                'Something went wrong'
+            );
+
+        }
+
+    }
+
+</script>
 
 <script>
 

@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="min-h-screen md:pt-24 bg-gray-100 flex items-center justify-center px-4">
+
+    <div class="w-full max-w-md bg-white rounded-[30px] shadow-2xl p-8">
+
+
+        <!-- HEADER -->
+
+        <div class="text-center mb-8">
+
+            <h2 class="text-4xl font-black text-gray-900">
+
+                Register
+
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+
+                Create your account
+
+            </p>
+
+        </div>
+
+
+
+        <!-- SUCCESS MESSAGE -->
+
+        <div
+            id="successMessage"
+            class="hidden mb-4 px-4 py-3 rounded-xl bg-green-100 text-green-700 font-medium text-sm">
+
+        </div>
+
+
+
+        <!-- ERROR MESSAGE -->
+
+        <div
+            id="errorMessage"
+            class="hidden mb-4 px-4 py-3 rounded-xl bg-red-100 text-red-700 font-medium text-sm">
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form id="registerForm" class="space-y-4">
+
+
+            <!-- ROLE -->
+
+            <div class="grid grid-cols-2 gap-3">
+
+                <label class="cursor-pointer">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="tourist"
+                        class="peer hidden"
+                        checked>
+
+                    <div class="h-12 rounded-xl border border-blue-500 bg-blue-50 flex items-center justify-center font-bold text-blue-500 peer-checked:bg-blue-900 peer-checked:text-white transition">
+
+                        Tourist
+
+                    </div>
+
+                </label>
+
+
+
+                <label class="cursor-pointer">
+
+                    <input
+                        type="radio"
+                        name="role"
+                        value="guide"
+                        class="peer hidden">
+
+                    <div class="h-12 rounded-xl border border-gray-200 flex items-center justify-center font-bold text-gray-600 peer-checked:bg-blue-900 peer-checked:text-white transition">
+
+                        Guide
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- USERNAME -->
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Username"
+                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+
+
+            <!-- EMAIL -->
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+
+
+            <!-- PHONE -->
+
+            <input
+                type="text"
+                id="phone_number"
+                placeholder="Phone Number"
+                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+
+
+            <!-- LOCATION -->
+
+            <input
+                type="text"
+                id="location"
+                placeholder="Location"
+                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+
+
+            <!-- PASSWORD -->
+
+            <div class="relative">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                <button
+                    type="button"
+                    onclick="togglePassword('password', 'passwordIcon')"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+
+                    <i id="passwordIcon" class="fa-solid fa-eye"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="relative">
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm Password"
+                    class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                <button
+                    type="button"
+                    onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+
+                    <i id="confirmPasswordIcon" class="fa-solid fa-eye"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="w-full h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300">
+
+                Create Account
+
+            </button>
+
+
+
+            <!-- LOGIN -->
+
+            <p class="text-center text-sm text-gray-500">
+
+                Already have an account?
+
+                <a href="/user/login/"
+                   class="text-blue-500 font-bold">
+
+                    Login
+
+                </a>
+
+            </p>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+
+
+<script>
+
+    // PASSWORD TOGGLE
+
+    function togglePassword(inputId, iconId) {
+
+        const input = document.getElementById(inputId);
+
+        const icon = document.getElementById(iconId);
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            icon.classList.remove("fa-eye");
+
+            icon.classList.add("fa-eye-slash");
+
+        }
+
+        else {
+
+            input.type = "password";
+
+            icon.classList.remove("fa-eye-slash");
+
+            icon.classList.add("fa-eye");
+
+        }
+
+    }
+
+
+
+    // REGISTER API
+
+    document
+        .getElementById('registerForm')
+        .addEventListener('submit', async function(e) {
+
+        e.preventDefault();
+
+        let username = document.getElementById('username').value;
+
+        let email = document.getElementById('email').value;
+
+        let phone_number = document.getElementById('phone_number').value;
+
+        let location = document.getElementById('location').value;
+
+        let password = document.getElementById('password').value;
+
+        let confirmPassword = document.getElementById('confirmPassword').value;
+
+        let role = document.querySelector(
+            'input[name="role"]:checked'
+        ).value;
+
+
+
+        let successMessage = document.getElementById('successMessage');
+
+        let errorMessage = document.getElementById('errorMessage');
+
+
+
+        successMessage.classList.add('hidden');
+
+        errorMessage.classList.add('hidden');
+
+
+
+        // PASSWORD CHECK
+
+        if (password !== confirmPassword) {
+
+            errorMessage.innerHTML = 'Passwords do not match';
+
+            errorMessage.classList.remove('hidden');
+
+            return;
+
+        }
+
+
+
+        try {
+
+            let response = await fetch('/user/api/register/', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify({
+
+                    username: username,
+                    email: email,
+                    phone_number: phone_number,
+                    location: location,
+                    password: password,
+                    role: role
+
+                })
+
+            });
+
+
+
+            let data = await response.json();
+
+
+
+            if (response.ok) {
+
+                successMessage.innerHTML =
+                    data.message;
+
+                successMessage.classList.remove('hidden');
+
+                document.getElementById(
+                    'registerForm'
+                ).reset();
+
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        '/user/login/';
+
+                }, 1500);
+
+            }
+
+            else {
+
+                errorMessage.innerHTML =
+                    JSON.stringify(data);
+
+                errorMessage.classList.remove('hidden');
+
+            }
+
+        }
+
+        catch (error) {
+
+            errorMessage.innerHTML =
+                'Something went wrong';
+
+            errorMessage.classList.remove('hidden');
+
+        }
+
+    });
+
+</script>
+
+{% endblock %}

@@ -42,6 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tourist',
     'user',
+    'rating',
+    'coupon',
+    'booking',
+    
+    
+    # Third Party Apps
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +109,49 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+
+        'rest_framework.authentication.SessionAuthentication',
+
+        'rest_framework.authentication.BasicAuthentication',
+
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [
+
+        'rest_framework.permissions.AllowAny',
+
+    ],
+
+}
+
+
+
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "anushamuraboina9@gmail.com"
+EMAIL_HOST_PASSWORD = "mpywwnwfrubgkxoe"
+
+DEFAULT_FROM_EMAIL = "Farmhouses Hyderabad <anushamuraboina9@gmail.com>"
+
+# Admin Email
+ADMIN_EMAIL = "anushamuraboina9@gmail.com"
+
+# Optional: CC emails
+CC_EMAIL = ["anushamuraboina99@gmail.com"]
+
+
 
 
 # Internationalization

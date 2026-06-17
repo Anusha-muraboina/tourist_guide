@@ -255,11 +255,12 @@ Home
   </section> 
 
   <!-- ================= TOUR SECTION ================= -->
+<!-- ================= TOUR SECTION ================= -->
 
-  <section class="mx-auto px-6 lg:px-16 py-8 overflow-hidden">
+<section class="mx-auto px-6 lg:px-16 py-12 bg-[#f8fbff]">
 
     <!-- TOP -->
-    <div class="flex items-center justify-between mb-12">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
 
         <div>
 
@@ -267,7 +268,7 @@ Home
                 Recommended Tours
             </p>
 
-            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-2">
+            <h2 class="text-3xl lg:text-5xl font-black text-gray-900 mt-3 leading-tight">
                 Based On Your Search In Hyderabad
             </h2>
 
@@ -275,255 +276,383 @@ Home
 
     </div>
 
-    <!-- CAROUSEL -->
-    <div class="relative">
 
-        <!-- LEFT BUTTON -->
-        <button
-            id="prevBtn"
-            class="absolute left-0 lg:-left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-lg hover:bg-cyan-600 hover:text-white transition"
-        >
-            <i class="fa-solid fa-chevron-left"></i>
-        </button>
 
-        <!-- RIGHT BUTTON -->
-        <button
-            id="nextBtn"
-            class="absolute right-0 lg:-right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-lg hover:bg-cyan-600 hover:text-white transition"
-        >
-            <i class="fa-solid fa-chevron-right"></i>
-        </button>
 
-        <!-- SLIDER --> 
-        <div
-            id="tourCarousel"
-            class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar"
-        >
-            <a href="{% url 'tour_details' %}"  class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover block">
-          
-              <!-- CARD -->
-           
-            <div class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+<!-- TOUR GRID -->
 
-                <div class="relative">
+
+
+<!-- TOUR GRID -->
+<div
+    id="tourGrid"
+    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-7"
+></div>
+
+
+<script>
+
+async function fetchHomeTours(){
+
+    try{
+
+        const response = await fetch(
+            "/api/home/"
+        );
+
+        const tours = await response.json();
+
+        console.log(tours);
+
+        let html = "";
+
+
+
+        tours.forEach((tour, index) => {
+
+            html += `
+
+            <!-- TOUR CARD -->
+            <a
+                href="/tour-details/${tour.slug}/"
+                class="
+                    ${
+                        index > 7
+                        ? 'hidden extra-tour'
+                        : ''
+                    }
+                    group
+                    bg-white
+                    rounded-[30px]
+                    overflow-hidden
+                    shadow-md
+                    hover:shadow-2xl
+                    hover:-translate-y-2
+                    transition
+                    duration-500
+                    block
+                "
+            >
+
+                <!-- IMAGE -->
+                <div class="relative overflow-hidden">
+
+                    {% comment %} <img
+                        src="${
+                            tour.thumbnail
+                            ? tour.thumbnail
+                            : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e'
+                        }"
+                        class="w-full h-[260px] object-cover group-hover:scale-110 transition duration-700"
+                    > {% endcomment %}
 
                     <img
-                        src="https://images.unsplash.com/photo-1548013146-72479768bada"
-                        class="h-64 w-full object-cover"
-                    />
+    src="${
+        tour.thumbnail
+        ? tour.thumbnail
+        : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e9'
+    }"
+    alt="${tour.title}"
+    class="w-full h-[260px] object-cover group-hover:scale-110 transition duration-700"
+    onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e'"
+>
+
+                    <!-- TOUR TYPE -->
+                    <div class="absolute top-4 left-4">
+
+                        <span class="bg-white/90 backdrop-blur-md text-cyan-700 text-[12px] font-bold px-4 py-2 rounded-full shadow-lg capitalize">
+
+                            ${tour.tour_type}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- FEATURED -->
+                    ${
+                        tour.featured
+                        ? `
+                        <div class="absolute top-4 right-4">
+
+                            <span class="bg-yellow-400 text-black text-[11px] font-black px-3 py-2 rounded-full shadow-lg">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+                        `
+                        : ''
+                    }
 
                 </div>
-                <div class="p-5">
-                    <p class="text-cyan-600 text-[12px] font-semibold">
-                        Private Tour
-                    </p>
 
-                    <h3 class="text-[18px] font-bold text-gray-900 mt-2">
-                        Golconda Fort Half-Day Tour
+
+
+
+                <!-- CONTENT -->
+                <div class="p-6">
+
+                    <!-- TITLE -->
+                    <h3 class="text-[22px] font-black text-[#0B1F44] leading-tight line-clamp-2 group-hover:text-cyan-600 transition">
+
+                        ${tour.title}
+
                     </h3>
 
-                    <p class="text-gray-500 text-[13px] mt-3">
-                        5 - 6 hours · Pickup available
-                    </p>
 
-                    <div class="flex items-center justify-between mt-6">
 
-                        <div>⭐ 4.5</div>
 
-                        <h2 class="text-[22px] font-bold text-cyan-600">
-                            ₹9,250
-                        </h2>
+
+                    <!-- DURATION -->
+                    <div class="flex items-center gap-2 text-gray-500 text-sm mt-4">
+
+                        <i class="fa-regular fa-clock text-cyan-600"></i>
+
+                        <span>
+
+                            ${tour.duration}
+
+                        </span>
+
+                    </div>
+
+
+
+
+
+                    <!-- BOTTOM -->
+                    <div class="flex items-end justify-between mt-7">
+
+                        <!-- LEFT -->
+                        <div>
+
+                            <div class="flex items-center gap-1 text-yellow-500">
+
+                                <i class="fa-solid fa-star"></i>
+
+                                <span class="font-bold text-[#0B1F44]">
+
+                                    4.8
+
+                                </span>
+
+                            </div>
+
+                            <p class="text-gray-400 text-sm mt-1">
+
+                                Tour Package
+
+                            </p>
+
+                        </div>
+
+
+
+
+                        <!-- RIGHT -->
+                        <div class="text-right">
+
+                            ${
+                                tour.offer_price
+                                ? `
+                                <p class="text-sm text-gray-400 line-through">
+
+                                    ₹${tour.adult_price}
+
+                                </p>
+                                `
+                                : ''
+                            }
+
+                            <h4 class="text-3xl font-black text-cyan-600">
+
+                             ₹${tour.adult_price}
+
+                                {% comment %} ₹${
+                                    tour.adult_price
+                                    ? tour.adult_price
+                                    : tour.price
+                                } {% endcomment %}
+
+                            </h4>
+
+                        </div>
 
                     </div>
 
                 </div>
-
-            </div>
-</a>
-
-
-            <a href="{% url 'tour_details' %}"  class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover block">
-          
-            <!-- CARD -->
-            <div class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-                <div class="relative">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1599661046289-e31897846e41"
-                        class="h-64 w-full object-cover"
-                    />
-
-                </div>
-
-                <div class="p-5">
-
-                    <p class="text-cyan-600 text-[12px] font-semibold">
-                        Full Day Tour
-                    </p>
-
-                    <h3 class="text-[18px] font-bold text-gray-900 mt-2">
-                        Hyderabad Full Day Tour
-                    </h3>
-
-                    <p class="text-gray-500 text-[13px] mt-3">
-                        4 - 8 hours · Skip line
-                    </p>
-
-                    <div class="flex items-center justify-between mt-6">
-
-                        <div>⭐ 4.8</div>
-
-                        <h2 class="text-[22px] font-bold text-red-500">
-                            ₹5,400
-                        </h2>
-
-                    </div>
-
-                </div>
-
-            </div>
 
             </a>
 
-            <a href="{% url 'tour_details' %}"  class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover block">
-          
-                        <!-- CARD -->
-            <div class="min-w-[320px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+            `;
 
-                <div class="relative">
+        });
 
-                    <img
-                        src="https://images.unsplash.com/photo-1599661046289-e31897846e41"
-                        class="h-64 w-full object-cover"
-                    />
 
-                </div>
 
-                <div class="p-5">
 
-                    <p class="text-cyan-600 text-[12px] font-semibold">
-                        Full Day Tour
-                    </p>
+        // ================= EMPTY =================
 
-                    <h3 class="text-[18px] font-bold text-gray-900 mt-2">
-                        Hyderabad Full Day Tour
+        if(tours.length === 0){
+
+            html = `
+
+            <div class="col-span-full">
+
+                <div class="bg-white rounded-3xl p-10 text-center shadow-md">
+
+                    <h3 class="text-2xl font-bold text-gray-900">
+
+                        No Tours Available
+
                     </h3>
 
-                    <p class="text-gray-500 text-[13px] mt-3">
-                        4 - 8 hours · Skip line
+                    <p class="text-gray-500 mt-3">
+
+                        Please add tours in admin panel.
+
                     </p>
-
-                    <div class="flex items-center justify-between mt-6">
-
-                        <div>⭐ 4.8</div>
-
-                        <h2 class="text-[22px] font-bold text-red-500">
-                            ₹5,400
-                        </h2>
-
-                    </div>
 
                 </div>
 
             </div>
-</a>
-            
+
+            `;
+
+        }
 
 
-            <a href="{% url 'tour_details' %}"  class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover block">
-          
-            <!-- CARD -->
-            <div class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-                <div class="relative">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989"
-                        class="h-64 w-full object-cover"
-                    />
-
-                </div>
-
-                <div class="p-5">
-
-                    <p class="text-cyan-600 text-[12px] font-semibold">
-                        Guided Tour
-                    </p>
-
-                    <h3 class="text-[18px] font-bold text-gray-900 mt-2">
-                        Heritage Walking Tour
-                    </h3>
-
-                    <p class="text-gray-500 text-[13px] mt-3">
-                        3 - 5 hours · Pickup available
-                    </p>
-
-                    <div class="flex items-center justify-between mt-6">
-
-                        <div>⭐ 4.9</div>
-
-                        <h2 class="text-[22px] font-bold text-cyan-600">
-                            ₹4,250
-                        </h2>
-
-                    </div>
-
-                </div>
-
-            </div>
-</a>
 
 
-            <a href="{% url 'tour_details' %}"  class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover block">
-          
-            <!-- CARD -->
-            <div class="min-w-[330px] bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+        document.getElementById(
+            "tourGrid"
+        ).innerHTML = html;
 
-                <div class="relative">
 
-                    <img
-                        src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2"
-                        class="h-64 w-full object-cover"
-                    />
 
-                </div>
 
-                <div class="p-5">
+        // ================= SHOW MORE =================
 
-                    <p class="text-cyan-600 text-[12px] font-semibold">
-                        Private Tour
-                    </p>
+        const hiddenTours =
+            document.querySelectorAll(
+                ".extra-tour"
+            );
 
-                    <h3 class="text-[18px] font-bold text-gray-900 mt-2">
-                        Hyderabad Tour With Lunch
-                    </h3>
 
-                    <p class="text-gray-500 text-[13px] mt-3">
-                        8 hours · Pickup available
-                    </p>
 
-                    <div class="flex items-center justify-between mt-6">
+        const existingBtn =
+            document.getElementById(
+                "showMoreWrapper"
+            );
 
-                        <div>⭐ 4.7</div>
+        if(existingBtn){
 
-                        <h2 class="text-[22px] font-bold text-cyan-600">
-                            ₹9,750
-                        </h2>
+            existingBtn.remove();
 
-                    </div>
+        }
 
-                </div>
+
+
+        if(hiddenTours.length > 0){
+
+            const buttonHTML = `
+
+            <div
+                id="showMoreWrapper"
+                class="flex justify-center mt-14"
+            >
+
+                <button
+                    id="showMoreBtn"
+                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 text-white px-10 py-4 rounded-2xl font-bold text-[15px] shadow-xl transition"
+                >
+
+                    Show More Tours
+
+                </button>
 
             </div>
-            </a>
 
-        </div>
+            `;
 
-    </div>
+            document
+                .querySelector("#tourGrid")
+                .insertAdjacentHTML(
+                    "afterend",
+                    buttonHTML
+                );
+
+
+
+            document
+                .getElementById("showMoreBtn")
+                .addEventListener("click", function(){
+
+                    hiddenTours.forEach((card) => {
+
+                        card.classList.remove(
+                            "hidden"
+                        );
+
+                    });
+
+                    this.parentElement.style.display = "none";
+
+                });
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(
+            "Home Tour API Error",
+            error
+        );
+
+    }
+
+}
+
+
+fetchHomeTours();
+
+</script>
 
 </section>
 
+
+
+
+
+<script>
+
+const showMoreBtn =
+    document.getElementById("showMoreBtn");
+
+if (showMoreBtn) {
+
+    showMoreBtn.addEventListener("click", function () {
+
+        const hiddenTours =
+            document.querySelectorAll(".extra-tour");
+
+        hiddenTours.forEach((card) => {
+
+            card.classList.remove("hidden");
+
+        });
+
+        showMoreBtn.style.display = "none";
+
+    });
+
+}
+
+</script>
 
 
 
@@ -1129,7 +1258,7 @@ Home
 
 </style>
 
-<script>
+{% comment %} <script>
 
 const carousel =
     document.getElementById("tourCarousel");
@@ -1184,241 +1313,8 @@ setInterval(() => {
 
 }, 3000);
 
-</script>
+</script> {% endcomment %}
 
-  <!-- <section class=" mx-auto px-16 py-8">
-
-   
-    <div class="flex items-center justify-between mb-12">
-
-      <div>
-
-        <p class="text-cyan-600 text-[13px] font-semibold uppercase tracking-[3px]">
-          Recommended Tours
-        </p>
-
-        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-2">
-
-          Based On Your Search In Hyderabad
-
-        </h2>
-
-      </div>
-
-      <button class="w-12 h-12 rounded-full bg-white shadow-md hover:bg-cyan-600 hover:text-white transition">
-
-        <i class="fa-solid fa-arrow-right"></i>
-
-      </button>
-
-    </div>
-
-  
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-2">
-
-      
-      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-        <div class="relative">
-
-          <img
-            src="https://images.unsplash.com/photo-1548013146-72479768bada"
-            class="h-64 w-full object-cover"
-          />
-
-          <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md">
-
-            <i class="fa-regular fa-heart"></i>
-
-          </button>
-
-        </div>
-
-        <div class="p-5">
-
-          <p class="text-cyan-600 text-[12px] font-semibold">
-            Private Tour
-          </p>
-
-          <h3 class="text-[18px] font-bold text-gray-900 mt-2 leading-7">
-
-            Golconda Fort Half-Day Tour
-
-          </h3>
-
-          <p class="text-gray-500 text-[13px] mt-3">
-            5 - 6 hours · Pickup available
-          </p>
-
-          <div class="flex items-center justify-between mt-6">
-
-            <div class="text-[14px]">
-              ⭐ 4.5
-            </div>
-
-            <h2 class="text-[22px] font-bold text-cyan-600">
-              ₹9,250
-            </h2>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      
-      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-        <div class="relative">
-
-          <img
-            src="https://images.unsplash.com/photo-1599661046289-e31897846e41"
-            class="h-64 w-full object-cover"
-          />
-
-          <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md">
-
-            <i class="fa-regular fa-heart"></i>
-
-          </button>
-
-        </div>
-
-        <div class="p-5">
-
-          <p class="text-cyan-600 text-[12px] font-semibold">
-            Full Day Tour
-          </p>
-
-          <h3 class="text-[18px] font-bold text-gray-900 mt-2 leading-7">
-
-            Hyderabad Full Day Tour
-
-          </h3>
-
-          <p class="text-gray-500 text-[13px] mt-3">
-            4 - 8 hours · Skip line
-          </p>
-
-          <div class="flex items-center justify-between mt-6">
-
-            <div class="text-[14px]">
-              ⭐ 4.8
-            </div>
-
-            <h2 class="text-[22px] font-bold text-red-500">
-              ₹5,400
-            </h2>
-
-          </div>
-
-        </div>
-
-      </div>
-
-     
-      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-        <div class="relative">
-
-          <img
-            src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989"
-            class="h-64 w-full object-cover"
-          />
-
-          <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md">
-
-            <i class="fa-regular fa-heart"></i>
-
-          </button>
-
-        </div>
-
-        <div class="p-5">
-
-          <p class="text-cyan-600 text-[12px] font-semibold">
-            Guided Tour
-          </p>
-
-          <h3 class="text-[18px] font-bold text-gray-900 mt-2 leading-7">
-
-            Heritage Walking Tour
-
-          </h3>
-
-          <p class="text-gray-500 text-[13px] mt-3">
-            3 - 5 hours · Pickup available
-          </p>
-
-          <div class="flex items-center justify-between mt-6">
-
-            <div class="text-[14px]">
-              ⭐ 4.9
-            </div>
-
-            <h2 class="text-[22px] font-bold text-cyan-600">
-              ₹4,250
-            </h2>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    
-      <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-
-        <div class="relative">
-
-          <img
-            src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2"
-            class="h-64 w-full object-cover"
-          />
-
-          <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md">
-
-            <i class="fa-regular fa-heart"></i>
-
-          </button>
-
-        </div>
-
-        <div class="p-5">
-
-          <p class="text-cyan-600 text-[12px] font-semibold">
-            Private Tour
-          </p>
-
-          <h3 class="text-[18px] font-bold text-gray-900 mt-2 leading-7">
-
-            Hyderabad Tour With Lunch
-
-          </h3>
-
-          <p class="text-gray-500 text-[13px] mt-3">
-            8 hours · Pickup available
-          </p>
-
-          <div class="flex items-center justify-between mt-6">
-
-            <div class="text-[14px]">
-              ⭐ 4.7
-            </div>
-
-            <h2 class="text-[22px] font-bold text-cyan-600">
-              ₹9,750
-            </h2>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>  -->
 
   
 {% endblock %}
