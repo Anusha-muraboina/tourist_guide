@@ -2692,37 +2692,41 @@ if(continueBtn){
 </script>
 
 <script>
+const backBtn =
+    document.getElementById(
+        "backBtn"
+    );
 
-document
-.getElementById(
-    "backBtn"
-)
 if(backBtn){
 
     backBtn.addEventListener(
-"click",
-function(){
+        "click",
+        function(){
 
-    document
-    .getElementById(
-        "paymentStep"
-    )
-    .style.display =
-        "none";
+            document
+            .getElementById(
+                "paymentStep"
+            )
+            .style.display =
+                "none";
 
-    document
-    .getElementById(
-        "contactStep"
-    )
-    .style.display =
-        "block";
+            document
+            .getElementById(
+                "contactStep"
+            )
+            .style.display =
+                "block";
 
-})};
+        }
+    );
+2.
+}
 
-document
-.getElementById(
-    "confirmBookingBtn"
-)
+const confirmBookingBtn =
+    document.getElementById(
+        "confirmBookingBtn"
+    );
+
 if(confirmBookingBtn){
 
     confirmBookingBtn.addEventListener(

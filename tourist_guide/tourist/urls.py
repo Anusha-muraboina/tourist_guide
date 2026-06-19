@@ -6,8 +6,9 @@ from django.urls import path
 from . import views
 
 from tourist.views import (
-    HomeListAPIView,
+    HomeAPIView,
     TourDetailAPIView,
+    CategoryTourAPIView
 )
 urlpatterns = [
     path('', views.home, name='home'),
@@ -19,7 +20,7 @@ urlpatterns = [
      
     path(
         'api/home/',
-        HomeListAPIView.as_view(),
+        HomeAPIView.as_view(),
         name='tour-list-api'
     ),
 
@@ -40,8 +41,9 @@ urlpatterns = [
     name='tour_details'
 ),
     
-    
-    
-    
+    path(
+        "api/categories/",
+        CategoryTourAPIView.as_view()
+    ),
     
 ]

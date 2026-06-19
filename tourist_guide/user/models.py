@@ -32,6 +32,18 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
+    
+    state = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+
+    country = models.CharField(
+        max_length=100,
+        default="India"
+    )
+
 
     role = models.CharField(
         max_length=20,

@@ -1,5 +1,8 @@
 from django.shortcuts import render
-
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser
+)
 # Create your views here.
 from django.http import HttpResponse
 # Create your views here.
@@ -56,7 +59,10 @@ from django.contrib.auth import (
 
 
 class RegisterAPIView(APIView):
-
+    parser_classes = [
+        MultiPartParser,
+        FormParser
+    ]
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -219,6 +225,7 @@ class ForgotPasswordAPIView(APIView):
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
+
 
 
 

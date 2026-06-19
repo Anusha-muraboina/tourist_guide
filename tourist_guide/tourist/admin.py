@@ -342,7 +342,7 @@ class TourAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "title",
-        "guide",
+        # "guide",
         "category",
         "city",
         "state",
@@ -411,7 +411,7 @@ class TourAdmin(admin.ModelAdmin):
             "Basic Information",
             {
                 "fields": (
-                    "guide",
+                    # "guide",
                     "category",
                     "title",
                     "slug",

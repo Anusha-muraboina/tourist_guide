@@ -38,6 +38,7 @@ from user.models import User
 class GuideSerializer(
     serializers.ModelSerializer
 ):
+    profile_image = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -53,9 +54,22 @@ class GuideSerializer(
 
             "phone_number",
 
-            "location"
-        ]
+            "location",
+             "state",
 
+            "profile_image"
+        ]
+    def get_profile_image(self, obj):
+
+        request = self.context.get("request")
+
+        if obj.profile_image and request:
+
+            return request.build_absolute_uri(
+                obj.profile_image.url
+            )
+
+        return None
 
 # =====================================
 # TOUR PRICING SERIALIZER
@@ -350,15 +364,30 @@ class BookingCreateSerializer(
 
                 })
 
+            # if (
+
+            #     selected_guide.location.strip().lower()
+
+            #     !=
+
+            #     tour.city.strip().lower()
+
+            # ):
+            
             if (
-
                 selected_guide.location.strip().lower()
-
-                !=
-
-                tour.city.strip().lower()
-
+                != tour.city.strip().lower()
+                or
+                selected_guide.state.strip().lower()
+                != tour.state.strip().lower()
             ):
+
+                raise serializers.ValidationError({
+                    "guide": (
+                        "Selected guide is not available "
+                        "for this location"
+                    )
+                })
 
                 raise serializers.ValidationError({
 
@@ -861,7 +890,8 @@ class BookingCreateSerializer(
         if obj.guide:
 
             return GuideSerializer(
-                obj.guide
+                obj.guide ,
+                context=self.context
             ).data
 
         return None
@@ -877,6 +907,8 @@ class BookingCreateSerializer(
             role="guide",
 
             location__iexact=obj.tour.city,
+            
+            state__iexact=obj.tour.state,
 
             is_active=True
         )
@@ -884,8 +916,8 @@ class BookingCreateSerializer(
         return GuideSerializer(
 
             guides,
-
-            many=True
+            many=True,
+            context=self.context
 
         ).data
 

@@ -242,8 +242,8 @@ class Tour(models.Model):
         ('group', 'Group'),
     )
 
-    guide = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name="guide_tours")
-    category = models.ForeignKey( TourCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    # guide = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name="guide_tours" ,null=True ,blank=True)
+    category = models.ForeignKey( TourCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="tours")
 
     title = models.CharField(
         max_length=255

@@ -4,7 +4,7 @@
 
 <section class="min-h-screen md:pt-24 bg-gray-100 flex items-center justify-center px-4">
 
-    <div class="w-full max-w-md bg-white rounded-[30px] shadow-2xl p-8">
+    <div class="w-full max-w-4xl bg-white rounded-[30px] shadow-2xl p-8">
 
 
         <!-- HEADER -->
@@ -94,7 +94,7 @@
             </div>
 
 
-
+ <div class="grid grid-cols-2 gap-3">
             <!-- USERNAME -->
 
             <input
@@ -113,10 +113,10 @@
                 placeholder="Email Address"
                 class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-
+ </div>
 
             <!-- PHONE -->
-
+ <div class="grid grid-cols-2 gap-3">
             <input
                 type="text"
                 id="phone_number"
@@ -134,9 +134,83 @@
                 class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
 
 
+ </div>
+
+
+
+
+
+  <div class="grid grid-cols-2 gap-3">
+            <div>
+
+    <label class="block mb-2">
+        Country
+    </label>
+
+    <select
+        id="country"
+        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50"
+    >
+        <option value="">
+            Select Country
+        </option>
+    </select>
+
+</div>
+
+<div>
+
+    <label class="block mb-2">
+        State
+    </label>
+
+    <select
+        id="state"
+        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50"
+    >
+        <option value="">
+            Select State
+        </option>
+    </select>
+
+</div>
+
+
+</div>
+
+
+
+
+
+        <div>
+
+    <label class="block mb-2 text-sm font-medium">
+        Profile Image
+    </label>
+
+    <input
+        type="file"
+        id="profile_image"
+        accept="image/*"
+        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50"
+    >
+
+</div>
+
+            {% comment %} <input
+                    type="text"
+                    id="state"
+                    placeholder="State"
+                    class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50">
+
+            <input
+                type="text"
+                id="country"
+                value="India"
+                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50"> {% endcomment %}
 
             <!-- PASSWORD -->
-
+<div class="grid grid-cols-2 gap-3">
             <div class="relative">
 
                 <input
@@ -179,19 +253,19 @@
 
             </div>
 
-
+        </div>
 
             <!-- BUTTON -->
-
+<div class="flex justify-center mt-6">
             <button
                 type="submit"
-                class="w-full h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300">
+                class="mx-auto px-4  h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300">
 
                 Create Account
 
             </button>
 
-
+        </div>
 
             <!-- LOGIN -->
 
@@ -220,8 +294,96 @@
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
+<script>
+
+const countrySelect =
+    document.getElementById("country");
+
+const stateSelect =
+    document.getElementById("state");
+
+let countriesData = [];
 
 
+async function loadCountries() {
+
+    try {
+
+        const response = await fetch(
+            "https://countriesnow.space/api/v0.1/countries/states"
+        );
+
+        const result = await response.json();
+
+        countriesData = result.data;
+
+        countrySelect.innerHTML =
+            '<option value="">Select Country</option>';
+
+        countriesData.forEach(country => {
+
+            countrySelect.innerHTML += `
+                <option value="${country.name}">
+                    ${country.name}
+                </option>
+            `;
+
+        });
+
+        countrySelect.value = "India";
+
+        loadStates();
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+function loadStates() {
+
+    const selectedCountry =
+        countrySelect.value;
+
+    stateSelect.innerHTML =
+        '<option value="">Select State</option>';
+
+    const country =
+        countriesData.find(
+            item =>
+                item.name === selectedCountry
+        );
+
+    if(!country){
+        return;
+    }
+
+    country.states.forEach(state => {
+
+        stateSelect.innerHTML += `
+            <option value="${state.name}">
+                ${state.name}
+            </option>
+        `;
+
+    });
+
+}
+
+
+countrySelect.addEventListener(
+    "change",
+    loadStates
+);
+
+loadCountries();
+
+</script>
 <script>
 
     // PASSWORD TOGGLE
@@ -270,7 +432,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
         let phone_number = document.getElementById('phone_number').value;
 
-        let location = document.getElementById('location').value;
+        {% comment %} let location = document.getElementById('location').value; {% endcomment %}
+
+        let location =
+            document.getElementById(
+                'location'
+            ).value;
+
+        let state =
+            document.getElementById(
+                'state'
+            ).value;
+
+        let country =
+            document.getElementById(
+                'country'
+            ).value;
 
         let password = document.getElementById('password').value;
 
@@ -310,7 +487,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
         try {
 
-            let response = await fetch('/user/api/register/', {
+            {% comment %} let response = await fetch('/user/api/register/', {
 
                 method: 'POST',
 
@@ -324,13 +501,86 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
                     email: email,
                     phone_number: phone_number,
                     location: location,
+                    state: stateSelect.value,
+
+                    country: countrySelect.value,
                     password: password,
                     role: role
 
                 })
 
             });
+ {% endcomment %}
 
+
+           const formData = new FormData();
+
+            formData.append(
+                "username",
+                username
+            );
+
+            formData.append(
+                "email",
+                email
+            );
+
+            formData.append(
+                "phone_number",
+                phone_number
+            );
+
+            formData.append(
+                "location",
+                location
+            );
+
+            formData.append(
+                "state",
+                stateSelect.value
+            );
+
+            formData.append(
+                "country",
+                countrySelect.value
+            );
+
+            formData.append(
+                "password",
+                password
+            );
+
+            formData.append(
+                "confirm_password",
+                confirmPassword
+            );
+
+            formData.append(
+                "role",
+                role
+            );
+
+            const profileImage =
+                document.getElementById(
+                    "profile_image"
+                ).files[0];
+
+            if(profileImage){
+
+                formData.append(
+                    "profile_image",
+                    profileImage
+                );
+
+            }
+
+            let response = await fetch(
+                "/user/api/register/",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
 
 
             let data = await response.json();

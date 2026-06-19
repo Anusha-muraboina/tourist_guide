@@ -1,7 +1,7 @@
 # tours/api/serializers.py
 
 from rest_framework import serializers
-
+from django.db.models import Avg
 from tourist.models import (
     Tour,
     TourImage,
@@ -12,7 +12,7 @@ from tourist.models import (
     TourSchedule,
     Amenity,
 )
-
+from rating.serializers import RatingSerializer
 
 from user.models import User
 
@@ -248,8 +248,9 @@ class TourListSerializer(
             "title",
 
             "slug",
-
+            "state",
             "tour_type",
+            "short_description",
 
             "duration",
 
@@ -350,6 +351,14 @@ class TourDetailSerializer(serializers.ModelSerializer):
     final_price = serializers.ReadOnlyField()
     
     guides = serializers.SerializerMethodField()
+    
+    
+    
+    average_rating = serializers.SerializerMethodField()
+
+    total_ratings = serializers.SerializerMethodField()
+
+    reviews = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -362,36 +371,28 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "slug",
             "short_description",
             "full_description",
-            
             "pricing",
-            
              "guides",
-
             "city",
             "state",
             "country",
             "address",
             "meeting_point",
-
             "duration",
             "language",
             "tour_type",
 
             "max_people",
             "min_age",
-
             # "price",
             # "offer_price",
             "final_price",
-
             "free_cancellation",
             "instant_confirmation",
             "pickup_available",
             "wheelchair_accessible",
-
             "featured",
             "is_active",
-
             "images",
             "highlights",
             "includes",
@@ -399,6 +400,10 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "important_information",
             "schedules",
             "amenities",
+            
+            "average_rating",
+            "total_ratings",
+            "reviews",
 
             "created_at",
             "updated_at",
@@ -406,32 +411,136 @@ class TourDetailSerializer(serializers.ModelSerializer):
         
     def get_guides(self, obj):
 
+        request = self.context.get("request")
+
         guides = User.objects.filter(
-
             role="guide",
-
             location__iexact=obj.city,
-
+            state__iexact=obj.state,
             is_active=True
-
         )
 
         return [
-
             {
                 "id": guide.id,
                 "name": guide.username,
                 "email": guide.email,
                 "phone": guide.phone_number,
                 "location": guide.location,
+                "state": guide.state,
+                "profile_image":
+                    request.build_absolute_uri(
+                        guide.profile_image.url
+                    )
+                    if guide.profile_image and request
+                    else None
             }
-
             for guide in guides
         ]
         
+    def get_average_rating(self, obj):
+
+            avg = obj.ratings.filter(
+                active=True
+            ).aggregate(
+                Avg("rating")
+            )["rating__avg"]
+
+            return round(avg, 1) if avg else 0
+
+
+    def get_total_ratings(self, obj):
+
+            return obj.ratings.filter(
+                active=True
+            ).count()
+
+
+    def get_reviews(self, obj):
+
+            ratings = obj.ratings.filter(
+                active=True
+            ).order_by(
+                "-created_at"
+            )[:10]
+
+            return RatingSerializer(
+                ratings,
+                many=True
+            ).data
+        
+    # def get_guides(self, obj):
+
+    #     guides = User.objects.filter(
+
+    #         role="guide",
+
+    #         location__iexact=obj.city,
+
+    #         is_active=True
+
+    #     )
+
+    #     return [
+
+    #         {
+    #             "id": guide.id,
+    #             "name": guide.username,
+    #             "email": guide.email,
+    #             "phone": guide.phone_number,
+    #             "location": guide.location,
+    #         }
+
+    #         for guide in guides
+    #     ]
         
         
         
+from rest_framework import serializers
+from tourist.models import Tour, TourCategory
+
+
+class TourCardSerializer(serializers.ModelSerializer):
+
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Tour
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "adult_price",
+            "image"
+        ]
+
+    def get_image(self, obj):
+
+        image = obj.images.filter(
+            is_primary=True
+        ).first()
+
+        if not image:
+            image = obj.images.first()
+
+        return image.image.url if image else None
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    tours = TourCardSerializer(
+        many=True,
+        read_only=True,
+        source="tours"
+    )
+
+    class Meta:
+        model = TourCategory
+        fields = [
+            "id",
+            "name",
+            "tours"
+        ]
         
         
         

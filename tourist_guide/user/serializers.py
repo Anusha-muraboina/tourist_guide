@@ -23,6 +23,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             'email',
             'phone_number',
             'location',
+             "state",
+
+            "country",
             'profile_image',
             'role',
             'password',
