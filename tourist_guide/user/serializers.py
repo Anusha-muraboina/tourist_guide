@@ -87,3 +87,74 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
 
         return attrs
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+from rest_framework import serializers
+from .models import User
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    profile_image = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = User
+
+        fields = [
+            "id",
+            "username",
+            "email",
+            "phone_number",
+            "location",
+            "state",
+            "country",
+            "role",
+            "profile_image",
+            "is_verified",
+            "created_at"
+        ]
+
+    def get_profile_image(self, obj):
+
+        request = self.context.get("request")
+
+        if obj.profile_image:
+
+            return request.build_absolute_uri(
+                obj.profile_image.url
+            )
+
+        return None
+
+
+class ProfileUpdateSerializer(
+serializers.ModelSerializer
+):
+
+
+    class Meta:
+
+        model = User
+
+        fields = [
+            "username",
+            "phone_number",
+            "location",
+            "state",
+            "country",
+            "profile_image"
+        ]

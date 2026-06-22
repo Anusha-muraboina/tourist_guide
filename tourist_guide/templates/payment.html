@@ -146,7 +146,7 @@
 
                     <button
     id="goToPaymentBtn"
-    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
+    class=" px-4 md:px-8 py-1 md:py-3 items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
 >
     Go to Payment
 </button>
@@ -169,19 +169,19 @@
     </h2>
 
     <div
-        id="guideContainer"
+        id="guideContainer".
         class="grid md:grid-cols-3 gap-2"
     >
     </div>
 
 
 
-    <div class="flex gap-4 mt-8">
+    <div class="flex   justify-between items-center gap-4 mt-8">
 
         <button
             type="button"
             id="guideBackBtn"
-            class="w-1/2 border py-3 rounded-xl"
+            class="px-4 md:px-8 border py-3 rounded-xl"
         >
             Previous
         </button>
@@ -189,7 +189,7 @@
         <button
             type="button"
             id="guideNextBtn"
-            class="w-1/2 bg-blue-600 text-white py-3 rounded-xl"
+            class="px-4 md:px-8 bg-blue-600 text-white py-3 rounded-xl"
         >
             Continue
         </button>
@@ -391,40 +391,52 @@
 
                     <h2 class="text-xl font-bold mb-5">Order summary</h2>
 
-                    <div class="flex gap-4">
-                        <img src="https://images.unsplash.com/photo-1588416499018-d8c621fa4989?q=80&w=400" 
-                             class="w-20 h-20 object-cover rounded-xl" alt="">
-                        <div class="flex-1">
-                            {% comment %} <h3 class="font-semibold text-[17px] leading-tight">
-                                Hyderabad: Heritage Walking Tour of Old City and Charminar
-                            </h3> {% endcomment %}
-                            <h3
-    id="summaryTourTitle"
-    class="font-semibold text-[17px] leading-tight"
->
-</h3>
-                            <div class="flex items-center gap-1 mt-2">
-                                <span class="text-amber-400 text-lg">★★★★★</span>
-                                <span class="text-sm text-gray-600">4.9 (50)</span>
-                            </div>
-                            <span class="inline-block mt-2 text-xs bg-gray-900 text-white px-3 py-1 rounded">Top rated</span>
-                        </div>
-                    </div>
-{% comment %} 
-                    <div class="mt-7 space-y-4 text-sm text-gray-700">
-                        <div class="flex gap-3">
-                            <i class="fa-regular fa-map mt-0.5"></i>
-                            <p>Join-in Tour at Meeting Point • Language: English</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <i class="fa-regular fa-clock mt-0.5"></i>
-                            <p>Saturday, May 23, 2026, starts at 9:00 AM</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <i class="fa-solid fa-user mt-0.5"></i>
-                            <p>1 adult (Age 0 - 99)</p>
-                        </div>
-                    </div> {% endcomment %}
+                 <div class="flex gap-4">
+
+    <img
+        id="summaryTourImage"
+        src=""
+        class="w-24 h-24 object-cover rounded-2xl"
+        alt=""
+    >
+
+    <div class="flex-1">
+
+        <h3
+            id="summaryTourTitle"
+            class="font-semibold text-[17px] leading-tight"
+        >
+        </h3>
+
+        <div class="flex items-center gap-2 mt-2">
+
+            <i class="fa-solid fa-star text-yellow-400"></i>
+
+            <span
+                id="summaryRating"
+                class="text-sm font-medium"
+            >
+                0
+            </span>
+
+            <span
+                id="summaryRatingCount"
+                class="text-sm text-gray-500"
+            >
+                (0 Reviews)
+            </span>
+
+        </div>
+
+        <span
+            class="inline-block mt-2 text-xs bg-gray-900 text-white px-3 py-1 rounded"
+        >
+            Top Rated
+        </span>
+
+    </div>
+
+</div>
 
 
 
@@ -915,6 +927,30 @@ document.addEventListener(
             "summaryDateTime"
         ).innerText =
             `${bookingDraft.tour_date} • ${bookingDraft.tour_time}`;
+
+
+        document.getElementById(
+            "summaryTourTitle"
+        ).innerText =
+            bookingDraft.tour_title || "";
+
+        document.getElementById(
+            "summaryTourImage"
+        ).src =
+            bookingDraft.tour_image || "";
+
+        document.getElementById(
+            "summaryRating"
+        ).innerText =
+            bookingDraft.average_rating || 0;
+
+        document.getElementById(
+            "summaryRatingCount"
+        ).innerText =
+            `(${bookingDraft.total_ratings || 0} Reviews)`;
+
+
+        
 
         // Travellers
         const adults =

@@ -4,6 +4,7 @@ from .views import (
     LoginAPIView,
     LogoutAPIView,
     ForgotPasswordAPIView,
+    ProfileAPIView
 )
 from . import views
 
@@ -39,8 +40,12 @@ urlpatterns = [
         ForgotPasswordAPIView.as_view(),
         name='forgot-password'
     ),
-    
-
+    path( "api/profile/", ProfileAPIView.as_view(), name="profile" ),
+    path(
+        "profile/",
+        views.profile_page,
+        name="profile"
+    ),
 
 
 ]

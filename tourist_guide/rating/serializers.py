@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from rating.models import Rating
 
-from rating.serializers import RatingSerializer
+
 class RatingSerializer(serializers.ModelSerializer):
 
     user_name = serializers.SerializerMethodField()

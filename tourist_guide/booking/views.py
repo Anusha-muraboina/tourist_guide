@@ -29,6 +29,8 @@ class BookingCreateAPIView(APIView):
             context={
                 "request": request
             }
+            
+            
         )
 
         if serializer.is_valid():
@@ -500,3 +502,201 @@ class ApplyCouponAPIView(APIView):
                 str(total_amount)
 
         })
+        
+        
+        
+        
+        
+        
+        
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from booking.models import Booking
+from booking.serializers import BookingCreateSerializer
+
+
+# class BookingListAPIView(APIView):
+
+#     permission_classes = [AllowAny]
+
+#     def get(self, request):
+
+#         bookings = (
+#             Booking.objects
+#             .filter(
+#                 user=request.user
+#             )
+#             .select_related(
+#                 "tour",
+#                 "guide"
+#             )
+#             .order_by(
+#                 "-created_at"
+#             )
+#         )
+
+#         serializer = BookingCreateSerializer(
+#             bookings,
+#             many=True,
+#             context={
+#                 "request": request
+#             }
+#         )
+
+#         return Response({
+
+#             "success": True,
+
+#             "count":
+#                 bookings.count(),
+
+#             "data":
+#                 serializer.data
+
+#         })
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from booking.models import Booking
+from booking.serializers import (
+    BookingCreateSerializer ,BookingListSerializer
+)
+class BookingListAPIView(APIView):
+
+    def get(self, request):
+
+        bookings = (
+            Booking.objects
+            .select_related(
+                "tour",
+                "guide"
+            )
+            .order_by(
+                "-created_at"
+            )
+        )
+
+        serializer = BookingListSerializer(
+            bookings,
+            many=True
+        )
+
+        return Response({
+
+            # "success": True,
+
+            # "count":
+            #     bookings.count(),
+
+            "data":
+                serializer.data
+
+        })
+
+# class BookingListAPIView(APIView):
+
+#     def get(self, request):
+
+#         bookings = (
+#             Booking.objects
+#             .select_related(
+#                 "tour",
+#                 "user",
+#                 "guide"
+#             )
+#             .order_by(
+#                 "-created_at"
+#             )
+#         )
+
+#         serializer = (
+#             BookingCreateSerializer(
+#                 bookings,
+#                 many=True,
+#                 context={
+#                     "request": request
+#                 }
+#             )
+#         )
+
+#         return Response({
+
+#             # "success": True,
+
+#             # "count":
+#             #     bookings.count(),
+
+#             "data":
+#                 serializer.data
+
+#         })
+class BookingDetailAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(
+        self,
+        request,
+        booking_id
+    ):
+
+        try:
+
+            booking = (
+                Booking.objects
+                .select_related(
+                    "tour",
+                    "guide"
+                )
+                .get(
+                    id=booking_id,
+                    user=request.user
+                )
+            )
+
+        except Booking.DoesNotExist:
+
+            return Response({
+
+                "success": False,
+
+                "message":
+                    "Booking not found"
+
+            }, status=404)
+
+        serializer = BookingCreateSerializer(
+
+            booking,
+
+            context={
+                "request": request
+            }
+
+        )
+
+        return Response({
+
+            "success": True,
+
+            "data":
+                serializer.data
+
+        })
+        
+        
+        
+        
+        
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def my_bookings(request):
+
+    return render(
+        request,
+        "my_bookings.html"
+    )

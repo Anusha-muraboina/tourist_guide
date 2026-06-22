@@ -1071,3 +1071,55 @@ class BookingUpdateSerializer(
             "payment_method"
 
         ]
+        
+        
+        
+        
+        
+from rest_framework import serializers
+from booking.models import Booking
+
+
+class BookingListSerializer(
+    serializers.ModelSerializer
+):
+
+    tour_name = serializers.CharField(
+        source="tour.title",
+        read_only=True
+    )
+
+    guide_name = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = Booking
+
+        fields = [
+
+            "id",
+            "booking_id",
+
+            "tour_name",
+
+            "guide_name",
+
+            "tour_date",
+
+            "total_amount",
+
+            "status",
+
+            "payment_status",
+
+            "created_at"
+
+        ]
+
+    def get_guide_name(self, obj):
+
+        if obj.guide:
+
+            return obj.guide.username
+
+        return None

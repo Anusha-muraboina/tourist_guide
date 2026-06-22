@@ -48,7 +48,7 @@ Premium Tour Details
 
                 <h1
                     id="tourTitle"
-                    class="text-2xl lg:text-4xl font-black leading-tight text-[#0B1F44]"
+                    class="text-5xl lg:text-4xl font-black leading-tight text-[#0B1F44]"
                 >
                 </h1>
 
@@ -677,153 +677,73 @@ BOOK NOW
 
     <!-- ================= REVIEWS ================= -->
 
-    <div id="reviews" class="tabContent hidden mt-8">
+ 
 
-<!-- ================= REVIEWS SECTION ================= -->
 
-<div class="mt-10 bg-white rounded-2xl border border-gray-200 p-6">
 
-    <!-- TITLE -->
+<!-- ================= REVIEWS ================= -->
 
-    <div class="flex items-center justify-between mb-6">
+<div id="reviews" class="tabContent hidden mt-8">
 
-        <div>
+    <div class="mt-10 bg-white rounded-2xl border border-gray-200 p-6">
 
-            <h2 class="text-2xl font-bold text-gray-900">
+        <!-- HEADER -->
 
-                Customer Reviews
+        <div class="flex items-center justify-between mb-6">
 
-            </h2>
+            <div>
 
-            <p class="text-sm text-gray-500 mt-1">
+                <h2 class="text-2xl font-bold text-gray-900">
+                    Customer Reviews
+                </h2>
 
-                Real reviews from verified travelers
+                <p class="text-sm text-gray-500 mt-1">
+                    Real reviews from verified travelers
+                </p>
 
-            </p>
+            </div>
 
         </div>
 
-        <button
-            class="text-blue-600 font-medium hover:underline"
+        <!-- RATING SUMMARY -->
+
+        <div
+            class="flex flex-wrap items-center gap-5 mb-8 pb-6 border-b"
         >
 
-            See all
-
-        </button>
-
-    </div>
-
-    <!-- REVIEWS GRID -->
-
-    <div class="grid md:grid-cols-2 gap-5">
-
-        <!-- REVIEW CARD -->
-
-        <div class="border border-gray-200 rounded-xl p-5">
-
-            <!-- STARS -->
-
-            <div class="flex items-center gap-1 text-yellow-400 text-sm">
-
-                ★★★★★
-
+            <div
+                id="averageRating"
+                class="text-5xl font-bold text-gray-900"
+            >
+                0.0
             </div>
 
-            <!-- USER -->
-
-            <div class="flex items-center gap-3 mt-4">
+            <div>
 
                 <div
-                    class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold"
+                    id="ratingStars"
+                    class="text-yellow-400 text-xl"
                 >
-
-                    B
-
+                    ★★★★★
                 </div>
 
-                <div>
-
-                    <h3 class="font-semibold text-gray-900">
-
-                        Bhupinder – Canada
-
-                    </h3>
-
-                    <p class="text-xs text-gray-500">
-
-                        April 28, 2026 · Verified booking
-
-                    </p>
-
-                </div>
+                <p
+                    id="totalRatings"
+                    class="text-sm text-gray-500 mt-1"
+                >
+                    0 Reviews
+                </p>
 
             </div>
-
-            <!-- TEXT -->
-
-            <p class="text-gray-600 leading-7 mt-4">
-
-                It was a good tour. Guide Azam was very knowledgeable.
-                The AC car was very comfortable during the Hyderabad heat.
-                Highly recommended.
-
-            </p>
 
         </div>
 
-        <!-- REVIEW CARD -->
+        <!-- REVIEWS LIST -->
 
-        <div class="border border-gray-200 rounded-xl p-5">
-
-            <!-- STARS -->
-
-            <div class="flex items-center gap-1 text-yellow-400 text-sm">
-
-                ★★★★★
-
-            </div>
-
-            <!-- USER -->
-
-            <div class="flex items-center gap-3 mt-4">
-
-                <div
-                    class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold"
-                >
-
-                    A
-
-                </div>
-
-                <div>
-
-                    <h3 class="font-semibold text-gray-900">
-
-                        Aisyah – Malaysia
-
-                    </h3>
-
-                    <p class="text-xs text-gray-500">
-
-                        April 12, 2026 · Verified booking
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- TEXT -->
-
-
-
-            <p class="text-gray-600 leading-7 mt-4">
-
-                Great experience with guide Azam and driver Baba.
-                They explained Hyderabad history very clearly.
-                Friendly team and comfortable journey.
-
-            </p>
+        <div
+            id="reviewsContainer"
+            class="grid md:grid-cols-2 gap-5"
+        >
 
         </div>
 
@@ -831,7 +751,10 @@ BOOK NOW
 
 </div>
 
-    </div>
+
+
+
+
 
 </div>
 
@@ -1524,6 +1447,153 @@ BOOK NOW
 
     });
 
+
+
+
+
+
+
+function renderReviews(tourData){
+
+    document.getElementById(
+        "averageRating"
+    ).innerText =
+        tourData.average_rating || 0;
+
+    document.getElementById(
+        "totalRatings"
+    ).innerText =
+        `${tourData.total_ratings || 0} Reviews`;
+
+    const container =
+        document.getElementById(
+            "reviewsContainer"
+        );
+
+    container.innerHTML = "";
+
+    if(
+        !tourData.reviews ||
+        tourData.reviews.length === 0
+    ){
+
+        container.innerHTML = `
+            <div class="col-span-2 text-center py-10 text-gray-500">
+                No reviews available
+            </div>
+        `;
+
+        return;
+    }
+
+    tourData.reviews.forEach(review => {
+
+        const rating =
+            parseFloat(
+                review.rating
+            );
+
+        const stars =
+            "★".repeat(
+                Math.round(rating)
+            );
+
+        const initial =
+            review.user_name
+            ? review.user_name[0]
+                .toUpperCase()
+            : "U";
+
+        container.innerHTML += `
+
+            <div
+                class="border border-gray-200 rounded-xl p-5"
+            >
+
+                <div
+                    class="flex items-center justify-between"
+                >
+
+                    <div
+                        class="text-yellow-400 text-sm"
+                    >
+                        ${stars}
+                    </div>
+
+                    <div
+                        class="text-sm font-medium text-gray-700"
+                    >
+                        ${review.rating}/5
+                    </div>
+
+                </div>
+
+                <div
+                    class="flex items-center gap-3 mt-4"
+                >
+
+                    <div
+                        class="
+                            w-10 h-10
+                            rounded-full
+                            bg-blue-100
+                            text-blue-600
+                            flex
+                            items-center
+                            justify-center
+                            font-bold
+                        "
+                    >
+                        ${initial}
+                    </div>
+
+                    <div>
+
+                        <h3
+                            class="
+                                font-semibold
+                                text-gray-900
+                            "
+                        >
+                            ${review.user_name}
+                        </h3>
+
+                        <p
+                            class="
+                                text-xs
+                                text-gray-500
+                            "
+                        >
+                            ${new Date(
+                                review.created_at
+                            ).toLocaleDateString()}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <p
+                    class="
+                        text-gray-600
+                        leading-7
+                        mt-4
+                    "
+                >
+                    ${review.review || ""}
+                </p>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+
+    
 </script>
 
 
@@ -1848,6 +1918,11 @@ async function fetchTourDetails(){
         const tour = tourData;
         console.log("FULL TOUR RESPONSE");
         console.log(tour);
+
+
+        renderReviews(
+        tourData
+    );
 
         if (tour.pricing && tour.pricing.length > 0){
 
@@ -2657,6 +2732,22 @@ if(continueBtn){
                 ).innerText
             ),
 
+
+            tour_title:
+                tourData.title,
+
+            tour_image:
+                tourData.images?.find(
+                    img => img.is_primary
+                )?.image ||
+                tourData.images?.[0]?.image,
+
+            average_rating:
+                tourData.average_rating,
+
+            total_ratings:
+                tourData.total_ratings,
+
             tour_date:
                 bookingDate,
 
@@ -2667,6 +2758,9 @@ if(continueBtn){
                 document.getElementById(
                     "totalDisplay"
                 ).innerText
+
+
+            
         };
 
         localStorage.setItem(

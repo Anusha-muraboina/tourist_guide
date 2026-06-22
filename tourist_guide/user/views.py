@@ -268,112 +268,83 @@ class ForgotPasswordAPIView(APIView):
         )
         
         
-        
-# class ForgotPasswordAPIView(APIView):
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-#     def get(self, request):
+from .serializers import (
+ProfileSerializer,
+ProfileUpdateSerializer
+)
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser
+)
+class ProfileAPIView(APIView):
 
-#         return Response(
-#             {
-#                 'message': 'Forgot Password API'
-#             }
-#         )
+    permission_classes = [
+        IsAuthenticated
+    ]
+    
+    parser_classes = [
+        MultiPartParser,
+        FormParser
+    ]
+
+    def get(self, request):
+
+        serializer = ProfileSerializer(
+            request.user,
+            context={
+                "request": request
+            }
+        )
+
+        return Response({
+            "success": True,
+            "data": serializer.data
+        })
+
+    def put(self, request):
+
+        serializer = ProfileUpdateSerializer(
+            request.user,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+
+            serializer.save()
+
+            return Response({
+                "success": True,
+                "message":
+                    "Profile Updated Successfully",
+                "data":
+                    ProfileSerializer(
+                        request.user,
+                        context={
+                            "request": request
+                        }
+                    ).data
+            })
+
+        return Response({
+            "success": False,
+            "errors": serializer.errors
+        })
 
 
-#     def post(self, request):
 
-#         email = request.data.get(
-#             'email'
-#         )
-
-#         try:
-
-#             User.objects.get(
-#                 email=email
-#             )
-
-#             request.session[
-#                 'reset_email'
-#             ] = email
-
-#             return Response(
-#                 {
-#                     'message': 'Email verified successfully'
-#                 },
-#                 status=status.HTTP_200_OK
-#             )
-
-#         except User.DoesNotExist:
-
-#             return Response(
-#                 {
-#                     'error': 'Email does not exist'
-#                 },
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
+def profile_page(request):
 
-# =========================================
-# CONFIRM PASSWORD API
-# =========================================
-
-# class ConfirmPasswordAPIView(APIView):
-
-#     def get(self, request):
-
-#         return Response(
-#             {
-#                 'message': 'Confirm Password API'
-#             }
-#         )
-
-
-#     def post(self, request):
-
-#         email = request.session.get(
-#             'reset_email'
-#         )
-
-#         if not email:
-
-#             return Response(
-#                 {
-#                     'error': 'Session expired'
-#                 },
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-
-#         password = request.data.get(
-#             'password'
-#         )
-
-#         confirm_password = request.data.get(
-#             'confirm_password'
-#         )
-
-#         if password != confirm_password:
-
-#             return Response(
-#                 {
-#                     'error': 'Passwords do not match'
-#                 },
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-
-#         user = User.objects.get(
-#             email=email
-#         )
-
-#         user.password = make_password(
-#             password
-#         )
-
-#         user.save()
-
-#         return Response(
-#             {
-#                 'message': 'Password updated successfully'
-#             },
-#             status=status.HTTP_200_OK
-#         )
+    return render(
+        request,
+        "profile.html"
+    )
