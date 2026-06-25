@@ -1,6 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+
+<style>
+input,
+select,
+textarea{
+    outline:none !important;
+    box-shadow:none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:none !important;
+    box-shadow:none !important;
+}
+
+/* Remove blue text selection */
+input::selection{
+    background:transparent;
+}
+
+input::-moz-selection{
+    background:transparent;
+}
+</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <section class="bg-white min-h-screen py-8"> 
@@ -30,9 +56,26 @@
             <div class="lg:col-span-7">
 
                 <!-- Timer -->
-                <div class="bg-[#fff5f5] text-[#e11d48] px-5 py-3 rounded-2xl flex items-center gap-3 mb-8 text-sm">
+                {% comment %} <div class="bg-[#fff5f5] text-[#e11d48] px-5 py-3 rounded-2xl flex items-center gap-3 mb-8 text-sm">
                     <i class="fa-solid fa-clock"></i>
                     <p>We'll hold your spot for <span class="font-bold">14:10 minutes</span></p>
+                </div> {% endcomment %}
+
+
+                <div
+                    class="bg-[#fff5f5] text-[#e11d48] px-5 py-3 rounded-2xl flex items-center gap-3 mb-8 text-sm"
+                >
+                    <i class="fa-solid fa-clock"></i>
+
+                    <p>
+                        We'll hold your spot for
+                        <span
+                            id="bookingTimer"
+                            class="font-bold text-lg"
+                        >
+                            25:00
+                        </span>
+                    </p>
                 </div>
 
                 {% comment %} <h1 class="text-3xl font-bold text-gray-900">Check your personal details</h1>
@@ -368,12 +411,29 @@
             Previous
         </button>
 
-        <button
+        {% comment %} <button
             type="button"
             id="confirmBookingBtn"
             class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium"
         >
             Confirm Booking
+        </button> {% endcomment %}
+
+        <button
+            type="button"
+            id="confirmBookingBtn"
+            class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2"
+        >
+
+            <span id="confirmBtnText">
+                Confirm Booking
+            </span>
+
+            <i
+                id="confirmLoader"
+                class="fa-solid fa-spinner fa-spin hidden"
+            ></i>
+
         </button>
 
     </div>
@@ -1491,12 +1551,55 @@ document
 "click",
 async function(){
 
+
+    const btn =
+    document.getElementById(
+        "confirmBookingBtn"
+    );
+
+    const loader =
+        document.getElementById(
+            "confirmLoader"
+        );
+
+    const text =
+        document.getElementById(
+            "confirmBtnText"
+        );
+
+    btn.disabled = true;
+
+    loader.classList.remove(
+        "hidden"
+    );
+
+    text.innerText =
+        "Please wait...";
+
     const paymentMethod =
         document.querySelector(
             'input[name="payment_method"]:checked'
         );
 
+    {% comment %} if(!paymentMethod){
+
+        alert(
+            "Please select payment method"
+        );
+
+        return;
+    } {% endcomment %}
+
     if(!paymentMethod){
+
+        btn.disabled = false;
+
+        loader.classList.add(
+            "hidden"
+        );
+
+        text.innerText =
+            "Confirm Booking";
 
         alert(
             "Please select payment method"
@@ -1514,12 +1617,30 @@ async function(){
 
     if(!bookingDraft){
 
+        btn.disabled = false;
+
+        loader.classList.add(
+            "hidden"
+        );
+
+        text.innerText =
+            "Confirm Booking";
+
         alert(
             "Booking data not found"
         );
 
         return;
     }
+
+    {% comment %} if(!bookingDraft){
+
+        alert(
+            "Booking data not found"
+        );
+
+        return;
+    } {% endcomment %}
 
     const payload = {
 
@@ -1607,7 +1728,9 @@ async function(){
         );
 
        if(result.success){
-           let bookingDraft =
+
+
+        let bookingDraft =
         JSON.parse(
             localStorage.getItem(
                 "bookingDraft"
@@ -1630,6 +1753,15 @@ async function(){
         console.log(
             "BOOKING SAVED",
             bookingDraft
+        );
+
+        localStorage.removeItem(
+            "bookingExpiry"
+        );
+        
+
+        localStorage.removeItem(
+            "bookingSeconds"
         );
         window.location.href =
             `/booking/booking-success/${result.data.id}/`;
@@ -2418,5 +2550,80 @@ document.addEventListener(
 </script>
 
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const timer =
+        document.getElementById("bookingTimer");
+
+    if (!timer) {
+        console.log("Timer element not found");
+        return;
+    }
+
+    let seconds =
+        localStorage.getItem("bookingSeconds");
+
+    if (!seconds) {
+        seconds = 25 * 60;
+        localStorage.setItem(
+            "bookingSeconds",
+            seconds
+        );
+    }
+
+    seconds = parseInt(seconds);
+
+    function updateTimer() {
+
+        const minutes =
+            Math.floor(seconds / 60);
+
+        const remainingSeconds =
+            seconds % 60;
+
+        timer.innerText =
+            `${minutes}:${String(
+                remainingSeconds
+            ).padStart(2, "0")}`;
+
+        if (seconds <= 0) {
+
+            clearInterval(interval);
+
+            localStorage.removeItem(
+                "bookingSeconds"
+            );
+
+            localStorage.removeItem(
+                "bookingDraft"
+            );
+
+            alert(
+                "Booking session expired."
+            );
+
+            window.location.href = "/";
+
+            return;
+        }
+
+        seconds--;
+
+        localStorage.setItem(
+            "bookingSeconds",
+            seconds
+        );
+    }
+
+    updateTimer();
+
+    const interval =
+        setInterval(
+            updateTimer,
+            1000
+        );
+
+});
+</script>
 {% endblock %}

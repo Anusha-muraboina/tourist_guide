@@ -52,6 +52,26 @@ urlpatterns = [
     "my-bookings/",
     views.my_bookings,
     name="my-bookings"
-),
+    ),
+    
+    path(
+        "invoice/<str:booking_id>/",
+        views.view_invoice,
+        name="view_invoice"
+    ),
 
+    path(
+        "cancel-booking/<str:booking_id>/",
+        views.CancelBookingAPI.as_view(),
+    ),
+    
+    path(
+        "cancel-reasons/",
+        views.CancelReasonListAPI.as_view(),
+    ),
+    
+    path(
+        "cancel_booking_page/<str:booking_id>/",
+        views.cancel_booking_page  ,name="cancel_booking_page"
+    ),
 ]

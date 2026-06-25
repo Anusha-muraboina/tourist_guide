@@ -12,9 +12,11 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from decimal import Decimal
 from datetime import timedelta, date
-
+from django.db import transaction
 import random
 import string
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from tourist.models import Tour
 from coupon.models import Coupon
@@ -174,7 +176,86 @@ class Booking(models.Model):
     # GENERATE BOOKING ID
     # =========================
 
+    # def save(self, *args, **kwargs):
+
+    #     if not self.booking_id:
+
+    #         while True:
+
+    #             random_id = ''.join(
+    #                 random.choices(
+    #                     string.digits,
+    #                     k=8
+    #                 )
+    #             )
+
+    #             booking_id = f"TG{random_id}"
+
+    #             if not Booking.objects.filter(
+    #                 booking_id=booking_id
+    #             ).exists():
+    #                 break
+
+    #         self.booking_id = booking_id
+
+    #     super().save(*args, **kwargs)
+    
+    
+    # def save(self, *args, **kwargs):
+
+    #     if not self.booking_id:
+
+    #         while True:
+
+    #             random_id = ''.join(
+    #                 random.choices(
+    #                     string.digits,
+    #                     k=8
+    #                 )
+    #             )
+
+    #             booking_id = f"TG{random_id}"
+
+    #             if not Booking.objects.filter(
+    #                 booking_id=booking_id
+    #             ).exists():
+    #                 break
+
+    #         self.booking_id = booking_id
+
+    #     # Payment Status Logic
+    #     if self.payment_method == "pay_at_location":
+
+    #         self.payment_status = "pending"
+    #         self.status = "confirmed"
+
+    #     elif self.payment_method == "partial_payment":
+
+    #         self.payment_status = "partial"
+    #         self.status = "confirmed"
+
+    #     elif self.payment_method == "full_payment":
+
+    #         self.payment_status = "paid"
+    #         self.status = "confirmed"
+
+    #     super().save(*args, **kwargs)
+    
+    
+
+
     def save(self, *args, **kwargs):
+
+        is_new = self.pk is None
+
+        old_status = None
+
+        if not is_new:
+            old_status = (
+                Booking.objects
+                .get(pk=self.pk)
+                .status
+            )
 
         if not self.booking_id:
 
@@ -196,7 +277,40 @@ class Booking(models.Model):
 
             self.booking_id = booking_id
 
+        if self.payment_method == "pay_at_location":
+
+            self.payment_status = "pending"
+            self.status = "confirmed"
+
+        elif self.payment_method == "partial_payment":
+
+            self.payment_status = "partial"
+            self.status = "confirmed"
+
+        elif self.payment_method == "full_payment":
+
+            self.payment_status = "paid"
+            self.status = "confirmed"
+
         super().save(*args, **kwargs)
+
+        if is_new:
+
+            transaction.on_commit(
+                lambda:
+                self.send_booking_email(
+                    "confirmed"
+                )
+            )
+
+        elif old_status != self.status:
+
+            transaction.on_commit(
+                lambda:
+                self.send_booking_email(
+                    self.status
+                )
+            )
 
     # =========================
     # ADVANCE PAYMENT
@@ -275,7 +389,100 @@ class Booking(models.Model):
             f"{self.booking_id} - "
             f"{self.guest_name}"
         )
+        
+    def send_booking_email(self, email_type,request=None):
+        """
+        email_type:
+        pending / confirmed / cancelled / completed
+        """
 
+        templates = {
+            "pending": {
+                "user": "emails/booking_pending_user.html",
+                "admin": "emails/booking_pending_user.html",
+                "subject_user": "Booking Received – Awaiting Confirmation",
+                "subject_admin": f"New Pending Booking - {self.booking_id}",
+            },
+            "confirmed": {
+                "user": "emails/user_booking_email.html",
+                "admin": "emails/admin_booking_email.html",
+                "subject_user": "✅ Booking Confirmed – Farmhousehyd",
+                "subject_admin": f"Booking Confirmed - {self.booking_id}",
+            },
+            "cancelled": {
+                "user": "emails/booking_cancelled_user.html",
+                "admin": "emails/booking_cancelled_user.html",
+                "subject_user": "❌ Booking Cancelled",
+                "subject_admin": f"Booking Cancelled - {self.booking_id}",
+            },
+            "completed": {
+                "user": "emails/booking_completed_admin.html",
+                "admin": "emails/booking_completed_user.html",
+                "subject_user": "🎉 Stay Completed – Thank You!",
+                "subject_admin": f"Stay Completed - {self.booking_id}",
+            }
+        }
+
+        config = templates[email_type]
+
+        # context = {"booking": self}
+        ####################################
+        # ⭐ Generate Invoice URL
+        ####################################
+
+        invoice_url = None
+
+
+        try:
+            invoice_path = reverse("view_invoice", args=[self.booking_id])
+            invoice_url = f"http://127.0.0.1:8000{invoice_path}"   # change manually when needed
+        except:
+            invoice_url = None
+
+        context = {
+            "booking": self,
+            "invoice_url": invoice_url
+        }
+        # USER EMAIL
+        user_html = render_to_string(config["user"], context)
+
+        user_email = EmailMultiAlternatives(
+            subject=config["subject_user"],
+            body="Booking update",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[self.guest_email],
+        )
+
+        user_email.attach_alternative(user_html, "text/html")
+        user_email.send()
+
+        # ADMIN EMAIL
+        admin_html = render_to_string(config["admin"], context)
+
+        admin_email = EmailMultiAlternatives(
+            subject=config["subject_admin"],
+            body="Booking update",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[settings.ADMIN_EMAIL],
+        )
+
+        admin_email.attach_alternative(admin_html, "text/html")
+        admin_email.send()
+
+    # ================= SAVE =================
+
+    # def save(self, *args, **kwargs):
+
+    #     is_new = self.pk is None
+    #     old_status = None
+        
+    #     if not is_new:
+    #         old_status = Booking.objects.get(pk=self.pk).status
+            
+    #     if not self.booking_id:
+    #         self.booking_id = "FHH" + ''.join(random.choices(string.digits, k=8))
+    #     super().save(*args, **kwargs)
+    
 
 # =========================
 # BLOCKED TOUR DATE
@@ -351,20 +558,11 @@ class TourPaymentPolicy(models.Model):
 
 class Invoice(models.Model):
 
-    invoice_id = models.CharField(
-        max_length=50,
-        unique=True
-    )
+    invoice_id = models.CharField(max_length=50,unique=True )
 
-    invoice_date = models.DateField(
-        auto_now_add=True
-    )
+    invoice_date = models.DateField(  auto_now_add=True)
 
-    booking = models.OneToOneField(
-        Booking,
-        on_delete=models.CASCADE,
-        related_name="invoice"
-    )
+    booking = models.OneToOneField( Booking, on_delete=models.CASCADE,  related_name="invoice")
 
     is_active = models.BooleanField(
         default=True

@@ -1123,3 +1123,13 @@ class BookingListSerializer(
             return obj.guide.username
 
         return None
+    
+from rest_framework.generics import ListAPIView
+from .models import *
+
+
+class CancelReasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CancelReason
+        fields = ["id", "reason"]
+

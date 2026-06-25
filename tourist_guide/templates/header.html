@@ -369,22 +369,14 @@
 
 
   <!-- ================= MOBILE MENU ================= -->
-
-<div
-    id="mobileMenu"
-    class="fixed top-0 left-0 w-full h-full bg-black/50 z-[999] hidden"
->
-
+<div id="mobileMenu"
+    class="fixed top-0 left-0 w-full h-full bg-black/50 z-[999] hidden">
     <!-- SIDEBAR -->
     <div
-        class="w-[300px] h-full bg-white shadow-2xl overflow-y-auto"
-    >
-
+        class="w-[300px] h-full bg-white shadow-2xl overflow-y-auto">
         <!-- TOP -->
         <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-
             <div>
-
                 <h2 class="text-[22px] font-bold text-gray-900">
                     Travel Explorer
                 </h2>
@@ -397,8 +389,7 @@
 
             <button
                 id="closeMobileMenu"
-                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
-            >
+                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -427,9 +418,9 @@
             </div>
 
             <!-- LINKS -->
-            <div class="space-y-3">
+            <!-- <div class="space-y-3">
 
-                <!-- ITEM -->
+                
                 <a href="#"
                    class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
 
@@ -446,11 +437,6 @@
                             <h3 class="text-[15px] font-semibold text-gray-900">
                                 Places to see
                             </h3>
-
-                            <p class="text-[12px] text-gray-500">
-                                Explore attractions
-                            </p>
-
                         </div>
 
                     </div>
@@ -459,7 +445,7 @@
 
                 </a>
 
-                <!-- ITEM -->
+                
                 <a href="#"
                    class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
 
@@ -489,84 +475,117 @@
 
                 </a>
 
-                <!-- ITEM -->
-                <a href="#"
-                   class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
+            </div> -->
 
-                    <div class="flex items-center gap-4">
+<div class="space-y-3">
 
-                        <div class="w-11 h-11 rounded-xl bg-pink-100 flex items-center justify-center text-pink-500">
+    <!-- PLACES TO SEE -->
 
-                            <i class="fa-solid fa-lightbulb"></i>
+    <div class="border border-gray-200 rounded-2xl overflow-hidden">
 
-                        </div>
+        <button
+            id="mobilePlacesBtn"
+            class="w-full flex items-center justify-between p-4 hover:bg-cyan-50 transition"
+        >
 
-                        <div>
+            <div class="flex items-center gap-4">
 
-                            <h3 class="text-[15px] font-semibold text-gray-900">
-                                Trip inspiration
-                            </h3>
+                <div class="w-11 h-11 rounded-xl bg-cyan-100 flex items-center justify-center text-cyan-600">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
 
-                            <p class="text-[12px] text-gray-500">
-                                Travel ideas
-                            </p>
+                <div>
 
-                        </div>
+                    <h3 class="text-[15px] font-semibold text-gray-900">
+                        Places to see
+                    </h3>
 
-                    </div>
+                    <p class="text-[12px] text-gray-500">
+                        Explore attractions
+                    </p>
 
-                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
+                </div>
 
-                </a>
+            </div>
+
+            <i
+                id="mobilePlacesIcon"
+                class="fa-solid fa-chevron-down text-gray-400 transition"
+            ></i>
+
+        </button>
+
+        <!-- Dynamic Categories -->
+
+        <div
+            id="mobileCategoryList"
+            class="hidden bg-gray-50 border-t border-gray-100"
+        >
+
+        </div>
+
+        <div
+    id="mobileTourList"
+    class="hidden bg-white border-t border-gray-100"
+></div>
+
+    </div>
+
+    <!-- THINGS TO DO -->
+
+    <a href="#"
+       class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
+
+        <div class="flex items-center gap-4">
+
+            <div class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center text-orange-500">
+                <i class="fa-solid fa-map"></i>
+            </div>
+
+            <div>
+
+                <h3 class="text-[15px] font-semibold text-gray-900">
+                    Things to do
+                </h3>
+
+                <p class="text-[12px] text-gray-500">
+                    Activities & tours
+                </p>
 
             </div>
 
-            <!-- DIVIDER -->
-            <div class="border-t border-gray-200 my-7"></div>
+        </div>
 
-            <!-- ACCOUNT -->
-            <div class="space-y-3">
+        <i class="fa-solid fa-chevron-right text-gray-400"></i>
 
-                <a href="#"
-                   class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 transition">
+    </a>
 
-                    <i class="fa-regular fa-heart text-[18px] text-gray-600"></i>
+</div>
 
-                    <span class="text-[15px] font-medium text-gray-800">
-                        Wishlist
-                    </span>
 
-                </a>
 
-                <a href="#"
-                   class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 transition">
 
-                    <i class="fa-solid fa-cart-shopping text-[18px] text-gray-600"></i>
 
-                    <span class="text-[15px] font-medium text-gray-800">
-                        Cart
-                    </span>
 
-                </a>
+            
 
-                <a href="#"
-                   class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 transition">
-
-                    <i class="fa-regular fa-bookmark text-[18px] text-gray-600"></i>
-
-                    <span class="text-[15px] font-medium text-gray-800">
-                        Bookings
-                    </span>
-
-                </a>
-
-            </div>
 
         </div>
 
     </div>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
 
@@ -678,6 +697,8 @@ async function loadCategories(){
             showTours(
                 categoriesData[0].id
             );
+
+            loadMobileCategories();
 
         }
 
@@ -932,4 +953,264 @@ loadCategories();
         }
     )
 
+
+function loadMobileCategories(){
+
+    const container =
+        document.getElementById(
+            "mobileCategoryList"
+        );
+
+    container.innerHTML = "";
+
+    categoriesData.forEach(category => {
+
+        let toursHtml = "";
+
+        category.tours.forEach(tour => {
+
+            toursHtml += `
+
+                <a
+                    href="/tour-details/${tour.slug}/"
+                    class="
+                        flex
+                        items-center
+                        gap-3
+                        py-3
+                        px-5
+                        border-t
+                        border-gray-100
+                        hover:bg-cyan-50
+                    "
+                >
+
+                    <img
+                        src="${tour.image}"
+                        class="
+                            w-12
+                            h-12
+                            rounded-lg
+                            object-cover
+                        "
+                    >
+
+                    <div>
+
+                        <h4
+                            class="
+                                text-sm
+                                font-semibold
+                                text-gray-800
+                            "
+                        >
+                            ${tour.title}
+                        </h4>
+
+                        <p
+                            class="
+                                text-xs
+                                text-gray-500
+                                mt-1
+                            "
+                        >
+                            ₹${tour.adult_price}
+                        </p>
+
+                    </div>
+
+                </a>
+
+            `;
+
+        });
+
+        container.innerHTML += `
+
+            <div
+                class="border-b border-gray-200"
+            >
+
+                <button
+                    onclick="
+                        document
+                        .getElementById(
+                            'tour-${category.id}'
+                        )
+                        .classList
+                        .toggle('hidden')
+                    "
+                    class="
+                        w-full
+                        flex
+                        justify-between
+                        items-center
+                        px-5
+                        py-4
+                        bg-white
+                    "
+                >
+
+                    <div>
+
+                        <h3
+                            class="
+                                text-left
+                                font-semibold
+                                text-gray-800
+                            "
+                        >
+                            ${category.name}
+                        </h3>
+
+                        <p
+                            class="
+                                text-xs
+                                text-gray-500
+                                mt-1
+                            "
+                        >
+                            ${category.tours.length} Tours
+                        </p>
+
+                    </div>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            text-gray-400
+                        "
+                    ></i>
+
+                </button>
+
+                <div
+                    id="tour-${category.id}"
+                    class="hidden bg-gray-50"
+                >
+
+                    ${toursHtml}
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+
+document
+.getElementById(
+    "mobilePlacesBtn"
+)
+?.addEventListener(
+    "click",
+    function(){
+
+        document
+        .getElementById(
+            "mobileCategoryList"
+        )
+        .classList.toggle(
+            "hidden"
+        );
+
+        document
+        .getElementById(
+            "mobilePlacesIcon"
+        )
+        .classList.toggle(
+            "rotate-180"
+        );
+
+    }
+);
+
+
+
+function showMobileTours(categoryId){
+
+    const category =
+        categoriesData.find(
+            item => item.id == categoryId
+        );
+
+    if(!category){
+        return;
+    }
+
+    const tourList =
+        document.getElementById(
+            "mobileTourList"
+        );
+
+    tourList.classList.remove(
+        "hidden"
+    );
+
+    tourList.innerHTML = "";
+
+    category.tours.forEach(tour => {
+
+        tourList.innerHTML += `
+
+            <a
+                href="/tour-details/${tour.slug}/"
+                class="
+                    flex
+                    items-center
+                    gap-4
+                    p-4
+                    border-b
+                    border-gray-100
+                    hover:bg-gray-50
+                "
+            >
+
+                <img
+                    src="${tour.image}"
+                    class="
+                        w-14
+                        h-14
+                        rounded-xl
+                        object-cover
+                    "
+                >
+
+                <div>
+
+                    <h3
+                        class="
+                            text-sm
+                            font-semibold
+                            text-gray-900
+                        "
+                    >
+                        ${tour.title}
+                    </h3>
+
+                    <p
+                        class="
+                            text-xs
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        ₹${tour.adult_price}
+                    </p>
+
+                </div>
+
+            </a>
+
+        `;
+
+    });
+
+}
 </script>

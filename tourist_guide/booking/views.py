@@ -2,8 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render
-
+from rest_framework.authentication import SessionAuthentication
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from booking.models import CancelReason ,Invoice
 # Create your views here.
 def booking(request):
     return HttpResponse("Welcome to Tourist Guide")
@@ -700,3 +702,138 @@ def my_bookings(request):
         request,
         "my_bookings.html"
     )
+    
+    
+    
+    
+from django.shortcuts import render, get_object_or_404
+from booking.models import Booking, Invoice
+
+
+def view_invoice(request, booking_id):
+
+    booking = get_object_or_404(
+        Booking.objects.select_related(
+            "tour",
+            "guide",
+            "user"
+        ),
+        booking_id=booking_id
+    )
+
+    invoice, _ = Invoice.objects.get_or_create(
+        booking=booking,
+        # defaults={
+        #     "user": booking.user
+        # }
+    )
+
+    return render(
+        request,
+        "emails/invoice.html",
+        {
+            "invoice": invoice,
+            "booking": booking
+        }
+    ) 
+
+# def view_invoice(request, booking_id):
+
+#     booking = get_object_or_404(
+#         Booking.objects.select_related("farmhouse"),
+#         booking_id=booking_id
+#     )
+
+#     invoice, _ = Invoice.objects.get_or_create(
+#         booking=booking,
+#         defaults={"user": booking.user}
+#     )
+
+#     return render(
+#         request,
+#         "emails/invoice.html",
+#         {
+#             "invoice": invoice,
+#             "booking": booking
+#         }
+#     )
+
+
+from booking.serializers import *
+
+class CancelReasonListAPI(ListAPIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    queryset = CancelReason.objects.filter(is_active=True)
+    serializer_class = CancelReasonSerializer
+    
+    
+    
+    
+class CancelBookingAPI(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id):
+
+        try:
+            booking = Booking.objects.get(
+                booking_id=booking_id,
+                user=request.user
+            )
+
+        except Booking.DoesNotExist:
+            return Response(
+                {"error": "Booking not found"},
+                status=404
+            )
+
+        reason_id = request.data.get("reason")
+        comment = request.data.get("comment", "")
+
+        reason = None
+
+        if reason_id:
+            reason = CancelReason.objects.filter(
+                id=reason_id
+            ).first()
+
+        try:
+
+            booking.cancel_booking(
+                user=request.user,
+                reason=reason,
+                comment=comment
+            )
+
+        except ValidationError as e:
+
+            return Response(
+                {"error": str(e)},
+                status=400
+            )
+
+        return Response({
+            "message": "Booking cancelled successfully"
+        })
+        
+        
+@login_required
+def cancel_booking_page(request, booking_id):
+
+    booking = get_object_or_404(
+        Booking,
+        booking_id=booking_id,   # using booking code 👍
+        user=request.user
+    )
+
+    return render(
+        request,
+        "cancelled_booking.html",
+        {
+            "booking": booking   # ⭐ PASS OBJECT, not just id
+        }
+    )
+    
+    

@@ -791,20 +791,20 @@ BOOK NOW
 
                     <!-- TOP -->
 
-                    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-8 text-white">
+                    <div class=" p-8 text-black">
 
                         <div class="flex items-end gap-2">
 
                             <h2 class="text-2xl font-black">
 
-                                ₹2,500
+                                <!-- ₹2,500 -->
 
 
                             </h2>
 
                             <span class="mb-2 opacity-90">
 
-                                / person
+                                / Adult person
 
                             </span>
 
@@ -3019,6 +3019,119 @@ function getCookie(name){
     return cookieValue;
 
 }
+
+</script>
+
+
+<script>
+    
+if (!localStorage.getItem("bookingExpiry")) {
+    const expiry =
+        new Date().getTime() +
+        (25 * 60 * 1000);
+
+    localStorage.setItem(
+        "bookingExpiry",
+        expiry
+    );
+}
+
+
+
+</script>
+<script>
+
+function startBookingTimer(){
+
+    const timer =
+        document.getElementById(
+            "bookingTimer"
+        );
+
+    if(!timer){
+        return;
+    }
+
+    let expiry =
+        localStorage.getItem(
+            "bookingExpiry"
+        );
+
+    if(!expiry){
+
+        expiry =
+            new Date().getTime() +
+            (25 * 60 * 1000);
+
+        localStorage.setItem(
+            "bookingExpiry",
+            expiry
+        );
+    }
+
+    const interval =
+        setInterval(function(){
+
+            const now =
+                new Date().getTime();
+
+            const distance =
+                expiry - now;
+
+            if(distance <= 0){
+
+                clearInterval(
+                    interval
+                );
+
+                localStorage.removeItem(
+                    "bookingExpiry"
+                );
+
+                <!-- localStorage.removeItem(
+                    "bookingDraft"
+                ); -->
+
+                alert(
+                    "Booking session expired."
+                );
+
+                window.location.href =
+                    "/";
+
+                return;
+            }
+
+            const minutes =
+                Math.floor(
+                    distance /
+                    (1000 * 60)
+                );
+
+            const seconds =
+                Math.floor(
+                    (
+                        distance %
+                        (1000 * 60)
+                    ) / 1000
+                );
+
+            timer.innerHTML =
+                `${minutes}:${String(
+                    seconds
+                ).padStart(2,"0")}`;
+
+        },1000);
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        startBookingTimer();
+
+    }
+);
 
 </script>
 {% endblock %}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Booking Alert</title>
+</head>
+
+<body
+    style="
+        margin:0;
+        padding:0;
+        background:#f3f4f6;
+        font-family:Arial,sans-serif;
+    "
+>
+
+<table
+    width="100%"
+    cellpadding="0"
+    cellspacing="0"
+    style="background:#f3f4f6;padding:40px 20px;"
+>
+<tr>
+<td align="center">
+
+<table
+    width="650"
+    cellpadding="0"
+    cellspacing="0"
+    style="
+        background:#ffffff;
+        border-radius:18px;
+        overflow:hidden;
+    "
+>
+
+    <!-- HEADER -->
+
+    <tr>
+
+        <td
+            style="
+                background:#ef4444;
+                padding:35px;
+                text-align:center;
+            "
+        >
+
+            <h1
+                style="
+                    color:#ffffff;
+                    margin:0;
+                    font-size:30px;
+                "
+            >
+                🔔 New Booking Alert
+            </h1>
+
+            <p
+                style="
+                    color:#ffffff;
+                    margin-top:10px;
+                "
+            >
+                A new tour booking has been received.
+            </p>
+
+        </td>
+
+    </tr>
+
+    <!-- STATS -->
+
+    <tr>
+
+        <td style="padding:35px;">
+
+            <table width="100%">
+
+                <tr>
+
+                    <td
+                        width="32%"
+                        align="center"
+                        style="
+                            background:#059669;
+                            color:white;
+                            padding:20px;
+                            border-radius:12px;
+                        "
+                    >
+
+                        <p style="margin:0;font-size:12px;">
+                            BOOKING ID
+                        </p>
+
+                        <h3 style="margin:10px 0 0;">
+                            {{ booking.booking_id }}
+                        </h3>
+
+                    </td>
+
+                    <td width="2%"></td>
+
+                    <td
+                        width="32%"
+                        align="center"
+                        style="
+                            background:#0ea5e9;
+                            color:white;
+                            padding:20px;
+                            border-radius:12px;
+                        "
+                    >
+
+                        <p style="margin:0;font-size:12px;">
+                            TOTAL
+                        </p>
+
+                        <h3 style="margin:10px 0 0;">
+                            ₹{{ booking.total_amount }}
+                        </h3>
+
+                    </td>
+
+                    <td width="2%"></td>
+
+                    <td
+                        width="32%"
+                        align="center"
+                        style="
+                            background:#7c3aed;
+                            color:white;
+                            padding:20px;
+                            border-radius:12px;
+                        "
+                    >
+
+                        <p style="margin:0;font-size:12px;">
+                            BALANCE
+                        </p>
+
+                        <h3 style="margin:10px 0 0;">
+                            ₹{{ booking.remaining_amount }}
+                        </h3>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+    <!-- GUEST DETAILS -->
+
+    <tr>
+
+        <td style="padding:0 35px 30px;">
+
+            <h2
+                style="
+                    color:#111827;
+                    border-bottom:2px solid #e5e7eb;
+                    padding-bottom:10px;
+                "
+            >
+                👤 Guest Information
+            </h2>
+
+            <table width="100%">
+
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <strong>
+                            {{ booking.guest_name }}
+                        </strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        {{ booking.guest_email }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Phone</td>
+                    <td>
+                        {{ booking.guest_phone }}
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+    <!-- BOOKING DETAILS -->
+
+    <tr>
+
+        <td style="padding:0 35px 30px;">
+
+            <h2
+                style="
+                    color:#111827;
+                    border-bottom:2px solid #e5e7eb;
+                    padding-bottom:10px;
+                "
+            >
+                🏨 Booking Details
+            </h2>
+
+            <table width="100%">
+
+                <tr>
+                    <td>Tour</td>
+                    <td>
+                        <strong>
+                            {{ booking.tour.title }}
+                        </strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Tour Date</td>
+                    <td>
+                        {{ booking.tour_date }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Tour Time</td>
+                    <td>
+                        {{ booking.tour_time }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Travellers</td>
+                    <td>
+
+                        {{ booking.adults }} Adult,
+                        {{ booking.children }} Child,
+                        {{ booking.infants }} Infant
+
+                    </td>
+                </tr>
+
+                {% if booking.guide %}
+                <tr>
+                    <td>Guide</td>
+                    <td>
+                        {{ booking.guide.username }}
+                    </td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <td>Payment Method</td>
+                    <td>
+                        {{ booking.get_payment_method_display }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Payment Status</td>
+                    <td>
+                        {{ booking.get_payment_status_display }}
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+    <!-- PAYMENT DETAILS -->
+
+    <tr>
+
+        <td style="padding:0 35px 35px;">
+
+            <h2
+                style="
+                    color:#111827;
+                    border-bottom:2px solid #e5e7eb;
+                    padding-bottom:10px;
+                "
+            >
+                💳 Payment Summary
+            </h2>
+
+            <table width="100%">
+
+                <tr>
+                    <td>Sub Total</td>
+                    <td>
+                        ₹{{ booking.sub_total }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Discount</td>
+                    <td>
+                        ₹{{ booking.discount_amount }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Total Amount</td>
+                    <td>
+                        ₹{{ booking.total_amount }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Advance Paid</td>
+                    <td>
+                        ₹{{ booking.advance_amount }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Remaining Amount</td>
+                    <td>
+                        ₹{{ booking.remaining_amount }}
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+    <!-- INVOICE -->
+
+    {% if invoice_url %}
+    <tr>
+
+        <td
+            align="center"
+            style="padding-bottom:35px;"
+        >
+
+            <a
+                href="{{ invoice_url }}"
+                style="
+                    background:#2563eb;
+                    color:white;
+                    text-decoration:none;
+                    padding:14px 30px;
+                    border-radius:8px;
+                    display:inline-block;
+                "
+            >
+                Download Invoice
+            </a>
+
+        </td>
+
+    </tr>
+    {% endif %}
+
+    <!-- FOOTER -->
+
+    <tr>
+
+        <td
+            style="
+                background:#111827;
+                color:#9ca3af;
+                text-align:center;
+                padding:25px;
+                font-size:13px;
+            "
+        >
+
+            Farmhouse Hyd Admin Panel<br>
+            Auto Generated Email
+
+        </td>
+
+    </tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
