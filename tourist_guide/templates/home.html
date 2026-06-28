@@ -1,4 +1,419 @@
+{% extends 'base.html' %}
 
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<style>
+  * {
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    background: #F8FAFC;
+  }
+
+  .hero-bg {
+    background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)),
+    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+    background-size: cover;
+    background-position: center;
+  }
+
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+
+<!-- HERO SECTION -->
+<section class="hero-bg pt-40 pb-32">
+  <div class="max-w-7xl mx-auto px-6">
+    
+    <div class="text-center mb-10">
+      <h1 class="text-white text-3xl md:text-5xl font-black tracking-tight leading-tight">
+        Discover & Book Things to Do
+      </h1>
+      <p class="text-slate-300 mt-3 text-base md:text-lg max-w-xl mx-auto font-medium">
+        Explore handpicked tours, unique experiences, and hidden gems.
+      </p>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-white rounded-2xl md:rounded-full shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 border border-white/20">
+        <div class="flex items-center flex-1 w-full px-4 py-2 md:py-0">
+          <i class="fa-solid fa-location-dot text-indigo-600 text-lg shrink-0"></i>
+          <div class="relative flex-1 px-3 w-full">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Find places and things to do..."
+              class="w-full py-2 bg-transparent outline-none text-slate-800 placeholder-slate-400 text-sm font-medium"
+              onkeyup="searchSuggestions()"
+              onfocus="showDefaultTours()"
+            />
+            <div
+              id="searchDropdown"
+              class="absolute left-0 right-0 top-full bg-white shadow-2xl rounded-2xl mt-4 hidden z-50 max-h-80 overflow-y-auto border border-slate-100 divide-y divide-slate-50"
+            ></div>
+          </div>
+        </div>
+
+        <button onclick="searchTours()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 transition text-white px-8 h-12 rounded-xl md:rounded-full font-bold text-sm tracking-wide shadow-md shadow-indigo-600/10 active:scale-[0.98]">
+          Search
+        </button>
+      </div>
+    </div>
+
+    <!-- TOP HANDPICKED CARDS -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-w-6xl mx-auto">
+      
+      <!-- Card 1 -->
+      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
+        <div class="relative shrink-0">
+          <img
+            src="https://images.unsplash.com/photo-1564507592333-c60657eea523"
+            class="w-28 h-28 rounded-xl object-cover"
+            alt="Heritage Tour"
+          />
+        </div>
+        <div class="flex flex-col justify-between flex-1 py-1">
+          <div>
+            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Heritage Tour</span>
+            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Hyderabad Walking Tour</h3>
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+              <i class="fa-regular fa-clock"></i> 3 - 5 hours · Pickup optional
+            </p>
+          </div>
+          <div class="flex items-end justify-between mt-2">
+            <div class="flex items-center gap-1 text-xs">
+              <span class="text-amber-500 font-semibold">★ 4.0</span>
+              <span class="text-slate-400">(50)</span>
+            </div>
+            <span class="text-lg font-black text-slate-900">₹4,250</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
+        <div class="relative shrink-0">
+          <img
+            src="https://images.unsplash.com/photo-1548013146-72479768bada"
+            class="w-28 h-28 rounded-xl object-cover"
+            alt="Fort Tour"
+          />
+        </div>
+        <div class="flex flex-col justify-between flex-1 py-1">
+          <div>
+            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Fort Tour</span>
+            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Golconda Fort & Tombs</h3>
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+              <i class="fa-regular fa-clock"></i> 5 - 6 hours · Private group
+            </p>
+          </div>
+          <div class="flex items-end justify-between mt-2">
+            <div class="flex items-center gap-1 text-xs">
+              <span class="text-amber-500 font-semibold">★ 4.2</span>
+              <span class="text-slate-400">(71)</span>
+            </div>
+            <span class="text-lg font-black text-slate-900">₹9,250</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
+        <div class="relative shrink-0">
+          <img
+            src="https://images.unsplash.com/photo-1599661046289-e31897846e41"
+            class="w-28 h-28 rounded-xl object-cover"
+            alt="Full Day Tour"
+          />
+        </div>
+        <div class="flex flex-col justify-between flex-1 py-1">
+          <div>
+            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Full Day Tour</span>
+            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Hyderabad Full Day Tour</h3>
+            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+              <i class="fa-regular fa-clock"></i> 4 - 8 hours · Skip line
+            </p>
+          </div>
+          <div class="flex items-end justify-between mt-2">
+            <div class="flex items-center gap-1 text-xs">
+              <span class="text-amber-500 font-semibold">★ 4.5</span>
+              <span class="text-slate-400">(56)</span>
+            </div>
+            <span class="text-lg font-black text-rose-600">₹5,400</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DYNAMIC RECOMMENDED GRID SECTION -->
+<section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+  <div class="mb-10">
+    <span class="text-indigo-600 text-xs font-bold uppercase tracking-widest block mb-1">Recommended Tours</span>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
+      Based On Your Search In Hyderabad
+    </h2>
+  </div>
+
+  <div id="tourGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+</section>
+
+<!-- DESTINATIONS SECTION -->
+<section class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-100">
+  <div class="mb-8">
+    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
+      Things to do wherever you're going
+    </h2>
+  </div>
+
+  <div id="destinationGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+</section>
+
+<!-- UNFORGETTABLE EXPERIENCES SECTION -->
+<section class="bg-slate-50 border-t border-b border-slate-100 py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
+          Unforgettable travel experiences
+        </h2>
+        <p class="text-slate-500 mt-2 text-sm md:text-base font-medium max-w-xl">
+          Explore top-rated tours, adventures, and unique activities curated just for you.
+        </p>
+      </div>
+      
+      <button class="shrink-0 self-start md:self-auto flex items-center gap-2 border border-slate-200 bg-white px-5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-slate-50 hover:shadow-sm transition active:scale-[0.98]">
+        View all <i class="fa-solid fa-arrow-right text-[10px]"></i>
+      </button>
+    </div>
+
+    <div id="unforgettableGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+  </div>
+</section>
+
+<!-- APPLICATION SCRIPTS -->
+<script>
+function renderTours(tours) {
+    let html = "";
+    tours.forEach((tour) => {
+        html += `
+        <a href="/tour-details/${tour.slug}/" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col card-hover">
+            <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                <img src="${tour.thumbnail}" class="w-full h-full object-cover" alt="${tour.title}">
+                <div class="absolute top-3 left-3">
+                    <span class="bg-white/95 backdrop-blur-sm text-indigo-600 px-2.5 py-1 rounded-lg text-[11px] font-bold tracking-wide shadow-sm uppercase">
+                        ${tour.tour_type}
+                    </span>
+                </div>
+            </div>
+            <div class="p-4 flex flex-col flex-1 justify-between">
+                <div>
+                    <div class="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
+                        <i class="fa-solid fa-location-dot text-indigo-500/80 text-[11px]"></i>
+                        <span>${tour.state}</span>
+                    </div>
+                    <h3 class="font-bold text-base text-slate-900 mt-1.5 leading-snug line-clamp-1">
+                        ${tour.title}
+                    </h3>
+                    <p class="text-slate-500 text-xs mt-1.5 line-clamp-2 leading-relaxed">
+                        ${tour.short_description}
+                    </p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-slate-50 flex items-center justify-between">
+                    <span class="text-slate-400 text-xs font-medium flex items-center gap-1">
+                        <i class="fa-regular fa-clock"></i> ${tour.duration}
+                    </span>
+                    <h4 class="text-xl font-black text-indigo-600">
+                        ₹${tour.adult_price}
+                    </h4>
+                </div>
+            </div>
+        </a>
+        `;
+    });
+    document.getElementById("tourGrid").innerHTML = html;
+}
+
+async function searchTours() {
+    const search = document.getElementById("searchInput").value;
+    const response = await fetch(`/api/home/?search=${search}`);
+    const data = await response.json();
+    renderTours(data.tours);
+}
+
+async function showDefaultTours() {
+    const response = await fetch("/api/home/");
+    const data = await response.json();
+    const tours = (data.tours || []).slice(0, 6);
+
+    let html = `
+        <div class="px-4 py-2.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+            Popular Tours
+        </div>
+    `;
+
+    tours.forEach((tour) => {
+        html += `
+        <a href="/tour-details/${tour.slug}/" class="block px-4 py-3 hover:bg-slate-50 transition">
+            <div class="font-semibold text-sm text-slate-900">${tour.title}</div>
+            <div class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-slate-300 text-[10px]"></i> ${tour.state}
+            </div>
+        </a>
+        `;
+    });
+
+    const dropdown = document.getElementById("searchDropdown");
+    dropdown.innerHTML = html;
+    dropdown.classList.remove("hidden");
+}
+
+async function searchSuggestions() {
+    const search = document.getElementById("searchInput").value;
+    if (!search.trim()) {
+        showDefaultTours();
+        return;
+    }
+
+    const response = await fetch(`/api/home/?search=${search}`);
+    const data = await response.json();
+    const tours = data.tours || [];
+
+    let html = "";
+    tours.forEach((tour) => {
+        html += `
+        <a href="/tour-details/${tour.slug}/" class="block px-4 py-3 hover:bg-slate-50 transition">
+            <div class="font-semibold text-sm text-slate-900">${tour.title}</div>
+            <div class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-slate-300 text-[10px]"></i> ${tour.state}
+            </div>
+        </a>
+        `;
+    });
+
+    const dropdown = document.getElementById("searchDropdown");
+    dropdown.innerHTML = html;
+    dropdown.classList.remove("hidden");
+}
+
+document.addEventListener("click", function(e) {
+    const input = document.getElementById("searchInput");
+    const dropdown = document.getElementById("searchDropdown");
+    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add("hidden");
+    }
+});
+
+async function fetchHomeTours() {
+    try {
+        const response = await fetch("/api/home/");
+        const data = await response.json();
+
+        const tours = data.tours || [];
+        const destinations = data.destinations || [];
+        const unforgettable = data.unforgettable || [];
+
+        renderTours(tours);
+
+        let destinationHTML = "";
+        destinations.forEach((item) => {
+            destinationHTML += `
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm border border-slate-100">
+                    <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${item.state}">
+                </div>
+                <h3 class="mt-2.5 text-base font-bold text-slate-900 group-hover:text-indigo-600 transition truncate px-1">
+                    ${item.state}
+                </h3>
+            </div>
+            `;
+        });
+        document.getElementById("destinationGrid").innerHTML = destinationHTML;
+
+        let unforgettableHTML = "";
+        unforgettable.forEach((tour) => {
+            unforgettableHTML += `
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col card-hover">
+                <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img src="${tour.thumbnail}" class="w-full h-full object-cover" alt="${tour.title}">
+                </div>
+                <div class="p-4 flex flex-col flex-1 justify-between">
+                    <div>
+                        <h3 class="font-bold text-base text-slate-900 leading-snug line-clamp-1">
+                            ${tour.title}
+                        </h3>
+                        <p class="text-slate-400 text-xs mt-1 flex items-center gap-1">
+                            <i class="fa-regular fa-clock"></i> ${tour.duration}
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between">
+                        <span class="text-xs text-slate-400 font-medium">Starting at</span>
+                        <h4 class="text-xl font-black text-indigo-600">
+                            ₹${tour.adult_price}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        document.getElementById("unforgettableGrid").innerHTML = unforgettableHTML;
+    } catch(error) {
+        console.error("HOME API ERROR", error);
+    }
+}
+
+fetchHomeTours();
+
+const showMoreBtn = document.getElementById("showMoreBtn");
+if (showMoreBtn) {
+    showMoreBtn.addEventListener("click", function () {
+        const hiddenTours = document.querySelectorAll(".extra-tour");
+        hiddenTours.forEach((card) => {
+            card.classList.remove("hidden");
+        });
+        showMoreBtn.style.display = "none";
+    });
+}
+</script>
+{% endblock %}
+
+{% comment %} 
 {% extends 'base.html' %}
 
 {% block title %}
@@ -69,12 +484,6 @@ Home
 
         </h1>
 
-        <!-- <p class="text-gray-200 text-[15px] lg:text-[17px] mt-6 max-w-2xl mx-auto leading-7">
-
-          Explore attractions, tours, adventures, and unforgettable activities
-          across the world with premium travel experiences.
-
-        </p> -->
 
       </div>
 
@@ -87,27 +496,8 @@ Home
 
             <i class="fa-solid fa-location-dot text-cyan-600 text-[18px]"></i>
 
-            {% comment %} <input
-              type="text"
-              placeholder="Find places and things to do"
-              class="w-full px-4 py-4 outline-none text-[15px]"
-            /> {% endcomment %}
-
+      
          <div class="relative flex-1 px-5">
-
-    {% comment %} <input
-        type="text"
-        id="searchInput"
-        placeholder="Find places and things to do"
-        class="w-full px-4 py-4 outline-none text-[15px]"
-        onkeyup="searchSuggestions()"
-    >
-
-    <div
-        id="searchDropdown"
-        class="absolute left-0 right-0 top-full bg-white shadow-lg rounded-xl mt-2 hidden z-50 max-h-80 overflow-y-auto"
-    >
-    </div> {% endcomment %}
 
 
 
@@ -135,12 +525,7 @@ Home
 
           </div>
 
-          {% comment %} <button class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 transition text-white px-10 py-4 rounded-full font-semibold text-[15px]">
-
-            Search
-
-          </button> {% endcomment %}
-
+      
 
           <button onclick="searchTours()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 transition text-white px-10 py-4 rounded-full font-semibold text-[15px]">
     Search
@@ -314,12 +699,10 @@ Home
 
   </section> 
 
-  <!-- ================= TOUR SECTION ================= -->
-<!-- ================= TOUR SECTION ================= -->
 
 <section class="mx-auto px-2 lg:px-28 py-2 md:py-12 bg-[#f8fbff]">
 
-    <!-- TOP -->
+    
     <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
 
         <div>
@@ -339,11 +722,6 @@ Home
 
 
 
-<!-- TOUR GRID -->
-
-
-
-<!-- TOUR GRID -->
 <div
     id="tourGrid"
     class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2"
@@ -566,13 +944,6 @@ document.addEventListener("click", function(e) {
 
         renderTours(tours);
 
-        // =====================
-        // TOURS
-        // =====================
-
-        // =====================
-        // DESTINATIONS
-        // =====================
 
         let destinationHTML = "";
 
@@ -604,9 +975,6 @@ document.addEventListener("click", function(e) {
         ).innerHTML =
             destinationHTML;
 
-        // =====================
-        // UNFORGETTABLE
-        // =====================
 
         let unforgettableHTML = "";
 
@@ -669,434 +1037,6 @@ document.addEventListener("click", function(e) {
 fetchHomeTours();
 </script>
 
-{% comment %} <script>
-
-async function fetchHomeTours(){
-
-    try{
-
-        const response = await fetch(
-            "/api/home/"
-        );
-
-        const tours = await response.json();
-
-        console.log(tours);
-        const tours = data.tours || [];
-
-
-        const destinations =
-            data.destinations || [];
-
-        const unforgettable =
-            data.unforgettable || [];
-
-
-        let html = "";
-
-
-
-        tours.forEach((tour, index) => {
-
-            html += `
-
-            <!-- TOUR CARD -->
-            <a
-                href="/tour-details/${tour.slug}/"
-                class="
-                    ${
-                        index > 7
-                        ? 'hidden extra-tour'
-                        : ''
-                    }
-                    group
-                    bg-white
-                    rounded-[30px]
-                    overflow-hidden
-                    shadow-md
-                    hover:shadow-2xl
-                    hover:-translate-y-2
-                    transition
-                    duration-500
-                    block
-                "
-            >
-
-                <!-- IMAGE -->
-                <div class="relative overflow-hidden">
-
-                  
-
-                    <img
-    src="${
-        tour.thumbnail
-        ? tour.thumbnail
-        : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e9'
-    }"
-    alt="${tour.title}"
-    class="w-full h-[260px] object-cover group-hover:scale-110 transition duration-700"
-    onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e'"
->
-
-                    <!-- TOUR TYPE -->
-                    <div class="absolute top-4 left-4">
-
-                        <span class="bg-white/90 backdrop-blur-md text-cyan-700 text-[12px] font-bold px-4 py-2 rounded-full shadow-lg capitalize">
-
-                            ${tour.tour_type}
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- FEATURED -->
-                    ${
-                        tour.featured
-                        ? `
-                        <div class="absolute top-4 right-4">
-
-                            <span class="bg-yellow-400 text-black text-[11px] font-black px-3 py-2 rounded-full shadow-lg">
-
-                                Featured
-
-                            </span>
-
-                        </div>
-                        `
-                        : ''
-                    }
-
-                </div>
-
-
-
-
-                <!-- CONTENT -->
-                <div class="p-6">
-
-                    <!-- TITLE -->
-                    <h3 class="text-[22px] font-black text-[#0B1F44] leading-tight line-clamp-2 group-hover:text-cyan-600 transition">
-
-                        ${tour.title}
-
-                    </h3>
-
-
-
-
-
-                    <!-- DURATION -->
-                    <div class="flex items-center gap-2 text-gray-500 text-sm mt-4">
-
-                        <i class="fa-regular fa-clock text-cyan-600"></i>
-
-                        <span>
-
-                            ${tour.duration}
-
-                        </span>
-
-                    </div>
-
-
-
-
-
-                    <!-- BOTTOM -->
-                    <div class="flex items-end justify-between mt-7">
-
-                        <!-- LEFT -->
-                        <div>
-
-                            <div class="flex items-center gap-1 text-yellow-500">
-
-                                <i class="fa-solid fa-star"></i>
-
-                                <span class="font-bold text-[#0B1F44]">
-
-                                    4.8
-
-                                </span>
-
-                            </div>
-
-                            <p class="text-gray-400 text-sm mt-1">
-
-                                Tour Package
-
-                            </p>
-
-                        </div>
-
-
-
-
-                        <!-- RIGHT -->
-                        <div class="text-right">
-
-                            ${
-                                tour.offer_price
-                                ? `
-                                <p class="text-sm text-gray-400 line-through">
-
-                                    ₹${tour.adult_price}
-
-                                </p>
-                                `
-                                : ''
-                            }
-
-                            <h4 class="text-3xl font-black text-cyan-600">
-
-                             ₹${tour.adult_price}
-
-                              
-
-                            </h4>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </a>
-
-            `;
-
-        });
-
-
-
-
-        // ================= EMPTY =================
-
-        if(tours.length === 0){
-
-            html = `
-
-            <div class="col-span-full">
-
-                <div class="bg-white rounded-3xl p-10 text-center shadow-md">
-
-                    <h3 class="text-2xl font-bold text-gray-900">
-
-                        No Tours Available
-
-                    </h3>
-
-                    <p class="text-gray-500 mt-3">
-
-                        Please add tours in admin panel.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            `;
-
-        }
-
-
-
-
-        document.getElementById(
-            "tourGrid"
-        ).innerHTML = html;
-
-
-// =====================
-// DESTINATIONS
-// =====================
-
-let destinationHTML = "";
-
-destinations.forEach((item) => {
-
-    destinationHTML += `
-
-    <div class="group cursor-pointer">
-
-        <div class="overflow-hidden rounded-3xl">
-
-            <img
-                src="${item.image}"
-                class="w-full h-[220px] object-cover group-hover:scale-110 transition duration-500"
-            >
-
-        </div>
-
-        <h3 class="text-[22px] font-bold text-[#0B1F44] mt-4">
-
-            ${item.state}
-
-        </h3>
-
-    </div>
-
-    `;
-});
-
-document.getElementById(
-    "destinationGrid"
-).innerHTML =
-    destinationHTML;
-
-
-// =====================
-// UNFORGETTABLE
-// =====================
-
-let unforgettableHTML = "";
-
-unforgettable.forEach((tour) => {
-
-    unforgettableHTML += `
-
-    <div class="group bg-white rounded-[28px] overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-2 duration-500">
-
-        <div class="overflow-hidden">
-
-            <img
-                src="${tour.thumbnail}"
-                class="w-full h-[250px] object-cover group-hover:scale-110 duration-700"
-            >
-
-        </div>
-
-        <div class="p-6">
-
-            <h3 class="text-[18px] font-black text-[#0B1F44]">
-
-                ${tour.title}
-
-            </h3>
-
-            <div class="mt-3 text-gray-500">
-
-                ${tour.duration}
-
-            </div>
-
-            <div class="mt-5 flex justify-between items-center">
-
-                <span class="text-yellow-500">
-
-                    ★ 4.8
-
-                </span>
-
-                <span class="text-2xl font-bold text-cyan-600">
-
-                    ₹${tour.adult_price}
-
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    `;
-});
-
-document.getElementById(
-    "unforgettableGrid"
-).innerHTML =
-    unforgettableHTML;
-
-        // ================= SHOW MORE =================
-
-        const hiddenTours =
-            document.querySelectorAll(
-                ".extra-tour"
-            );
-
-
-
-        const existingBtn =
-            document.getElementById(
-                "showMoreWrapper"
-            );
-
-        if(existingBtn){
-
-            existingBtn.remove();
-
-        }
-
-
-
-        if(hiddenTours.length > 0){
-
-            const buttonHTML = `
-
-            <div
-                id="showMoreWrapper"
-                class="flex justify-center mt-14"
-            >
-
-                <button
-                    id="showMoreBtn"
-                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 text-white px-10 py-4 rounded-2xl font-bold text-[15px] shadow-xl transition"
-                >
-
-                    Show More Tours
-
-                </button>
-
-            </div>
-
-            `;
-
-            document
-                .querySelector("#tourGrid")
-                .insertAdjacentHTML(
-                    "afterend",
-                    buttonHTML
-                );
-
-
-
-            document
-                .getElementById("showMoreBtn")
-                .addEventListener("click", function(){
-
-                    hiddenTours.forEach((card) => {
-
-                        card.classList.remove(
-                            "hidden"
-                        );
-
-                    });
-
-                    this.parentElement.style.display = "none";
-
-                });
-
-        }
-
-    }
-
-    catch(error){
-
-        console.log(
-            "Home Tour API Error",
-            error
-        );
-
-    }
-
-}
-
-
-fetchHomeTours();
-
-</script> {% endcomment %}
 
 </section>
 
@@ -1132,13 +1072,9 @@ if (showMoreBtn) {
 
 
 
-
-
-<!-- ================= DESTINATIONS SECTION ================= -->
-
 <section class=" mx-auto  px-2 md:px-16 py-4">
 
-    <!-- TITLE -->
+  
     <div class="mb-10  px-2 md:px-16">
 
         <h2 class="text-xl lg:text-3xl font-extrabold text-[#0B1F44] leading-tight">
@@ -1147,27 +1083,18 @@ if (showMoreBtn) {
 
     </div>
 
-    <!-- DESTINATIONS GRID -->
-    {% comment %} <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6"> {% endcomment %}
-
     <div
     id="destinationGrid"
     class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6  px-2 md:px-16"
 ></div>
 
-    {% comment %} </div> {% endcomment %}
-
 </section>
-
-
-
-<!-- ================= EXPERIENCE SECTION ================= -->
 
 <section class="py-4 px-2 md:px-16 bg-[#f7f9fc]">
 
     <div class=" mx-auto px-4 lg:px-16">
 
-        <!-- TOP -->
+  
         <div class="flex items-center justify-between mb-10">
 
             <div>
@@ -1196,10 +1123,7 @@ if (showMoreBtn) {
 
         </div>
 
-        <!-- ================= CARDS ================= -->
-
-        {% comment %} <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-7"> {% endcomment %}
-
+      
           <div
     id="unforgettableGrid"
     class="grid sm:grid-cols-2 lg:grid-cols-4 gap-7"
@@ -1207,8 +1131,6 @@ if (showMoreBtn) {
 
 
          
-
-        {% comment %} </div> {% endcomment %}
 
     </div>
 </div>
@@ -1231,179 +1153,5 @@ if (showMoreBtn) {
 </style>
 
 
-<script>
-
-{% comment %} 
-   const destinationGrid =
-    document.getElementById(
-        "destinationGrid"
-    );
-
-let destinationHTML = "";
-
-(data.destinations || []).forEach(
-    (item) => {
-
-        destinationHTML += `
-        <div class="group cursor-pointer">
-
-            <div class="overflow-hidden rounded-3xl">
-
-                <img
-                    src="${item.image}"
-                    class="w-full h-[220px] object-cover group-hover:scale-110 transition duration-500"
-                >
-
-            </div>
-
-            <h3 class="text-[22px] font-bold text-[#0B1F44] mt-4">
-
-                ${item.state}
-
-            </h3>
-
-        </div>
-        `;
-    }
-);
-
-destinationGrid.innerHTML =
-    destinationHTML;
-
-
-
-
-
-const unforgettableGrid =
-    document.getElementById(
-        "unforgettableGrid"
-    );
-
-let unforgettableHTML = "";
-
-(data.unforgettable || []).forEach(
-    (tour) => {
-
-        unforgettableHTML += `
-        <div class="group bg-white rounded-[28px] overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-2 duration-500">
-
-            <div class="relative overflow-hidden">
-
-                <img
-                    src="${tour.thumbnail}"
-                    class="w-full h-[250px] object-cover group-hover:scale-110 duration-700"
-                >
-
-            </div>
-
-            <div class="p-6">
-
-                <h3 class="text-[18px] font-black text-[#0B1F44]">
-
-                    ${tour.title}
-
-                </h3>
-
-                <div class="mt-3 text-gray-500">
-
-                    ${tour.duration}
-
-                </div>
-
-                <div class="mt-5 flex justify-between items-center">
-
-                    <span class="text-yellow-500">
-                        ★ 4.8
-                    </span>
-
-                    <span class="text-2xl font-bold text-cyan-600">
-
-                        ₹${tour.adult_price}
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-        `;
-    }
-);
-
-unforgettableGrid.innerHTML =
-    unforgettableHTML;
- {% endcomment %}
-
-
-</script>
-
-
-
-
-
-
-
-
-
-
-{% comment %} <script>
-
-const carousel =
-    document.getElementById("tourCarousel");
-
-const nextBtn =
-    document.getElementById("nextBtn");
-
-const prevBtn =
-    document.getElementById("prevBtn");
-
-nextBtn.addEventListener("click", () => {
-
-    carousel.scrollBy({
-        left: 350,
-        behavior: "smooth"
-    });
-
-});
-
-prevBtn.addEventListener("click", () => {
-
-    carousel.scrollBy({
-        left: -350,
-        behavior: "smooth"
-    });
-
-});
-
-
-// AUTO MOVE
-
-setInterval(() => {
-
-    if (
-        carousel.scrollLeft + carousel.clientWidth
-        >= carousel.scrollWidth - 10
-    ) {
-
-        carousel.scrollTo({
-            left: 0,
-            behavior: "smooth"
-        });
-
-    } else {
-
-        carousel.scrollBy({
-            left: 350,
-            behavior: "smooth"
-        });
-
-    }
-
-}, 3000);
-
-</script> {% endcomment %}
-
-
   
-{% endblock %}
+{% endblock %} {% endcomment %}

@@ -565,37 +565,67 @@ from booking.models import Booking
 from booking.serializers import (
     BookingCreateSerializer ,BookingListSerializer
 )
+
 class BookingListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
 
-        bookings = (
-            Booking.objects
-            .select_related(
-                "tour",
-                "guide"
+        if request.user.role == "guide":
+            bookings = (
+                Booking.objects
+                .filter(guide=request.user)
+                .select_related("tour", "guide")
+                .order_by("-created_at")
             )
-            .order_by(
-                "-created_at"
+        else:
+            bookings = (
+                Booking.objects
+                .filter(user=request.user)
+                .select_related("tour", "guide")
+                .order_by("-created_at")
             )
-        )
 
         serializer = BookingListSerializer(
             bookings,
-            many=True
+            many=True,
+            context={"request": request}
         )
 
         return Response({
-
-            # "success": True,
-
-            # "count":
-            #     bookings.count(),
-
-            "data":
-                serializer.data
-
+            "data": serializer.data
         })
+# class BookingListAPIView(APIView):
+
+#     def get(self, request):
+
+#         bookings = (
+#             Booking.objects
+#             .select_related(
+#                 "tour",
+#                 "guide"
+#             )
+#             .order_by(
+#                 "-created_at"
+#             )
+#         )
+
+#         serializer = BookingListSerializer(
+#             bookings,
+#             many=True
+#         )
+
+#         return Response({
+
+#             # "success": True,
+
+#             # "count":
+#             #     bookings.count(),
+
+#             "data":
+#                 serializer.data
+
+#         })
 
 # class BookingListAPIView(APIView):
 
@@ -634,15 +664,70 @@ class BookingListAPIView(APIView):
 #                 serializer.data
 
 #         })
+
+
+
+# class BookingDetailAPIView(APIView):
+
+#     permission_classes = [IsAuthenticated]
+
+#     def get(
+#         self,
+#         request,
+#         booking_id
+#     ):
+
+#         try:
+
+#             booking = (
+#                 Booking.objects
+#                 .select_related(
+#                     "tour",
+#                     "guide"
+#                 )
+#                 .get(
+#                     id=booking_id,
+#                     user=request.user
+#                 )
+#             )
+
+#         except Booking.DoesNotExist:
+
+#             return Response({
+
+#                 "success": False,
+
+#                 "message":
+#                     "Booking not found"
+
+#             }, status=404)
+
+#         serializer = BookingCreateSerializer(
+
+#             booking,
+
+#             context={
+#                 "request": request
+#             }
+
+#         )
+
+#         return Response({
+
+#             "success": True,
+
+#             "data":
+#                 serializer.data
+
+#         })
+        
+from django.db.models import Q
+
 class BookingDetailAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def get(
-        self,
-        request,
-        booking_id
-    ):
+    def get(self, request, booking_id):
 
         try:
 
@@ -653,42 +738,35 @@ class BookingDetailAPIView(APIView):
                     "guide"
                 )
                 .get(
-                    id=booking_id,
-                    user=request.user
+                    Q(user=request.user) |
+                    Q(guide=request.user),
+                    id=booking_id
                 )
             )
 
         except Booking.DoesNotExist:
 
-            return Response({
-
-                "success": False,
-
-                "message":
-                    "Booking not found"
-
-            }, status=404)
+            return Response(
+                {
+                    "success": False,
+                    "message": "Booking not found"
+                },
+                status=404
+            )
 
         serializer = BookingCreateSerializer(
-
             booking,
-
             context={
                 "request": request
             }
-
         )
 
-        return Response({
-
-            "success": True,
-
-            "data":
-                serializer.data
-
-        })
-        
-        
+        return Response(
+            {
+                "success": True,
+                "data": serializer.data
+            }
+        )  
         
         
         
@@ -808,9 +886,8 @@ class CancelBookingAPI(APIView):
             )
 
         except ValidationError as e:
-
             return Response(
-                {"error": str(e)},
+                {"error": e.messages[0]},
                 status=400
             )
 

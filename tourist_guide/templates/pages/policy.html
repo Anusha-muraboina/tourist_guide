@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Privacy Policy - Tourist Guide
+{% endblock %}
+
+{% block content %}
+<!-- Google Fonts & Tailwind Config Dependency (Ensure Inter is available) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  .font-inter { font-family: 'Inter', sans-serif; }
+  .blur-bg { backdrop-filter: blur(100px); }
+</style>
+
+<div class="font-inter bg-slate-50/50 min-h-screen text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+  
+  <!-- HERO COVER SECTION -->
+  <header class="relative overflow-hidden bg-slate-900 pt-36 pb-24 border-b border-slate-800">
+    <!-- Grid Decoration -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-60"></div>
+    
+    <!-- Ambient Glows -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center z-10">
+      <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-400/20 px-3 py-1 rounded-full mb-4">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-indigo-300 text-xs font-bold uppercase tracking-wider">Compliance Center</span>
+      </div>
+      <h1 class="text-white text-4xl sm:text-5xl font-black tracking-tight leading-none">
+        Privacy Policy
+      </h1>
+      <p class="text-slate-400 mt-4 text-base sm:text-lg font-medium max-w-xl mx-auto leading-relaxed">
+        We prioritize transparency. Discover how your data assets are encrypted, processed, and safeguarded within our global network.
+      </p>
+      
+      <!-- Metadata Chips -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-8 text-xs text-slate-400 font-semibold border-t border-slate-800/60 pt-6 max-w-md mx-auto">
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar"></i> Updated: June 2026</span>
+        <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> Reading Time: 4 mins</span>
+        <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+        <span class="flex items-center gap-1.5 text-indigo-400"><i class="fa-solid fa-scale-balanced"></i> GDPR & CCPA Compliant</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY CONTENT WRAPPER -->
+  <main class="max-w-4xl mx-auto px-6 py-16">
+    
+    <!-- TL;DR SUMMARY CARD -->
+    <section class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl shadow-indigo-950/10 mb-12 border border-indigo-800/30 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full translate-x-10 -translate-y-10 blur-xl"></div>
+      <h2 class="text-lg font-extrabold flex items-center gap-2 text-indigo-300 mb-3">
+        <i class="fa-solid fa-bolt"></i> Privacy Summary (TL;DR)
+      </h2>
+      <p class="text-indigo-100/80 text-sm leading-relaxed mb-4">
+        If you are short on time, here is the baseline: We use your data exclusively to handle logistics, confirm dynamic reservations with your regional experience providers, and secure your account against malicious entities. <strong class="text-white font-semibold">We never sell your telemetry metrics to third-party data aggregators.</strong>
+      </p>
+    </section>
+
+    <!-- MAIN POLICY ARTICLES -->
+    <div class="bg-white border border-slate-200/60 rounded-3xl p-6 md:p-12 shadow-sm space-y-10">
+      
+      <!-- Article 1 -->
+      <article class="group">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+            01
+          </div>
+          <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Information We Collect</h3>
+        </div>
+        <div class="pl-11 space-y-4 text-slate-600 text-[15px] leading-relaxed">
+          <p>
+            To process bookings securely and verify structural database parameters, we request personal variables during account generation sequences:
+          </p>
+          <ul class="space-y-3 bg-slate-50 rounded-2xl p-5 border border-slate-100">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-500 mt-1 text-sm shrink-0"></i>
+              <span><strong>Identity Profiles:</strong> Legal name, validation credentials, and systemic identification configurations.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-500 mt-1 text-sm shrink-0"></i>
+              <span><strong>Contact Matrix:</strong> Active corporate or individual emails, cellular channels, and backup notification settings.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-500 mt-1 text-sm shrink-0"></i>
+              <span><strong>Payment Vectors:</strong> Hash codes and order logs. Raw checking numbers or security keys are funneled straight into fully compliant tokenized processing vaults.</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <hr class="border-slate-100" />
+
+      <!-- Article 2 -->
+      <article class="group">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+            02
+          </div>
+          <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">How Your Information Is Used</h3>
+        </div>
+        <div class="pl-11 space-y-3 text-slate-600 text-[15px] leading-relaxed">
+          <p>
+            Your collected profiles are bound exclusively to live ecosystem performance targets. We process data under these legal pillars:
+          </p>
+          <p>
+            First, to coordinate localized trip profiles and match your user configurations directly with destination suppliers. Second, to broadcast platform telemetry, confirmation vouchers, and updates regarding operational structural anomalies. Finally, data is tracked to screen for automated scripts, malicious Sybil patterns, or systemic attacks.
+          </p>
+        </div>
+      </article>
+
+      <!-- IMPORTANT CALLOUT INSIDE CONTAINER -->
+      <div class="bg-amber-50/60 rounded-2xl p-5 border border-amber-200/50 my-8 flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-shield-halved text-lg"></i>
+        </div>
+        <div class="text-sm text-amber-900/90 leading-relaxed">
+          <h4 class="font-extrabold mb-0.5">Absolute Data Retention Security</h4>
+          <p class="m-0">
+            Account data profiles are systematically cached strictly during active service parameters. You maintain undisputed legal access controls to request immediate platform expunging or a complete personal history download right inside your profile management dashboard.
+          </p>
+        </div>
+      </div>
+
+      <hr class="border-slate-100" />
+
+      <!-- Article 3 -->
+      <article class="group">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+            03
+          </div>
+          <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Data Sharing Restrictions</h3>
+        </div>
+        <div class="pl-11 space-y-3 text-slate-600 text-[15px] leading-relaxed">
+          <p>
+            We enforce an absolute isolation mechanism. We do not distribute tracking models, behavioral pipelines, or profile coordinates to speculative ad brokers. Data handshakes happen strictly with matching regional operators who are executing your specific itinerary, or under absolute jurisdiction mandates issued by authorized legal courts.
+          </p>
+        </div>
+      </article>
+
+      <hr class="border-slate-100" />
+
+      <!-- Article 4 -->
+      <article class="group">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-bold flex items-center justify-center text-sm border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+            04
+          </div>
+          <h3 class="text-xl font-extrabold text-slate-900 tracking-tight">Cookies and Telemetry Triggers</h3>
+        </div>
+        <div class="pl-11 space-y-3 text-slate-600 text-[15px] leading-relaxed">
+          <p>
+            Our web nodes drop standard cookie files onto your browser endpoints to memorize active interface states (like retaining chosen currency or local language frameworks). You hold complete system authorization to toggle off analytical tracking flags inside your individual system settings without disabling primary system performance.
+          </p>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- REPORTING / COMPLIANCE FOOTER CONTACT -->
+    <div class="mt-12 bg-slate-100 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-200/50">
+      <div class="text-center md:text-left">
+        <h4 class="text-slate-900 font-extrabold text-base">Questions regarding data security protocols?</h4>
+        <p class="text-slate-500 text-xs mt-0.5 font-medium">Our legal team responds to inquiries within 48 systemic hours.</p>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="mailto:privacy@touristguide.com" class="bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-slate-50 hover:shadow-sm transition-all duration-200 flex items-center gap-2">
+          <i class="fa-solid fa-envelope text-slate-400"></i> Email Compliance
+        </a>
+        {% comment %} <a href="{% url 'terms_conditions' %}" class="bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs hover:bg-indigo-700 shadow-md shadow-indigo-600/10 transition-all duration-200">
+          View Terms of Service
+        </a> {% endcomment %}
+      </div>
+    </div>
+
+  </main>
+</div>
+{% endblock %}

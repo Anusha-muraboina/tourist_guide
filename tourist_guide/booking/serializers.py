@@ -1090,6 +1090,12 @@ class BookingListSerializer(
     )
 
     guide_name = serializers.SerializerMethodField()
+    
+    user_role = serializers.CharField(
+        source="user.role",
+        read_only=True
+    )
+
 
     class Meta:
 
@@ -1112,7 +1118,8 @@ class BookingListSerializer(
 
             "payment_status",
 
-            "created_at"
+            "created_at",
+            "user_role",
 
         ]
 

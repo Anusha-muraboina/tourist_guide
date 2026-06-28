@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'coupon',
     'booking',
     
+    'blog',
+    'contact',
+    
     
     # Third Party Apps
     'rest_framework',

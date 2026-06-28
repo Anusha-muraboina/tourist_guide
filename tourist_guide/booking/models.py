@@ -276,21 +276,23 @@ class Booking(models.Model):
                     break
 
             self.booking_id = booking_id
+            
+        if is_new:
 
-        if self.payment_method == "pay_at_location":
+            if self.payment_method == "pay_at_location":
 
-            self.payment_status = "pending"
-            self.status = "confirmed"
+                self.payment_status = "pending"
+                self.status = "confirmed"
 
-        elif self.payment_method == "partial_payment":
+            elif self.payment_method == "partial_payment":
 
-            self.payment_status = "partial"
-            self.status = "confirmed"
+                self.payment_status = "partial"
+                self.status = "confirmed"
 
-        elif self.payment_method == "full_payment":
+            elif self.payment_method == "full_payment":
 
-            self.payment_status = "paid"
-            self.status = "confirmed"
+                self.payment_status = "paid"
+                self.status = "confirmed"
 
         super().save(*args, **kwargs)
 
@@ -344,50 +346,77 @@ class Booking(models.Model):
         )
         
         
-    @property
-    def advance_amount(self):
+    # @property
+    # def advance_amount(self):
 
-        if self.payment_method == "partial_payment":
-            return (
-                self.total_amount * Decimal("0.30")
-            ).quantize(Decimal("0.01"))
+    #     if self.payment_method == "partial_payment":
+    #         return (
+    #             self.total_amount * Decimal("0.30")
+    #         ).quantize(Decimal("0.01"))
 
-        elif self.payment_method == "full_payment":
-            return self.total_amount
+    #     elif self.payment_method == "full_payment":
+    #         return self.total_amount
 
-        return Decimal("0.00")
+    #     return Decimal("0.00")
 
     # =========================
     # CANCEL BOOKING
     # =========================
 
-    def cancel_booking(self, user=None):
+    # def cancel_booking(self, user=None):
 
-        if self.status == "cancelled":
-            raise ValidationError(
-                "Booking already cancelled"
-            )
+    #     if self.status == "cancelled":
+    #         raise ValidationError(
+    #             "Booking already cancelled"
+    #         )
 
-        if self.tour_date <= timezone.now().date():
-            raise ValidationError(
-                "Tour already started"
-            )
+    #     if self.tour_date <= timezone.now().date():
+    #         raise ValidationError(
+    #             "Tour already started"
+    #         )
 
-        self.status = "cancelled"
+    #     self.status = "cancelled"
 
-        self.cancelled_at = timezone.now()
+    #     self.cancelled_at = timezone.now()
 
-        self.cancelled_by = (
-            "user" if user else "admin"
-        )
+    #     self.cancelled_by = (
+    #         "user" if user else "admin"
+    #     )
 
-        self.save()
+    #     self.save()
 
     def __str__(self):
 
         return (
             f"{self.booking_id} - "
             f"{self.guest_name}"
+        )
+        
+        
+    def cancel_booking(
+        self,
+        user=None,
+        reason=None,
+        comment=None
+    ):
+        print("BEFORE:", self.status)
+
+        self.status = "cancelled"
+        self.cancelled_at = timezone.now()
+        self.cancelled_by = "user"
+
+        if self.payment_status in ["paid", "partial"]:
+            self.payment_status = "failed"
+
+        self.save()
+
+        print("AFTER:", self.status)
+
+        BookingCancelComment.objects.create(
+            user=user,
+            booking=self,
+            reason=reason,
+            comment=comment or ""
         )
         
     def send_booking_email(self, email_type,request=None):

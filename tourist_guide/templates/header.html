@@ -51,9 +51,15 @@
 
             <div>
 
-              <h1 class="text-[20px] font-bold text-gray-900">
+                <a href="/">
+    <h1 class="text-[20px] font-bold text-gray-900">
+        Travel Explorer
+    </h1>
+</a>
+
+              {% comment %} <h1 class="text-[20px] font-bold text-gray-900">
                 Travel Explorer
-              </h1>
+              </h1> {% endcomment %}
 
               <p class="text-[11px] text-gray-500">
                 Explore the world
@@ -63,6 +69,20 @@
 
           </div>
 
+
+          <a
+    href="{% url 'about_us' %}"
+    class="hover:text-cyan-400 transition-colors"
+>
+    About Us
+</a>
+
+<a
+    href="{% url 'contact_us' %}"
+    class="hover:text-cyan-400 transition-colors"
+>
+    Contact Us
+</a>
           <!-- MENU -->
 <div class="hidden lg:flex items-center gap-10 relative">
 
@@ -77,6 +97,9 @@
         Places to see
         <i class="fa-solid fa-chevron-down text-[11px]"></i>
     </button>
+
+
+    
 
     <div
         id="placesDropdown"
@@ -250,7 +273,7 @@
 
                 <!-- PROFILE -->
 
-                <a href="/profile/"
+                <a href="/user/profile/"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
 
                     <i class="fa-regular fa-user text-cyan-600"></i>
@@ -375,9 +398,9 @@
     <div
         class="w-[300px] h-full bg-white shadow-2xl overflow-y-auto">
         <!-- TOP -->
-        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div class="p-2 md:p-6 border-b border-gray-200 flex items-center justify-between">
             <div>
-                <h2 class="text-[22px] font-bold text-gray-900">
+                <h2 class="md:text-[22px] text-[13px] md:font-bold text-gray-900">
                     Travel Explorer
                 </h2>
 

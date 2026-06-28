@@ -1,13 +1,372 @@
 {% extends "base.html" %}
 
 {% block content %}
+<section class="bg-slate-50 min-h-screen py-10 antialiased">
+    <div class="max-w-7xl mx-auto px-4 pt-16">
+
+        <!-- Header -->
+        <div class="mb-10  flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class=" text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    My Bookings
+                </h1>
+                <p class="text-slate-500 mt-1.5 text-sm md:text-base font-medium">
+                    View, track, and manage your tour reservations and guide assignments.
+                </p>
+            </div>
+        </div>
+
+        <!-- Layout Grid -->
+        <div class="grid lg:grid-cols-3 gap-8 items-start">
+
+            <!-- Booking List Sidebar -->
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden lg:sticky lg:top-6">
+                <div class="p-5 border-b border-slate-100 bg-white flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 tracking-tight">
+                        Booking History
+                    </h3>
+                </div>
+
+                <div
+                    id="bookingContainer"
+                    class="max-h-[750px] overflow-y-auto divide-y divide-slate-100 scrollbar-thin"
+                >
+                    <!-- JavaScript injected lists -->
+                </div>
+            </div>
+
+            <!-- Booking Detail Content Display Container -->
+            <div class="lg:col-span-2">
+                <div
+                    id="bookingDetail"
+                    class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 min-h-[650px] transition-all duration-300 relative overflow-hidden"
+                >
+                    <!-- Empty State Placeholder -->
+                    <div class="flex flex-col items-center justify-center py-32 text-center">
+                        <div class="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 text-slate-400">
+                            <i class="fa-regular fa-calendar-days text-3xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 tracking-tight">
+                            Select a Reservation
+                        </h3>
+                        <p class="text-slate-400 text-sm mt-1.5 max-w-xs mx-auto">
+                            Click any trip or tour profile from the sidebar panel to check details.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+async function loadBookings(){
+    try{
+        const response = await fetch("/booking/api/booking-list/");
+        const result = await response.json();
+        const container = document.getElementById("bookingContainer");
+
+        container.innerHTML = "";
+
+        result.data.forEach(booking => {
+            // Refined Tailwind native color mappings for clean UI styling strings
+            let statusClasses = "";
+            if(booking.status === "confirmed") {
+                statusClasses = "bg-emerald-50 text-emerald-700 border-emerald-100";
+            } else if(booking.status === "cancelled") {
+                statusClasses = "bg-rose-50 text-rose-700 border-rose-100";
+            } else {
+                statusClasses = "bg-amber-50 text-amber-700 border-amber-100";
+            }
+
+            container.innerHTML += `
+                <div
+                    onclick="loadBookingDetail(${booking.id})"
+                    class="p-5 cursor-pointer hover:bg-slate-50/80 active:bg-slate-100/50 transition-all duration-200 border-l-4 border-l-transparent hover:border-l-cyan-500 group"
+                >
+                    <div class="flex justify-between items-start gap-4">
+                        <div class="space-y-0.5">
+                            <h4 class="font-bold text-slate-800 group-hover:text-cyan-600 transition-colors line-clamp-1">
+                                ${booking.tour_name}
+                            </h4>
+                            <p class="text-xs font-mono tracking-wider text-slate-400 uppercase">
+                                ${booking.booking_id}
+                            </p>
+                        </div>
+                        <span class="text-xs px-2.5 py-1 rounded-full font-semibold tracking-wide border uppercase ${statusClasses} shrink-0">
+                            ${booking.status}
+                        </span>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between text-xs font-medium text-slate-500">
+                        <div class="flex items-center gap-1.5 text-slate-900 font-semibold text-sm">
+                            <span class="text-xs font-normal text-slate-400">Total:</span>
+                            ₹${Number(booking.total_amount).toLocaleString('en-IN')}
+                        </div>
+                        <div class="flex items-center gap-1 text-slate-400">
+                            <i class="fa-regular fa-clock text-[10px]"></i>
+                            <span>${booking.tour_date}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if(result.data.length){
+            loadBookingDetail(result.data[0].id);
+        }
+
+    }catch(error){
+        console.error("Error loading booking index stream:", error);
+    }
+}
+
+async function loadBookingDetail(id){
+    try{
+        const response = await fetch(`/booking/api/booking-detail/${id}/`);
+        const result = await response.json();
+        const booking = result.data;
+
+        let statusClasses = "";
+        if(booking.status === "confirmed") {
+            statusClasses = "bg-emerald-50 text-emerald-700 border-emerald-200";
+        } else if(booking.status === "cancelled") {
+            statusClasses = "bg-rose-50 text-rose-700 border-rose-200";
+        } else {
+            statusClasses = "bg-amber-50 text-amber-700 border-amber-200";
+        }
+
+        document.getElementById("bookingDetail").innerHTML = `
+            <!-- Background Decorative Glow Effects -->
+            <div class="absolute top-0 right-0 w-48 h-48 bg-cyan-50 rounded-full filter blur-3xl opacity-40 -mr-12 -mt-12 pointer-events-none"></div>
+
+            <!-- Top Header Block -->
+            <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-100">
+                <div>
+                    <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        ${booking.tour_details.title}
+                    </h2>
+                    <p class="text-sm font-medium text-slate-400 mt-2 flex items-center gap-1.5">
+                        <span class="font-semibold text-slate-500">Booking ID:</span>
+                        <span class="font-mono text-xs tracking-wider uppercase bg-slate-50 px-2 py-0.5 rounded border border-slate-200/60">${booking.booking_id}</span>
+                    </p>
+                </div>
+                <span class="px-4 py-1.5 border rounded-full text-xs font-bold uppercase tracking-wide shrink-0 shadow-sm ${statusClasses}">
+                    ${booking.status}
+                </span>
+            </div>
+
+            <!-- Meta Parameters Layout Grid Split -->
+            <div class="relative z-10 grid md:grid-cols-2 gap-8 mt-8">
+                <!-- Guest Block Layout card wrapper -->
+                <div class="bg-slate-50/40 rounded-2xl p-5 border border-slate-100/70">
+                    <h3 class="font-bold text-slate-800 text-sm tracking-wider uppercase mb-4 flex items-center gap-2 text-cyan-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                        Guest Information
+                    </h3>
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Name</span>
+                            <span class="font-semibold text-slate-800">${booking.guest_name}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Email</span>
+                            <span class="text-slate-700 break-all select-all">${booking.guest_email}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Phone</span>
+                            <span class="text-slate-700 font-medium">${booking.guest_phone}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Card Block Wrapper -->
+                <div class="bg-slate-50/40 rounded-2xl p-5 border border-slate-100/70">
+                    <h3 class="font-bold text-slate-800 text-sm tracking-wider uppercase mb-4 flex items-center gap-2 text-cyan-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                        Tour Information
+                    </h3>
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Date</span>
+                            <span class="font-semibold text-slate-800">${booking.tour_date}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Time</span>
+                            <span class="text-slate-700 font-medium">${booking.tour_time}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-16 font-medium text-slate-400 shrink-0">Guide</span>
+                            <span class="px-2 py-0.5 rounded text-xs font-semibold ${booking.selected_guide ? 'bg-cyan-50 text-cyan-700' : 'bg-slate-100 text-slate-600'}">
+                                ${booking.selected_guide ? booking.selected_guide.username : "Not Assigned"}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Guide Component Insertion Layout Block Container -->
+            <div class="relative z-10 mt-8">
+                <h3 class="font-bold text-slate-800 text-sm tracking-wider uppercase mb-4">
+                    Assigned Guide Profile
+                </h3>
+                ${booking.selected_guide ? `
+                    <div class="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all duration-200 hover:shadow-md">
+                        <img
+                            src="${booking.selected_guide.profile_image || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(booking.selected_guide.username)}"
+                            alt="Guide profile picture"
+                            class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0"
+                        >
+                        <div class="space-y-1 w-full">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <h4 class="text-base font-bold text-slate-800">
+                                    ${booking.selected_guide.username}
+                                </h4>
+                                <span class="text-xs text-slate-400 font-mono flex items-center gap-1">
+                                    <i class="fa-solid fa-location-dot text-[10px] text-slate-400"></i>
+                                    ${booking.selected_guide.location || '-'}, ${booking.selected_guide.state || '-'}
+                                </span>
+                            </div>
+                            <p class="text-xs font-medium text-slate-500 break-all">
+                                ${booking.selected_guide.email}
+                            </p>
+                            <p class="text-xs text-slate-500 pt-1">
+                                <span class="text-slate-400 font-medium">Contact:</span> ${booking.selected_guide.phone_number || 'N/A'}
+                            </p>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="bg-amber-50/60 text-amber-800 text-sm font-medium rounded-2xl p-4 border border-amber-100 flex items-center gap-3">
+                        <i class="fa-solid fa-circle-info text-amber-500 text-base"></i>
+                        <span>An expert local guide will be assigned to your booking shortly.</span>
+                    </div>
+                `}
+            </div>
+
+            <!-- Ledger Breakdown Financial Processing Panel Component -->
+            <div class="relative z-10 mt-8">
+                <h3 class="font-bold text-slate-800 text-sm tracking-wider uppercase mb-4">
+                    Payment Invoice Summary
+                </h3>
+                <div class="bg-slate-50/70 rounded-2xl p-5 border border-slate-100/80 space-y-3.5 text-sm">
+                    <div class="flex justify-between text-slate-500">
+                        <span>Sub Total Base Fare</span>
+                        <span class="font-medium text-slate-800">₹${Number(booking.sub_total).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500">
+                        <span> Discounts Applied</span>
+                        <span class="font-medium text-emerald-600">- ₹${Number(booking.discount_amount).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="h-px bg-slate-200/60 my-2"></div>
+                    <div class="flex justify-between text-slate-900 font-semibold">
+                        <span class="text-base text-slate-800">Total Net Amount</span>
+                        <span class="text-base text-slate-900">₹${Number(booking.total_amount).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500">
+                        <span>Advance Deposit Paid</span>
+                        <span class="font-medium text-slate-800">₹${Number(booking.advance_amount).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div class="bg-white/80   py-2.5 flex justify-between items-center mt-2">
+                        <span class="font-bold text-xs uppercase tracking-wider text-slate-400">Balance Due on Arrival</span>
+                        <span class="text-base font-extrabold text-rose-600">₹${Number(booking.remaining_amount).toLocaleString('en-IN')}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Structural Functional State Actions Trigger Row Panel -->
+            <div class="relative z-10 mt-8 pt-4 border-t border-slate-100 flex justify-end">
+                ${booking.status !== "cancelled" ? `
+                    <button
+                        onclick="window.location.href='/booking/cancel_booking_page/${booking.booking_id}/'"
+                        class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 active:scale-[0.98] font-semibold text-sm px-6 py-3 rounded-xl shadow-sm transition-all duration-200 border border-rose-200/50"
+                    >
+                        Request Cancellation
+                    </button>
+                ` : `
+                    <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-50/80 border border-rose-100 text-rose-700 font-medium text-sm rounded-xl uppercase tracking-wide">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                        Booking Cancelled
+                    </span>
+                `}
+            </div>
+        `;
+    }catch(error){
+        console.error("Error drawing structural details view context card:", error);
+    }
+}
+
+async function cancelBooking(id){
+    if(!confirm("Are you sure you want to cancel this booking?")){
+        return;
+    }
+
+    try {
+        const response = await fetch(`/booking/api/cancel/${id}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            }
+        });
+        const result = await response.json();
+        if(result.success){
+            alert("Booking cancelled successfully");
+            loadBookings();
+        }
+    } catch(err) {
+        console.error("Cancellation network processing failed:", err);
+    }
+}
+
+function getCookie(name){
+    let cookieValue = null;
+    if(document.cookie){
+        const cookies = document.cookie.split(";");
+        for(let cookie of cookies){
+            cookie = cookie.trim();
+            if(cookie.startsWith(name + "=")){
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Initial fire
+loadBookings();
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+
+{% block content %}
 
 <section class="bg-gray-50 min-h-screen py-10">
 
-```
+
 <div class="md:max-w-7xl mx-auto px-4 pt-8">
 
-    <!-- Header -->
+    
 
     <div class="mb-8">
 
@@ -21,11 +380,11 @@
 
     </div>
 
-    <!-- Layout -->
+ 
 
     <div class="grid lg:grid-cols-3 gap-6">
 
-        <!-- Booking List -->
+      
 
         <div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
 
@@ -46,7 +405,7 @@
 
         </div>
 
-        <!-- Booking Detail -->
+      
 
         <div class="lg:col-span-2">
 
@@ -604,4 +963,4 @@ loadBookings();
 
 </script>
 
-{% endblock %}
+{% endblock %} {% endcomment %}

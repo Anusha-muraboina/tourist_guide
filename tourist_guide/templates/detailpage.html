@@ -689,7 +689,9 @@ BOOK NOW
 
         <!-- HEADER -->
 
-        <div class="flex items-center justify-between mb-6">
+        <!-- <div class="flex items-center justify-between mb-6"> -->
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
             <div>
 
@@ -701,7 +703,14 @@ BOOK NOW
                     Real reviews from verified travelers
                 </p>
 
+
             </div>
+             <button
+                        onclick="toggleReviewForm()"
+                        class="bg-[#1677e6] text-white px-5 py-2 rounded-xl"
+                    >
+                        Add Review
+                    </button>
 
         </div>
 
@@ -737,6 +746,57 @@ BOOK NOW
             </div>
 
         </div>
+
+
+
+
+
+        <div
+    id="reviewForm"
+    class="hidden bg-gray-50 rounded-2xl p-6 mb-8 border"
+>
+
+    <h3 class="text-xl font-bold mb-4">
+        Write a Review
+    </h3>
+
+    <div class="mb-4">
+        <label class="font-medium block mb-2">
+            Rating
+        </label>
+
+        <div id="starRating" class="flex gap-2 text-3xl">
+            <span onclick="selectRating(1)" class="cursor-pointer text-gray-300">★</span>
+            <span onclick="selectRating(2)" class="cursor-pointer text-gray-300">★</span>
+            <span onclick="selectRating(3)" class="cursor-pointer text-gray-300">★</span>
+            <span onclick="selectRating(4)" class="cursor-pointer text-gray-300">★</span>
+            <span onclick="selectRating(5)" class="cursor-pointer text-gray-300">★</span>
+        </div>
+    </div>
+
+    <textarea
+        id="reviewText"
+        rows="4"
+        class="w-full border rounded-xl p-3"
+        placeholder="Write your review..."
+    ></textarea>
+
+<div
+    id="reviewError"
+    class="hidden mt-3 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl"
+></div>
+
+    <button
+        onclick="submitReview()"
+        class="mt-4 bg-green-600 text-white px-6 py-3 rounded-xl"
+    >
+        Submit Review
+    </button>
+
+</div>
+
+
+
 
         <!-- REVIEWS LIST -->
 
@@ -1449,7 +1509,133 @@ BOOK NOW
 
 
 
+let selectedRating = 0;
 
+async function submitReview(){
+
+    const review =
+        document.getElementById(
+            "reviewText"
+        ).value;
+
+    if(!selectedRating){
+        alert("Please select a rating");
+        return;
+    }
+
+    try{
+
+
+        const response = await fetch(
+            "/rating/add-rating/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    tour: tourData.id,
+                    rating: selectedRating,
+                    review: review
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        if(data.success){
+
+
+
+
+        document.getElementById(
+                "reviewError"
+            ).classList.add(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "reviewText"
+            ).value = "";
+
+            selectedRating = 0;
+
+            document.getElementById(
+                "reviewForm"
+            ).classList.add(
+                "hidden"
+            );
+
+            fetchTourDetails();
+        }
+        else{
+
+            const errorBox =
+                document.getElementById(
+                    "reviewError"
+                );
+
+            errorBox.innerText =
+                data.message ||
+                "Something went wrong";
+
+            errorBox.classList.remove(
+                "hidden"
+            );
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+        alert(
+            "Something went wrong"
+        );
+    }
+}
+
+function selectRating(rating){
+
+    selectedRating = rating;
+
+    const stars =
+        document.querySelectorAll(
+            "#starRating span"
+        );
+
+    stars.forEach((star,index)=>{
+
+        if(index < rating){
+            star.classList.remove(
+                "text-gray-300"
+            );
+            star.classList.add(
+                "text-yellow-400"
+            );
+        }
+        else{
+            star.classList.remove(
+                "text-yellow-400"
+            );
+            star.classList.add(
+                "text-gray-300"
+            );
+        }
+
+    });
+}
+
+function toggleReviewForm(){
+
+    document
+        .getElementById("reviewForm")
+        .classList.toggle("hidden");
+}
 
 
 

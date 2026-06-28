@@ -25,6 +25,10 @@ urlpatterns = [
     path('coupon/',include('coupon.urls')),
     path('booking/',include('booking.urls')),
     path('user/',include('user.urls')),
+    
+    path('blog/',include('blog.urls')),
+    
+    path('contact/',include('contact.urls')),
 
 ]
 

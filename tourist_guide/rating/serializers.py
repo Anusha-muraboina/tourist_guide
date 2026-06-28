@@ -26,3 +26,18 @@ class RatingSerializer(serializers.ModelSerializer):
             return "Anonymous"
 
         return obj.user.username
+    
+    
+from rest_framework import serializers
+from rating.models import Rating
+
+class RatingCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = [
+            "tour",
+            "rating",
+            "review",
+            "anonymous",
+        ]

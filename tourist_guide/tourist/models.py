@@ -290,7 +290,6 @@ class Tour(models.Model):
     featured = models.BooleanField( default=False)
 
 
-
     slot_position = models.PositiveIntegerField(
         default=0
     )
