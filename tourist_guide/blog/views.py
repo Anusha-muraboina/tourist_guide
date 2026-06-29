@@ -28,8 +28,8 @@ def about_us(request):
     )
 
 
-def contact_us(request):
-    return render(
-        request,
-        "pages/contact_us.html"
-    )
+# def contact_us(request):
+#     return render(
+#         request,
+#         "pages/contact_us.html"
+#     )

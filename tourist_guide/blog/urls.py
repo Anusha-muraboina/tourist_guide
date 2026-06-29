@@ -21,9 +21,9 @@ urlpatterns = [
         name="about_us"
     ),
 
-    path(
-        "contact-us/",
-        views.contact_us,
-        name="contact_us"
-    ),
+    # path(
+    #     "contact-us/",
+    #     views.contact_us,
+    #     name="contact_us"
+    # ),
 ]
