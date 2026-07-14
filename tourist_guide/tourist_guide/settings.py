@@ -48,6 +48,11 @@ INSTALLED_APPS = [
     
     'blog',
     'contact',
+    'tourist_admin',
+    
+    
+    
+    "ckeditor",
     
     
     # Third Party Apps

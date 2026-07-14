@@ -1,0 +1,531 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+Tours
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+
+    <!-- Header -->
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+                Tours
+            </h2>
+
+            <p class="text-sm text-slate-500">
+                Manage all tours, destinations and travel packages.
+            </p>
+        </div>
+
+        <a href="{% url 'tour_add' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium transition">
+
+            <i class="fa-solid fa-plus mr-2"></i>
+
+            Add Tour
+
+        </a>
+
+    </div>
+
+    <!-- Search -->
+    <div class="p-6 border-b border-gray-100">
+
+        <form method="GET">
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+                <!-- Search -->
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search Tour..."
+                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none">
+
+
+                <!-- Category -->
+
+                <select
+                    name="category"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    {% for cat in categories %}
+
+                    <option
+                        value="{{ cat.id }}"
+                        {% if category == cat.id|stringformat:"s" %}
+                        selected
+                        {% endif %}>
+
+                        {{ cat.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- Status -->
+
+                <select
+                    name="status"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option
+                        value="1"
+                        {% if status == "1" %}selected{% endif %}>
+
+                        Active
+
+                    </option>
+
+                    <option
+                        value="0"
+                        {% if status == "0" %}selected{% endif %}>
+
+                        Inactive
+
+                    </option>
+
+                </select>
+
+
+                <!-- Featured -->
+
+                <select
+                    name="featured"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">
+                        Featured
+                    </option>
+
+                    <option
+                        value="1"
+                        {% if featured == "1" %}selected{% endif %}>
+
+                        Yes
+
+                    </option>
+
+                    <option
+                        value="0"
+                        {% if featured == "0" %}selected{% endif %}>
+
+                        No
+
+                    </option>
+
+                </select>
+
+
+                <!-- Buttons -->
+
+                <div class="flex gap-2">
+
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+
+                        Search
+
+                    </button>
+
+                    <a href="{% url 'tour_list' %}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full">
+
+            <thead class="bg-slate-900 text-white">
+
+                <tr>
+
+                    <th class="px-6 py-4 text-left">
+                        #
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Tour
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Category
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        City
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Type
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Duration
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Price
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Featured
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Status
+                    </th>
+
+                    <th class="px-6 py-4 text-right">
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+
+            {% for item in items %}
+
+<tr class="hover:bg-gray-50 transition">
+
+    <!-- Serial -->
+    <td class="px-6 py-4">
+        {{ page_obj.start_index|add:forloop.counter0 }}
+    </td>
+
+    <!-- Tour -->
+    <td class="px-6 py-4">
+
+        <div class="font-semibold text-slate-800">
+            {{ item.title }}
+        </div>
+
+        {% comment %} <div class="text-xs text-slate-500 mt-1">
+            {{ item.slug }}
+        </div> {% endcomment %}
+
+    </td>
+
+    <!-- Category -->
+    <td class="px-6 py-4">
+
+        {% if item.category %}
+            {{ item.category.name }}
+        {% else %}
+            <span class="text-gray-400">
+                --
+            </span>
+        {% endif %}
+
+    </td>
+
+    <!-- City -->
+    <td class="px-6 py-4">
+
+        {{ item.city }}
+
+        <div class="text-xs text-gray-400">
+            {{ item.state }}
+        </div>
+
+    </td>
+
+    <!-- Tour Type -->
+    <td class="px-6 py-4">
+
+        {% if item.tour_type == "private" %}
+
+        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs">
+
+            Private
+
+        </span>
+
+        {% else %}
+
+        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs">
+
+            Group
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Duration -->
+    <td class="px-6 py-4">
+
+        {{ item.duration }}
+
+    </td>
+
+    <!-- Price -->
+    <td class="px-6 py-4">
+
+        <div class="font-bold text-green-700">
+
+            {% comment %} ₹ {{ item.adult_price }} {% endcomment %}
+
+             ₹ {{ item.adult_price|floatformat:0 }}
+
+        </div>
+
+        <div class="text-xs text-gray-500">
+
+            Adult
+
+        </div>
+
+    </td>
+
+    <!-- Featured -->
+    <td class="px-6 py-4">
+
+        {% if item.featured %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs">
+
+            <i class="fa-solid fa-star mr-1"></i>
+
+            Featured
+
+        </span>
+
+        {% else %}
+
+        <span class="text-gray-400">
+
+            —
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Status -->
+    <td class="px-6 py-4">
+
+        {% if item.is_active %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs">
+
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+
+            Active
+
+        </span>
+
+        {% else %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs">
+
+            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+
+            Inactive
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Actions -->
+    <td class="px-6 py-4 text-right whitespace-nowrap">
+
+        <div class="inline-flex gap-2">
+
+            <a href="{% url 'tour_edit' item.pk %}"
+               class="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-pen mr-1"></i>
+
+                Edit
+
+            </a>
+
+            <a href="{% url 'tour_delete' item.pk %}"
+               onclick="return confirm('Delete this tour?')"
+               class="inline-flex items-center bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-trash mr-1"></i>
+
+                Delete
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="10" class="py-16 text-center">
+
+        <i class="fa-solid fa-route text-5xl text-gray-300 mb-4"></i>
+
+        <h3 class="text-lg font-semibold text-gray-500">
+
+            No Tours Found
+
+        </h3>
+
+        <p class="text-sm text-gray-400 mt-2">
+
+            Create your first tour package.
+
+        </p>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+
+<!-- Pagination -->
+{% if is_paginated %}
+
+<div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
+
+    <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+
+        <!-- Record Info -->
+        <div class="text-sm text-gray-600">
+
+            Showing
+
+            <span class="font-semibold">
+                {{ page_obj.start_index }}
+            </span>
+
+            -
+
+            <span class="font-semibold">
+                {{ page_obj.end_index }}
+            </span>
+
+            of
+
+            <span class="font-semibold">
+                {{ paginator.count }}
+            </span>
+
+            Tours
+
+        </div>
+
+
+        <!-- Pagination -->
+
+        <div class="flex items-center gap-2">
+
+            {% if page_obj.has_previous %}
+
+            <a href="?page=1&search={{ search }}&category={{ category }}&status={{ status }}&featured={{ featured }}"
+               class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                First
+
+            </a>
+
+            <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&category={{ category }}&status={{ status }}&featured={{ featured }}"
+               class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                <i class="fa-solid fa-angle-left"></i>
+
+            </a>
+
+            {% endif %}
+
+
+            {% for num in paginator.page_range %}
+
+                {% if num == page_obj.number %}
+
+                <span class="px-4 py-2 bg-teal-600 text-white rounded-lg">
+
+                    {{ num }}
+
+                </span>
+
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+
+                <a href="?page={{ num }}&search={{ search }}&category={{ category }}&status={{ status }}&featured={{ featured }}"
+                   class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+
+                    {{ num }}
+
+                </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if page_obj.has_next %}
+
+            <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&category={{ category }}&status={{ status }}&featured={{ featured }}"
+               class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                <i class="fa-solid fa-angle-right"></i>
+
+            </a>
+
+            <a href="?page={{ paginator.num_pages }}&search={{ search }}&category={{ category }}&status={{ status }}&featured={{ featured }}"
+               class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                Last
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

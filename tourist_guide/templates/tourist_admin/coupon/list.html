@@ -1,0 +1,495 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+Coupons
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+
+    <!-- Header -->
+
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+        <div>
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Coupons
+            </h2>
+
+            <p class="text-sm text-slate-500">
+                Manage discount coupons for tours.
+            </p>
+
+        </div>
+
+        <a href="{% url 'coupon_add' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium">
+
+            <i class="fa-solid fa-plus mr-2"></i>
+
+            Add Coupon
+
+        </a>
+
+    </div>
+
+    <!-- Search -->
+
+    <div class="p-6 border-b border-gray-100">
+
+        <form method="GET">
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search Coupon..."
+                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 outline-none">
+
+                <select
+                    name="discount_type"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">All Discount Types</option>
+
+                    <option value="flat"
+                        {% if discount_type == "flat" %}selected{% endif %}>
+                        Flat Amount
+                    </option>
+
+                    <option value="percentage"
+                        {% if discount_type == "percentage" %}selected{% endif %}>
+                        Percentage
+                    </option>
+
+                </select>
+
+                <select
+                    name="status"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">All Status</option>
+
+                    <option value="1"
+                        {% if status == "1" %}selected{% endif %}>
+                        Active
+                    </option>
+
+                    <option value="0"
+                        {% if status == "0" %}selected{% endif %}>
+                        Inactive
+                    </option>
+
+                </select>
+
+                <div class="flex gap-2">
+
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 rounded-lg">
+
+                        Search
+
+                    </button>
+
+                    <a href="{% url 'coupon_list' %}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full">
+
+            <thead class="bg-slate-900 text-white">
+
+                <tr>
+
+                    <th class="px-6 py-4 text-left">#</th>
+
+                    <th class="px-6 py-4 text-left">Coupon</th>
+
+                    <th class="px-6 py-4 text-left">Tour</th>
+
+                    <th class="px-6 py-4 text-left">Type</th>
+
+                    <th class="px-4 py-4 text-left">Discount</th>
+
+                    <th class="px-6 py-4 text-left">Validity </th>
+
+                    <th class="px-6 py-4 text-left">Usage</th>
+
+                    <th class="px-6 py-4 text-left">Status</th>
+
+                    <th class="px-6 py-4 text-right">
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+
+                {% for item in items %}
+
+<tr class="hover:bg-gray-50 transition">
+
+    <td class="px-6 py-4">
+        {{ page_obj.start_index|add:forloop.counter0 }}
+    </td>
+
+    <!-- Coupon -->
+
+    <td class="px-4 py-4">
+
+        <div class="font-semibold text-slate-800">
+
+            {{ item.title }}
+
+        </div>
+
+        <div class="text-xs text-gray-500 uppercase">
+
+            {{ item.code }}
+
+        </div>
+
+    </td>
+
+    <!-- Tour -->
+
+    <td class="px-6 py-4">
+
+        {% if item.tour %}
+
+            {{ item.tour.title }}
+
+        {% else %}
+
+            <span class="text-gray-400">
+                All Tours
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Discount Type -->
+
+    <td class="px-6 py-4">
+
+        {% if item.discount_type == "flat" %}
+
+        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+
+            Flat
+
+        </span>
+
+        {% else %}
+
+        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+
+            Percentage
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Discount -->
+
+    <td class="px-6 py-4">
+
+        {% if item.discount_type == "flat" %}
+
+            <span class="font-bold text-green-700">
+
+                ₹ {{ item.discount_value|floatformat:0 }}
+
+            </span>
+
+        {% else %}
+
+            <span class="font-bold text-indigo-700">
+
+                {{ item.discount_value|floatformat:0 }} %
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Validity -->
+
+    <td class="px-4 py-4 text-sm">
+
+        <div>
+
+            {{ item.start_date|date:"d M Y" }}
+
+        </div>
+
+        <div class="text-gray-500">
+
+            {{ item.end_date|date:"d M Y" }}
+
+        </div>
+
+    </td>
+
+    <!-- Usage -->
+
+    <td class="px-6 py-4">
+
+        {% if item.usage_limit == 0 %}
+
+            <span class="text-green-600 font-medium">
+
+                Unlimited
+
+            </span>
+
+        {% else %}
+
+            <div class="font-medium">
+
+                {{ item.used_count }}
+
+                /
+
+                {{ item.usage_limit }}
+
+            </div>
+
+            <div class="w-32 bg-gray-200 rounded-full h-2 mt-2">
+
+                <div
+                    class="bg-teal-600 h-2 rounded-full"
+                    style="width:{% widthratio item.used_count item.usage_limit 100 %}%">
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Status -->
+
+    <td class="px-6 py-4">
+
+        {% if item.is_active %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs">
+
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+
+            Active
+
+        </span>
+
+        {% else %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs">
+
+            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+
+            Inactive
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Actions -->
+
+    <td class="px-6 py-4 text-right whitespace-nowrap">
+
+        <div class="inline-flex gap-2">
+
+            <a href="{% url 'coupon_edit' item.pk %}"
+               class="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-pen mr-1"></i>
+
+                Edit
+
+            </a>
+
+            <a href="{% url 'coupon_delete' item.pk %}"
+               onclick="return confirm('Delete this coupon?')"
+               class="inline-flex items-center bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-trash mr-1"></i>
+
+                Delete
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="9" class="text-center py-12">
+
+        <i class="fa-solid fa-ticket text-4xl text-gray-300 mb-3"></i>
+
+        <p class="text-gray-500 font-medium">
+
+            No Coupons Found
+
+        </p>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+
+    <!-- Pagination -->
+
+    {% if is_paginated %}
+
+    <div class="px-6 py-5 border-t bg-gray-50">
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+            <!-- Records -->
+
+            <div class="text-sm text-gray-600">
+
+                Showing
+
+                <span class="font-semibold">
+
+                    {{ page_obj.start_index }}
+
+                </span>
+
+                to
+
+                <span class="font-semibold">
+
+                    {{ page_obj.end_index }}
+
+                </span>
+
+                of
+
+                <span class="font-semibold">
+
+                    {{ paginator.count }}
+
+                </span>
+
+                records
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="flex items-center gap-2">
+
+                {% if page_obj.has_previous %}
+
+                <a href="?page=1&search={{ search }}&discount_type={{ discount_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                    First
+
+                </a>
+
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&discount_type={{ discount_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                </a>
+
+                {% endif %}
+
+                {% for num in paginator.page_range %}
+
+                    {% if page_obj.number == num %}
+
+                        <span class="px-4 py-2 rounded-lg bg-teal-600 text-white">
+
+                            {{ num }}
+
+                        </span>
+
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+
+                        <a href="?page={{ num }}&search={{ search }}&discount_type={{ discount_type }}&status={{ status }}"
+                           class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+
+                            {{ num }}
+
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+
+                <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&discount_type={{ discount_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+                <a href="?page={{ paginator.num_pages }}&search={{ search }}&discount_type={{ discount_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+
+                    Last
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -151,7 +151,6 @@ from tourist.serializers import TourListSerializer
 
 from rating.serializers import RatingSerializer
 class HomeAPIView(APIView):
-
     permission_classes = [AllowAny]
 
     def get(self, request):

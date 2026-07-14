@@ -1,0 +1,207 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}Edit Contact{% else %}Add Contact{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-teal-600 to-cyan-600 px-8 py-6 flex justify-between items-center">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold text-white">
+
+                        {% if object %}
+                            Edit Contact 
+                        {% else %}
+                            Add Contact 
+                        {% endif %}
+
+                    </h2>
+
+                    {% comment %} <p class="text-teal-100 mt-1">
+                        Manage customer enquiries quickly and easily.
+                    </p> {% endcomment %}
+
+                </div>
+
+                <a href="{% url 'contact_us_list' %}"
+                   class="bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-lg transition">
+
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+            <!-- Body -->
+            <div class="p-8 space-y-8">
+
+                <!-- Contact Information -->
+
+                <div>
+
+                    <h3 class="text-lg font-semibold text-slate-800 mb-5 border-b pb-2">
+
+                        <i class="fa-solid fa-user text-teal-600 mr-2"></i>
+
+                        Contact Information
+
+                    </h3>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+                        <div>
+
+                            <label class="block mb-2 font-medium text-gray-700">
+
+                                Full Name
+
+                            </label>
+
+                            {{ form.name }}
+
+                            {% if form.name.errors %}
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ form.name.errors.0 }}
+                            </p>
+                            {% endif %}
+
+                        </div>
+
+                        <div>
+
+                            <label class="block mb-2 font-medium text-gray-700">
+
+                                Email Address
+
+                            </label>
+
+                            {{ form.email }}
+
+                        </div>
+
+                        <div class="md:col-span-2">
+
+                            <label class="block mb-2 font-medium text-gray-700">
+
+                                Phone Number
+
+                            </label>
+
+                            {{ form.phone_number }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Message -->
+
+                <div>
+
+                    <h3 class="text-lg font-semibold text-slate-800 mb-5 border-b pb-2">
+
+                        <i class="fa-solid fa-envelope text-teal-600 mr-2"></i>
+
+                        Customer Message
+
+                    </h3>
+
+                    <label class="block mb-2 font-medium text-gray-700">
+
+                        Message
+
+                    </label>
+
+                    {{ form.message }}
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div>
+
+                    <h3 class="text-lg font-semibold text-slate-800 mb-5 border-b pb-2">
+
+                        <i class="fa-solid fa-circle-check text-teal-600 mr-2"></i>
+
+                        Status
+
+                    </h3>
+
+                    <label class="flex items-center gap-4 border rounded-xl px-5 py-4 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer">
+
+                        {{ form.is_read }}
+
+                        <div>
+
+                            <div class="font-semibold text-slate-800">
+
+                                Mark as Read
+
+                            </div>
+
+                            <div class="text-sm text-gray-500">
+
+                                Enable if this enquiry has been reviewed.
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+
+            <div class="bg-gray-50 px-8 py-5 border-t flex justify-end gap-3">
+
+                <a href="{% url 'contact_us_list' %}"
+                   class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="px-8 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold shadow transition">
+
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+
+                    {% if object %}
+                        Update 
+                    {% else %}
+                        Save 
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

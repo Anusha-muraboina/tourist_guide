@@ -1,0 +1,40 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+Tour Pricing
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto bg-white rounded-xl shadow p-6">
+
+<h2 class="text-2xl font-bold mb-5">
+
+{% if object %}
+Edit Pricing
+{% else %}
+Add Pricing
+{% endif %}
+
+</h2>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button class="bg-blue-600 text-white px-5 py-2 rounded">
+Save
+</button>
+
+<a href="{% url 'tour_pricing_list' %}"
+class="bg-gray-500 text-white px-5 py-2 rounded">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

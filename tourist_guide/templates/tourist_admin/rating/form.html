@@ -1,0 +1,325 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}
+Edit Rating
+{% else %}
+Add Rating
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="space-y-6">
+
+        <!-- Header -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-5 flex justify-between items-center">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold text-slate-800">
+
+                        {% if object %}
+                            Edit Rating
+                        {% else %}
+                            Add Rating
+                        {% endif %}
+
+                    </h2>
+
+                    <p class="text-sm text-slate-500 mt-1">
+
+                        Manage customer ratings and reviews.
+
+                    </p>
+
+                </div>
+
+                <a href="{% url 'rating_list' %}"
+                   class="bg-gray-100 hover:bg-gray-200 text-slate-700 px-5 py-2 rounded-lg font-medium transition">
+
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Customer & Tour -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    <i class="fa-solid fa-user text-teal-600 mr-2"></i>
+
+                    Customer Information
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                            Customer
+
+                        </label>
+
+                        {{ form.user }}
+
+                        {% if form.user.errors %}
+                        <p class="text-red-500 text-xs mt-2">
+                            {{ form.user.errors.0 }}
+                        </p>
+                        {% endif %}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                            Tour
+
+                        </label>
+
+                        {{ form.tour }}
+
+                        {% if form.tour.errors %}
+                        <p class="text-red-500 text-xs mt-2">
+                            {{ form.tour.errors.0 }}
+                        </p>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Rating -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    <i class="fa-solid fa-star text-yellow-500 mr-2"></i>
+
+                    Rating
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                            Rating (1 - 5)
+
+                        </label>
+
+                        {{ form.rating }}
+
+                        {% if form.rating.errors %}
+                        <p class="text-red-500 text-xs mt-2">
+                            {{ form.rating.errors.0 }}
+                        </p>
+                        {% endif %}
+
+                        <p class="text-xs text-gray-500 mt-2">
+
+                            You can use values like 4.5 or 3.5.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+                <!-- Review -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    <i class="fa-solid fa-comment text-blue-600 mr-2"></i>
+
+                    Customer Review
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+
+                    Review
+
+                </label>
+
+                {{ form.review }}
+
+                {% if form.review.errors %}
+
+                <p class="text-red-500 text-xs mt-2">
+
+                    {{ form.review.errors.0 }}
+
+                </p>
+
+                {% endif %}
+
+                <p class="text-xs text-gray-500 mt-2">
+
+                    Optional review provided by the customer.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Status -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    <i class="fa-solid fa-toggle-on text-green-600 mr-2"></i>
+
+                    Status
+
+                </h3>
+
+            </div>
+
+            <div class="p-6 space-y-4">
+
+                <label class="flex items-center justify-between border rounded-xl p-4 hover:bg-gray-50 cursor-pointer">
+
+                    <div>
+
+                        <p class="font-semibold text-slate-700">
+
+                            Anonymous Review
+
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+
+                            Hide customer information from public.
+
+                        </p>
+
+                    </div>
+
+                    {{ form.anonymous }}
+
+                </label>
+
+                <label class="flex items-center justify-between border rounded-xl p-4 hover:bg-gray-50 cursor-pointer">
+
+                    <div>
+
+                        <p class="font-semibold text-slate-700">
+
+                            Active
+
+                        </p>
+
+                        <p class="text-xs text-slate-500">
+
+                            Enable this rating to be displayed.
+
+                        </p>
+
+                    </div>
+
+                    {{ form.active }}
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- Buttons -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="p-6 flex justify-end gap-3">
+
+                <a href="{% url 'rating_list' %}"
+                   class="px-6 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="px-8 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold transition">
+
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+
+                    {% if object %}
+
+                        Update Rating
+
+                    {% else %}
+
+                        Save Rating
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock %}

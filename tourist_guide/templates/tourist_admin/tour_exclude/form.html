@@ -1,0 +1,95 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}Edit Tour Exclude{% else %}Add Tour Exclude{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
+    
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100">
+        <h2 class="text-xl font-bold text-slate-800 tracking-tight">
+            {% if object %}
+                <i class="fa-solid fa-pen-to-square text-amber-500 mr-2"></i>Edit Tour Exclude
+            {% else %}
+                <i class="fa-solid fa-circle-plus text-teal-500 mr-2"></i>Add Tour Exclude
+            {% endif %}
+        </h2>
+        <p class="text-xs text-slate-500 mt-1">Configure feature items that are bundled inside specific itineraries.</p>
+    </div>
+
+    <form method="POST" class="p-6 space-y-5">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="flex flex-col form-field-row">
+            
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5 tracking-wide">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-red-500 font-bold">*</span>{% endif %}
+            </label>
+
+            <div class="django-field-wrapper w-full">
+                {{ field }}
+            </div>
+
+            {% if field.help_text %}
+                <p class="text-slate-400 text-xs mt-1">{{ field.help_text }}</p>
+            {% endif %}
+
+            {% if field.errors %}
+                <div class="mt-1.5 text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg p-2 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <div>{{ field.errors|striptags }}</div>
+                </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+        <div class="pt-4 border-t border-gray-100 flex items-center justify-end space-x-3">
+            <a href="{% url 'tour_exclude_list' %}"
+               class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-white hover:bg-slate-50 border border-gray-200 rounded-lg transition-colors cursor-pointer">
+                Cancel
+            </a>
+            
+            <button type="submit" class="px-6 py-2.5 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-xs transition-colors cursor-pointer">
+                Save
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<style>
+    /* Injects smooth visual formatting directly onto plain native Django-rendered HTML <input> types */
+    .django-field-wrapper input[type="text"], 
+    .django-field-wrapper input[type="number"],
+    .django-field-wrapper select,
+    .django-field-wrapper textarea {
+        width: 100%;
+        border-radius: 0.5rem;
+        border: 1px solid #cbd5e1;
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+        background-color: #fff;
+        color: #1e293b;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .django-field-wrapper input:focus,
+    .django-field-wrapper select:focus,
+    .django-field-wrapper textarea:focus {
+        outline: none;
+        border-color: #0d9488;
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+    .django-field-wrapper input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.25rem;
+        border: 1px solid #cbd5e1;
+        color: #0d9488;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

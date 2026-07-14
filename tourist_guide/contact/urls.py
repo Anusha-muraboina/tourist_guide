@@ -16,7 +16,9 @@ urlpatterns = [
         "contact/",
         contact,
         name="contact"
+    
     ),
+    
 
 ]
 

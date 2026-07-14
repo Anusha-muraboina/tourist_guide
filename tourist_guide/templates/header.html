@@ -72,16 +72,23 @@
 
           <a
     href="{% url 'about_us' %}"
-    class="hover:text-cyan-400 transition-colors"
+    class="hover:text-cyan-400 text-sm font-medium  transition-colors"
 >
     About Us
 </a>
 
 <a
     href="{% url 'contact' %}"
-    class="hover:text-cyan-400 transition-colors"
+    class="hover:text-cyan-400 text-sm font-medium transition-colors"
 >
     Contact Us
+</a>
+
+<a
+    href="{% url 'blog_list' %}"
+    class="hover:text-cyan-400 text-sm font-medium  transition-colors"
+>
+    Blog
 </a>
           <!-- MENU -->
 <div class="hidden lg:flex items-center gap-10 relative">
@@ -92,7 +99,7 @@
     <button
         id="placesBtn"
         type="button"
-        class="flex items-center gap-2 text-[15px] font-medium text-gray-800 hover:text-cyan-600"
+        class="flex items-center gap-2 text-sm font-medium  text-gray-800 hover:text-cyan-600"
     >
         Places to see
         <i class="fa-solid fa-chevron-down text-[11px]"></i>
@@ -124,6 +131,7 @@
 >
 </div>
 
+
                     </div>
 
                     <!-- RIGHT -->
@@ -136,8 +144,6 @@
     </div>
 
 </div>
-
-
 
 
 

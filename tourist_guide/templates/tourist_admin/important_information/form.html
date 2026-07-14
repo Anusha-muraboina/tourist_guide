@@ -1,0 +1,40 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}Edit Tour Exclude{% else %}Add Tour Exclude{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow">
+
+<h2 class="text-2xl font-bold mb-5">
+
+{% if object %}
+Edit Tour Imformation
+{% else %}
+Add Tour Imformation
+{% endif %}
+
+</h2>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button class="bg-blue-600 text-white px-5 py-2 rounded">
+Save
+</button>
+
+<a href="{% url 'tour_amenity_list' %}"
+class="bg-gray-600 text-white px-5 py-2 rounded">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

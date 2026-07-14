@@ -1,0 +1,360 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+Contact Us
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+
+    <!-- Header -->
+
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+        <div>
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Contact
+            </h2>
+
+            {% comment %} <p class="text-sm text-slate-500">
+                Manage customer contact requests.
+            </p> {% endcomment %}
+
+        </div>
+
+        <a href="{% url 'contact_us_add' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium">
+
+            <i class="fa-solid fa-plus mr-2"></i>
+
+            Add Contact
+
+        </a>
+
+    </div>
+
+    <!-- Search -->
+
+    <div class="p-6 border-b border-gray-100">
+
+        <form method="GET">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search Name, Email or Phone..."
+                    class="border rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 outline-none">
+
+
+                <select
+                    name="status"
+                    class="border rounded-lg px-4 py-2">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="1"
+                        {% if status == "1" %}selected{% endif %}>
+                        Read
+                    </option>
+
+                    <option value="0"
+                        {% if status == "0" %}selected{% endif %}>
+                        Unread
+                    </option>
+
+                </select>
+
+
+                <div class="flex gap-2">
+
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 rounded-lg">
+
+                        Search
+
+                    </button>
+
+                    <a href="{% url 'contact_us_list' %}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full">
+
+            <thead class="bg-slate-900 text-white">
+
+                <tr>
+
+                    <th class="px-6 py-4 text-left">
+                        #
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Name
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Email
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Phone
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Message
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Status
+                    </th>
+
+                    <th class="px-6 py-4 text-left">
+                        Date
+                    </th>
+
+                    <th class="px-6 py-4 text-right">
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+
+            {% for item in items %}
+
+                <tr class="hover:bg-gray-50">
+
+                    <td class="px-6 py-4">
+                        {{ page_obj.start_index|add:forloop.counter0 }}
+                    </td>
+
+                    <td class="px-6 py-4 font-semibold">
+                        {{ item.name }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ item.email }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {{ item.phone_number|default:"-" }}
+                    </td>
+
+                    <td class="px-6 py-4 max-w-sm">
+
+                        <p class="truncate">
+
+                            {{ item.message }}
+
+                        </p>
+
+                    </td>
+
+                    <td class="px-6 py-4">
+
+                        {% if item.is_read %}
+
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs">
+
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+
+                            Read
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs">
+
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+
+                            Unread
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="px-6 py-4">
+
+                        {{ item.created_at|date:"d M Y" }}
+
+                        <div class="text-xs text-gray-500">
+
+                            {{ item.created_at|time:"h:i A" }}
+
+                        </div>
+
+                    </td>
+
+                    <td class="px-6 py-4 text-right whitespace-nowrap">
+
+                        <div class="inline-flex gap-2">
+
+                            <a href="{% url 'contact_us_edit' item.pk %}"
+                               class="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                                <i class="fa-solid fa-pen mr-1"></i>
+
+                                Edit
+
+                            </a>
+
+                            <a href="{% url 'contact_us_delete' item.pk %}"
+                               onclick="return confirm('Delete this enquiry?')"
+                               class="inline-flex items-center bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                                <i class="fa-solid fa-trash mr-1"></i>
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="8"
+                        class="text-center py-12">
+
+                        <i class="fa-solid fa-envelope-open-text text-5xl text-gray-300 mb-4"></i>
+
+                        <h3 class="text-lg font-semibold text-gray-500">
+
+                            No Contact Enquiries
+
+                        </h3>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Pagination -->
+
+    {% comment %} {% include "tourist_admin/includes/pagination.html" %} {% endcomment %}
+
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+            <div class="text-sm text-gray-600">
+                Showing
+                <span class="font-semibold">{{ page_obj.start_index }}</span>
+                to
+                <span class="font-semibold">{{ page_obj.end_index }}</span>
+                of
+                <span class="font-semibold">{{ paginator.count }}</span>
+                records
+            </div>
+
+            <div class="flex items-center gap-1">
+
+                {% if page_obj.has_previous %}
+
+                <a href="?page=1&search={{ search }}&person_type={{ person_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+                    First
+                </a>
+
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&person_type={{ person_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+
+                {% endif %}
+
+
+                {% for num in paginator.page_range %}
+
+                    {% if num == page_obj.number %}
+
+                        <span class="px-4 py-2 bg-teal-600 text-white rounded-lg">
+                            {{ num }}
+                        </span>
+
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+
+                        <a href="?page={{ num }}&search={{ search }}&person_type={{ person_type }}&status={{ status }}"
+                           class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                            {{ num }}
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if page_obj.has_next %}
+
+                <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&person_type={{ person_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <a href="?page={{ paginator.num_pages }}&search={{ search }}&person_type={{ person_type }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100">
+                    Last
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+</div>
+
+{% endblock %}

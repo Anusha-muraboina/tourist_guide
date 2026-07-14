@@ -1,0 +1,102 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}Tour Amenity{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
+    
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h2 class="text-xl font-bold text-slate-800 tracking-tight">Tour Amenity</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Manage the default items, services, or perks included in tour packages.</p>
+        </div>
+
+        <a href="{% url 'amenity_add' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg transition-colors shadow-xs group cursor-pointer">
+            <i class="fa-solid fa-plus mr-2 text-xs transition-transform group-hover:rotate-90"></i> Add Include
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-900 text-slate-200 text-xs font-semibold uppercase tracking-wider border-b border-slate-950">
+                    <th class="px-6 py-4 w-16 text-center">#</th>
+                   <th class="px-6 py-4">Name</th>
+<th class="px-6 py-4 text-center">Icon</th>
+<th class="px-6 py-4 w-36">Status</th>
+<th class="px-6 py-4 w-32 text-center">Position</th>
+<th class="px-6 py-4 w-44 text-right">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-100 text-sm text-slate-600">
+                {% for item in items %}
+                <tr class="hover:bg-slate-50/70 transition-colors">
+                    
+                    <td class="px-6 py-4 text-center font-medium text-slate-400">
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td class="px-6 py-4 font-semibold text-slate-800">
+                        {{ item.name }}
+                    </td>
+<td class="px-6 py-4 text-center">
+    {% comment %} <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 border">
+        <i class="{{ item.icon_class }} text-lg text-teal-600"></i>
+    </div> {% endcomment %}
+    <div class="text-xs text-gray-500 mt-1">
+        {{ item.icon_class }}
+    </div>
+</td>
+
+                    <td class="px-6 py-4">
+                        {% if item.is_active %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-200/60">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-red-50 text-red-700 border border-red-200/60">
+                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span> Inactive
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-6 py-4 text-center font-mono font-medium text-slate-700">
+                        {{ item.slot_position }}
+                    </td>
+
+                <td class="px-6 py-4 text-right whitespace-nowrap">
+    <div class="inline-flex items-center gap-2">
+        <a href="{% url 'amenity_edit' item.pk %}"
+           class="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+            <i class="fa-solid fa-pen mr-1 text-[10px]"></i>
+            Edit
+        </a>
+
+        <a href="{% url 'amenity_delete' item.pk %}"
+           onclick="return confirm('Delete this record?')"
+           class="inline-flex items-center bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+            <i class="fa-solid fa-trash mr-1 text-[10px]"></i>
+            Delete
+        </a>
+    </div>
+</td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-12 bg-white">
+                        <div class="flex flex-col items-center justify-center space-y-2">
+                            <i class="fa-solid fa-square-check text-3xl text-slate-300"></i>
+                            <p class="text-slate-500 font-medium">No Records Found</p>
+                            <p class="text-xs text-slate-400">Add common tour features like "Free Lunch", "Hotel Pickup", or "Entry Tickets".</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

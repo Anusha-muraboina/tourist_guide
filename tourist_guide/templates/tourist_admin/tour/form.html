@@ -1,0 +1,357 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}Edit Tour{% else %}Add Tour{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        
+        <div class="space-y-8">
+            
+            <!-- Header Card -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 transition-all">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-teal-600 bg-teal-50 px-3 py-1 rounded-full">
+                            Tour Management
+                        </span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mt-2">
+                            {% if object %}Edit Tour{% else %}Add Tour{% endif %}
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Create, update, and manage your custom travel experiences.
+                        </p>
+                    </div>
+                    <a href="{% url 'tour_list' %}"
+                       class="inline-flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-600 font-medium px-5 py-2.5 rounded-xl border border-gray-200 transition-colors gap-2 w-full sm:w-auto">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        Back to List
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content Split (Form Grid) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left 2 Columns: Core Content -->
+                <div class="lg:col-span-2 space-y-8">
+                    
+                    <!-- Basic Information -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+                            <div class="p-2 bg-teal-50 text-teal-600 rounded-lg">
+                                <i class="fa-solid fa-circle-info text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800">Basic Information</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 form-styles">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Title</label>
+                                {{ form.title }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Slug</label>
+                                {{ form.slug }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Category</label>
+                                {{ form.category }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Type</label>
+                                {{ form.tour_type }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Language</label>
+                                {{ form.language }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description Section -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+                            <div class="p-2 bg-teal-50 text-teal-600 rounded-lg">
+                                <i class="fa-solid fa-align-left text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800">Media & Descriptions</h3>
+                        </div>
+                        
+                        <div class="space-y-6 form-styles">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Short Description</label>
+                                {{ form.short_description }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Full Description</label>
+                                {{ form.full_description }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Information -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+                            <div class="p-2 bg-teal-50 text-teal-600 rounded-lg">
+                                <i class="fa-solid fa-location-dot text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800">Location Details</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 form-styles mb-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">City</label>
+                                {{ form.city }}
+                                {% if form.city.errors %}
+                                    <p class="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-exclamation"></i> {{ form.city.errors.0 }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">State</label>
+                                {{ form.state }}
+                                {% if form.state.errors %}
+                                    <p class="text-red-500 text-xs mt-1.5 flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-exclamation"></i> {{ form.state.errors.0 }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Country</label>
+                                {{ form.country }}
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 form-styles">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Meeting Point</label>
+                                {{ form.meeting_point }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tour Features (Includes/Excludes) -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+                        <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+                            <div class="p-2 bg-teal-50 text-teal-600 rounded-lg">
+                                <i class="fa-solid fa-list-check text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800">Features & Amenities</h3>
+                        </div>
+
+
+                        <div class="space-y-6 form-styles">
+
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Tour Includes
+        </label>
+        {{ form.includes }}
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Tour Excludes
+        </label>
+        {{ form.excludes }}
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Tour Highlights
+        </label>
+        {{ form.highlights }}
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Important Information
+        </label>
+        {{ form.important_information }}
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Amenities
+        </label>
+        {{ form.amenities }}
+    </div>
+
+</div>
+
+                        {% comment %} <div class="grid grid-cols-1 md:grid-cols-2 gap-6 form-styles">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Includes</label>
+                                {{ form.includes }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Excludes</label>
+                                {{ form.excludes }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Highlights</label>
+                                {{ form.highlights }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Important Info</label>
+                                {{ form.important_information }}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Amenities</label>
+                                {{ form.amenities }}
+                            </div>
+                        </div> {% endcomment %}
+                    </div>
+
+                </div>
+
+                <!-- Right 1 Column: Sticky Configuration Sidebar -->
+                <div class="space-y-8">
+                    
+                    <!-- Logistics & Capacity -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-6">
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-50 pb-2">
+                            Logistics
+                        </h4>
+                        <div class="space-y-4 form-styles">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Duration</label>
+                                {{ form.duration }}
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Max Capacity</label>
+                                {{ form.max_people }}
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Minimum Age</label>
+                                {{ form.min_age }}
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Display Position</label>
+                                {{ form.slot_position }}
+                            </div>
+                        </div>
+
+                    <!-- Visibility Options toggles -->
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm  px-2 pt-3 mt-6">
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-50 pb-2">
+                            Settings & Toggles
+                        </h4>
+                        <div class="space-y-4 toggle-styles">
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-gray-50 hover:bg-gray-50 cursor-pointer transition">
+                                <span class="text-sm font-medium text-slate-700">Free Cancellation</span>
+                                {{ form.free_cancellation }}
+                            </label>
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-gray-50 hover:bg-gray-50 cursor-pointer transition">
+                                <span class="text-sm font-medium text-slate-700">Instant Confirmation</span>
+                                {{ form.instant_confirmation }}
+                            </label>
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-gray-50 hover:bg-gray-50 cursor-pointer transition">
+                                <span class="text-sm font-medium text-slate-700">Pickup Available</span>
+                                {{ form.pickup_available }}
+                            </label>
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-gray-50 hover:bg-gray-50 cursor-pointer transition">
+                                <span class="text-sm font-medium text-slate-700">Wheelchair Accessible</span>
+                                {{ form.wheelchair_accessible }}
+                            </label>
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-teal-100 bg-teal-50/30 hover:bg-teal-50/60 cursor-pointer transition">
+                                <span class="text-sm font-semibold text-teal-900">Featured Tour</span>
+                                {{ form.featured }}
+                            </label>
+                            <label class="flex items-center justify-between p-3 rounded-xl border border-gray-50 hover:bg-gray-50 cursor-pointer transition">
+                                <span class="text-sm font-medium text-slate-700">Active</span>
+                                {{ form.is_active }}
+                            </label>
+                        </div>
+                    </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Global Floating/Sticky Submit Bar -->
+            <div class="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-200/80 shadow-lg p-4  bottom-6 z-50 flex justify-end gap-4">
+                <a href="{% url 'tour_list' %}"
+                   class="px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="px-8 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 active:scale-98 text-white font-bold tracking-wide shadow-md shadow-teal-600/20 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    {% if object %}Update Tour Details{% else %}Publish Tour{% endif %}
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<!-- Form Field Custom Injector Style Blocks -->
+<style>
+    /* Styling injected standard Django fields */
+    .form-styles input[type="text"],
+    .form-styles input[type="number"],
+    .form-styles select,
+    .form-styles textarea {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        color: #1e293b;
+        transition: all 0.2s ease-in-out;
+        font-size: 0.95rem;
+    }
+    .form-styles input:focus,
+    .form-styles select:focus,
+    .form-styles textarea:focus {
+        outline: none;
+        border-color: #0d9488;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+    }
+    .form-styles textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    /* Elegant Checkbox Styling overrides */
+    .toggle-styles input[type="checkbox"] {
+        appearance: none;
+        width: 2.75rem;
+        height: 1.5rem;
+        background-color: #e2e8f0;
+        border-radius: 9999px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    .toggle-styles input[type="checkbox"]::before {
+        content: "";
+        position: absolute;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 9999px;
+        background-color: white;
+        top: 0.125rem;
+        left: 0.125rem;
+        transition: transform 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .toggle-styles input[type="checkbox"]:checked {
+        background-color: #0d9488;
+    }
+    .toggle-styles input[type="checkbox"]:checked::before {
+        transform: translateX(1.25rem);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,339 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}
+Edit Coupon
+{% else %}
+Add Coupon
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- Header -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="flex justify-between items-center px-6 py-5 border-b">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold text-slate-800">
+
+                        {% if object %}
+                            Edit Coupon
+                        {% else %}
+                            Add Coupon
+                        {% endif %}
+
+                    </h2>
+
+                    <p class="text-sm text-gray-500 mt-1">
+
+                        Create and manage discount coupons.
+
+                    </p>
+
+                </div>
+
+                <a href="{% url 'coupon_list' %}"
+                   class="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700">
+
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Coupon Information -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    Coupon Information
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label class="block font-medium text-gray-700 mb-2">
+
+                            Coupon Title
+
+                        </label>
+
+                        {{ form.title }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium text-gray-700 mb-2">
+
+                            Coupon Code
+
+                        </label>
+
+                        {{ form.code }}
+
+                    </div>
+
+                    <div class="md:col-span-2">
+
+                        <label class="block font-medium text-gray-700 mb-2">
+
+                            Tour
+
+                        </label>
+
+                        {{ form.tour }}
+
+                        <p class="text-xs text-gray-500 mt-2">
+
+                            Leave empty to apply this coupon to all tours.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Discount -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    Discount Details
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Discount Type
+
+                        </label>
+
+                        {{ form.discount_type }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Discount Value
+
+                        </label>
+
+                        {{ form.discount_value }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Minimum Booking Amount
+
+                        </label>
+
+                        {{ form.min_booking_amount }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Maximum Discount
+
+                        </label>
+
+                        {{ form.max_discount_amount }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Validity -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold text-slate-800">
+
+                    Coupon Validity
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Start Date
+
+                        </label>
+
+                        {{ form.start_date }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            End Date
+
+                        </label>
+
+                        {{ form.end_date }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-medium mb-2">
+
+                            Usage Limit
+
+                        </label>
+
+                        {{ form.usage_limit }}
+
+                        <p class="text-xs text-gray-500 mt-2">
+
+                            Enter 0 for Unlimited.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Status -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="px-6 py-4 border-b">
+
+                <h3 class="text-lg font-semibold">
+
+                    Status
+
+                </h3>
+
+            </div>
+
+            <div class="p-6">
+
+                <label class="flex items-center justify-between border rounded-xl px-5 py-4 hover:bg-gray-50 cursor-pointer">
+
+                    <div>
+
+                        <p class="font-semibold">
+
+                            Active Coupon
+
+                        </p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Enable this coupon for customers.
+
+                        </p>
+
+                    </div>
+
+                    {{ form.is_active }}
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+
+        <div class="bg-white rounded-xl shadow border border-gray-200">
+
+            <div class="p-6 flex justify-end gap-3">
+
+                <a href="{% url 'coupon_list' %}"
+                   class="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100">
+
+                    Cancel
+
+                </a>
+
+                <button
+                    type="submit"
+                    class="px-8 py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold">
+
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+
+                    {% if object %}
+                        Update Coupon
+                    {% else %}
+                        Save Coupon
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock %}

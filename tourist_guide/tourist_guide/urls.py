@@ -28,6 +28,8 @@ urlpatterns = [
     
     path('blog/',include('blog.urls')),
     
+    path('tourist_admin/' , include('tourist_admin.urls')),
+    
     path('contact/',include('contact.urls')),
 
 ]

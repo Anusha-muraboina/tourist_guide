@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="bg-gradient-to-r from-indigo-900 via-blue-900 to-cyan-500 pt-28 pb-20">
+    <div class="container mx-auto px-6 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            Our Blogs
+        </h1>
+        <p class="text-blue-100 mt-4 text-xl max-w-2xl mx-auto">
+            Stay updated with the latest insights, tips, and stories.
+        </p>
+    </div>
+</section>
+
+<!-- Blog Section -->
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+
+        <!-- Search -->
+        {% comment %} <div class="max-w-xl mx-auto mb-12">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search blogs by title or keyword..."
+                    class="w-full px-6 py-4 pl-12 border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400 absolute left-5 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div> {% endcomment %}
+
+        <!-- Blog Cards -->
+        <div id="blogContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-20 text-gray-500 text-lg">
+            <div class="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+            Loading blogs...
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="hidden col-span-full text-center py-16">
+            <h2 class="text-2xl font-semibold text-gray-400">No blogs found</h2>
+            <p class="text-gray-500 mt-2">Try adjusting your search term.</p>
+        </div>
+
+    </div>
+</section>
+
+<script>
+const API_URL = "http://127.0.0.1:9000/blog/api/blogs/";
+let allBlogs = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadBlogs();
+    document.getElementById("searchInput").addEventListener("keyup", searchBlogs);
+});
+
+async function loadBlogs() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        document.getElementById("loading").style.display = "none";
+
+        if (data.success && data.results) {
+            allBlogs = data.results;
+            displayBlogs(allBlogs);
+        } else {
+            showNoResults();
+        }
+    } catch (error) {
+        document.getElementById("loading").innerHTML = `
+            <p class="text-red-500">Unable to load blogs. Please try again later.</p>
+        `;
+        console.error(error);
+    }
+}
+
+function displayBlogs(blogs) {
+    const container = document.getElementById("blogContainer");
+    container.innerHTML = "";
+
+    if (blogs.length === 0) {
+        showNoResults();
+        return;
+    }
+
+    document.getElementById("noResults").classList.add("hidden");
+
+    blogs.forEach(blog => {
+        const cardHTML = `
+        <div class="bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden group">
+            <div class="overflow-hidden">
+                <img src="${blog.image}" 
+                     alt="${blog.title}"
+                     class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-blue-100 text-blue-700 text-xs font-medium px-4 py-1.5 rounded-full">
+                        ${blog.category?.name || "General"}
+                    </span>
+                    <span class="text-sm text-gray-500">
+                        ${formatDate(blog.created_at)}
+                    </span>
+                </div>
+                
+                <h2 class="text-xl font-semibold text-gray-800 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    ${blog.title}
+                </h2>
+                
+                <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                    ${blog.short_description}
+                </p>
+                
+                <a href="/blog/blog_detail/${blog.slug}/" 
+                   class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold group-hover:translate-x-1 transition-all">
+                    Read More
+                    <span class="ml-2 text-xl leading-none">→</span>
+                </a>
+            </div>
+        </div>`;
+
+        container.innerHTML += cardHTML;
+    });
+}
+
+function searchBlogs() {
+    const value = document.getElementById("searchInput").value.toLowerCase().trim();
+    const filtered = allBlogs.filter(blog =>
+        blog.title.toLowerCase().includes(value) ||
+        blog.short_description.toLowerCase().includes(value)
+    );
+    displayBlogs(filtered);
+}
+
+function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function showNoResults() {
+    document.getElementById("noResults").classList.remove("hidden");
+}
+</script>
+
+{% endblock %}

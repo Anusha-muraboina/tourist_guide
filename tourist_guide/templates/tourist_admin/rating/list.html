@@ -1,0 +1,501 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+Ratings
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+
+    <!-- Header -->
+
+    <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+        <div>
+
+            <h2 class="text-2xl font-bold text-slate-800">
+                Customer Ratings
+            </h2>
+
+            <p class="text-sm text-slate-500">
+                Manage customer reviews and ratings.
+            </p>
+
+        </div>
+
+        <a href="{% url 'rating_add' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium transition">
+
+            <i class="fa-solid fa-plus mr-2"></i>
+
+            Add Rating
+
+        </a>
+
+    </div>
+
+
+    <!-- Search & Filter -->
+
+    <div class="p-6 border-b border-gray-100">
+
+        <form method="GET">
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                <!-- Search -->
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search User / Tour / Review..."
+                    class="border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-teal-500 outline-none">
+
+                <!-- Rating -->
+
+                <select
+                    name="rating"
+                    class="border rounded-lg px-4 py-2.5">
+
+                    <option value="">All Ratings</option>
+
+                    <option value="5"
+                        {% if rating == "5" %}selected{% endif %}>
+                       
+                    </option>
+
+                    <option value="4"
+                        {% if rating == "4" %}selected{% endif %}>
+                        
+                    </option>
+
+                    <option value="3"
+                        {% if rating == "3" %}selected{% endif %}>
+                    </option>
+
+                    <option value="2"
+                        {% if rating == "2" %}selected{% endif %}>
+                    </option>
+
+                    <option value="1"
+                        {% if rating == "1" %}selected{% endif %}>
+                    </option>
+
+                </select>
+
+                <!-- Status -->
+
+                <select
+                    name="status"
+                    class="border rounded-lg px-4 py-2.5">
+
+                    <option value="">All Status</option>
+
+                    <option value="1"
+                        {% if status == "1" %}selected{% endif %}>
+                        Active
+                    </option>
+
+                    <option value="0"
+                        {% if status == "0" %}selected{% endif %}>
+                        Inactive
+                    </option>
+
+                </select>
+
+                <!-- Buttons -->
+
+                <div class="flex gap-2">
+
+                    <button
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 rounded-lg">
+
+                        Search
+
+                    </button>
+
+                    <a href="{% url 'rating_list' %}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full">
+
+            <thead class="bg-slate-900 text-white">
+
+                <tr>
+
+                    <th class="px-6 py-4 text-left">#</th>
+
+                    <th class="px-6 py-4 text-left">User</th>
+
+                    <th class="px-6 py-4 text-left">Tour</th>
+
+                    <th class="px-6 py-4 text-left">Rating</th>
+
+                    <th class="px-6 py-4 text-left">Review</th>
+
+                    <th class="px-6 py-4 text-left">Anonymous</th>
+
+                    <th class="px-6 py-4 text-left">Status</th>
+
+                    <th class="px-6 py-4 text-left">Created</th>
+
+                    <th class="px-6 py-4 text-right">
+
+                        Actions
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+
+
+                {% for item in items %}
+
+<tr class="hover:bg-gray-50 transition">
+
+    <!-- S.No -->
+
+    <td class="px-6 py-4">
+        {{ page_obj.start_index|add:forloop.counter0 }}
+    </td>
+
+    <!-- User -->
+
+    <td class="px-6 py-4">
+
+        {% if item.anonymous %}
+
+            <div class="font-semibold text-gray-600">
+                Anonymous
+            </div>
+
+        {% else %}
+
+            <div class="font-semibold text-slate-800">
+                {{ item.user.username }}
+            </div>
+
+            <div class="text-xs text-gray-500">
+                {{ item.user.email }}
+            </div>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Tour -->
+
+    <td class="px-6 py-4">
+
+        <div class="font-medium text-slate-700">
+            {{ item.tour.title }}
+        </div>
+
+    </td>
+
+    <!-- Rating -->
+
+    <td class="px-6 py-4">
+
+        <div class="flex items-center gap-2">
+
+            <span class="text-yellow-500 text-lg">
+
+                {% if item.rating >= 1 %}{% endif %}
+                {% if item.rating >= 2 %}{% endif %}
+                {% if item.rating >= 3 %}{% endif %}
+                {% if item.rating >= 4 %}{% endif %}
+                {% if item.rating >= 5 %}{% endif %}
+
+            </span>
+
+            <span class="font-semibold text-slate-700">
+
+                {{ item.rating }}
+
+            </span>
+
+        </div>
+
+    </td>
+
+    <!-- Review -->
+
+    <td class="px-6 py-4">
+
+        {% if item.review %}
+
+            <div class="max-w-xs truncate">
+
+                {{ item.review }}
+
+            </div>
+
+        {% else %}
+
+            <span class="text-gray-400">
+
+                No Review
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Anonymous -->
+
+    <td class="px-6 py-4">
+
+        {% if item.anonymous %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+
+            Yes
+
+        </span>
+
+        {% else %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium">
+
+            No
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Status -->
+
+    <td class="px-6 py-4">
+
+        {% if item.active %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs">
+
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+
+            Active
+
+        </span>
+
+        {% else %}
+
+        <span class="inline-flex items-center px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs">
+
+            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+
+            Inactive
+
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <!-- Created -->
+
+    <td class="px-6 py-4 text-sm text-gray-600">
+
+        {{ item.created_at|date:"d M Y" }}
+
+    </td>
+
+    <!-- Actions -->
+
+    <td class="px-6 py-4 text-right whitespace-nowrap">
+
+        <div class="inline-flex gap-2">
+
+            <a href="{% url 'rating_edit' item.pk %}"
+               class="inline-flex items-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-pen mr-1"></i>
+
+                Edit
+
+            </a>
+
+            <a href="{% url 'rating_delete' item.pk %}"
+               onclick="return confirm('Delete this rating?')"
+               class="inline-flex items-center bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-medium">
+
+                <i class="fa-solid fa-trash mr-1"></i>
+
+                Delete
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="9" class="text-center py-12">
+
+        <div class="flex flex-col items-center">
+
+            <i class="fa-solid fa-star text-4xl text-gray-300 mb-3"></i>
+
+            <p class="text-gray-500 font-medium">
+
+                No Ratings Found
+
+            </p>
+
+        </div>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+    <!-- Pagination -->
+
+    {% if is_paginated %}
+
+    <div class="px-6 py-5 border-t border-gray-100 bg-gray-50">
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+            <!-- Records -->
+
+            <div class="text-sm text-gray-600">
+
+                Showing
+
+                <span class="font-semibold">
+
+                    {{ page_obj.start_index }}
+
+                </span>
+
+                to
+
+                <span class="font-semibold">
+
+                    {{ page_obj.end_index }}
+
+                </span>
+
+                of
+
+                <span class="font-semibold">
+
+                    {{ paginator.count }}
+
+                </span>
+
+                Ratings
+
+            </div>
+
+            <!-- Pagination Buttons -->
+
+            <div class="flex items-center gap-2">
+
+                {% if page_obj.has_previous %}
+
+                <a href="?page=1&search={{ search }}&rating={{ rating }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100 transition">
+
+                    First
+
+                </a>
+
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&rating={{ rating }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100 transition">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                </a>
+
+                {% endif %}
+
+                {% for num in paginator.page_range %}
+
+                    {% if page_obj.number == num %}
+
+                        <span class="px-4 py-2 rounded-lg bg-teal-600 text-white font-semibold">
+
+                            {{ num }}
+
+                        </span>
+
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+
+                        <a href="?page={{ num }}&search={{ search }}&rating={{ rating }}&status={{ status }}"
+                           class="px-4 py-2 border rounded-lg hover:bg-gray-100 transition">
+
+                            {{ num }}
+
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+
+                <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&rating={{ rating }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100 transition">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </a>
+
+                <a href="?page={{ paginator.num_pages }}&search={{ search }}&rating={{ rating }}&status={{ status }}"
+                   class="px-3 py-2 border rounded-lg hover:bg-gray-100 transition">
+
+                    Last
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
