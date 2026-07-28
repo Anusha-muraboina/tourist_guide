@@ -29,7 +29,7 @@ input::-moz-selection{
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<section class="bg-white min-h-screen py-8"> 
+<section class="bg-white min-h-screen py-8 px-2 md:px-32"> 
     <div class=" mx-auto px-4 md:px-14 ">
 
         <!-- Header -->
@@ -39,7 +39,7 @@ input::-moz-selection{
             <!-- Stepper -->
             <div class="flex items-center gap-8">
                 <div class="flex items-center gap-3">
-                    <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">1</div>
+                    <div class="w-7 h-7 rounded-full bg-blue-800 text-white flex items-center justify-center text-sm font-bold">1</div>
                     <p class="text-sm font-semibold text-gray-900">Contact</p>
                 </div>
                 <div class="w-16 h-px bg-gray-300"></div>
@@ -87,7 +87,7 @@ input::-moz-selection{
                 <div class="mt-8 space-y-5" id="contactStep">
 
                 
-                        <h1 class="text-3xl font-bold text-gray-900">Check your personal details</h1>
+                        <h1 class=" text-md  md:text-2xl font-bold text-gray-900">Check your personal details</h1>
                 <div class="flex items-center gap-2 mt-2 text-emerald-600 text-sm">
                     <i class="fa-solid fa-lock"></i>
                     <span>Checkout is fast and secure</span>
@@ -106,6 +106,8 @@ input::-moz-selection{
 >
                     </div>
 
+
+
                     <!-- Email -->
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Email</label>
@@ -116,6 +118,7 @@ input::-moz-selection{
     class="w-full bg-transparent outline-none text-base font-medium"
 >
                     </div>
+
 
                     <!-- Country -->
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
@@ -134,19 +137,12 @@ input::-moz-selection{
                     <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Mobile phone number</label>
                         <input
-    id="guestPhone"
-    type="tel"
-    placeholder="Enter mobile number"
-    class="w-full bg-transparent outline-none text-base font-medium"
->
+                            id="guestPhone"
+                            type="tel"
+                            placeholder="Enter mobile number"
+                            class="w-full bg-transparent outline-none text-base font-medium"
+                        >
                     </div>
-
-
-
-
-
-
-
 
 
        <div class="mt-4">
@@ -167,7 +163,7 @@ input::-moz-selection{
                             <button
                                 type="button"
                                 id="applyCouponBtn"
-                                class="bg-blue-600 text-white px-5 py-3 rounded-xl"
+                                class="bg-blue-900 text-white px-5 py-3 rounded-xl"
                             >
                                 Apply
                             </button>
@@ -183,16 +179,17 @@ input::-moz-selection{
 
                     
 
+                    
                     <p class="text-sm text-gray-500 mt-4">
                         We'll only contact you with essential updates or changes to your booking.
                     </p>
 
                     <button
-    id="goToPaymentBtn"
-    class=" px-4 md:px-8 py-1 md:py-3 items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
->
-    Go to Payment
-</button>
+                        id="goToPaymentBtn"
+                        class=" px-4 md:px-8 py-1 md:py-3 items-center bg-blue-900 hover:bg-blue-800 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
+                    >
+                        Go to Payment
+                    </button>
 
 
 
@@ -206,7 +203,7 @@ input::-moz-selection{
 >
 
     <h2
-        class="text-3xl font-bold mb-6"
+        class="md:text-xl text-md text-xl font-bold mb-6"
     >
         Select Your Guide
     </h2>
@@ -232,7 +229,7 @@ input::-moz-selection{
         <button
             type="button"
             id="guideNextBtn"
-            class="px-4 md:px-8 bg-blue-600 text-white py-3 rounded-xl"
+            class="px-4 md:px-8 bg-blue-800 text-white py-3 rounded-xl"
         >
             Continue
         </button>
@@ -249,10 +246,8 @@ input::-moz-selection{
 >
 
 
-
-
     <h2
-        class="text-3xl font-bold text-gray-900 mb-6"
+        class=" text-md md:text-2xl font-bold text-gray-900 mb-6"
     >
         Select Payment Method
     </h2>
@@ -422,7 +417,7 @@ input::-moz-selection{
         <button
             type="button"
             id="confirmBookingBtn"
-            class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2"
+            class="w-1/2 bg-blue-900 hover:bg-blue-800 text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2"
         >
 
             <span id="confirmBtnText">
@@ -523,7 +518,7 @@ input::-moz-selection{
 <a
     href="#"
     id="changeBookingBtn"
-    class="text-blue-600 text-sm font-medium hover:underline block mt-5"
+    class="text-blue-900 text-sm font-medium hover:underline block mt-5"
 >
     Change date or participants
 </a>
@@ -619,7 +614,7 @@ input::-moz-selection{
     <button
         id="updateBookingBtn"
         type="button"
-        class="w-full mt-5 bg-blue-600 text-white py-3 rounded-xl"
+        class="w-full mt-5 bg-blue-900 text-white py-3 rounded-xl"
     >
         Update Booking
     </button>
@@ -649,10 +644,6 @@ input::-moz-selection{
 
                     <div class="border-t my-6"></div>
 
-                    {% comment %} <button class="text-blue-600 text-sm hover:underline w-full text-left">
-                        Enter promo or gift code
-                    </button> {% endcomment %}
-
                     <!-- Total -->
                     <div class="bg-gray-50 -mx-6 -mb-6 mt-8 p-6 rounded-b-2xl flex justify-between items-center">
 
@@ -676,102 +667,7 @@ input::-moz-selection{
 
 
 <script>
-{% comment %} 
-let updateCalendar = null;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        const bookingDraft =
-            JSON.parse(
-                localStorage.getItem(
-                    "bookingDraft"
-                )
-            );
-
-        if(!bookingDraft){
-            return;
-        }
-
-        const totalAmount =
-            parseFloat(
-                bookingDraft.total_amount
-                    .replace("₹","")
-                    .replace(/,/g,"")
-            );
-
-        document.getElementById(
-            "totalAmountDisplay"
-        ).innerText =
-            `₹${totalAmount.toFixed(2)}`;
-
-        document
-        .querySelectorAll(
-            'input[name="payment_method"]'
-        )
-        .forEach(radio => {
-
-            radio.addEventListener(
-                "change",
-                function(){
-
-                    let payNow = 0;
-                    let remaining = 0;
-
-                    if(
-                        this.value ===
-                        "pay_at_location"
-                    ){
-
-                        payNow = 0;
-                        remaining = totalAmount;
-
-                    }
-
-                    else if(
-                        this.value ===
-                        "partial_payment"
-                    ){
-
-                        payNow =
-                            totalAmount * 0.30;
-
-                        remaining =
-                            totalAmount -
-                            payNow;
-
-                    }
-
-                    else if(
-                        this.value ===
-                        "full_payment"
-                    ){
-
-                        payNow =
-                            totalAmount;
-
-                        remaining = 0;
-
-                    }
-
-                    document.getElementById(
-                        "payNowAmount"
-                    ).innerText =
-                        `₹${payNow.toFixed(2)}`;
-
-                    document.getElementById(
-                        "remainingAmount"
-                    ).innerText =
-                        `₹${remaining.toFixed(2)}`;
-
-                }
-            );
-
-        });
-
-    }
-); {% endcomment %}
 
 
 let updateCalendar = null;
@@ -1286,7 +1182,7 @@ function renderGuides(guides){
                         rounded-full
                         object-cover
                         border-4
-                        border-blue-100
+                        border-blue-800
                     "
                 >
 
@@ -1305,7 +1201,7 @@ function renderGuides(guides){
                     <p
                         class="
                             text-sm
-                            text-blue-600
+                            text-blue-800
                             font-medium
                             mt-1
                         "
@@ -1325,7 +1221,7 @@ function renderGuides(guides){
                         class="
                             fa-solid
                             fa-location-dot
-                            text-blue-600
+                            text-blue-900
                         "
                     ></i>
 
@@ -1419,7 +1315,7 @@ function renderGuides(guides){
                         "Select Guide";
 
                     btn.classList.remove(
-                        "bg-blue-600",
+                        "bg-blue-900",
                         "text-white"
                     );
 
@@ -1449,7 +1345,7 @@ function renderGuides(guides){
                 );
 
                 btn.classList.add(
-                    "bg-blue-600",
+                    "bg-blue-900",
                     "text-white"
                 );
 
