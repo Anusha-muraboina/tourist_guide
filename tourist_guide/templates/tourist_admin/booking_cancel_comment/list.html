@@ -1,0 +1,185 @@
+{% extends "tourist_admin/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold">
+        Booking Cancel Comments
+    </h2>
+
+    <a href="{% url 'booking_cancel_comment_create' %}"
+       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <i class="fa-solid fa-plus"></i>
+        Add Comment
+    </a>
+</div>
+
+<form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+    <input
+        type="text"
+        name="search"
+        value="{{ search }}"
+        placeholder="Search Booking / User"
+        class="border rounded-lg px-3 py-2">
+
+    <select
+        name="reason"
+        class="border rounded-lg px-3 py-2">
+
+        <option value="">All Reasons</option>
+
+        {% for item in reasons %}
+
+        <option
+            value="{{ item.id }}"
+            {% if reason == item.id|stringformat:"s" %}
+            selected
+            {% endif %}
+        >
+            {{ item.reason }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <button
+        type="submit"
+        class="bg-slate-800 text-white rounded-lg px-4 py-2">
+        Search
+    </button>
+
+    <a
+        href="{% url 'booking_cancel_comment_list' %}"
+        class="bg-gray-600 text-white rounded-lg px-4 py-2 text-center">
+        Reset
+    </a>
+
+</form>
+
+<div class="bg-white rounded-lg shadow overflow-x-auto">
+
+<table class="min-w-full">
+
+    <thead class="bg-slate-100">
+
+        <tr>
+
+            <th class="px-4 py-3 text-left">Booking</th>
+
+            <th class="px-4 py-3 text-left">User</th>
+
+            <th class="px-4 py-3 text-left">Reason</th>
+
+            <th class="px-4 py-3 text-left">Comment</th>
+
+            <th class="px-4 py-3 text-left">Created</th>
+
+            <th class="px-4 py-3 text-center">Action</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for item in items %}
+
+        <tr class="border-t">
+
+            <td class="px-4 py-3">
+                {{ item.booking.booking_id }}
+            </td>
+
+            <td class="px-4 py-3">
+                {{ item.user }}
+            </td>
+
+            <td class="px-4 py-3">
+                {{ item.reason }}
+            </td>
+
+            <td class="px-4 py-3">
+                {{ item.comment|truncatechars:60 }}
+            </td>
+
+            <td class="px-4 py-3">
+                {{ item.created_at|date:"d M Y" }}
+            </td>
+
+            <td class="px-4 py-3 text-center">
+
+                <a href="{% url 'booking_cancel_comment_update' item.pk %}"
+                   class="text-blue-600 mr-3">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+
+                <a href="{% url 'booking_cancel_comment_delete' item.pk %}"
+                   onclick="return confirm('Delete this comment?')"
+                   class="text-red-600">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td colspan="6" class="text-center py-5">
+
+                No records found.
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+</div>
+
+{% if is_paginated %}
+
+<div class="flex justify-center mt-6 gap-2">
+
+    {% if page_obj.has_previous %}
+
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="px-3 py-2 border rounded">
+            Previous
+        </a>
+
+    {% endif %}
+
+    <span class="px-4 py-2">
+
+        {{ page_obj.number }}
+
+        /
+
+        {{ page_obj.paginator.num_pages }}
+
+    </span>
+
+    {% if page_obj.has_next %}
+
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="px-3 py-2 border rounded">
+            Next
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

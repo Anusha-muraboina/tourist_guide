@@ -1,0 +1,93 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto bg-white shadow rounded-xl p-6">
+
+    <h2 class="text-2xl font-bold mb-6">
+
+        {% if form.instance.pk %}
+
+            Update Booking Cancel Comment
+
+        {% else %}
+
+            Add Booking Cancel Comment
+
+        {% endif %}
+
+    </h2>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div>
+
+                <label class="block mb-2 font-medium">
+                    User
+                </label>
+
+                {{ form.user }}
+
+            </div>
+
+            <div>
+
+                <label class="block mb-2 font-medium">
+                    Booking
+                </label>
+
+                {{ form.booking }}
+
+            </div>
+
+            <div>
+
+                <label class="block mb-2 font-medium">
+                    Cancel Reason
+                </label>
+
+                {{ form.reason }}
+
+            </div>
+
+            <div class="md:col-span-2">
+
+                <label class="block mb-2 font-medium">
+                    Comment
+                </label>
+
+                {{ form.comment }}
+
+            </div>
+
+        </div>
+
+        <div class="mt-8 flex gap-3">
+
+            <button
+                type="submit"
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+
+                Save
+
+            </button>
+
+            <a
+                href="{% url 'booking_cancel_comment_list' %}"
+                class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

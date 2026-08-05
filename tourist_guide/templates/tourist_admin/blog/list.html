@@ -1,0 +1,244 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between p-6 border-b">
+        <h2 class="text-2xl font-bold">
+            Blog List
+        </h2>
+
+        <a href="{% url 'blog_create' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg transition-colors shadow-xs group cursor-pointer">
+            <i class="fa-solid fa-plus mr-2"></i>
+            Add Blog
+        </a>
+    </div>
+
+    <!-- Search -->
+    <form method="get" class="p-6 grid md:grid-cols-5 gap-4">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Search title or author..."
+            class="border rounded-lg px-4 py-2">
+
+        <select
+            name="category"
+            class="border rounded-lg px-4 py-2">
+
+            <option value="">All Categories</option>
+
+            {% for cat in categories %}
+
+            <option
+                value="{{ cat.id }}"
+                {% if category == cat.id|stringformat:"s" %}selected{% endif %}>
+                {{ cat.name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <select
+            name="featured"
+            class="border rounded-lg px-4 py-2">
+
+            <option value="">Featured</option>
+
+            <option value="1"
+            {% if featured == "1" %}selected{% endif %}>
+                Yes
+            </option>
+
+            <option value="0"
+            {% if featured == "0" %}selected{% endif %}>
+                No
+            </option>
+
+        </select>
+
+        <select
+            name="status"
+            class="border rounded-lg px-4 py-2">
+
+            <option value="">Status</option>
+
+            <option value="1"
+            {% if status == "1" %}selected{% endif %}>
+                Active
+            </option>
+
+            <option value="0"
+            {% if status == "0" %}selected{% endif %}>
+                Inactive
+            </option>
+
+        </select>
+
+        <button
+            class="bg-black text-white rounded-lg">
+            Search
+        </button>
+
+    </form>
+
+    <!-- Table -->
+
+    <div class="overflow-x-auto">
+
+        <table class="w-full">
+
+            <thead class="bg-gray-100">
+
+                <tr>
+
+                    <th class="p-3 text-left">Image</th>
+
+                    <th class="p-3 text-left">Title</th>
+
+                    <th class="p-3 text-left">Category</th>
+
+                    <th class="p-3 text-left">Author</th>
+
+                    <th class="p-3 text-left">Views</th>
+
+                    <th class="p-3 text-left">Featured</th>
+
+                    <th class="p-3 text-left">Status</th>
+
+                    <th class="p-3 text-center">Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in items %}
+
+                <tr class="border-b">
+
+                    <td class="p-3">
+
+                        <img
+                            src="{{ item.image.url }}"
+                            class="w-20 h-14 rounded object-cover">
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ item.title }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ item.category }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ item.author }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {{ item.views }}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {% if item.featured %}
+
+                        <span class="text-green-600">
+                            Yes
+                        </span>
+
+                        {% else %}
+
+                        <span class="text-red-600">
+                            No
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        {% if item.is_active %}
+
+                        <span class="text-green-600">
+                            Active
+                        </span>
+
+                        {% else %}
+
+                        <span class="text-red-600">
+                            Inactive
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="p-3 text-center">
+
+                        <a
+                            href="{% url 'blog_update' item.id %}"
+                            class="text-blue-600 mr-3">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                        </a>
+
+                        <a
+                            href="{% url 'blog_delete' item.id %}"
+                            onclick="return confirm('Delete this blog?')"
+                            class="text-red-600">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="text-center py-5">
+
+                        No Blogs Found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% comment %} {% include "tourist_admin/includes/pagination.html" %} {% endcomment %}
+
+</div>
+
+{% endblock %}

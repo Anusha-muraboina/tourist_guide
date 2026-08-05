@@ -479,3 +479,135 @@ class RatingForm(forms.ModelForm):
             }),
 
         }
+        
+        
+        
+from django import forms
+from blog.models import Blog, BlogCategory
+
+
+class BlogCategoryForm(forms.ModelForm):
+    class Meta:
+        model = BlogCategory
+        fields = "__all__"
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = "__all__"
+        
+        
+
+
+from django import forms
+from blog.models import Blog
+
+
+class BlogForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Blog
+
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+
+            if field.widget.__class__.__name__ != "CKEditorWidget":
+
+                field.widget.attrs.update({
+                    "class": "w-full border rounded-lg px-4 py-2"
+                })
+                
+                
+                
+
+from booking.models import CancelReason ,BookingCancelComment
+
+
+class CancelReasonForm(forms.ModelForm):
+
+    class Meta:
+
+        model = CancelReason
+
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+
+            field.widget.attrs.update({
+
+                "class": "w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500"
+
+            })
+            
+            
+            
+
+
+
+class BookingCancelCommentForm(forms.ModelForm):
+
+    class Meta:
+
+        model = BookingCancelComment
+
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+
+            field.widget.attrs.update({
+
+                "class": "w-full border border-gray-300 rounded-lg px-4 py-2"
+
+            })
+
+        self.fields["comment"].widget.attrs["rows"] = 5
+        
+        
+
+# from django import forms
+from booking.models import TourPaymentPolicy
+
+
+class TourPaymentPolicyForm(forms.ModelForm):
+
+    class Meta:
+        model = TourPaymentPolicy
+        fields = "__all__"
+
+        widgets = {
+            "tour": forms.Select(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+            "allow_pay_at_location": forms.CheckboxInput(
+                attrs={
+                    "class": "h-5 w-5"
+                }
+            ),
+            "allow_partial_payment": forms.CheckboxInput(
+                attrs={
+                    "class": "h-5 w-5"
+                }
+            ),
+            "allow_full_payment": forms.CheckboxInput(
+                attrs={
+                    "class": "h-5 w-5"
+                }
+            ),
+        }

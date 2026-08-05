@@ -11,12 +11,36 @@
 
     <div class="flex h-screen overflow-hidden">
         
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between hidden md:flex">
-            <div>
+        {% comment %} <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between hidden md:flex"> {% endcomment %}
+<aside id="sidebar"
+class="fixed inset-y-0 left-0 z-50 w-64
+bg-slate-900
+text-slate-300
+flex
+flex-col
+overflow-y-auto
+transform
+-transition-transform
+duration-300
+ease-in-out
+-translate-x-full
+md:relative
+md:translate-x-0
+md:flex">
+     
+
+        <div>
                 <div class="h-16 flex items-center justify-center bg-slate-950 px-6">
                     <span class="text-xl font-bold text-white tracking-wide">
                         <i class="fa-solid fa-compass text-teal-400 mr-2"></i>TourAdmin
                     </span>
+
+                        <button id="closeSidebar"
+            class="text-white md:hidden">
+
+        <i class="fa-solid fa-xmark text-xl"></i>
+
+    </button>
                 </div>
 
                 <nav class="mt-6 px-4 space-y-1">
@@ -40,8 +64,14 @@
                         <i class="fa-solid fa-calendar-days w-5 mr-3 text-lg text-slate-400"></i> Include
                     </a>
 
+
                     <a href="{% url 'tour_exclude_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
                         <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Exclude
+                    </a>
+
+
+                    <a href="{% url 'important_information_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> important
                     </a>
 
   <a href="{% url 'amenity_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
@@ -69,12 +99,71 @@
                         <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Coupon 
                     </a>
 
-    
-
                  <a href="{% url 'rating_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
                         <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Rating 
-                    </a>
+                    </a> 
 
+
+<!-- ==========================================
+     BLOG MANAGEMENT
+=========================================== -->
+<a href="{% url 'payment_policy_list' %}"
+   class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white">
+
+    <i class="fa-solid fa-credit-card w-5 mr-3 text-slate-400"></i>
+
+    Payment Policy
+
+</a>
+
+
+<div class="mt-6">
+
+    <p class="px-4 mb-2 text-xs uppercase tracking-widest text-slate-500">
+        Blog Management
+    </p>
+
+    <a href="{% url 'blog_category_list' %}"
+       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+
+        <i class="fa-solid fa-folder-tree w-5 mr-3 text-lg text-slate-400"></i>
+
+        Blog Categories
+
+    </a>
+
+    <a href="{% url 'blog_list' %}"
+       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+
+        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
+
+        Blogs
+
+    </a>
+
+    <a href="{% url 'cancel_reason_list' %}"
+       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+
+        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
+
+        cancel reasons
+
+    </a>
+
+    <a href="{% url 'booking_cancel_comment_list' %}"
+       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
+
+        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
+
+        cancel comment
+
+    </a>
+    
+
+
+
+
+</div>
 
                 </nav>
 
@@ -93,19 +182,104 @@
                 </a>
             </div>
         </aside>
-
+      <div id="sidebarOverlay"
+     class="fixed inset-0 bg-black/50 hidden z-40 md:hidden">
+</div>
         <div class="flex-1 flex flex-col overflow-hidden">
-            
+
+
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
-                <div class="flex items-center">
-                    <button class="text-gray-500 md:hidden focus:outline-none mr-4">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-800">
-                        {% block dynamic_header %}Overview Dashboard{% endblock %}
-                    </h1>
+
+    <div class="flex items-center">
+        {% comment %} <button class="text-gray-500 md:hidden mr-4">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button> {% endcomment %}
+
+        <button id="menuBtn"
+        class="text-gray-700 md:hidden mr-4">
+
+    <i class="fa-solid fa-bars text-2xl"></i>
+
+</button>
+
+        <h1 class="text-2xl font-semibold text-gray-800">
+            {% block dynamic_header %}Dashboard{% endblock %}
+        </h1>
+    </div>
+
+    <div class="relative">
+
+
+        <button
+            id="profileBtn"
+            onclick="toggleProfile()"
+            class="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2 transition">
+
+            <div class="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold uppercase">
+                {{ request.user.first_name|default:request.user.username|slice:":1" }}
+            </div>
+
+            <div class="hidden md:block text-left">
+                <p class="text-sm font-semibold text-gray-800">
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </p>
+
+                <p class="text-xs text-gray-500">
+                    {{ request.user.email }}
+                </p>
+            </div>
+
+            <i class="fa-solid fa-chevron-down text-gray-500 text-sm"></i>
+
+        </button>
+
+
+        <div
+            id="profileDropdown"
+            class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border overflow-hidden">
+
+            <div class="px-5 py-4 border-b">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-12 h-12 rounded-full bg-teal-600 flex items-center justify-center text-white text-lg font-bold uppercase">
+                        {{ request.user.first_name|default:request.user.username|slice:":1" }}
+                    </div>
+
+                    <div>
+
+                        <h4 class="font-semibold">
+                            {{ request.user.get_full_name|default:request.user.username }}
+                        </h4>
+
+                        <p class="text-sm text-gray-500">
+                            {{ request.user.email }}
+                        </p>
+
+                    </div>
+
                 </div>
-            </header>
+
+            </div>
+
+
+            <a href="#"
+               class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100">
+
+                <i class="fa-solid fa-user text-teal-600"></i>
+
+                My Profile
+            </a>
+
+            <a href="{% url 'admin_logout' %}"
+               class="flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+
+</header>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
                 {% block content %}
@@ -114,5 +288,69 @@
         </div>
     </div>
 
+    <script>
+const profileBtn = document.getElementById("profileBtn");
+const profileDropdown = document.getElementById("profileDropdown");
+
+profileBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    profileDropdown.classList.toggle("hidden");
+});
+
+// Close dropdown when clicking outside
+document.addEventListener("click", function (e) {
+    if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+        profileDropdown.classList.add("hidden");
+    }
+});
+
+// Prevent closing when clicking inside dropdown
+profileDropdown.addEventListener("click", function (e) {
+    e.stopPropagation();
+});
+</script>
+
+<script>
+
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("sidebarOverlay");
+
+const menuBtn = document.getElementById("menuBtn");
+
+const closeBtn = document.getElementById("closeSidebar");
+
+menuBtn.addEventListener("click", function(){
+
+    sidebar.classList.remove("-translate-x-full");
+
+    overlay.classList.remove("hidden");
+
+});
+
+closeBtn.addEventListener("click", closeSidebar);
+
+overlay.addEventListener("click", closeSidebar);
+
+function closeSidebar(){
+
+    sidebar.classList.add("-translate-x-full");
+
+    overlay.classList.add("hidden");
+
+}
+
+window.addEventListener("resize", function(){
+
+    if(window.innerWidth >= 768){
+
+        sidebar.classList.remove("-translate-x-full");
+
+        overlay.classList.add("hidden");
+
+    }
+
+});
+
+</script>
 </body>
 </html>

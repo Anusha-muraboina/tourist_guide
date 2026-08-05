@@ -1,0 +1,129 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}Payment Policy{% endblock %}
+
+{% block dynamic_header %}
+Payment Policy
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="flex justify-between items-center p-6 border-b">
+
+        <form method="get">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ request.GET.search }}"
+                placeholder="Search Tour"
+                class="border rounded-lg px-4 py-2">
+
+        </form>
+
+        <a href="{% url 'payment_policy_create' %}"
+           class="bg-teal-600 text-white px-4 py-2 rounded-lg">
+
+            Add Payment Policy
+
+        </a>
+
+    </div>
+
+    <table class="min-w-full">
+
+        <thead class="bg-gray-100">
+
+            <tr>
+
+                <th class="px-4 py-3 text-left">
+                    Tour
+                </th>
+
+                <th>
+                    Pay at Location
+                </th>
+
+                <th>
+                    Partial
+                </th>
+
+                <th>
+                    Full
+                </th>
+
+                <th class="text-center">
+                    Action
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for item in items %}
+
+            <tr class="border-t">
+
+                <td class="px-4 py-3">
+                    {{ item.tour }}
+                </td>
+
+                <td class="text-center">
+                    {{ item.allow_pay_at_location|yesno:"✅,❌" }}
+                </td>
+
+                <td class="text-center">
+                    {{ item.allow_partial_payment|yesno:"✅,❌" }}
+                </td>
+
+                <td class="text-center">
+                    {{ item.allow_full_payment|yesno:"✅,❌" }}
+                </td>
+
+                <td class="text-center">
+
+                    <a href="{% url 'payment_policy_update' item.id %}"
+                       class="text-blue-600">
+
+                        Edit
+
+                    </a>
+
+                    |
+
+                    <a href="{% url 'payment_policy_delete' item.id %}"
+                       class="text-red-600">
+
+                        Delete
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+
+                <td colspan="5" class="text-center py-6">
+
+                    No Records Found
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

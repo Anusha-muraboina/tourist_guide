@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Guide Admin Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        body{
+            font-family:'Poppins',sans-serif;
+        }
+    </style>
+
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 via-white to-cyan-100">
+
+<div class="w-full max-w-md px-5">
+
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+
+        <div class="bg-gradient-to-r from-cyan-600 to-blue-700 py-10 text-center">
+
+            {% comment %} <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-10 h-10 text-cyan-700"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 2l3 7h7l-5.5 4.5L18 22l-6-4-6 4 1.5-8.5L2 9h7z"/>
+
+                </svg>
+
+            </div> {% endcomment %}
+
+            <h2 class="text-3xl font-bold text-white mt-5">
+                Tourist Guide
+            </h2>
+
+            <p class="text-cyan-100 mt-2">
+                Admin Dashboard Login
+            </p>
+
+        </div>
+
+        <div class="p-8">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-5 rounded-xl border border-red-300 bg-red-100 text-red-700 px-4 py-3">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <!-- Username -->
+
+                <div class="mb-5">
+
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">
+                      Email
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter Username"
+                        required
+                        autocomplete="username"
+                        class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+                </div>
+
+                <!-- Password -->
+
+                <div class="mb-6">
+
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">
+                        Password
+                    </label>
+
+                    <div class="relative">
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter Password"
+                            required
+                            autocomplete="current-password"
+                            class="w-full rounded-xl border border-gray-300 px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+                        <button
+                            type="button"
+                            onclick="togglePassword()"
+                            class="absolute right-4 top-3 text-gray-500">
+
+                            👁
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 text-white py-3 rounded-xl font-semibold hover:shadow-xl duration-300">
+
+                    Login
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="text-center mt-6 text-gray-500 text-sm">
+        © {% now "Y" %} Tourist Guide Admin Panel
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+    let input=document.getElementById("password");
+
+    if(input.type==="password"){
+        input.type="text";
+    }else{
+        input.type="password";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
+

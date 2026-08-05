@@ -510,3 +510,5 @@ class TourPricing(models.Model):
             f"{self.tour.title} - "
             f"{self.person_type}"
         )
+
+

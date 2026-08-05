@@ -12,6 +12,10 @@ from tourist.models import (
     Amenity
 )
 
+from blog.models import (
+BlogCategory
+)
+
 from .forms import (
     TourCategoryForm,
     TourHighlightForm,
@@ -23,11 +27,66 @@ from .forms import (
 from tourist.models import TourSchedule, TourPricing
 from .forms import TourScheduleForm, TourPricingForm
 
-def dashboard(request):
-    return render(
-        request,
-        "tourist_admin/dashboard.html"
-    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+
+def admin_login(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        print("Username:", username)
+        print("Password:", password)
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        print("Authenticated User:", user)
+
+        if user is not None:
+            print("is_staff:", user.is_staff)
+
+            if user.is_staff:
+                login(request, user)
+                return redirect("dashboard")
+
+            messages.error(request, "You are not a staff user.")
+        else:
+            messages.error(request, "Invalid username or password.")
+
+    return render(request, "tourist_admin/login.html")
+
+
+def admin_logout(request):
+    logout(request)
+    return redirect("admin_login")
+# def dashboard(request):
+#     return render(
+#         request,
+#         "tourist_admin/dashboard.html"
+#     )
 
 
 
@@ -986,3 +1045,613 @@ class RatingDeleteView(BaseDeleteView):
     success_url = reverse_lazy(
         "rating_list"
     )
+    
+    
+# from django.views.generic import ListView
+# from django.db.models import Q
+from django.db.models import Q
+from django.urls import reverse_lazy
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+)
+
+from blog.models import BlogCategory, Blog
+from .forms import BlogCategoryForm, BlogForm
+
+from tourist_admin.views import BaseDeleteView
+
+
+# ==========================================
+# Blog Category List
+# ==========================================
+
+class BlogCategoryListView(ListView):
+
+    model = BlogCategory
+
+    template_name = "tourist_admin/blog/category_list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = BlogCategory.objects.all()
+
+        search = self.request.GET.get("search")
+
+        status = self.request.GET.get("status")
+
+        if search:
+
+            queryset = queryset.filter(
+                Q(name__icontains=search)
+            )
+
+        if status == "1":
+
+            queryset = queryset.filter(
+                is_active=True
+            )
+
+        elif status == "0":
+
+            queryset = queryset.filter(
+                is_active=False
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["status"] = self.request.GET.get(
+            "status",
+            ""
+        )
+
+        return context
+
+
+# ==========================================
+# Blog Category Create
+# ==========================================
+
+class BlogCategoryCreateView(CreateView):
+
+    model = BlogCategory
+
+    form_class = BlogCategoryForm
+
+    template_name = "tourist_admin/blog/category_form.html"
+
+    success_url = reverse_lazy(
+        "blog_category_list"
+    )
+
+
+# ==========================================
+# Blog Category Update
+# ==========================================
+
+class BlogCategoryUpdateView(UpdateView):
+
+    model = BlogCategory
+
+    form_class = BlogCategoryForm
+
+    template_name = "tourist_admin/blog/form.html"
+
+    success_url = reverse_lazy(
+        "blog_category_list"
+    )
+
+
+# ==========================================
+# Blog Category Delete
+# ==========================================
+
+class BlogCategoryDeleteView(BaseDeleteView):
+
+    model = BlogCategory
+
+    success_url = reverse_lazy(
+        "blog_category_list"
+    )
+
+
+# ==========================================
+# Blog List
+# ==========================================
+
+class BlogListView(ListView):
+
+    model = Blog
+
+    template_name = "tourist_admin/blog/list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = (
+            Blog.objects
+            .select_related("category")
+            .all()
+        )
+
+        search = self.request.GET.get("search")
+
+        category = self.request.GET.get("category")
+
+        featured = self.request.GET.get("featured")
+
+        status = self.request.GET.get("status")
+
+        if search:
+
+            queryset = queryset.filter(
+
+                Q(title__icontains=search) |
+
+                Q(author__icontains=search)
+
+            )
+
+        if category:
+
+            queryset = queryset.filter(
+                category_id=category
+            )
+
+        if featured == "1":
+
+            queryset = queryset.filter(
+                featured=True
+            )
+
+        elif featured == "0":
+
+            queryset = queryset.filter(
+                featured=False
+            )
+
+        if status == "1":
+
+            queryset = queryset.filter(
+                is_active=True
+            )
+
+        elif status == "0":
+
+            queryset = queryset.filter(
+                is_active=False
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["categories"] = BlogCategory.objects.filter(
+            is_active=True
+        )
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["category"] = self.request.GET.get(
+            "category",
+            ""
+        )
+
+        context["featured"] = self.request.GET.get(
+            "featured",
+            ""
+        )
+
+        context["status"] = self.request.GET.get(
+            "status",
+            ""
+        )
+
+        return context
+
+
+# ==========================================
+# Blog Create
+# ==========================================
+
+class BlogCreateView(CreateView):
+
+    model = Blog
+
+    form_class = BlogForm
+
+    template_name = "tourist_admin/blog/form.html"
+
+    success_url = reverse_lazy(
+        "blog_list"
+    )
+
+
+# ==========================================
+# Blog Update
+# ==========================================
+
+class BlogUpdateView(UpdateView):
+
+    model = Blog
+
+    form_class = BlogForm
+
+    template_name = "tourist_admin/blog/form.html"
+
+    success_url = reverse_lazy(
+        "blog_list"
+    )
+
+
+# ==========================================
+# Blog Delete
+# ==========================================
+
+class BlogDeleteView(BaseDeleteView):
+
+    model = Blog
+
+    success_url = reverse_lazy(
+        "blog_list"
+    )
+    
+    
+    
+
+
+# from django.db.models import Q
+# from django.urls import reverse_lazy
+# from django.views.generic import (
+#     ListView,
+#     CreateView,
+#     UpdateView,
+# )
+
+from booking.models import CancelReason
+from .forms import CancelReasonForm
+
+from tourist_admin.views import BaseDeleteView
+
+
+# ==========================================
+# Cancel Reason List
+# ==========================================
+
+class CancelReasonListView(ListView):
+
+    model = CancelReason
+
+    template_name = "tourist_admin/cancel_reason/list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = CancelReason.objects.all()
+
+        search = self.request.GET.get("search")
+
+        status = self.request.GET.get("status")
+
+        if search:
+
+            queryset = queryset.filter(
+
+                Q(reason__icontains=search)
+
+            )
+
+        if status == "1":
+
+            queryset = queryset.filter(
+                is_active=True
+            )
+
+        elif status == "0":
+
+            queryset = queryset.filter(
+                is_active=False
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["status"] = self.request.GET.get(
+            "status",
+            ""
+        )
+
+        return context
+
+
+# ==========================================
+# Create Cancel Reason
+# ==========================================
+
+class CancelReasonCreateView(CreateView):
+
+    model = CancelReason
+
+    form_class = CancelReasonForm
+
+    template_name = "tourist_admin/cancel_reason/form.html"
+
+    success_url = reverse_lazy(
+        "cancel_reason_list"
+    )
+
+
+# ==========================================
+# Update Cancel Reason
+# ==========================================
+
+class CancelReasonUpdateView(UpdateView):
+
+    model = CancelReason
+
+    form_class = CancelReasonForm
+
+    template_name = "tourist_admin/cancel_reason/form.html"
+
+    success_url = reverse_lazy(
+        "cancel_reason_list"
+    )
+
+
+# ==========================================
+# Delete Cancel Reason
+# ==========================================
+
+class CancelReasonDeleteView(BaseDeleteView):
+
+    model = CancelReason
+
+    success_url = reverse_lazy(
+        "cancel_reason_list"
+    )
+    
+    
+
+from django.db.models import Q
+from django.urls import reverse_lazy
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+)
+
+from booking.models import (
+    BookingCancelComment,
+    CancelReason,
+)
+
+from .forms import BookingCancelCommentForm
+
+from tourist_admin.views import BaseDeleteView
+
+
+# ==========================================
+# Booking Cancel Comment List
+# ==========================================
+
+class BookingCancelCommentListView(ListView):
+
+    model = BookingCancelComment
+
+    template_name = "tourist_admin/booking_cancel_comment/list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = (
+
+            BookingCancelComment.objects
+
+            .select_related(
+
+                "user",
+
+                "booking",
+
+                "reason",
+
+            )
+
+            .all()
+
+        )
+
+        search = self.request.GET.get("search")
+
+        reason = self.request.GET.get("reason")
+
+        if search:
+
+            queryset = queryset.filter(
+
+                Q(comment__icontains=search) |
+
+                Q(user__username__icontains=search) |
+
+                Q(booking__booking_id__icontains=search)
+
+            )
+
+        if reason:
+
+            queryset = queryset.filter(
+
+                reason_id=reason
+
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get(
+
+            "search",
+
+            ""
+
+        )
+
+        context["reason"] = self.request.GET.get(
+
+            "reason",
+
+            ""
+
+        )
+
+        context["reasons"] = CancelReason.objects.filter(
+
+            is_active=True
+
+        )
+
+        return context
+
+
+# ==========================================
+# Create
+# ==========================================
+
+class BookingCancelCommentCreateView(CreateView):
+
+    model = BookingCancelComment
+
+    form_class = BookingCancelCommentForm
+
+    template_name = "tourist_admin/booking_cancel_comment/form.html"
+
+    success_url = reverse_lazy(
+
+        "booking_cancel_comment_list"
+
+    )
+
+
+# ==========================================
+# Update
+# ==========================================
+
+class BookingCancelCommentUpdateView(UpdateView):
+
+    model = BookingCancelComment
+
+    form_class = BookingCancelCommentForm
+
+    template_name = "tourist_admin/booking_cancel_comment/form.html"
+
+    success_url = reverse_lazy(
+
+        "booking_cancel_comment_list"
+
+    )
+
+
+# ==========================================
+# Delete
+# ==========================================
+
+class BookingCancelCommentDeleteView(BaseDeleteView):
+
+    model = BookingCancelComment
+
+    success_url = reverse_lazy(
+
+        "booking_cancel_comment_list"
+
+    )
+    
+    
+    
+
+
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView
+from .forms import TourPaymentPolicyForm
+from booking.models import TourPaymentPolicy
+
+
+class TourPaymentPolicyListView(ListView):
+    model = TourPaymentPolicy
+    template_name = "tourist_admin/policy/list.html"
+    context_object_name = "items"
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = (
+            TourPaymentPolicy.objects
+            .select_related("tour")
+            .order_by("tour__title")
+        )
+
+        search = self.request.GET.get("search")
+
+        if search:
+            queryset = queryset.filter(
+                tour__title__icontains=search
+            )
+
+        return queryset
+
+
+class TourPaymentPolicyCreateView(CreateView):
+    model = TourPaymentPolicy
+    form_class = TourPaymentPolicyForm
+    template_name = "tourist_admin/policy/form.html"
+    success_url = reverse_lazy("payment_policy_list")
+
+
+class TourPaymentPolicyUpdateView(UpdateView):
+    model = TourPaymentPolicy
+    form_class = TourPaymentPolicyForm
+    template_name = "tourist_admin/policy/form.html"
+    success_url = reverse_lazy("payment_policy_list")
+
+
+class TourPaymentPolicyDeleteView(BaseDeleteView):
+    model = TourPaymentPolicy
+    success_url = reverse_lazy("payment_policy_list")

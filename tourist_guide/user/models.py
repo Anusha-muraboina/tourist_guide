@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+
+
+
 class User(AbstractUser):
 
     # username = None
@@ -41,7 +44,9 @@ class User(AbstractUser):
 
     country = models.CharField(
         max_length=100,
-        default="India"
+        default="India",
+        null =True,
+        blank=True
     )
 
 

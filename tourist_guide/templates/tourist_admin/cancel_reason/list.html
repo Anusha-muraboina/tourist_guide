@@ -1,0 +1,147 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl shadow">
+
+    <div class="flex justify-between items-center p-6 border-b">
+
+        <h2 class="text-2xl font-bold">
+
+            Cancel Reasons
+
+        </h2>
+
+        <a href="{% url 'cancel_reason_create' %}"
+           class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg transition-colors shadow-xs group cursor-pointer">
+            Add Reason
+        </a>
+
+    </div>
+
+    <form method="get" class="grid md:grid-cols-3 gap-4 p-6">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Search..."
+            class="border rounded-lg px-4 py-2">
+
+        <select
+            name="status"
+            class="border rounded-lg px-4 py-2">
+
+            <option value="">All Status</option>
+
+            <option value="1"
+            {% if status == "1" %}selected{% endif %}>
+                Active
+            </option>
+
+            <option value="0"
+            {% if status == "0" %}selected{% endif %}>
+                Inactive
+            </option>
+
+        </select>
+
+        <button
+            class="bg-black text-white rounded-lg">
+
+            Search
+
+        </button>
+
+    </form>
+
+    <table class="w-full">
+
+        <thead class="bg-gray-100">
+
+            <tr>
+
+                <th class="p-3 text-left">Reason</th>
+
+                <th class="p-3 text-left">Status</th>
+
+                <th class="p-3 text-center">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for item in items %}
+
+            <tr class="border-b">
+
+                <td class="p-3">
+
+                    {{ item.reason }}
+
+                </td>
+
+                <td class="p-3">
+
+                    {% if item.is_active %}
+
+                        <span class="text-green-600">
+                            Active
+                        </span>
+
+                    {% else %}
+
+                        <span class="text-red-600">
+                            Inactive
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td class="p-3 text-center">
+
+                    <a href="{% url 'cancel_reason_update' item.id %}"
+                       class="text-blue-600 mr-3">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </a>
+
+                    <a href="{% url 'cancel_reason_delete' item.id %}"
+                       onclick="return confirm('Delete this reason?')"
+                       class="text-red-600">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="3" class="text-center py-5">
+
+                    No records found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% comment %} {% include "tourist_admin/includes/pagination.html" %} {% endcomment %}
+
+</div>
+
+{% endblock %}
