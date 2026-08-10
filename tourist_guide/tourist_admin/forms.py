@@ -611,3 +611,127 @@ class TourPaymentPolicyForm(forms.ModelForm):
                 }
             ),
         }
+        
+        
+        
+from django import forms
+from user.models import Location
+
+
+class LocationForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Location
+
+        fields = [
+            "country",
+            "state",
+            "district",
+            "city",
+            "is_active",
+        ]
+        
+        
+
+from django import forms
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class UserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+            "phone_number",
+            "role",
+            "locations",
+            "profile_image",
+            "is_verified",
+            "is_active",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+
+            if name == "locations":
+                field.widget.attrs.update({
+                    "class": "w-full rounded-xl border border-slate-300 p-3 h-64"
+                })
+
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    "class": "w-5 h-5 rounded text-indigo-600"
+                })
+
+            elif isinstance(field.widget, forms.FileInput):
+                field.widget.attrs.update({
+                    "class": "block w-full text-sm border rounded-xl p-2"
+                })
+
+            else:
+                field.widget.attrs.update({
+                    "class": "w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                })
+                
+                
+                
+from django import forms
+from booking.models import Booking
+from tourist.models import Tour
+from user.models import User
+
+
+class BookingForm(forms.ModelForm):
+
+    class Meta:
+        model = Booking
+        fields = [
+            "tour",
+            "guide",
+            "guest_name",
+            "guest_email",
+            "guest_phone",
+            "adults",
+            "children",
+            "infants",
+            "tour_date",
+            "tour_time",
+            "special_requests",
+            "payment_method",
+            "payment_status",
+            "status",
+        ]
+        widgets = {
+            "tour": forms.Select(attrs={"class": "form-control"}),
+            "guide": forms.Select(attrs={"class": "form-control"}),
+            "guest_name": forms.TextInput(attrs={"class": "form-control"}),
+            "guest_email": forms.EmailInput(attrs={"class": "form-control"}),
+            "guest_phone": forms.TextInput(attrs={"class": "form-control"}),
+            "adults": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
+            "children": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
+            "infants": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
+            "tour_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "tour_time": forms.TimeInput(attrs={"class": "form-control", "type": "time"}),
+            "special_requests": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "payment_method": forms.Select(attrs={"class": "form-control"}),
+            "payment_status": forms.Select(attrs={"class": "form-control"}),
+            "status": forms.Select(attrs={"class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Only show active guides
+        self.fields["guide"].queryset = User.objects.filter(
+            role="guide",
+            is_active=True
+        )
+
+        # Only show active tours
+        self.fields["tour"].queryset = Tour.objects.filter(is_active=True)

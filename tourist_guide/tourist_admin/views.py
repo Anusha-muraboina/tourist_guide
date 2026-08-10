@@ -16,6 +16,8 @@ from blog.models import (
 BlogCategory
 )
 
+from user.models  import Location
+
 from .forms import (
     TourCategoryForm,
     TourHighlightForm,
@@ -1655,3 +1657,364 @@ class TourPaymentPolicyUpdateView(UpdateView):
 class TourPaymentPolicyDeleteView(BaseDeleteView):
     model = TourPaymentPolicy
     success_url = reverse_lazy("payment_policy_list")
+    
+
+
+# from django.db.models import Q
+# from django.urls import reverse_lazy
+# from django.views.generic import ListView, CreateView, UpdateView
+
+# from .models import Location
+from .forms import LocationForm
+# from .views import BaseDeleteView
+
+
+# ==========================================
+# List
+# ==========================================
+
+class LocationListView(ListView):
+
+    model = Location
+
+    template_name = "tourist_admin/location/list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = Location.objects.all()
+
+        search = self.request.GET.get("search")
+
+        state = self.request.GET.get("state")
+
+        if search:
+
+            queryset = queryset.filter(
+                Q(country__icontains=search) |
+                Q(state__icontains=search) |
+                Q(district__icontains=search) |
+                Q(city__icontains=search)
+            )
+
+        if state:
+
+            queryset = queryset.filter(
+                state__iexact=state
+            )
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["state"] = self.request.GET.get(
+            "state",
+            ""
+        )
+
+        context["states"] = (
+            Location.objects
+            .values_list("state", flat=True)
+            .distinct()
+            .order_by("state")
+        )
+
+        return context
+
+
+# ==========================================
+# Create
+# ==========================================
+
+class LocationCreateView(CreateView):
+
+    model = Location
+
+    form_class = LocationForm
+
+    template_name = "tourist_admin/location/form.html"
+
+    success_url = reverse_lazy(
+        "location_list"
+    )
+
+
+# ==========================================
+# Update
+# ==========================================
+
+class LocationUpdateView(UpdateView):
+
+    model = Location
+
+    form_class = LocationForm
+
+    template_name = "tourist_admin/location/form.html"
+
+    success_url = reverse_lazy(
+        "location_list"
+    )
+
+
+# ==========================================
+# Delete
+# ==========================================
+
+class LocationDeleteView(BaseDeleteView):
+
+    model = Location
+
+    success_url = reverse_lazy(
+        "location_list"
+    )
+    
+    
+    
+from django.contrib.auth import get_user_model
+from django.views.generic import ListView, DetailView, UpdateView
+from django.urls import reverse_lazy
+from django.db.models import Q
+
+from .forms import UserForm
+
+User = get_user_model()
+
+
+class UserListView(ListView):
+
+    model = User
+
+    template_name = "tourist_admin/users/list.html"
+
+    context_object_name = "items"
+
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        queryset = User.objects.prefetch_related(
+            "locations"
+        ).order_by("-created_at")
+
+        search = self.request.GET.get("search")
+
+        role = self.request.GET.get("role")
+
+        if search:
+            queryset = queryset.filter(
+                Q(username__icontains=search) |
+                Q(email__icontains=search) |
+                Q(phone_number__icontains=search)
+            )
+
+        if role:
+            queryset = queryset.filter(role=role)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["role"] = self.request.GET.get(
+            "role",
+            ""
+        )
+
+        context["roles"] = User.ROLE_CHOICES
+
+        return context
+
+
+class UserDetailView(DetailView):
+
+    model = User
+
+    template_name = "tourist_admin/users/detail.html"
+
+    context_object_name = "user_obj"
+
+
+class UserUpdateView(UpdateView):
+
+    model = User
+
+    form_class = UserForm
+
+    template_name = "tourist_admin/users/form.html"
+
+    success_url = reverse_lazy("user_list")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.utils import timezone
+
+from booking.models import Booking
+from .forms import BookingForm
+
+
+class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+
+# ===================== LIST =====================
+class BookingListView(StaffRequiredMixin, ListView):
+    model = Booking
+    template_name = "tourist_admin/bookings/list.html"
+    context_object_name = "items"
+    paginate_by = 15
+
+    def get_queryset(self):
+        queryset = Booking.objects.select_related(
+            "tour", "tour__location", "guide", "user", "coupon_applied"
+        ).order_by("-created_at")
+
+        search = self.request.GET.get("search")
+        status = self.request.GET.get("status")
+        payment_status = self.request.GET.get("payment_status")
+        payment_method = self.request.GET.get("payment_method")
+
+        if search:
+            queryset = queryset.filter(
+                Q(booking_id__icontains=search) |
+                Q(guest_name__icontains=search) |
+                Q(guest_email__icontains=search) |
+                Q(guest_phone__icontains=search) |
+                Q(tour__title__icontains=search)
+            )
+
+        if status:
+            queryset = queryset.filter(status=status)
+
+        if payment_status:
+            queryset = queryset.filter(payment_status=payment_status)
+
+        if payment_method:
+            queryset = queryset.filter(payment_method=payment_method)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search"] = self.request.GET.get("search", "")
+        context["status"] = self.request.GET.get("status", "")
+        context["payment_status"] = self.request.GET.get("payment_status", "")
+        context["payment_method"] = self.request.GET.get("payment_method", "")
+
+        context["status_choices"] = Booking.STATUS_CHOICES
+        context["payment_status_choices"] = Booking.PAYMENT_STATUS_CHOICES
+        context["payment_method_choices"] = Booking.PAYMENT_METHOD_CHOICES
+        return context
+
+
+# ===================== DETAIL =====================
+class BookingDetailView(StaffRequiredMixin, DetailView):
+    model = Booking
+    template_name = "tourist_admin/bookings/detail.html"
+    context_object_name = "booking"
+    pk_url_kwarg = "pk"
+
+
+# ===================== CREATE =====================
+class BookingCreateView(StaffRequiredMixin, CreateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = "tourist_admin/bookings/form.html"
+    success_url = reverse_lazy("booking_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Booking created successfully")
+        return super().form_valid(form)
+
+
+# ===================== UPDATE =====================
+class BookingUpdateView(StaffRequiredMixin, UpdateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = "tourist_admin/bookings/form.html"
+    success_url = reverse_lazy("booking_list")
+    pk_url_kwarg = "pk"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Booking updated successfully")
+        return super().form_valid(form)
+
+
+# ===================== DELETE =====================
+class BookingDeleteView(StaffRequiredMixin, DeleteView):
+    model = Booking
+    template_name = "tourist_admin/bookings/confirm_delete.html"
+    success_url = reverse_lazy("booking_list")
+    pk_url_kwarg = "pk"
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Booking deleted successfully")
+        return super().delete(request, *args, **kwargs)
+
+
+# ===================== QUICK STATUS CHANGE =====================
+class BookingStatusUpdateView(StaffRequiredMixin, UpdateView):
+    model = Booking
+    fields = ["status"]
+    pk_url_kwarg = "pk"
+
+    def post(self, request, *args, **kwargs):
+        booking = self.get_object()
+        new_status = request.POST.get("status")
+
+        if new_status in dict(Booking.STATUS_CHOICES):
+            old_status = booking.status
+            booking.status = new_status
+
+            if new_status == "cancelled":
+                booking.cancelled_at = timezone.now()
+                booking.cancelled_by = "admin"
+                if booking.payment_status in ["paid", "partial"]:
+                    booking.payment_status = "failed"
+
+            booking.save()
+
+            if old_status != new_status:
+                try:
+                    booking.send_booking_email(new_status)
+                except Exception:
+                    pass
+
+            messages.success(request, f"Status updated to {new_status}")
+        else:
+            messages.error(request, "Invalid status")
+
+        return redirect("booking_detail", pk=booking.pk)

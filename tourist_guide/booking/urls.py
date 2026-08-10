@@ -5,6 +5,11 @@
 from django.urls import path
 from . import views
 from booking.views import ( BookingCreateAPIView,BookingUpdateAPIView ,ApplyCouponAPIView ,BookingListAPIView ,BookingDetailAPIView)
+from booking.views import (
+    CreateRazorpayOrderAPIView,
+    VerifyAndCreateBookingAPIView,
+    RazorpayWebhookAPIView
+)
 
 urlpatterns = [
     path('booking/', views.booking, name='booking'),
@@ -74,4 +79,8 @@ urlpatterns = [
         "cancel_booking_page/<str:booking_id>/",
         views.cancel_booking_page  ,name="cancel_booking_page"
     ),
+    
+    path("create-razorpay-order/", CreateRazorpayOrderAPIView.as_view()),
+    path("verify-and-create-booking/", VerifyAndCreateBookingAPIView.as_view()),
+    path("payments/webhook/", RazorpayWebhookAPIView.as_view()),
 ]

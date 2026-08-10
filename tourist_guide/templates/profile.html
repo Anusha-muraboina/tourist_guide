@@ -4,14 +4,237 @@
 <section class="bg-slate-50 min-h-screen py-12">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
         
-        <!-- Main Profile Card -->
         <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-10 relative overflow-hidden">
             
-            <!-- Subtle Decorative Background Glows -->
+            <!-- Decorative glows -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full filter blur-3xl opacity-60 -mr-20 -mt-20 pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full filter blur-3xl opacity-60 -ml-20 -mb-20 pointer-events-none"></div>
 
-            <!-- Top Header Section -->
+            <!-- Header -->
+            <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center pb-8 border-b border-slate-100">
+                <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                    <div class="relative group">
+                        <img id="profileImage" src="" alt="Profile Picture"
+                            class="w-32 h-32 rounded-full object-cover ring-4 ring-slate-50 shadow-md">
+                    </div>
+                    <div>
+                        <h1 id="username" class="text-3xl font-bold text-slate-900">Loading...</h1>
+                        <p id="email" class="text-slate-500 mt-1 font-medium"></p>
+                        <span id="role" class="inline-flex items-center mt-3 bg-cyan-50 text-cyan-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase">-</span>
+                    </div>
+                </div>
+
+                <button id="updateProfileBtn"
+                    class="w-full lg:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-xl font-semibold shadow-sm transition">
+                    Save Changes
+                </button>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
+                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Account Type</p>
+                    <h3 id="accountRole" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+                </div>
+                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
+                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Country</p>
+                    <h3 id="countryText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+                </div>
+                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
+                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">State</p>
+                    <h3 id="stateText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+                </div>
+                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
+                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">District</p>
+                    <h3 id="districtText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="relative z-10 mt-10">
+                <h2 class="text-xl font-bold text-slate-900 mb-6">Personal Information</h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-2">Username</label>
+                        <input id="editUsername" type="text"
+                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-2">Phone Number</label>
+                        <input id="editPhone" type="text"
+                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none">
+                    </div>
+
+                    <!-- Locations Multi Select -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-2">
+                            Locations (City, District, State, Country)
+                        </label>
+                        <select id="editLocations" multiple
+                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none min-h-[160px]">
+                        </select>
+                        <p class="text-xs text-slate-400 mt-1">Hold <b>Ctrl</b> (Windows) or <b>Cmd</b> (Mac) to select multiple locations</p>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-2">Profile Image</label>
+                        <div class="relative w-full border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50/30">
+                            <input id="editProfileImage" type="file" accept="image/*"
+                                class="w-full text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+async function loadAllLocations() {
+    try {
+        const res = await fetch("/user/api/locations/");
+        if (!res.ok) throw new Error("Failed to load locations");
+        
+        const locations = await res.json();
+        const select = document.getElementById("editLocations");
+        select.innerHTML = "";
+
+        locations.forEach(loc => {
+            const option = document.createElement("option");
+            option.value = loc.id;
+            option.textContent = `${loc.city}, ${loc.district}, ${loc.state}, ${loc.country}`;
+            select.appendChild(option);
+        });
+        return locations;
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
+
+async function loadProfile() {
+    try {
+        await loadAllLocations();
+
+        const response = await fetch("/user/api/profile/");
+        if (!response.ok) throw new Error("Failed to load profile");
+        
+        const result = await response.json();
+        const user = result.data || result;
+
+        console.log("User Profile:", user);
+
+        // Header
+        document.getElementById("profileImage").src =
+            user.profile_image || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username || "User")}`;
+        
+        document.getElementById("username").innerText = user.username || "User";
+        document.getElementById("email").innerText = user.email || "";
+        document.getElementById("role").innerText = (user.role || "Member").toUpperCase();
+        document.getElementById("accountRole").innerText = user.role || "-";
+
+        // ========== Country / State / District ==========
+        document.getElementById("countryText").innerText = user.country || "-";
+        document.getElementById("stateText").innerText = user.state || "-";
+        document.getElementById("districtText").innerText = user.district || "-";
+
+        // Form fields
+        document.getElementById("editUsername").value = user.username || "";
+        document.getElementById("editPhone").value = user.phone_number || "";
+
+        // Pre-select locations
+        const select = document.getElementById("editLocations");
+        const userLocationIds = (user.locations || []).map(l => String(l.id));
+
+        Array.from(select.options).forEach(opt => {
+            opt.selected = userLocationIds.includes(opt.value);
+        });
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to load profile");
+    }
+}
+
+// Image preview
+document.getElementById("editProfileImage").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            document.getElementById("profileImage").src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// ========== UPDATE (Country, State, District, Locations) ==========
+document.getElementById("updateProfileBtn").addEventListener("click", async () => {
+    const formData = new FormData();
+    
+    formData.append("username", document.getElementById("editUsername").value);
+    formData.append("phone_number", document.getElementById("editPhone").value);
+
+    // Locations (this updates country, state, district automatically)
+    const selected = Array.from(document.getElementById("editLocations").selectedOptions)
+                          .map(opt => opt.value);
+    
+    selected.forEach(id => formData.append("locations", id));
+
+    const imageInput = document.getElementById("editProfileImage");
+    if (imageInput.files[0]) {
+        formData.append("profile_image", imageInput.files[0]);
+    }
+
+    try {
+        const res = await fetch("/user/api/profile/", {
+            method: "PUT",
+            body: formData,
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert("Profile updated successfully!");
+            loadProfile(); // refresh country, state, district, locations
+        } else {
+            console.error(data);
+            alert("Update failed");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Something went wrong");
+    }
+});
+
+loadProfile();
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+
+{% block content %}
+<section class="bg-slate-50 min-h-screen py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        
+        
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+            
+           
+            <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full filter blur-3xl opacity-60 -mr-20 -mt-20 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full filter blur-3xl opacity-60 -ml-20 -mb-20 pointer-events-none"></div>
+
+          
             <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center pb-8 border-b border-slate-100">
                 <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
                     <div class="relative group">
@@ -42,7 +265,7 @@
                 </button>
             </div>
 
-            <!-- Quick Stats Grid -->
+           
             <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                 <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 transition-all duration-200 hover:bg-slate-50">
                     <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Account Type</p>
@@ -65,7 +288,7 @@
                 </div>
             </div>
 
-            <!-- Form Fields Section -->
+            
             <div class="relative z-10 mt-10">
                 <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                     Personal Information
@@ -90,14 +313,19 @@
                         >
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Location</label>
-                        <input
-                            id="editLocation"
-                            type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all duration-200 bg-slate-50/30"
-                        >
-                    </div>
+
+
+                <label class="block text-sm font-medium text-slate-600 mb-2">
+                    Locations
+                </label>
+
+                <select
+                    id="editLocations"
+                    multiple
+                    class="w-full border border-slate-200 rounded-xl px-4 py-3"
+                >
+                </select>
+
 
                     <div>
                         <label class="block text-sm font-medium text-slate-600 mb-2">State</label>
@@ -148,15 +376,41 @@ async function loadProfile(){
         document.getElementById("email").innerText = user.email || "";
         document.getElementById("role").innerText = user.role || "Member";
         document.getElementById("accountRole").innerText = user.role || "-";
-        document.getElementById("countryText").innerText = user.country || "-";
-        document.getElementById("stateText").innerText = user.state || "-";
+        
+        document.getElementById("countryText").innerText =
+            user.locations.length
+                ? user.locations[0].country
+                : "-";
+
+        document.getElementById("stateText").innerText =
+            user.locations
+                .map(l => l.state)
+                .join(", ");
         
         // Dynamically style verification text status color if desired, basic text fallback for now
         document.getElementById("verifyStatus").innerText = user.is_verified ? "Verified" : "Pending";
 
         document.getElementById("editUsername").value = user.username || "";
         document.getElementById("editPhone").value = user.phone_number || "";
-        document.getElementById("editLocation").value = user.location || "";
+        
+        const select = document.getElementById("editLocations");
+
+        user.locations.forEach(location => {
+
+            const option = document.createElement("option");
+
+            option.value = location.id;
+
+            option.text =
+                `${location.city}, ${location.district}, ${location.state}`;
+
+            option.selected = true;
+
+            select.appendChild(option);
+            
+
+        });
+
         document.getElementById("editState").value = user.state || "";
         document.getElementById("editCountry").value = user.country || "";
     } catch(error) {
@@ -164,7 +418,7 @@ async function loadProfile(){
     }
 }
 
-// Live Image Preview feature (Does not modify your save mechanics, purely visual UX upgrade)
+
 document.getElementById('editProfileImage').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -197,338 +451,4 @@ loadProfile();
 
 
 
-
-
-
-{% comment %} {% extends "base.html" %}
-
-{% block content %}
-
-<section class="bg-slate-50 min-h-screen py-10">
-
-
-<div class="md:max-w-6xl mx-auto px-4 pt-36">
-
-
-
-    <div class="bg-white rounded-3xl shadow-xl p-8 -mt-20 relative z-10">
-
-  
-
-        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center">
-
-            <div class="flex flex-col md:flex-row items-center gap-6">
-
-                <div class="relative">
-
-                    <img
-                        id="profileImage"
-                        src=""
-                        class="w-36 h-36 rounded-full object-cover border-4 border-white shadow-lg"
-                    >
-
-                </div>
-
-                <div>
-
-                    <h1
-                        id="username"
-                        class="text-3xl font-bold text-slate-900"
-                    >
-                        Loading...
-                    </h1>
-
-                    <p
-                        id="email"
-                        class="text-slate-500 mt-2"
-                    >
-                    </p>
-
-                    <span
-                        id="role"
-                        class="inline-block mt-3 bg-cyan-100 text-cyan-700 px-4 py-2 rounded-full text-sm font-medium"
-                    >
-                    </span>
-
-                </div>
-
-            </div>
-
-            <button
-                id="updateProfileBtn"
-                class="mt-6 lg:mt-0 bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-xl font-medium shadow-md"
-            >
-                Save Changes
-            </button>
-
-        </div>
-
-      
-
-        <div class="grid md:grid-cols-4 gap-5 mt-10">
-
-            <div class="bg-cyan-50 rounded-2xl p-5">
-
-                <p class="text-gray-500 text-sm">
-                    Account Type
-                </p>
-
-                <h3
-                    id="accountRole"
-                    class="text-xl font-bold mt-2"
-                >
-                </h3>
-
-            </div>
-
-            <div class="bg-green-50 rounded-2xl p-5">
-
-                <p class="text-gray-500 text-sm">
-                    Country
-                </p>
-
-                <h3
-                    id="countryText"
-                    class="text-xl font-bold mt-2"
-                >
-                </h3>
-
-            </div>
-
-            <div class="bg-purple-50 rounded-2xl p-5">
-
-                <p class="text-gray-500 text-sm">
-                    State
-                </p>
-
-                <h3
-                    id="stateText"
-                    class="text-xl font-bold mt-2"
-                >
-                </h3>
-
-            </div>
-
-            <div class="bg-orange-50 rounded-2xl p-5">
-
-                <p class="text-gray-500 text-sm">
-                    Verification
-                </p>
-
-                <h3
-                    id="verifyStatus"
-                    class="text-xl font-bold mt-2"
-                >
-                </h3>
-
-            </div>
-
-        </div>
-
-     
-
-        <div class="mt-10">
-
-            <h2 class="text-xl font-bold mb-6">
-                Personal Information
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-6">
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        Username
-                    </label>
-
-                    <input
-                        id="editUsername"
-                        type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-cyan-500 outline-none"
-                    >
-
-                </div>
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        Phone Number
-                    </label>
-
-                    <input
-                        id="editPhone"
-                        type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-cyan-500 outline-none"
-                    >
-
-                </div>
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        Location
-                    </label>
-
-                    <input
-                        id="editLocation"
-                        type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-cyan-500 outline-none"
-                    >
-
-                </div>
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        State
-                    </label>
-
-                    <input
-                        id="editState"
-                        type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-cyan-500 outline-none"
-                    >
-
-                </div>
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        Country
-                    </label>
-
-                    <input
-                        id="editCountry"
-                        type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-cyan-500 outline-none"
-                    >
-
-                </div>
-
-                <div>
-
-                    <label class="block text-sm text-gray-500 mb-2">
-                        Profile Image
-                    </label>
-
-                    <input
-                        id="editProfileImage"
-                        type="file"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3"
-                    >
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-</section>
-<script>
-
-async function loadProfile(){
-
-    try{
-
-        const response =
-            await fetch(
-                "/user/api/profile/"
-            );
-
-        const result =
-            await response.json();
-
-        console.log(result);
-
-        const user =
-            result.data;
-
-        document.getElementById(
-            "profileImage"
-        ).src =
-            user.profile_image ||
-            "https://ui-avatars.com/api/?name=" +
-            user.username;
-
-        document.getElementById(
-            "username"
-        ).innerText =
-            user.username;
-
-        document.getElementById(
-            "email"
-        ).innerText =
-            user.email;
-
-        document.getElementById(
-            "role"
-        ).innerText =
-            user.role;
-
-        document.getElementById(
-            "accountRole"
-        ).innerText =
-            user.role;
-
-        document.getElementById(
-            "countryText"
-        ).innerText =
-            user.country || "-";
-
-        document.getElementById(
-            "stateText"
-        ).innerText =
-            user.state || "-";
-
-        document.getElementById(
-            "verifyStatus"
-        ).innerText =
-            user.is_verified
-                ? "Verified"
-                : "Pending";
-
-        document.getElementById(
-            "editUsername"
-        ).value =
-            user.username || "";
-
-        document.getElementById(
-            "editPhone"
-        ).value =
-            user.phone_number || "";
-
-        document.getElementById(
-            "editLocation"
-        ).value =
-            user.location || "";
-
-        document.getElementById(
-            "editState"
-        ).value =
-            user.state || "";
-
-        document.getElementById(
-            "editCountry"
-        ).value =
-            user.country || "";
-
-    }
-
-    catch(error){
-
-        console.log(error);
-
-    }
-
-}
-
-loadProfile();
-
-</script>
-
-{% endblock %} {% endcomment %}
+ {% endcomment %}

@@ -57,7 +57,30 @@ from django.contrib.auth import (
 )
 
 
+from .models import Location
+from .serializers import LocationSerializer
 
+
+class LocationListAPIView(APIView):
+
+    # permission_classes = [
+    #     IsAuthenticated
+    # ]
+
+    def get(self, request):
+
+        locations = Location.objects.filter(
+            is_active=True
+        )
+
+        serializer = LocationSerializer(
+            locations,
+            many=True
+        )
+
+        return Response(serializer.data)
+    
+    
 class RegisterAPIView(APIView):
     parser_classes = [
         MultiPartParser,

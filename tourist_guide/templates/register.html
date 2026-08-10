@@ -31,7 +31,9 @@
 
             <!-- ROLE SELECTOR -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">I want to register as a:</label>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                    I want to register as a:
+                </label>
                 <div class="grid grid-cols-2 gap-3">
                     <label class="cursor-pointer">
                         <input type="radio" name="role" value="tourist" class="peer hidden" checked>
@@ -53,65 +55,48 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Username</label>
-                    <input type="text" id="username" placeholder="e.g. johndoe" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                    <input type="text" id="username" placeholder="e.g. johndoe"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
                 </div>
 
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Email Address</label>
-                    <input type="email" id="email" placeholder="name@example.com" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                    <input type="email" id="email" placeholder="name@example.com"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
                 </div>
             </div>
 
-            <!-- PHONE & LOCATION -->
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone Number</label>
-                    <input type="text" id="phone_number" placeholder="Contact number" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Location</label>
-                    <input type="text" id="location" placeholder="City name" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                </div>
+            <!-- PHONE -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone Number</label>
+                <input type="text" id="phone_number" placeholder="Contact number"
+                    class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
             </div>
 
-            <!-- COUNTRY & STATE SELECTORS -->
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Country</label>
-                    <div class="relative">
-                        <select id="country" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 appearance-none focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                            <option value="">Select Country</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">State</label>
-                    <div class="relative">
-                        <select id="state" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 appearance-none focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                            <option value="">Select State</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
-                        </div>
-                    </div>
-                </div>
+            <!-- LOCATIONS (ONLY FOR GUIDE) -->
+            <div id="locationsWrapper" class="space-y-1.5 hidden">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                    Locations <span class="text-rose-500">*</span>
+                </label>
+                <select id="locations" multiple
+                    class="w-full min-h-[140px] px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                </select>
+                <p class="text-xs text-slate-400 mt-1">
+                    Hold <b>Ctrl</b> (Windows) or <b>Cmd</b> (Mac) to select multiple locations
+                </p>
             </div>
 
-            <!-- PROFILE IMAGE UPLOAD -->
+            <!-- PROFILE IMAGE -->
             <div class="space-y-1.5">
                 <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Profile Image</label>
                 <div class="flex items-center justify-center w-full">
                     <label class="w-full flex flex-col items-center px-4 py-4 bg-white text-slate-500 rounded-xl border border-slate-200 tracking-wide cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition-all text-sm">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i>
-                            <span class="text-slate-600 font-medium">Choose avatar image asset</span>
+                            <span id="fileNameText" class="text-slate-600 font-medium">Choose avatar image</span>
                         </div>
-                        <input type="file" id="profile_image" accept="image/*" class="hidden" onchange="this.previousElementSibling.querySelector('span').textContent = this.files[0] ? this.files[0].name : 'Choose avatar image asset'">
+                        <input type="file" id="profile_image" accept="image/*" class="hidden"
+                            onchange="document.getElementById('fileNameText').textContent = this.files[0] ? this.files[0].name : 'Choose avatar image'">
                     </label>
                 </div>
             </div>
@@ -120,9 +105,11 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
-                    <div class="relative focus-within:text-indigo-600">
-                        <input type="password" id="password" placeholder="••••••••" class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                        <button type="button" onclick="togglePassword('password', 'passwordIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition">
+                    <div class="relative">
+                        <input type="password" id="password" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('password', 'passwordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                             <i id="passwordIcon" class="fa-solid fa-eye text-sm"></i>
                         </button>
                     </div>
@@ -130,25 +117,27 @@
 
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Confirm Password</label>
-                    <div class="relative focus-within:text-indigo-600">
-                        <input type="password" id="confirmPassword" placeholder="••••••••" class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                        <button type="button" onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition">
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                             <i id="confirmPasswordIcon" class="fa-solid fa-eye text-sm"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- SUBMIT BUTTON -->
+            <!-- SUBMIT -->
             <div class="pt-2">
-                <button type="submit" class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition shadow-sm shadow-slate-900/10 active:scale-[0.99]">
+                <button type="submit"
+                    class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition shadow-sm active:scale-[0.99]">
                     Create Account
                 </button>
             </div>
 
-            <!-- BOTTOM LINK -->
             <p class="text-center text-sm text-slate-500 pt-2">
-                Already have an account? 
+                Already have an account?
                 <a href="/user/login/" class="text-indigo-600 hover:text-indigo-700 font-bold ml-0.5 underline underline-offset-4">
                     Sign in
                 </a>
@@ -157,47 +146,10 @@
     </div>
 </section>
 
-<!-- DEPENDENCY FONTS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-<!-- SCRIPTS (LOGIC PRESERVED COMPLETELY) -->
 <script>
-const countrySelect = document.getElementById("country");
-const stateSelect = document.getElementById("state");
-let countriesData = [];
-
-async function loadCountries() {
-    try {
-        const response = await fetch("https://countriesnow.space/api/v0.1/countries/states");
-        const result = await response.json();
-        countriesData = result.data;
-        countrySelect.innerHTML = '<option value="">Select Country</option>';
-        countriesData.forEach(country => {
-            countrySelect.innerHTML += `<option value="${country.name}">${country.name}</option>`;
-        });
-        countrySelect.value = "India";
-        loadStates();
-    } catch(error){
-        console.log(error);
-    }
-}
-
-function loadStates() {
-    const selectedCountry = countrySelect.value;
-    stateSelect.innerHTML = '<option value="">Select State</option>';
-    const country = countriesData.find(item => item.name === selectedCountry);
-    if(!country){ return; }
-    country.states.forEach(state => {
-        stateSelect.innerHTML += `<option value="${state.name}">${state.name}</option>`;
-    });
-}
-
-countrySelect.addEventListener("change", loadStates);
-loadCountries();
-</script>
-
-<script>
-// PASSWORD TOGGLE
+// ====================== PASSWORD TOGGLE ======================
 function togglePassword(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon = document.getElementById(iconId);
@@ -212,28 +164,76 @@ function togglePassword(inputId, iconId) {
     }
 }
 
-// REGISTER API
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    let username = document.getElementById('username').value;
-    let email = document.getElementById('email').value;
-    let phone_number = document.getElementById('phone_number').value;
-    let location = document.getElementById('location').value;
-    let state = document.getElementById('state').value;
-    let country = document.getElementById('country').value;
-    let password = document.getElementById('password').value;
-    let confirmPassword = document.getElementById('confirmPassword').value;
-    let role = document.querySelector('input[name="role"]:checked').value;
+// ====================== LOAD LOCATIONS ======================
+async function loadLocations() {
+    try {
+        const res = await fetch("/user/api/locations/");
+        if (!res.ok) throw new Error("Failed to load locations");
 
-    let successMessage = document.getElementById('successMessage');
-    let errorMessage = document.getElementById('errorMessage');
+        const locations = await res.json();
+        const select = document.getElementById("locations");
+        select.innerHTML = "";
+
+        locations.forEach(loc => {
+            const option = document.createElement("option");
+            option.value = loc.id;
+            option.textContent = `${loc.city}, ${loc.district}, ${loc.state}, ${loc.country}`;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ====================== SHOW / HIDE LOCATIONS BASED ON ROLE ======================
+function toggleLocationsField() {
+    const role = document.querySelector('input[name="role"]:checked').value;
+    const wrapper = document.getElementById("locationsWrapper");
+
+    if (role === "guide") {
+        wrapper.classList.remove("hidden");
+    } else {
+        wrapper.classList.add("hidden");
+        // Clear selection when switching to tourist
+        document.getElementById("locations").selectedIndex = -1;
+    }
+}
+
+// Listen to role change
+document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener("change", toggleLocationsField);
+});
+
+// ====================== REGISTER ======================
+document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone_number = document.getElementById('phone_number').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const role = document.querySelector('input[name="role"]:checked').value;
+
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
 
     successMessage.classList.add('hidden');
     errorMessage.classList.add('hidden');
 
-    // PASSWORD CHECK
+    // Password check
     if (password !== confirmPassword) {
         errorMessage.querySelector('span').innerHTML = 'Passwords do not match';
+        errorMessage.classList.remove('hidden');
+        return;
+    }
+
+    // Locations (only required for Guide)
+    const selectedLocations = Array.from(document.getElementById("locations").selectedOptions)
+                                   .map(opt => opt.value);
+
+    if (role === "guide" && selectedLocations.length === 0) {
+        errorMessage.querySelector('span').innerHTML = 'Please select at least one location for Guide.';
         errorMessage.classList.remove('hidden');
         return;
     }
@@ -243,45 +243,62 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         formData.append("username", username);
         formData.append("email", email);
         formData.append("phone_number", phone_number);
-        formData.append("location", location);
-        formData.append("state", stateSelect.value);
-        formData.append("country", countrySelect.value);
         formData.append("password", password);
         formData.append("confirm_password", confirmPassword);
         formData.append("role", role);
 
+        // Only send locations if Guide
+        if (role === "guide") {
+            selectedLocations.forEach(id => {
+                formData.append("locations", id);
+            });
+        }
+
         const profileImage = document.getElementById("profile_image").files[0];
-        if(profileImage){
+        if (profileImage) {
             formData.append("profile_image", profileImage);
         }
 
-        let response = await fetch("/user/api/register/", {
+        const response = await fetch("/user/api/register/", {
             method: "POST",
             body: formData
         });
 
-        let data = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
-            successMessage.querySelector('span').innerHTML = data.message;
+            successMessage.querySelector('span').innerHTML = data.message || "Account created successfully!";
             successMessage.classList.remove('hidden');
             document.getElementById('registerForm').reset();
+            toggleLocationsField(); // reset visibility
+
             setTimeout(() => {
                 window.location.href = '/user/login/';
             }, 1500);
         } else {
-            errorMessage.querySelector('span').innerHTML = JSON.stringify(data);
+            let errorText = "";
+            if (typeof data === "object") {
+                errorText = Object.entries(data)
+                    .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(", ") : val}`)
+                    .join("<br>");
+            } else {
+                errorText = data;
+            }
+            errorMessage.querySelector('span').innerHTML = errorText;
             errorMessage.classList.remove('hidden');
         }
     } catch (error) {
-        errorMessage.querySelector('span').innerHTML = 'Something went wrong';
+        console.error(error);
+        errorMessage.querySelector('span').innerHTML = 'Something went wrong. Please try again.';
         errorMessage.classList.remove('hidden');
     }
 });
+
+// Initial load
+loadLocations();
+toggleLocationsField();   // hide locations by default (Tourist is selected)
 </script>
 {% endblock %}
-
-
 
 {% comment %} {% extends 'base.html' %}
 

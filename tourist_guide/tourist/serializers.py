@@ -12,6 +12,8 @@ from tourist.models import (
     TourSchedule,
     Amenity,
 )
+
+from user.serializers import LocationSerializer
 from rating.serializers import RatingSerializer
 
 from user.models import User
@@ -236,6 +238,7 @@ class TourListSerializer(
 
     adult_price = serializers.SerializerMethodField()
     
+    location = LocationSerializer(read_only=True)
 
     class Meta:
 
@@ -248,7 +251,8 @@ class TourListSerializer(
             "title",
 
             "slug",
-            "state",
+            # "state",
+            "location",
             "tour_type",
             "short_description",
 
@@ -359,6 +363,8 @@ class TourDetailSerializer(serializers.ModelSerializer):
     total_ratings = serializers.SerializerMethodField()
 
     reviews = serializers.SerializerMethodField()
+    
+    location = LocationSerializer(read_only=True)
 
     class Meta:
 
@@ -373,10 +379,12 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "full_description",
             "pricing",
              "guides",
-            "city",
-            "state",
-            "country",
-            "address",
+            # "city",
+            # "state",
+            # "country",
+            # "address",
+            
+            "location",
             "meeting_point",
             "duration",
             "language",
@@ -413,12 +421,14 @@ class TourDetailSerializer(serializers.ModelSerializer):
 
         request = self.context.get("request")
 
+        if not obj.location:
+            return []
+
         guides = User.objects.filter(
             role="guide",
-            location__iexact=obj.city,
-            state__iexact=obj.state,
-            is_active=True
-        )
+            is_active=True,
+            locations=obj.location
+        ).distinct()
 
         return [
             {
@@ -426,17 +436,90 @@ class TourDetailSerializer(serializers.ModelSerializer):
                 "name": guide.username,
                 "email": guide.email,
                 "phone": guide.phone_number,
-                "location": guide.location,
-                "state": guide.state,
-                "profile_image":
-                    request.build_absolute_uri(
-                        guide.profile_image.url
-                    )
+                "locations": [
+                    {
+                        "id": loc.id,
+                        "city": loc.city,
+                        "district": loc.district,
+                        "state": loc.state,
+                        "country": loc.country,
+                    }
+                    for loc in guide.locations.all()
+                ],
+                "profile_image": (
+                    request.build_absolute_uri(guide.profile_image.url)
                     if guide.profile_image and request
                     else None
+                ),
             }
             for guide in guides
         ]
+        
+        
+    # def get_guides(self, obj):
+    #     request = self.context.get("request")
+
+    #     # Correct filter using ManyToMany locations
+    #     guides = User.objects.filter(
+    #         role="guide",
+    #         is_active=True,
+    #         locations__city__iexact=obj.city,
+    #         locations__state__iexact=obj.state,
+    #     ).distinct()
+
+    #     return [
+    #         {
+    #             "id": guide.id,
+    #             "name": guide.username,
+    #             "email": guide.email,
+    #             "phone": guide.phone_number,
+    #             "locations": [
+    #                 {
+    #                     "id": loc.id,
+    #                     "city": loc.city,
+    #                     "district": loc.district,
+    #                     "state": loc.state,
+    #                     "country": loc.country,
+    #                 }
+    #                 for loc in guide.locations.all()
+    #             ],
+    #             "profile_image": (
+    #                 request.build_absolute_uri(guide.profile_image.url)
+    #                 if guide.profile_image and request
+    #                 else None
+    #             ),
+    #         }
+    #         for guide in guides
+    #     ]
+        
+    # def get_guides(self, obj):
+
+    #     request = self.context.get("request")
+
+    #     guides = User.objects.filter(
+    #         role="guide",
+    #         location__iexact=obj.city,
+    #         state__iexact=obj.state,
+    #         is_active=True
+    #     )
+
+    #     return [
+    #         {
+    #             "id": guide.id,
+    #             "name": guide.username,
+    #             "email": guide.email,
+    #             "phone": guide.phone_number,
+    #             "location": guide.location,
+    #             "state": guide.state,
+    #             "profile_image":
+    #                 request.build_absolute_uri(
+    #                     guide.profile_image.url
+    #                 )
+    #                 if guide.profile_image and request
+    #                 else None
+    #         }
+    #         for guide in guides
+    #     ]
         
     def get_average_rating(self, obj):
 

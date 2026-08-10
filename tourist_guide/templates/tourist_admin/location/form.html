@@ -1,0 +1,106 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+{% if object %}
+Update Location
+{% else %}
+Add Location
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h4 class="mb-0">
+
+                {% if object %}
+                    Update Location
+                {% else %}
+                    Add Location
+                {% endif %}
+
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Country
+                        </label>
+                        {{ form.country }}
+                        {{ form.country.errors }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            State
+                        </label>
+                        {{ form.state }}
+                        {{ form.state.errors }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            District
+                        </label>
+                        {{ form.district }}
+                        {{ form.district.errors }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            City
+                        </label>
+                        {{ form.city }}
+                        {{ form.city.errors }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="form-check mt-4">
+
+                            {{ form.is_active }}
+
+                            <label class="form-check-label">
+                                Active
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary">
+                    Save
+                </button>
+
+                <a href="{% url 'location_list' %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+            <div class="flex items-center gap-3">
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Booking #{{ booking.booking_id }}</h2>
+                
+                <!-- Status Badge -->
+                {% if booking.status == "confirmed" %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Confirmed</span>
+                {% elif booking.status == "pending" %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">Pending</span>
+                {% elif booking.status == "cancelled" %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700">Cancelled</span>
+                {% else %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">{{ booking.get_status_display }}</span>
+                {% endif %}
+            </div>
+            <p class="text-sm text-gray-500 mt-1">Detailed overview and financials for this reservation.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <a href="{% url 'booking_update' booking.pk %}" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a href="{% url 'booking_list' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-colors">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Guest & Tour Information -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Guest Details Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium">
+                        <i class="bi bi-person text-base"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900">Guest Details</h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Full Name</span>
+                        <span class="text-sm font-semibold text-gray-900">{{ booking.guest_name }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Email Address</span>
+                        <a href="mailto:{{ booking.guest_email }}" class="text-sm font-medium text-indigo-600 hover:underline truncate block">{{ booking.guest_email }}</a>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Phone Number</span>
+                        <a href="tel:{{ booking.guest_phone }}" class="text-sm font-medium text-gray-900 hover:text-indigo-600 block">{{ booking.guest_phone }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tour Details Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium">
+                        <i class="bi bi-map text-base"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900">Tour Details</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gray-50/70 p-3.5 rounded-lg border border-gray-100">
+                            <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Tour Title</span>
+                            <span class="text-sm font-bold text-gray-900">{{ booking.tour.title }}</span>
+                        </div>
+                        <div class="bg-gray-50/70 p-3.5 rounded-lg border border-gray-100">
+                            <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Date & Time</span>
+                            <span class="text-sm font-semibold text-gray-900">{{ booking.tour_date }}</span>
+                            <span class="text-xs text-gray-500 block mt-0.5"><i class="bi bi-clock"></i> {{ booking.tour_time|time:"g:i A" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
+                            <span class="block text-xs text-gray-400 uppercase font-medium">Adults</span>
+                            <span class="text-base font-bold text-gray-800">{{ booking.adults }}</span>
+                        </div>
+                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
+                            <span class="block text-xs text-gray-400 uppercase font-medium">Children</span>
+                            <span class="text-base font-bold text-gray-800">{{ booking.children }}</span>
+                        </div>
+                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
+                            <span class="block text-xs text-gray-400 uppercase font-medium">Infants</span>
+                            <span class="text-base font-bold text-gray-800">{{ booking.infants }}</span>
+                        </div>
+                    </div>
+
+                    {% if booking.guide %}
+                    <div class="flex items-center gap-3 p-3.5 rounded-lg bg-indigo-50/40 border border-indigo-100/60">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-semibold text-indigo-900 uppercase tracking-wider">Assigned Guide</span>
+                            <span class="text-sm font-medium text-gray-800">{{ booking.guide.username }} <span class="text-xs text-gray-500">({{ booking.guide.email }})</span></span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if booking.special_requests %}
+                    <div class="p-4 rounded-lg bg-amber-50/50 border border-amber-200/60">
+                        <span class="block text-xs font-semibold text-amber-800 uppercase tracking-wider mb-1"><i class="bi bi-exclamation-circle"></i> Special Requests</span>
+                        <p class="text-sm text-gray-700 leading-relaxed">{{ booking.special_requests }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Financials & Quick Status Actions -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Payment & Financials Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-medium">
+                        <i class="bi bi-wallet2 text-base"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900">Payment Breakdown</h3>
+                </div>
+
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Sub Total</span>
+                        <span class="font-medium text-gray-900">₹{{ booking.sub_total }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Discount</span>
+                        <span class="font-medium text-rose-600">-₹{{ booking.discount_amount }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 pt-2 border-t border-gray-100">
+                        <span class="font-bold text-gray-900">Total Amount</span>
+                        <span class="font-bold text-emerald-600 text-base">₹{{ booking.total_amount }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 pt-1">
+                        <span>Advance Paid</span>
+                        <span class="font-medium text-gray-900">₹{{ booking.advance_amount }}</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Remaining Balance</span>
+                        <span class="font-semibold text-amber-600">₹{{ booking.remaining_amount }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-5 border-t border-gray-100 space-y-3 text-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-xs uppercase font-medium">Payment Method</span>
+                        <span class="font-semibold text-gray-800">{{ booking.get_payment_method_display }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-xs uppercase font-medium">Payment Status</span>
+                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ booking.get_payment_status_display }}</span>
+                    </div>
+                    {% if booking.payment_id %}
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400 text-xs uppercase font-medium">Payment ID</span>
+                        <span class="font-mono text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-200">{{ booking.payment_id }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Status Change Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-gray-100">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-medium">
+                        <i class="bi bi-sliders text-base"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900">Update Status</h3>
+                </div>
+
+                <form method="post" action="{% url 'booking_status' booking.pk %}" class="space-y-3">
+                    {% csrf_token %}
+                    <div>
+                        <select name="status" class="w-full py-2 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                            {% for value, label in booking.STATUS_CHOICES %}
+                                <option value="{{ value }}" {% if booking.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
+                        Update Status
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons CDN link -->
+{% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> {% endcomment %}
+{% endblock %}

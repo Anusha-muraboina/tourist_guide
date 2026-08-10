@@ -142,13 +142,13 @@ Premium Tour Details
 
     <div class="flex flex-wrap gap-8 mt-6">
 
-        <div class="flex items-center gap-3 text-[#111827]">
+        <!-- <div class="flex items-center gap-3 text-[#111827]">
 
             <i class="fa-regular fa-clock text-[#1677e6]"></i>
 
             <span class="font-medium">
 
-                Duration: 3 Hours
+                Duration: 4 Hours
 
             </span>
 
@@ -160,17 +160,39 @@ Premium Tour Details
 
             <span class="font-medium">
 
-                Guide: English
+                Guide: Hindi
 
             </span>
 
-        </div>
+        </div> -->
+
+        <div class="flex items-center gap-3 text-[#111827]">
+        <i class="fa-regular fa-clock text-[#1677e6]"></i>
+        <span class="font-medium">
+            Duration: <span id="cardDuration">-</span>
+        </span>
+    </div>
+
+    <div class="flex items-center gap-3 text-[#111827]">
+        <i class="fa-solid fa-language text-[#1677e6]"></i>
+        <span class="font-medium">
+            Language: <span id="cardLanguage">-</span>
+        </span>
+    </div>
+
+
 
     </div>
 
-    <!-- LOCATION -->
+   <!-- LOCATION -->
+<div class="flex items-start gap-3 mt-5">
+    <i class="fa-solid fa-location-dot text-[#1677e6] mt-1"></i>
+    <p id="cardLocation" class="font-medium text-[#111827]">
+        -
+    </p>
+</div>
 
-    <div class="flex items-start gap-3 mt-5">
+    <!-- <div class="flex items-start gap-3 mt-5">
 
         <i class="fa-solid fa-location-dot text-[#1677e6] mt-1"></i>
 
@@ -181,7 +203,7 @@ Premium Tour Details
 
         </p>
 
-    </div>
+    </div> -->
 
     <!-- DIVIDER -->
 
@@ -719,12 +741,29 @@ BOOK NOW
 
 
             </div>
-             <button
+             <!-- <button
                         onclick="toggleReviewForm()"
                         class="bg-[#1677e6] text-white px-5 py-2 rounded-xl"
                     >
                         Add Review
-                    </button>
+                    </button> -->
+
+
+                    {% if user.is_authenticated %}
+    <button
+        onclick="toggleReviewForm()"
+        class="bg-blue-400 text-white px-5 py-2 rounded-xl"
+    >
+        Add Review
+    </button>
+{% else %}
+    <a
+        href="{% url 'login' %}"
+        class="bg-blue-400 text-white px-5 py-2 rounded-xl inline-block"
+    >
+        Login/Signup
+    </a>
+{% endif %}
 
         </div>
 
@@ -763,7 +802,7 @@ BOOK NOW
 
 
 
-bold
+
 
         <div
     id="reviewForm"
@@ -859,441 +898,10 @@ bold
 
 
 
-
-
-
-
-
-
-
-
-
-            
-            <!-- ================= RIGHT BOOKING ================= -->
-
-             <!-- <div class="lg:col-span-4">
-
-                <div class="sticky top-24 bg-white rounded-[35px]  overflow-hidden border border-gray-100">
-
-                   
-
-                    <div class=" p-8 text-black">
-
-                        <div class="flex items-end gap-2">
-
-                            <h2 class="text-2xl font-black">
-
-                                
-
-                            </h2>
-
-                            <span class="mb-2 opacity-90">
-
-                                / Adult person
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                   
-                    <div class="p-4">
-                        
-
-                        <div>
-
-                            <label class="font-medium text-[#212121] block mb-3">
-
-                                Select Date
-
-                            </label>
-
-                            <div class="relative cursor-pointer">
-
-                                <div class="absolute left-5 top-1/2 -translate-y-1/2 z-10">
-
-                                    <i class="fa-solid fa-calendar-days text-[#2874f0] text-lg"></i>
-
-                                </div>
-
-                                <input
-                                    type="text"
-                                    id="bookingDate"
-                                    placeholder="Choose your travel date"
-                                    class="w-full bg-[#f8faff] border border-gray-200 rounded-2xl pl-14 pr-5 py-4 text-[15px] font-medium text-[#212121] outline-none focus:border-[#2874f0] focus:ring-4 focus:ring-blue-100 shadow-sm"
-                                >
-
-                            </div>
-
-                        </div>
-
-                        
-
-
-<div class="mt-5 relative">
-
-    <label class="font-semibold text-[#111827] block mb-3">
-
-        Travellers
-
-    </label>
-
-    
-    <button
-        type="button"
-        onclick="toggleTravellers()"
-        class="w-full bg-[#f3f5fa] border border-gray-200 rounded-[24px] px-3 py-3 flex items-center justify-between hover:border-[#1677e6] duration-300"
-    >
-
-        <div class="flex items-center gap-4">
-
-
-            <div class="text-left">
-
-                <h3 class="font-bold text-[14px] text-[#111827]">
-
-                    Adult x <span id="adultCountText">1</span>
-                                        Child x <span id="childCountText">0</span>,
-                    Infant x <span id="infantCountText">0</span>
-
-
-                </h3>
-
-         
-            </div>
-
-        </div>
-
-        <i
-            id="travellerArrow"
-            class="fa-solid fa-chevron-down text-[#111827] text-lg duration-300"
-        ></i>
-
-    </button>
-
-  
-    <div
-        id="travellerDropdown"
-        class="hidden absolute left-0 right-0 mt-4 bg-white rounded-[32px] border border-gray-200 shadow-[0_20px_50px_rgba(0,0,0,0.12)] overflow-hidden z-50"
-    >
-
-        <div class="p-4 space-y-2">
-
-         
-            <div class="flex items-center justify-between">
-
-                <div>
-
-                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
-
-                        Adult
-
-                    </h3>   
-
-                    <p class="text-gray-500 text-sm mt-2">
-
-                        (Age 13-99)
-
-                    </p>
-
-                </div>
-
-                <div class="flex items-center gap-5">
-
-                    <button
-                        onclick="updateCount('adult', -1)"
-                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
-                    >
-
-                        −
-
-                    </button>
-
-                    <div
-                        id="adultCount"
-                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
-                    >
-
-                        1
-
-                    </div>
-
-                    <button
-                        onclick="updateCount('adult', 1)"
-                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
-                    >
-
-                        +
-
-                    </button>
-
-                </div>
-
-            </div>
-
-           
-            <div class="border-t pt-2 flex items-center justify-between">
-
-                <div>
-
-                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
-
-                        Child
-
-                    </h3>
-
-                    <p class="text-gray-500 text-sm mt-2">
-
-                        (Age 4-12)
-
-                    </p>
-
-                </div>
-
-                <div class="flex items-center gap-5">
-
-                    <button
-                        onclick="updateCount('child', -1)"
-                        class="w-8 h-8 rounded-full border-2 border-gray-300 text-gray-400 flex items-center justify-center text-medium font-bold hover:border-[#1677e6] hover:text-[#1677e6] duration-300"
-                    >
-
-                        −
-
-                    </button>
-
-                    <div
-                        id="childCount"
-                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
-                    >
-
-                        0
-
-                    </div>
-
-                    <button
-                        onclick="updateCount('child', 1)"
-                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
-                    >
-
-                        +
-
-                    </button>
-
-                </div>
-
-            </div>
-
-     
-            <div class="border-t pt-2 flex items-center justify-between">
-
-                <div>
-
-                    <h3 class="font-bold text-[14px] text-[#111827] leading-none">
-
-                        Infant
-
-                    </h3>
-
-                    <p class="text-gray-500 text-sm mt-2">
-
-                        (Age 3 and younger)
-
-                    </p>
-
-                </div>
-
-                <div class="flex items-center gap-5">
-
-                    <button
-                        onclick="updateCount('infant', -1)"
-                        class="w-8 h-8 rounded-full border-2 border-gray-300 text-gray-400 flex items-center justify-center text-medium font-bold hover:border-[#1677e6] hover:text-[#1677e6] duration-300"
-                    >
-
-                        −
-
-                    </button>
-
-                    <div
-                        id="infantCount"
-                        class="w-8 h-8 rounded-xl border border-gray-200 flex items-center justify-center text-medium font-bold"
-                    >
-
-                        0
-
-                    </div>
-
-                    <button
-                        onclick="updateCount('infant', 1)"
-                        class="w-8 h-8 rounded-full border-2 border-[#1677e6] text-[#1677e6] flex items-center justify-center text-medium font-bold hover:bg-[#1677e6] hover:text-white duration-300"
-                    >
-
-                        +
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-     
-        <div class="border-t bg-[#fafbff] p-6">
-
-            <button
-                onclick="toggleTravellers()"
-                class="w-full h-[48px] rounded-full bg-[#1677e6] hover:bg-[#005fe0] text-white text-medium font-bold duration-300"
-            >
-
-                Continue
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-
-
-
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-                       
-                        <div class="space-y-5 mt-8">
-
-                            <div class="flex items-center gap-4">
-
-                                <i class="fa-solid fa-circle-check text-green-500"></i>
-
-                                <span class="text-gray-700">
-                                    Free cancellation
-                                </span>
-
-                            </div>
-
-                            <div class="flex items-center gap-4">
-
-                                <i class="fa-solid fa-bolt text-yellow-500"></i>
-
-                                <span class="text-gray-700">
-                                    Instant confirmation
-                                </span>
-
-                            </div>
-
-                            <div class="flex items-center gap-4">
-
-                                <i class="fa-solid fa-shield-heart text-cyan-500"></i>
-
-                                <span class="text-gray-700">
-                                    Reserve now & pay later
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                       
-                        <div class="mt-8 bg-[#f8fafc] rounded-2xl p-5 border border-gray-100">
-
-                            <div class="flex items-center justify-between">
-
-                                <span class="text-gray-500">
-                                    Tour Price
-                                </span>
-
-                                <span
-                                    id="tourPriceDisplay"
-                                    class="font-semibold text-[#212121]"
-                                >
-                                    ₹0
-                                </span>
-
-                            </div>
-
-                            <div class="flex items-center justify-between mt-3">
-
-                                <span class="text-gray-500">
-                                    Taxes & Fees
-                                </span>
-
-                                <span
-                                id="taxDisplay"
-                                class="font-semibold text-[#212121]"
-                            >
-                                ₹0
-                            </span>
-
-                            </div>
-
-                            <div class="border-t mt-4 pt-4 flex items-center justify-between">
-
-                                <span class="font-bold text-lg text-[#212121]">
-                                    Total
-                                </span>
-
-                                <span
-                                    id="totalDisplay"
-                                    class="font-black text-2xl text-[#2874f0]"
-                                >
-                                    ₹0
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                      
-                  
-                  
-                    </div>
-
-                </div>
-
-            </div> -->
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="lg:col-span-4">
     <!-- Sticky Card Container -->
     <div class="sticky top-24 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] overflow-hidden transition-all">
 
-        <!-- HEADER / PRICE DISPLAY -->
-        <!-- <div class="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50/50 to-white">
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-3xl font-extrabold tracking-tight text-slate-900" id="tourCardTotal">₹0</span>
-                <span class="text-sm font-medium text-slate-500">/ adult</span>
-            </div>
-        </div> -->
 
         <!-- CARD BODY -->
         <div class="p-6 space-y-6">
@@ -1415,6 +1023,7 @@ bold
                         </div>
                     </div>
 
+                    
                     <!-- DROPDOWN FOOTER -->
                     <div class="p-4 bg-slate-50 border-t border-slate-100">
                         <button
@@ -2030,36 +1639,7 @@ function renderReviews(tourData){
 
 <!-- ================= SCRIPT ================= -->
 
-<script>
 
-
-    <!-- flatpickr("#bookingDate", {
-
-        minDate: "today",
-
-        altInput: true,
-
-        altFormat: "F j, Y",
-
-        dateFormat: "Y-m-d",
-
-        disableMobile: true,
-
-        animate: true,
-
-        defaultDate: null ,
-
-        monthSelectorType: "dropdown",
-
-        nextArrow: `<i class="fa-solid fa-chevron-right"></i>`,
-
-        prevArrow: `<i class="fa-solid fa-chevron-left"></i>`,
-
-        disable: [],
-
-    }); -->
-
-</script>
 
 
 
@@ -2287,6 +1867,13 @@ function renderReviews(tourData){
 
 <script>
 
+
+
+
+
+    
+
+
 const slug = "{{ slug }}";
 
 let tourData = {};   
@@ -2296,6 +1883,7 @@ let selectedTourTime = null;
 let adultPrice = 0;
 let childPrice = 0;
 let infantPrice = 0;
+
 async function fetchTourDetails(){
 
     try{
@@ -2304,7 +1892,7 @@ async function fetchTourDetails(){
             `/api/tours/${slug}/`
         );
 
-        <!-- const tour = await response.json(); -->
+      
         tourData = await response.json();
         const tour = tourData;
         console.log("FULL TOUR RESPONSE");
@@ -2344,6 +1932,94 @@ async function fetchTourDetails(){
 
             selectedTourTime =
                 tour.schedules[0].start_time;
+        }
+
+
+        // Duration
+        document.getElementById("tourDuration").innerText = tour.duration || "-";
+
+        // Language (optional - add an element if you want)
+        const languageEl = document.getElementById("tourLanguage");
+        if (languageEl) {
+            languageEl.innerText = tour.language || "-";
+        }
+
+        // Location
+        if (tour.location && typeof tour.location === "object") {
+            const { city, district, state, country } = tour.location;
+
+            let locationEl = document.getElementById("tourLocationDisplay");
+            if (!locationEl) {
+                locationEl = document.createElement("p");
+                locationEl.id = "tourLocationDisplay";
+                locationEl.className = "text-gray-500 mt-3 flex items-center gap-2 text-sm font-medium";
+                document.getElementById("tourTitle").after(locationEl);
+            }
+            locationEl.innerHTML = `
+                <i class="fa-solid fa-location-dot text-cyan-500"></i>
+                ${city}, ${district}, ${state}, ${country}
+            `;
+        }
+
+
+
+        // ===================== CARD INFO (Duration, Language, Location) =====================
+
+        // ===================== CARD INFO =====================
+        const cardDuration = document.getElementById("cardDuration");
+        if (cardDuration) {
+            cardDuration.innerText = tour.duration || "-";
+        }
+
+        const cardLanguage = document.getElementById("cardLanguage");
+        if (cardLanguage) {
+            cardLanguage.innerText = tour.language || "-";
+        }
+
+   // ========== FORCE LOCATION DISPLAY ==========
+        setTimeout(() => {
+            const cardLocation = document.getElementById("cardLocation");
+            console.log("cardLocation element:", cardLocation);
+            console.log("tour.location:", tour.location);
+
+            if (cardLocation && tour.location) {
+                const loc = tour.location;
+                cardLocation.innerText = `${loc.city}, ${loc.district}, ${loc.state}, ${loc.country}`;
+                console.log("Location set successfully!");
+            } else {
+                console.log("Could not set location");
+            }
+        }, 100);
+        // ===================== LOCATION =====================
+        if (tour.location) {
+            const { city, district, state, country } = tour.location;
+
+            // Location under title
+            let locationEl = document.getElementById("tourLocationDisplay");
+            if (!locationEl) {
+                locationEl = document.createElement("p");
+                locationEl.id = "tourLocationDisplay";
+                locationEl.className = "text-gray-500 mt-3 flex items-center gap-2 text-sm font-medium";
+                document.getElementById("tourTitle").after(locationEl);
+            }
+            locationEl.innerHTML = `
+                <i class="fa-solid fa-location-dot text-cyan-500"></i>
+                ${city}, ${district}, ${state}, ${country}
+            `;
+
+            // Breadcrumb
+            const breadcrumbContainer = document.querySelector(".flex.items-center.gap-2.text-sm.text-gray-500.mb-5");
+            if (breadcrumbContainer) {
+                breadcrumbContainer.innerHTML = `
+                    <a href="#" class="hover:text-cyan-600">${country || "India"}</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <a href="#" class="hover:text-cyan-600">${state || ""}</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <a href="#" class="hover:text-cyan-600">${city || ""}</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <span class="text-gray-700 font-medium">Tour Details</span>
+                `;
+            }
         }
 
         console.log(tour);
@@ -3093,8 +2769,9 @@ if(continueBtn){
                     "tourTitle"
                 ).innerText,
 
-            location:
-                tourData.city,
+            location: tourData.location
+            ? `${tourData.location.city}, ${tourData.location.district}, ${tourData.location.state}, ${tourData.location.country}`
+            : "Location not available",
 
             tour_slug:
                 tourData.slug,
@@ -3204,168 +2881,214 @@ if(backBtn){
 
         }
     );
-2.
+
 }
 
-const confirmBookingBtn =
-    document.getElementById(
-        "confirmBookingBtn"
-    );
 
-if(confirmBookingBtn){
+document.getElementById("confirmBookingBtn").addEventListener("click", async function () {
 
-    confirmBookingBtn.addEventListener(
-"click",
-async function(){
+    const btn = this;
+    const loader = document.getElementById("confirmLoader");
+    const text = document.getElementById("confirmBtnText");
 
-    const paymentMethod =
+    btn.disabled = true;
+    loader.classList.remove("hidden");
+    text.innerText = "Please wait...";
 
-        document.querySelector(
-            'input[name="payment_method"]:checked'
-        );
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
 
-    if(!paymentMethod){
-
-        alert(
-            "Please select payment method"
-        );
-
+    if (!paymentMethod) {
+        alert("Please select a payment method");
+        resetBtn();
         return;
     }
 
-    let bookingDraft =
+    const bookingDraft = JSON.parse(localStorage.getItem("bookingDraft") || "{}");
 
-        JSON.parse(
-            localStorage.getItem(
-                "bookingDraft"
-            )
-        );
-
-    bookingDraft.guest_name =
-        document.getElementById(
-            "guestName"
-        ).value;
-
-    bookingDraft.guest_email =
-        document.getElementById(
-            "guestEmail"
-        ).value;
-
-    bookingDraft.guest_phone =
-        document.getElementById(
-            "guestPhone"
-        ).value;
-
-    bookingDraft.payment_method =
-        paymentMethod.value;
-
-    const payload = {
-
-        tour:
-            bookingDraft.tour,
-
-        adults:
-            bookingDraft.adults,
-
-        children:
-            bookingDraft.children,
-
-        infants:
-            bookingDraft.infants,
-
-        tour_date:
-            bookingDraft.tour_date,
-
-        tour_time:
-            bookingDraft.tour_time,
-
-        guest_name:
-            bookingDraft.guest_name,
-
-        guest_email:
-            bookingDraft.guest_email,
-
-        guest_phone:
-            bookingDraft.guest_phone,
-
-        payment_method:
-            bookingDraft.payment_method,
-
-        guide:
-            bookingDraft.guide || null,
-
-    };
-
-    console.log(payload);
-
-    try{
-
-        const response =
-            await fetch(
-                "/booking/create-booking/",
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "X-CSRFToken":
-                            getCookie(
-                                "csrftoken"
-                            )
-
-                    },
-
-                    body:
-                        JSON.stringify(
-                            payload
-                        )
-
-                }
-            );
-
-        const result =
-            await response.json();
-
-        console.log(result);
-
-        if(result.success){
-
-            alert(
-                "Booking Created Successfully"
-            );
-
-            localStorage.removeItem(
-                "bookingDraft"
-            );
-
-            window.location.href =
-                "/";
-
-        }else{
-
-            alert(
-                JSON.stringify(
-                    result.errors
-                )
-            );
-
-        }
-
-    }catch(error){
-
-        console.log(error);
-
-        alert(
-            "Booking Failed"
-        );
-
+    if (!bookingDraft.tour) {
+        alert("Booking data not found");
+        resetBtn();
+        return;
     }
 
-})};
+    const guestName = document.getElementById("guestName").value.trim();
+    const guestEmail = document.getElementById("guestEmail").value.trim();
+    const guestPhone = document.getElementById("guestPhone").value.trim();
+
+    if (!guestName || !guestEmail || !guestPhone) {
+        alert("Please fill all personal details");
+        resetBtn();
+        return;
+    }
+
+    // Calculate amount
+    let total = parseFloat(
+        String(bookingDraft.total_amount).replace("₹", "").replace(/,/g, "")
+    ) || 0;
+
+    let amountToPay = 0;
+
+    if (paymentMethod.value === "pay_at_location") {
+        // Direct booking (no Razorpay)
+        createBookingDirectly(paymentMethod.value);
+        return;
+    } 
+    else if (paymentMethod.value === "partial_payment") {
+        amountToPay = +(total * 0.30).toFixed(2);
+    } 
+    else {
+        amountToPay = +total.toFixed(2);
+    }
+
+    try {
+        // ========== 1. Create Razorpay Order ==========
+        const orderRes = await fetch("/booking/create-razorpay-order/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({
+                amount: amountToPay
+            })
+        });
+
+        const orderData = await orderRes.json();
+
+        if (!orderData.success) {
+            throw new Error(orderData.message || "Failed to create order");
+        }
+
+        // ========== 2. Open Razorpay ==========
+        const options = {
+            key: orderData.key,
+            amount: orderData.amount,
+            currency: "INR",
+            name: "Get Your Guide",
+            description: bookingDraft.tour_title || "Tour Booking",
+            order_id: orderData.order_id,
+            handler: async function (response) {
+
+                // ========== 3. Verify + Create Booking ==========
+                const verifyRes = await fetch("/booking/verify-and-create-booking/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie("csrftoken")
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+
+                        // Booking Data
+                        tour: bookingDraft.tour,
+                        adults: bookingDraft.adults,
+                        children: bookingDraft.children,
+                        infants: bookingDraft.infants,
+                        tour_date: bookingDraft.tour_date,
+                        tour_time: bookingDraft.tour_time,
+                        guest_name: guestName,
+                        guest_email: guestEmail,
+                        guest_phone: guestPhone,
+                        payment_method: paymentMethod.value,
+                        guide: bookingDraft.guide || null,
+                        coupon_code: bookingDraft.coupon_code || ""
+                    })
+                });
+
+                const result = await verifyRes.json();
+
+                if (result.success) {
+                    localStorage.removeItem("bookingDraft");
+                    localStorage.removeItem("bookingSeconds");
+                    localStorage.removeItem("bookingExpiry");
+
+                    window.location.href = `/booking/booking-success/${result.data.id}/`;
+                } else {
+                    alert("Payment successful but booking failed. Please contact support.");
+                    resetBtn();
+                }
+            },
+            prefill: {
+                name: guestName,
+                email: guestEmail,
+                contact: guestPhone
+            },
+            theme: {
+                color: "#1e3a8a"
+            },
+            modal: {
+                ondismiss: function () {
+                    resetBtn();
+                }
+            }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong while initiating payment");
+        resetBtn();
+    }
+
+    function resetBtn() {
+        btn.disabled = false;
+        loader.classList.add("hidden");
+        text.innerText = "Confirm Booking";
+    }
+});
+
+
+// ========== Helper for "Pay at Location" ==========
+async function createBookingDirectly(paymentMethod) {
+    const bookingDraft = JSON.parse(localStorage.getItem("bookingDraft") || "{}");
+
+    const payload = {
+        tour: bookingDraft.tour,
+        adults: bookingDraft.adults,
+        children: bookingDraft.children,
+        infants: bookingDraft.infants,
+        tour_date: bookingDraft.tour_date,
+        tour_time: bookingDraft.tour_time,
+        guest_name: document.getElementById("guestName").value,
+        guest_email: document.getElementById("guestEmail").value,
+        guest_phone: document.getElementById("guestPhone").value,
+        payment_method: paymentMethod,
+        guide: bookingDraft.guide || null,
+        coupon_code: bookingDraft.coupon_code || ""
+    };
+
+    try {
+        const response = await fetch("/booking/create-booking/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            localStorage.removeItem("bookingDraft");
+            localStorage.removeItem("bookingSeconds");
+            localStorage.removeItem("bookingExpiry");
+            window.location.href = `/booking/booking-success/${result.data.id}/`;
+        } else {
+            alert(JSON.stringify(result.errors));
+            document.getElementById("confirmBookingBtn").disabled = false;
+            document.getElementById("confirmLoader").classList.add("hidden");
+            document.getElementById("confirmBtnText").innerText = "Confirm Booking";
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Booking failed");
+    }
+}
 
 function getCookie(name){
 
@@ -3479,9 +3202,7 @@ function startBookingTimer(){
                     "bookingExpiry"
                 );
 
-                <!-- localStorage.removeItem(
-                    "bookingDraft"
-                ); -->
+                
 
                 alert(
                     "Booking session expired."

@@ -344,8 +344,10 @@ class TourAdmin(admin.ModelAdmin):
         "title",
         # "guide",
         "category",
-        "city",
-        "state",
+        # "city",
+        # "state",
+        
+         "location",
         # "price",
         # "offer_price",
         "featured",
@@ -371,11 +373,19 @@ class TourAdmin(admin.ModelAdmin):
         "wheelchair_accessible",
     )
 
+    # search_fields = (
+    #     "title",
+    #     "city",
+    #     "state",
+    #     "country",
+    # )
+    
     search_fields = (
         "title",
-        "city",
-        "state",
-        "country",
+        "location__city",
+        "location__state",
+        "location__district",
+        "location__country",
     )
 
     ordering = (
@@ -425,10 +435,12 @@ class TourAdmin(admin.ModelAdmin):
             "Location Information",
             {
                 "fields": (
-                    "city",
-                    "state",
-                    "country",
-                    "address",
+                    # "city",
+                    # "state",
+                    # "country",
+                    # "address",
+                    
+                    "location",
                     "meeting_point",
                 )
             }

@@ -12,7 +12,7 @@
 
 # from user.models import User
 from coupon.models import Coupon ,CouponUsage
-
+from user.serializers import LocationSerializer
 # bookings/serializers.py
 
 from decimal import Decimal
@@ -39,7 +39,7 @@ class GuideSerializer(
     serializers.ModelSerializer
 ):
     profile_image = serializers.SerializerMethodField()
-
+    locations = LocationSerializer(many=True, read_only=True)
     class Meta:
 
         model = User
@@ -49,13 +49,12 @@ class GuideSerializer(
             "id",
 
             "username",
-
             "email",
 
             "phone_number",
 
-            "location",
-             "state",
+            "locations",
+            #  "state",
 
             "profile_image"
         ]
@@ -351,43 +350,53 @@ class BookingCreateSerializer(
         # =================================
         # CHECK GUIDE LOCATION
         # =================================
+        
+        
+        # =================================
+        # CHECK GUIDE LOCATION (New ManyToMany)
+        # =================================
 
         if selected_guide:
 
-            if not selected_guide.location:
-
+            # Tour must have a location
+            if not tour.location:
                 raise serializers.ValidationError({
-
-                    "guide": (
-                        "Guide location missing"
-                    )
-
+                    "guide": "Tour has no location assigned"
                 })
 
-            # if (
+            # Check if guide has this location in their ManyToMany locations
+            if not selected_guide.locations.filter(id=tour.location.id).exists():
+                raise serializers.ValidationError({
+                    "guide": "Selected guide is not available for this location"
+                })
 
-            #     selected_guide.location.strip().lower()
+        # if selected_guide:
 
-            #     !=
+        #     if not selected_guide.location:
 
-            #     tour.city.strip().lower()
+        #         raise serializers.ValidationError({
 
-            # ):
+        #             "guide": (
+        #                 "Guide location missing"
+        #             )
+
+        #         })
+
             
-            if (
-                selected_guide.location.strip().lower()
-                != tour.city.strip().lower()
-                or
-                selected_guide.state.strip().lower()
-                != tour.state.strip().lower()
-            ):
+        #     if (
+        #         selected_guide.location.strip().lower()
+        #         != tour.city.strip().lower()
+        #         or
+        #         selected_guide.state.strip().lower()
+        #         != tour.state.strip().lower()
+        #     ):
 
-                raise serializers.ValidationError({
-                    "guide": (
-                        "Selected guide is not available "
-                        "for this location"
-                    )
-                })
+        #         raise serializers.ValidationError({
+        #             "guide": (
+        #                 "Selected guide is not available "
+        #                 "for this location"
+        #             )
+        #         })
 
                 raise serializers.ValidationError({
 
@@ -908,7 +917,8 @@ class BookingCreateSerializer(
 
             location__iexact=obj.tour.city,
             
-            state__iexact=obj.tour.state,
+            # state__iexact=obj.tour.state,
+            locations=obj.tour.location ,
 
             is_active=True
         )

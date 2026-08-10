@@ -10,6 +10,25 @@ from .views import (
     BlogCreateView,
     BlogUpdateView,
     BlogDeleteView,
+    
+    LocationListView,
+    LocationCreateView,
+    LocationUpdateView,
+    LocationDeleteView,
+    
+    
+    UserListView,
+    UserDetailView,
+    UserUpdateView,
+    
+    
+    BookingListView,
+    BookingDetailView,
+    BookingCreateView,
+    BookingUpdateView,
+    BookingDeleteView,
+    BookingStatusUpdateView,
+    
 )
 
 from .views import (
@@ -178,10 +197,41 @@ urlpatterns = [
         name="payment_policy_update",
     ),
 
+    path( "payment-policy/<int:pk>/delete/", views.TourPaymentPolicyDeleteView.as_view(), name="payment_policy_delete",),
+    
+    
+    path(  "locations/",  LocationListView.as_view(), name="location_list",),
+
+    path("locations/create/",LocationCreateView.as_view(),name="location_create",),
+
+    path( "locations/<int:pk>/update/",LocationUpdateView.as_view(), name="location_update",),
+
+    path("locations/<int:pk>/delete/",LocationDeleteView.as_view(),name="location_delete",),
+    
     path(
-        "payment-policy/<int:pk>/delete/",
-        views.TourPaymentPolicyDeleteView.as_view(),
-        name="payment_policy_delete",
+        "users/",
+        UserListView.as_view(),
+        name="user_list",
     ),
+
+    path(
+        "users/<int:pk>/",
+        UserDetailView.as_view(),
+        name="user_detail",
+    ),
+
+    path(
+        "users/<int:pk>/update/",
+        UserUpdateView.as_view(),
+        name="user_update",
+    ),
+    
+    
+    path("bookings/", BookingListView.as_view(), name="booking_list"),
+    path("bookings/create/", BookingCreateView.as_view(), name="booking_create"),
+    path("bookings/<int:pk>/", BookingDetailView.as_view(), name="booking_detail"),
+    path("bookings/<int:pk>/edit/", BookingUpdateView.as_view(), name="booking_update"),
+    path("bookings/<int:pk>/delete/", BookingDeleteView.as_view(), name="booking_delete"),
+    path("bookings/<int:pk>/status/", BookingStatusUpdateView.as_view(), name="booking_status"),
 
 ]

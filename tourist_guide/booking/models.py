@@ -138,6 +138,19 @@ class Booking(models.Model):
 
     transaction_id = models.CharField( max_length=100, blank=True, null=True)
 
+
+    razorpay_order_id = models.CharField(
+            max_length=100,
+            blank=True,
+            null=True
+        )
+
+    razorpay_signature = models.CharField(
+            max_length=255,
+            blank=True,
+            null=True
+        )
+
     # =========================
     # STATUS
     # =========================
@@ -172,76 +185,7 @@ class Booking(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    # =========================
-    # GENERATE BOOKING ID
-    # =========================
 
-    # def save(self, *args, **kwargs):
-
-    #     if not self.booking_id:
-
-    #         while True:
-
-    #             random_id = ''.join(
-    #                 random.choices(
-    #                     string.digits,
-    #                     k=8
-    #                 )
-    #             )
-
-    #             booking_id = f"TG{random_id}"
-
-    #             if not Booking.objects.filter(
-    #                 booking_id=booking_id
-    #             ).exists():
-    #                 break
-
-    #         self.booking_id = booking_id
-
-    #     super().save(*args, **kwargs)
-    
-    
-    # def save(self, *args, **kwargs):
-
-    #     if not self.booking_id:
-
-    #         while True:
-
-    #             random_id = ''.join(
-    #                 random.choices(
-    #                     string.digits,
-    #                     k=8
-    #                 )
-    #             )
-
-    #             booking_id = f"TG{random_id}"
-
-    #             if not Booking.objects.filter(
-    #                 booking_id=booking_id
-    #             ).exists():
-    #                 break
-
-    #         self.booking_id = booking_id
-
-    #     # Payment Status Logic
-    #     if self.payment_method == "pay_at_location":
-
-    #         self.payment_status = "pending"
-    #         self.status = "confirmed"
-
-    #     elif self.payment_method == "partial_payment":
-
-    #         self.payment_status = "partial"
-    #         self.status = "confirmed"
-
-    #     elif self.payment_method == "full_payment":
-
-    #         self.payment_status = "paid"
-    #         self.status = "confirmed"
-
-    #     super().save(*args, **kwargs)
-    
-    
 
 
     def save(self, *args, **kwargs):
@@ -345,46 +289,6 @@ class Booking(models.Model):
             self.advance_amount
         )
         
-        
-    # @property
-    # def advance_amount(self):
-
-    #     if self.payment_method == "partial_payment":
-    #         return (
-    #             self.total_amount * Decimal("0.30")
-    #         ).quantize(Decimal("0.01"))
-
-    #     elif self.payment_method == "full_payment":
-    #         return self.total_amount
-
-    #     return Decimal("0.00")
-
-    # =========================
-    # CANCEL BOOKING
-    # =========================
-
-    # def cancel_booking(self, user=None):
-
-    #     if self.status == "cancelled":
-    #         raise ValidationError(
-    #             "Booking already cancelled"
-    #         )
-
-    #     if self.tour_date <= timezone.now().date():
-    #         raise ValidationError(
-    #             "Tour already started"
-    #         )
-
-    #     self.status = "cancelled"
-
-    #     self.cancelled_at = timezone.now()
-
-    #     self.cancelled_by = (
-    #         "user" if user else "admin"
-    #     )
-
-    #     self.save()
-
     def __str__(self):
 
         return (

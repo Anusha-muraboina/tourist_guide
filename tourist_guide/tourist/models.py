@@ -12,7 +12,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 
-
+from user.models import Location
 # =========================
 # TOUR CATEGORY
 # =========================
@@ -254,12 +254,20 @@ class Tour(models.Model):
     short_description = models.TextField()
 
     full_description = models.TextField()
+    
+    
+    location = models.ForeignKey(
+        Location,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="tours"
+    )
 
-    city = models.CharField(max_length=100)
+    city = models.CharField(max_length=100 , null=True , blank= True)
 
-    state = models.CharField( max_length=100)
+    state = models.CharField( max_length=100, null=True , blank= True)
 
-    country = models.CharField( max_length=100, default="India")
+    country = models.CharField( max_length=100, default="India", null=True , blank= True)
 
     address = models.TextField( blank=True, null=True)
 

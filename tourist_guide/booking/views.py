@@ -1,5 +1,7 @@
 from django.shortcuts import render
-
+import razorpay
+import json
+from django.conf import settings
 # Create your views here.
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication
@@ -10,7 +12,173 @@ from booking.models import CancelReason ,Invoice
 def booking(request):
     return HttpResponse("Welcome to Tourist Guide")
 
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+)
 
+
+# booking/razorpay_views.py
+
+import razorpay
+import json
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+from booking.serializers import BookingCreateSerializer
+from booking.models import Booking
+
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+)
+
+
+class CreateRazorpayOrderAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        amount = request.data.get("amount")  # in rupees
+
+        if not amount:
+            return Response({"success": False, "message": "Amount required"}, status=400)
+
+        try:
+            amount_paise = int(float(amount) * 100)
+
+            order = razorpay_client.order.create({
+                "amount": amount_paise,
+                "currency": "INR",
+                "payment_capture": 1
+            })
+
+            return Response({
+                "success": True,
+                "order_id": order["id"],
+                "amount": order["amount"],
+                "currency": order["currency"],
+                "key": settings.RAZORPAY_KEY_ID
+            })
+
+        except Exception as e:
+            return Response({"success": False, "message": str(e)}, status=400)
+
+class VerifyAndCreateBookingAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        data = request.data
+
+        # ========== 1. Verify Signature ==========
+        try:
+            razorpay_client.utility.verify_payment_signature({
+                "razorpay_order_id": data.get("razorpay_order_id"),
+                "razorpay_payment_id": data.get("razorpay_payment_id"),
+                "razorpay_signature": data.get("razorpay_signature")
+            })
+        except Exception:
+            return Response({
+                "success": False,
+                "message": "Payment verification failed"
+            }, status=400)
+
+        # ========== 2. Prepare Booking Data ==========
+        booking_data = {
+            "tour": data.get("tour"),
+            "adults": data.get("adults"),
+            "children": data.get("children"),
+            "infants": data.get("infants"),
+            "tour_date": data.get("tour_date"),
+            "tour_time": data.get("tour_time"),
+            "guest_name": data.get("guest_name"),
+            "guest_email": data.get("guest_email"),
+            "guest_phone": data.get("guest_phone"),
+            "payment_method": data.get("payment_method"),
+            "guide": data.get("guide"),
+            "coupon_code": data.get("coupon_code", ""),
+        }
+
+        serializer = BookingCreateSerializer(
+            data=booking_data,
+            context={"request": request}
+        )
+
+        if not serializer.is_valid():
+            return Response({
+                "success": False,
+                "errors": serializer.errors
+            }, status=400)
+
+        # ========== 3. Create Booking ==========
+        booking = serializer.save()
+
+        # ========== 4. Save Razorpay IDs ==========
+        booking.payment_id = data.get("razorpay_payment_id")
+        booking.transaction_id = data.get("razorpay_order_id")   # or payment_id
+        booking.razorpay_order_id = data.get("razorpay_order_id")
+        booking.razorpay_signature = data.get("razorpay_signature")
+
+        # Update payment status based on method
+        if booking.payment_method == "partial_payment":
+            booking.payment_status = "partial"
+        elif booking.payment_method == "full_payment":
+            booking.payment_status = "paid"
+        else:
+            booking.payment_status = "pending"
+
+        booking.status = "confirmed"
+        booking.save()
+
+        return Response({
+            "success": True,
+            "message": "Payment successful & Booking created",
+            "data": {
+                "id": booking.id,
+                "booking_id": booking.booking_id,
+                "payment_id": booking.payment_id,
+                "transaction_id": booking.transaction_id,
+                "payment_status": booking.payment_status,
+                "total_amount": str(booking.total_amount),
+                "advance_amount": str(booking.advance_amount),
+                "remaining_amount": str(booking.remaining_amount),
+            }
+        }, status=201)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class RazorpayWebhookAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            webhook_body = request.body.decode("utf-8")
+            webhook_signature = request.headers.get("X-Razorpay-Signature")
+
+            razorpay_client.utility.verify_webhook_signature(
+                webhook_body,
+                webhook_signature,
+                settings.RAZORPAY_WEBHOOK_SECRET
+            )
+
+            payload = json.loads(webhook_body)
+            event = payload.get("event")
+
+            if event == "payment.captured":
+                payment = payload["payload"]["payment"]["entity"]
+                payment_id = payment["id"]
+                order_id = payment["order_id"]
+
+                # Optional: update booking if needed
+                Booking.objects.filter(
+                    razorpay_order_id=order_id
+                ).update(payment_status="paid")
+
+            return Response({"status": "ok"})
+
+        except Exception as e:
+            return Response({"status": "error", "message": str(e)}, status=400)
 
 # bookings/api_views.py
 
@@ -132,116 +300,7 @@ from booking.models import Booking
 from booking.serializers import BookingCreateSerializer
 
 
-# class BookingUpdateAPIView(APIView):
 
-#     def patch(self, request, booking_id):
-
-#         try:
-
-#             booking = Booking.objects.get(
-#                 id=booking_id
-#             )
-
-#         except Booking.DoesNotExist:
-
-#             return Response(
-#                 {
-#                     "success": False,
-#                     "message": "Booking not found"
-#                 },
-#                 status=status.HTTP_404_NOT_FOUND
-#             )
-#         serializer = BookingCreateSerializer(
-#             booking,
-#             data=request.data,
-#             partial=True,
-#             context={
-#                 "request": request
-#             }
-#         )
-#         # serializer = BookingCreateSerializer(
-
-#         #     booking,
-
-#         #     data=request.data,
-
-#         #     partial=True
-
-#         # )
-        
-
-#         if serializer.is_valid():
-
-#             serializer.save()
-            
-            
-#             updated_booking = serializer.save()
-
-#             updated_booking.refresh_from_db()
-
-#             return Response({
-
-#                 "success": True,
-
-#                 "message": "Booking updated successfully",
-
-#                 "sub_total": str(
-#                     updated_booking.sub_total
-#                 ),
-
-#                 "discount_amount": str(
-#                     updated_booking.discount_amount
-#                 ),
-
-#                 "total_amount": str(
-#                     updated_booking.total_amount
-#                 ),
-
-#                 "coupon_applied":
-#                     updated_booking.coupon_applied.code
-#                     if updated_booking.coupon_applied
-#                     else None,
-
-#                 "data": serializer.data
-
-#             })
-
-#             # return Response({
-
-#             #     "success": True,
-
-#             #     "message":
-#             #         "Booking updated successfully",
-#             #         "sub_total":
-#             #     str(
-#             #             booking.sub_total
-#             #         ),
-
-#             #     "discount_amount":
-#             #         str(
-#             #             booking.discount_amount
-#             #         ),
-
-#             #     "total_amount":
-#             #         str(
-#             #             booking.total_amount
-#             #         ),
-
-#             #     "data":
-#             #         serializer.data
-
-#             # })
-
-#         return Response({
-
-#             "success": False,
-
-#             "errors":
-#                 serializer.errors
-
-#         }, status=status.HTTP_400_BAD_REQUEST)
-        
-        
         
         
 class BookingUpdateAPIView(APIView):

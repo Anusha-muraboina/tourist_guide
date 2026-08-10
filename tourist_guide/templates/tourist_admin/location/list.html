@@ -1,0 +1,302 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}Location Management{% endblock %}
+
+{% block content %}
+<div class="p-6 bg-slate-50 min-h-screen">
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-slate-900 to-slate-900 rounded-3xl shadow-lg p-8 mb-8">
+
+        <div class="flex flex-col lg:flex-row justify-between items-center">
+
+            <div>
+
+                <h1 class="text-3xl font-bold text-white">
+                    📍 Location Management
+                </h1>
+
+                <p class="text-blue-100 mt-2">
+                    Manage Countries, States, Districts and Cities
+                </p>
+
+            </div>
+
+            <a href="{% url 'location_create' %}"
+               class="mt-5 lg:mt-0 bg-white text-slate-900 font-semibold px-6 py-3 rounded-xl shadow hover:scale-105 transition">
+
+                + Add Location
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Stats -->
+
+    {% comment %} <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <p class="text-gray-500 text-sm">
+                Total Locations
+            </p>
+
+            <h2 class="text-3xl font-bold mt-2">
+                {{ items.paginator.count }}
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <p class="text-gray-500 text-sm">
+                Active
+            </p>
+
+            <h2 class="text-3xl font-bold text-green-600 mt-2">
+                {{ active_count }}
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <p class="text-gray-500 text-sm">
+                States
+            </p>
+
+            <h2 class="text-3xl font-bold text-blue-600 mt-2">
+                {{ states|length }}
+            </h2>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-6">
+
+            <p class="text-gray-500 text-sm">
+                Inactive
+            </p>
+
+            <h2 class="text-3xl font-bold text-red-600 mt-2">
+                {{ inactive_count }}
+            </h2>
+
+        </div>
+
+    </div> {% endcomment %}
+
+
+    <!-- Search -->
+
+    <div class="bg-white rounded-2xl shadow p-6 mb-8">
+
+        <form method="GET">
+
+            <div class="grid lg:grid-cols-4 gap-4">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search..."
+                    class="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+
+                <select
+                    name="state"
+                    class="rounded-xl border border-gray-300 px-4 py-3">
+
+                    <option value="">All States</option>
+
+                    {% for item in states %}
+
+                    <option value="{{ item }}"
+                    {% if state == item %}selected{% endif %}>
+
+                        {{ item }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <button
+                    class="bg-slate-600 hover:bg-slate-700 text-white rounded-xl font-medium">
+
+                    Search
+
+                </button>
+
+                <a href="{% url 'location_list' %}"
+                   class="bg-gray-100 hover:bg-gray-200 rounded-xl flex justify-center items-center">
+
+                    Reset
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- Table -->
+
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead>
+
+                    <tr class="bg-slate-100 text-slate-600 uppercase text-sm">
+
+                        <th class="px-6 py-4 text-left">#</th>
+
+                        <th class="px-6 py-4 text-left">Country</th>
+
+                        <th class="px-6 py-4 text-left">State</th>
+
+                        <th class="px-6 py-4 text-left">District</th>
+
+                        <th class="px-6 py-4 text-left">City</th>
+
+                        <th class="px-6 py-4 text-left">Status</th>
+
+                        <th class="px-6 py-4 text-right">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for item in items %}
+
+                    <tr class="border-t hover:bg-indigo-50 transition duration-200">
+
+                        <td class="px-6 py-5">
+
+                            {{ forloop.counter }}
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            🌍 {{ item.country }}
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            {{ item.state }}
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            {{ item.district }}
+
+                        </td>
+
+                        <td class="px-6 py-5 font-semibold">
+
+                            {{ item.city }}
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            {% if item.is_active %}
+
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+
+                                Active
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
+
+                                Inactive
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="px-6 py-5">
+
+                            <div class="flex justify-end gap-2">
+
+                                <a href="{% url 'location_update' item.pk %}"
+                                   class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+
+                                    ✏️
+
+                                </a>
+
+                                <a href="{% url 'location_delete' item.pk %}"
+                                   class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition">
+
+                                    🗑
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="py-20 text-center">
+
+                                <div class="text-7xl">
+
+                                    📍
+
+                                </div>
+
+                                <h2 class="text-2xl font-bold mt-4">
+
+                                    No Locations Found
+
+                                </h2>
+
+                                <p class="text-gray-500 mt-2">
+
+                                    Start by creating your first location.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

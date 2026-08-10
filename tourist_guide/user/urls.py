@@ -4,7 +4,8 @@ from .views import (
     LoginAPIView,
     LogoutAPIView,
     ForgotPasswordAPIView,
-    ProfileAPIView
+    ProfileAPIView,
+    LocationListAPIView
 )
 from . import views
 
@@ -46,6 +47,7 @@ urlpatterns = [
         views.profile_page,
         name="profile"
     ),
-
+    
+    path("api/locations/", LocationListAPIView.as_view(), name="location-list"),
 
 ]

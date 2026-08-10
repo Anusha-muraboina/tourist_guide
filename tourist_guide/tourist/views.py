@@ -160,6 +160,7 @@ class HomeAPIView(APIView):
         tours = (
             Tour.objects
             .filter(is_active=True)
+            .select_related("location")
             .prefetch_related(
                 "images",
                 "pricing"
@@ -177,10 +178,14 @@ class HomeAPIView(APIView):
                 Q(title__icontains=search) |
 
                 Q(short_description__icontains=search) |
+                
+                Q(location__city__icontains=search) |
+                Q(location__state__icontains=search) |
+                Q(location__district__icontains=search) |
 
-                Q(city__icontains=search) |
+                # Q(city__icontains=search) |
 
-                Q(state__icontains=search) |
+                # Q(state__icontains=search) |
 
                 Q(category__name__icontains=search)
 
@@ -239,11 +244,8 @@ class HomeAPIView(APIView):
 
         states = (
             Tour.objects
-            .filter(is_active=True)
-            .values_list(
-                "state",
-                flat=True
-            )
+            .filter(is_active=True , location__isnull=False)
+            .values_list("location__state", flat=True)
             .distinct()
         )
 
@@ -252,9 +254,10 @@ class HomeAPIView(APIView):
             first_tour = (
                 Tour.objects
                 .filter(
-                    state=state,
+                    location__state=state,
                     is_active=True
                 )
+                .select_related("location")
                 .prefetch_related(
                     "images"
                 )

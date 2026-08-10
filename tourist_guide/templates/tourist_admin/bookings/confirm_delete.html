@@ -1,0 +1,15 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card p-4">
+        <h3>Delete Booking</h3>
+        <p>Are you sure you want to delete booking <strong>{{ object.booking_id }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'booking_detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

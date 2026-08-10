@@ -2,7 +2,42 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
+
+class Location(models.Model):
+    country = models.CharField(
+        max_length=100,
+        default="India"
+    )
+
+    state = models.CharField(
+        max_length=100
+    )
+
+    district = models.CharField(
+        max_length=100
+    )
+
+    city = models.CharField(
+        max_length=100
+    )
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ["state", "district", "city"]
+        unique_together = ("state", "district", "city")
+
+    def __str__(self):
+        return f"{self.city}, {self.district}, {self.state}"
 
 
 class User(AbstractUser):
@@ -16,6 +51,7 @@ class User(AbstractUser):
     ROLE_CHOICES = (
         ('tourist', 'Tourist'),
         ('guide', 'Guide'),
+        ('admin' , 'Admin'),
     )
     username = models.CharField(
         max_length=150,
@@ -30,24 +66,30 @@ class User(AbstractUser):
         # null=True
     )
 
-    location = models.CharField(
-        max_length=255,
+    # location = models.CharField(
+    #     max_length=255,
+    #     blank=True,
+    #     null=True
+    # )
+    
+    locations = models.ManyToManyField(
+        Location,
         blank=True,
-        null=True
+        related_name="guides"
     )
     
-    state = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True
-    )
+    # state = models.CharField(
+    #     max_length=100,
+    #     blank=True,
+    #     null=True
+    # )
 
-    country = models.CharField(
-        max_length=100,
-        default="India",
-        null =True,
-        blank=True
-    )
+    # country = models.CharField(
+    #     max_length=100,
+    #     default="India",
+    #     null =True,
+    #     blank=True
+    # )
 
 
     role = models.CharField(
