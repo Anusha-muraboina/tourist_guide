@@ -26,6 +26,44 @@ input::selection{
 input::-moz-selection{
     background:transparent;
 }
+
+
+/* =========================================
+   REMOVE CHROME / EDGE AUTOFILL BACKGROUND
+========================================= */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+
+    -webkit-text-fill-color: #1f2937 !important;
+
+    background-color: transparent !important;
+
+    transition:
+        background-color 9999s ease-in-out 0s,
+        color 9999s ease-in-out 0s !important;
+}
+
+/* Make inputs completely transparent */
+input,
+input:focus,
+select,
+select:focus {
+    background-color: transparent !important;
+    outline: none !important;
+}
+
+/* Remove browser focus shadow */
+input:focus,
+select:focus {
+    box-shadow: none !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -92,24 +130,35 @@ input::-moz-selection{
                     <i class="fa-solid fa-lock"></i>
                     <span>Checkout is fast and secure</span>
                 </div>
-
-
-
                     <!-- Full Name -->
-                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                    {% comment %} <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Full name</label>
                         <input
-    id="guestName"
-    type="text"
-    placeholder="Enter full name"
-    class="w-full bg-transparent outline-none text-base font-medium"
->
-                    </div>
+                        id="guestName"
+                        type="text"
+                        placeholder="Enter full name"
+                        class="w-full bg-transparent outline-none text-base font-medium">
+                    </div> {% endcomment %}
+
+
+
+                    <div class="border border-gray-200 bg-gray-50/50 hover:bg-white focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10 rounded-2xl px-4 py-3 transition-all duration-200">
+            <label for="guestName" class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-1">Full name</label>
+            <div class="flex items-center gap-3">
+                <i class="fa-regular fa-user text-gray-400 text-sm"></i>
+                <input
+                    id="guestName"
+                    type="text"
+                    placeholder="e.g. Jane Doe"
+                    class="w-full bg-transparent outline-none text-sm font-semibold text-gray-800 placeholder:text-gray-300 placeholder:font-normal"
+                >
+            </div>
+        </div>
 
 
 
                     <!-- Email -->
-                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                    {% comment %} <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Email</label>
                         <input
     id="guestEmail"
@@ -117,11 +166,25 @@ input::-moz-selection{
     placeholder="Enter email address"
     class="w-full bg-transparent outline-none text-base font-medium"
 >
-                    </div>
+                    </div> {% endcomment %}
+
+
+                    <div class="border border-gray-200 bg-gray-50/50 hover:bg-white focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10 rounded-2xl px-4 py-3 transition-all duration-200">
+            <label for="guestEmail" class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-1">Email address</label>
+            <div class="flex items-center gap-3">
+                <i class="fa-regular fa-envelope text-gray-400 text-sm"></i>
+                <input
+                    id="guestEmail"
+                    type="email"
+                    placeholder="name@example.com"
+                    class="w-full bg-transparent outline-none text-sm font-semibold text-gray-800 placeholder:text-gray-300 placeholder:font-normal"
+                >
+            </div>
+        </div>
 
 
                     <!-- Country -->
-                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                    {% comment %} <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Country</label>
                         <div class="flex justify-between items-center">
                             <select class="w-full bg-transparent outline-none text-base font-medium">
@@ -131,10 +194,34 @@ input::-moz-selection{
                             </select>
                             <i class="fa-solid fa-chevron-down text-gray-400"></i>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
+
+
+                    <div class="border border-gray-200 bg-gray-50/50 hover:bg-white focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10 rounded-2xl px-4 py-3 transition-all duration-200">
+            <label class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 block mb-1">Phone Number</label>
+            <div class="flex items-center gap-2">
+                <!-- Country Dropdown -->
+                <div class="relative flex items-center pr-2 border-r border-gray-200">
+                    <select class="bg-transparent outline-none text-sm font-semibold text-gray-800 cursor-pointer appearance-none pr-5 z-10">
+                        <option value="+91">🇮🇳 +91</option>
+                        {% comment %} <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option> {% endcomment %}
+                    </select>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 absolute right-0 pointer-events-none"></i>
+                </div>
+
+                <!-- Phone Input -->
+                <input
+                    id="guestPhone"
+                    type="tel"
+                    placeholder="98765 43210"
+                    class="w-full bg-transparent outline-none text-sm font-semibold text-gray-800 placeholder:text-gray-300 placeholder:font-normal pl-1"
+                >
+            </div>
+        </div>
 
                     <!-- Mobile -->
-                    <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
+                    {% comment %} <div class="border border-gray-300 rounded-2xl px-5 py-4 focus-within:border-blue-600 transition">
                         <label class="text-xs text-gray-500 block mb-1">Mobile phone number</label>
                         <input
                             id="guestPhone"
@@ -142,41 +229,88 @@ input::-moz-selection{
                             placeholder="Enter mobile number"
                             class="w-full bg-transparent outline-none text-base font-medium"
                         >
-                    </div>
+                    </div> {% endcomment %}
 
 
-       <div class="mt-4">
+      <!-- ================= COUPON ================= -->
 
-                        <label class="block text-sm font-medium mb-2">
-                            Promo / Coupon Code
-                        </label>
+<div class="mt-5">
 
-                        <div class="flex gap-2">
+    <label
+        for="couponCode"
+        class="flex items-center gap-2
+               text-sm font-semibold text-gray-700 mb-2"
+    >
+        <i class="fa-solid fa-tag text-blue-600"></i>
+        Have a coupon?
+    </label>
 
-                            <input
-                                type="text"
-                                id="couponCode"
-                                placeholder="Enter Coupon Code"
-                                class="flex-1 border border-gray-300 rounded-xl px-4 py-3"
-                            >
+    <div
+        class="flex items-stretch
+               bg-gray-50
+               border border-gray-200
+               rounded-2xl
+               p-1.5
+               transition-all duration-200
+               focus-within:bg-white
+               focus-within:border-blue-500
+               focus-within:ring-4
+               focus-within:ring-blue-500/10"
+    >
 
-                            <button
-                                type="button"
-                                id="applyCouponBtn"
-                                class="bg-blue-900 text-white px-5 py-3 rounded-xl"
-                            >
-                                Apply
-                            </button>
+        <!-- Coupon Input -->
+        <div class="flex items-center flex-1 px-3 gap-2">
 
-                        </div>
+            <i class="fa-solid fa-ticket-simple text-gray-400 text-sm"></i>
 
-                        <p
-                            id="couponMessage"
-                            class="text-sm mt-2"
-                        ></p>
+            <input
+                type="text"
+                id="couponCode"
+                placeholder="Enter coupon code"
+                autocomplete="off"
+                class="w-full
+                       bg-transparent
+                       border-0
+                       outline-none
+                       ring-0
+                       focus:ring-0
+                       text-sm
+                       font-semibold
+                       text-gray-800
+                       placeholder:text-gray-400
+                       "
+            >
 
-                    </div>
+        </div>
 
+        <!-- Apply Button -->
+        <button
+            type="button"
+            id="applyCouponBtn"
+            class="px-6
+                   py-3
+                   rounded-xl
+                   bg-[#071B3B]
+                   hover:bg-blue-700
+                   active:scale-[0.98]
+                   text-white
+                   text-sm
+                   font-bold
+                   transition-all duration-200
+                   shadow-sm"
+        >
+            Apply
+        </button>
+
+    </div>
+
+    <!-- Coupon Message -->
+    <p
+        id="couponMessage"
+        class="hidden mt-2 text-sm font-medium"
+    ></p>
+
+</div>
                     
 
                     
@@ -186,7 +320,7 @@ input::-moz-selection{
 
                     <button
                         id="goToPaymentBtn"
-                        class=" px-4 md:px-8 py-1 md:py-3 items-center bg-blue-900 hover:bg-blue-800 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
+                        class=" px-4 md:px-4 py-1 md:py-3 items-center bg-blue-900 hover:bg-blue-800 text-white font-semibold py-4 rounded-2xl mt-8 text-base transition"
                     >
                         Go to Payment
                     </button>
@@ -1061,83 +1195,6 @@ function(){
 
 let selectedGuideId = null;
 
-{% comment %} function renderGuides(guides){
-
-    const container =
-        document.getElementById(
-            "guideContainer"
-        );
-
-    container.innerHTML = "";
-
-    guides.forEach(
-        guide => {
-
-            container.innerHTML += `
-
-            <div
-                class="guide-card border rounded-2xl p-5 cursor-pointer"
-                data-id="${guide.id}"
-            >
-
-                <h3 class="font-bold text-lg">
-                    ${guide.name}
-                </h3>
-
-                <p class="text-gray-500 mt-2">
-                    ${guide.location || ""}
-                </p>
-
-                <p class="text-gray-500">
-                    ${guide.phone || ""}
-                </p>
-
-            </div>
-
-            `;
-        }
-    );
-
-    document
-    .querySelectorAll(
-        ".guide-card"
-    )
-    .forEach(card => {
-
-        card.addEventListener(
-            "click",
-            function(){
-
-                document
-                .querySelectorAll(
-                    ".guide-card"
-                )
-                .forEach(
-                    c => c.classList.remove(
-                        "border-blue-600",
-                        "bg-blue-50"
-                    )
-                );
-
-                this.classList.add(
-                    "border-blue-600",
-                    "bg-blue-50"
-                );
-
-                selectedGuideId =
-                    this.dataset.id;
-
-            }
-        );
-
-    });
-
-} {% endcomment %}
-
-
-
-
-
 function renderGuides(guides){
 
     const container =
@@ -1225,7 +1282,7 @@ function renderGuides(guides){
                         "
                     ></i>
 
-                    <span class="text-gray-600">
+                    <span class="text-gray-600 text-md" style="font-size:13px">
                         {% comment %} ${guide.location || "Location not available"} {% endcomment %}
 
                         ${
@@ -1264,7 +1321,7 @@ function renderGuides(guides){
                         "
                     ></i>
 
-                    <span class="text-gray-600 break-all">
+                    <span class="text-gray-600 break-all"  style="font-size:16px">
                         ${guide.email || ""}
                     </span>
 
@@ -1274,9 +1331,9 @@ function renderGuides(guides){
 
             <div
                 class="
-                    mt-5
+                    mt-3
                     text-center
-                    py-3
+                    py-2
                     rounded-2xl
                     bg-gray-100
                     font-semibold
@@ -1365,6 +1422,14 @@ function renderGuides(guides){
     });
 
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -1649,232 +1714,7 @@ async function createBookingDirectly(paymentMethod) {
         alert("Booking failed");
     }
 }
-{% comment %} document
-.getElementById(
-    "confirmBookingBtn"
-)
-.addEventListener(
-"click",
-async function(){
 
-
-    const btn =
-    document.getElementById(
-        "confirmBookingBtn"
-    );
-
-    const loader =
-        document.getElementById(
-            "confirmLoader"
-        );
-
-    const text =
-        document.getElementById(
-            "confirmBtnText"
-        );
-
-    btn.disabled = true;
-
-    loader.classList.remove(
-        "hidden"
-    );
-
-    text.innerText =
-        "Please wait...";
-
-    const paymentMethod =
-        document.querySelector(
-            'input[name="payment_method"]:checked'
-        );
-
-
-
-    if(!paymentMethod){
-
-        btn.disabled = false;
-
-        loader.classList.add(
-            "hidden"
-        );
-
-        text.innerText =
-            "Confirm Booking";
-
-        alert(
-            "Please select payment method"
-        );
-
-        return;
-    }
-
-    const bookingDraft =
-        JSON.parse(
-            localStorage.getItem(
-                "bookingDraft"
-            )
-        );
-
-    if(!bookingDraft){
-
-        btn.disabled = false;
-
-        loader.classList.add(
-            "hidden"
-        );
-
-        text.innerText =
-            "Confirm Booking";
-
-        alert(
-            "Booking data not found"
-        );
-
-        return;
-    }
-
-    const payload = {
-
-        tour: bookingDraft.tour,
-
-        adults: bookingDraft.adults,
-
-        children: bookingDraft.children,
-
-        infants: bookingDraft.infants,
-
-        tour_date: bookingDraft.tour_date,
-
-        tour_time: bookingDraft.tour_time,
-
-        guest_name:
-            document.getElementById(
-                "guestName"
-            ).value,
-
-        guest_email:
-            document.getElementById(
-                "guestEmail"
-            ).value,
-
-        guest_phone:
-            document.getElementById(
-                "guestPhone"
-            ).value,
-
-        payment_method:
-            paymentMethod.value ,
-
-
-        coupon_code:
-            bookingDraft.coupon_code || "",
-        guide:
-            bookingDraft.guide || null,
-
-    };
-
-    console.log(
-        "Sending Payload",
-        payload
-    );
-
-    try{
-
-        const response =
-            await fetch(
-                "/booking/create-booking/",
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json",
-
-                        "X-CSRFToken":
-                            getCookie(
-                                "csrftoken"
-                            )
-
-                    },
-
-                    body:
-                        JSON.stringify(
-                            payload
-                        )
-
-                }
-            );
-
-        const result =
-            await response.json();
-
-        console.log(
-            result
-        );
-
-       if(result.success){
-
-
-        let bookingDraft =
-        JSON.parse(
-            localStorage.getItem(
-                "bookingDraft"
-            )
-        ) || {};
-
-        bookingDraft.booking_id =
-            result.data.id;
-
-        bookingDraft.booking_number =
-            result.data.booking_id;
-
-        localStorage.setItem(
-            "bookingDraft",
-            JSON.stringify(
-                bookingDraft
-            )
-        );
-
-        console.log(
-            "BOOKING SAVED",
-            bookingDraft
-        );
-
-        localStorage.removeItem(
-            "bookingExpiry"
-        );
-        
-
-        localStorage.removeItem(
-            "bookingSeconds"
-        );
-        window.location.href =
-            `/booking/booking-success/${result.data.id}/`;
-
-}else{
-
-            alert(
-                JSON.stringify(
-                    result.errors
-                )
-            );
-
-        }
-
-    }catch(error){
-
-        console.log(
-            error
-        );
-
-        alert(
-            "Booking Failed"
-        );
-
-    }
-
-}); {% endcomment %}
 
 function getCookie(name){
     let cookieValue = null;
@@ -1902,26 +1742,6 @@ function getCookie(name){
     }
     return cookieValue;
 }
-
-
-
-{% comment %} const result =
-    await response.json();
-if(result.success){
-    localStorage.removeItem(
-        "bookingDraft"
-    );
-    document.body.innerHTML = `
-        SUCCESS PAGE HTML HERE
-    `;
-}else{
-    alert(
-        JSON.stringify(
-            result.errors
-        )
-    );
-} {% endcomment %}
-
 
 
 
@@ -2615,28 +2435,59 @@ document.addEventListener(
     }
 );
 
-{% comment %} document.adddocument.addEventListener(
-    "DOMContentLoaded",
-    function(){
 
-        updateCalendar =
-            flatpickr(
-                "#updateTourDate",
-                {
-                    minDate: "today",
-                    dateFormat: "Y-m-d",
-                    altInput: true,
-                    altFormat: "F j, Y",
-                    disableMobile: true
-                }
-            );
-
-    }
-); {% endcomment %}
 </script>
 
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const timer = document.getElementById("bookingTimer");
+
+    if (!timer) {
+        return;
+    }
+
+    // 25 MINUTES
+    const BOOKING_TIME = 25 * 60;
+
+    let seconds = BOOKING_TIME;
+
+    function updateTimer() {
+
+        const minutes = Math.floor(seconds / 60);
+
+        const remainingSeconds = seconds % 60;
+
+        timer.innerText =
+            `${String(minutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+
+        if (seconds <= 0) {
+
+            clearInterval(interval);
+
+            localStorage.removeItem("bookingSeconds");
+            localStorage.removeItem("bookingExpiry");
+            localStorage.removeItem("bookingDraft");
+
+            alert("Booking session expired.");
+
+            window.location.href = "/";
+
+            return;
+        }
+
+        seconds--;
+    }
+
+    // Start at 25:00
+    updateTimer();
+
+    // Decrease every 1 second
+    const interval = setInterval(updateTimer, 1000);
+
+});
+</script>
+{% comment %} <script>
 document.addEventListener("DOMContentLoaded", function () {
 
     const timer =
@@ -2711,5 +2562,5 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 });
-</script>
+</script> {% endcomment %}
 {% endblock %}

@@ -331,6 +331,23 @@ class Tour(models.Model):
         blank=True,
         related_name="tours"
     )
+    
+    seo_title = models.CharField(
+        max_length=70,
+        blank=True,
+        null=True
+    )
+
+    seo_description = models.TextField(
+        max_length=160,
+        blank=True,
+        null=True
+    )
+
+    seo_keywords = models.TextField(
+        blank=True,
+        null=True
+    )
 
     is_active = models.BooleanField(default=True)
 
@@ -349,6 +366,12 @@ class Tour(models.Model):
     # def final_price(self):
 
     #     return self.offer_price or self.price
+    
+    
+    
+
+    
+    
     
     
     @property

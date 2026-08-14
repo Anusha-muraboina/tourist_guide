@@ -8,7 +8,9 @@ from . import views
 from tourist.views import (
     HomeAPIView,
     TourDetailAPIView,
-    CategoryTourAPIView
+    CategoryTourAPIView,
+    TourListAPIView,
+    tour_list
 )
 urlpatterns = [
     path('', views.home, name='home'),
@@ -24,6 +26,18 @@ urlpatterns = [
         name='tour-list-api'
     ),
 
+    path(
+        "tours/",
+        tour_list,
+        name="tourlist"
+    ),
+    
+
+    path(
+        "api/tours/",
+        TourListAPIView.as_view(),
+        name="tour_list_api"
+    ),
 
     # =========================================
     # TOUR DETAIL API

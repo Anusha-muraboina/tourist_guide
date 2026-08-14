@@ -1,290 +1,1273 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Tour Management Dashboard{% endblock %}</title>
+
+    <title>
+        {% block title %}
+            Tour Management Dashboard
+        {% endblock %}
+    </title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+        }
+
+        /* Scrollbar */
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Sidebar scrollbar */
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+
+        /* Sidebar menu */
+
+        .sidebar-link {
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(2px);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(
+                135deg,
+                #0d9488,
+                #0f766e
+            );
+            color: white;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25);
+        }
+
+        .sidebar-link.active i {
+            color: white !important;
+        }
+
+        /* Profile dropdown */
+
+        .profile-dropdown {
+            animation: dropdown 0.18s ease-out;
+            transform-origin: top right;
+        }
+
+        @keyframes dropdown {
+
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+
+        }
+
+        /* Mobile overlay */
+
+        .overlay-visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Cards */
+
+        .dashboard-card {
+            transition: all 0.25s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+        }
+
+    </style>
+
+    {% block extra_css %}
+    {% endblock %}
+
 </head>
-<body class="bg-gray-100 font-sans antialiased">
 
-    <div class="flex h-screen overflow-hidden">
-        
-        {% comment %} <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between hidden md:flex"> {% endcomment %}
-<aside id="sidebar"
-class="fixed inset-y-0 left-0 z-50 w-64
-bg-slate-900
-text-slate-300
-flex
-flex-col
-overflow-y-auto
-transform
--transition-transform
-duration-300
-ease-in-out
--translate-x-full
-md:relative
-md:translate-x-0
-md:flex">
-     
 
-        <div>
-                <div class="h-16 flex items-center justify-center bg-slate-950 px-6">
-                    <span class="text-xl font-bold text-white tracking-wide">
-                        <i class="fa-solid fa-compass text-teal-400 mr-2"></i>TourAdmin
-                    </span>
-
-                        <button id="closeSidebar"
-            class="text-white md:hidden">
-
-        <i class="fa-solid fa-xmark text-xl"></i>
-
-    </button>
-                </div>
-
-                <nav class="mt-6 px-4 space-y-1">
-                    <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg {% if request.resolver_match.url_name == 'dashboard' %}bg-teal-600 text-white{% else %}hover:bg-slate-800 hover:text-white{% endif %} transition-colors">
-                        <i class="fa-solid fa-chart-pie w-5 mr-3 text-lg"></i> Dashboard
-                    </a>
-
-                    <div class="pt-4 pb-2 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        Core Management
-                    </div>
-
-                    <a href="{% url 'tour_category_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-route w-5 mr-3 text-lg text-slate-400"></i> Category
-                    </a>
-
-                    <a href="{% url 'tour_highlight_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Highlight
-                    </a>
-
-                    <a href="{% url 'tour_include_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-calendar-days w-5 mr-3 text-lg text-slate-400"></i> Include
-                    </a>
-
-
-                    <a href="{% url 'tour_exclude_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Exclude
-                    </a>
-
-
-                    <a href="{% url 'important_information_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> important
-                    </a>
-
-  <a href="{% url 'amenity_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Amenity
-                    </a>
-                    
-  <a href="{% url 'tour_schedule_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Sheduled
-                    </a>
-
-
-  <a href="{% url 'tour_pricing_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Pricing
-                    </a>
-
-                  <a href="{% url 'tour_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Tours
-                    </a>
-
-
-                  <a href="{% url 'contact_us_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Contact 
-                    </a>
-                            <a href="{% url 'coupon_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Coupon 
-                    </a>
-
-                 <a href="{% url 'rating_list' %}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-                        <i class="fa-solid fa-tags w-5 mr-3 text-lg text-slate-400"></i> Rating 
-                    </a> 
-
-
-<!-- ==========================================
-     BLOG MANAGEMENT
-=========================================== -->
-<a href="{% url 'payment_policy_list' %}"
-   class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white">
-
-    <i class="fa-solid fa-credit-card w-5 mr-3 text-slate-400"></i>
-
-    Payment Policy
-
-</a>
-
-<a href="{% url 'booking_list' %}"
-   class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white">
-
-    <i class="fa-solid fa-credit-card w-5 mr-3 text-slate-400"></i>
-
-    Booking
-
-</a>
-
-
-
-<a href="{% url 'location_list' %}"
-   class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white">
-
-    <i class="fa-solid fa-credit-card w-5 mr-3 text-slate-400"></i>
-
-    Location
-
-</a>
-
-<a href="{% url 'user_list' %}"
-   class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white">
-
-    <i class="fa-solid fa-credit-card w-5 mr-3 text-slate-400"></i>
-
-    users
-
-</a>
-
-
-
-<div class="mt-6">
-
-    <p class="px-4 mb-2 text-xs uppercase tracking-widest text-slate-500">
-        Blog Management
-    </p>
-
-    <a href="{% url 'blog_category_list' %}"
-       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-
-        <i class="fa-solid fa-folder-tree w-5 mr-3 text-lg text-slate-400"></i>
-
-        Blog Categories
-
-    </a>
-
-    <a href="{% url 'blog_list' %}"
-       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-
-        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
-
-        Blogs
-
-    </a>
-
-    <a href="{% url 'cancel_reason_list' %}"
-       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-
-        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
-
-        cancel reasons
-
-    </a>
-
-    <a href="{% url 'booking_cancel_comment_list' %}"
-       class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
-
-        <i class="fa-solid fa-blog w-5 mr-3 text-lg text-slate-400"></i>
-
-        cancel comment
-
-    </a>
-    
-
-
-
-
-</div>
-
-                </nav>
-
-            </div>
-
-            <div class="p-4 border-t border-slate-800 bg-slate-950 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold">A</div>
-                    <div>
-                        <p class="text-sm font-medium text-white">Admin User</p>
-                        <p class="text-xs text-slate-400">Manager</p>
-                    </div>
-                </div>
-                <a href="#" class="text-slate-400 hover:text-red-400 transition-colors">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </a>
-            </div>
-        </aside>
-      <div id="sidebarOverlay"
-     class="fixed inset-0 bg-black/50 hidden z-40 md:hidden">
-</div>
-        <div class="flex-1 flex flex-col overflow-hidden">
-
-
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
-
-    <div class="flex items-center">
-        {% comment %} <button class="text-gray-500 md:hidden mr-4">
-            <i class="fa-solid fa-bars text-xl"></i>
-        </button> {% endcomment %}
-
-        <button id="menuBtn"
-        class="text-gray-700 md:hidden mr-4">
-
-    <i class="fa-solid fa-bars text-2xl"></i>
-
-</button>
-
-        <h1 class="text-2xl font-semibold text-gray-800">
-            {% block dynamic_header %}Dashboard{% endblock %}
-        </h1>
-    </div>
-
-    <div class="relative">
-
-
-        <button
-            id="profileBtn"
-            onclick="toggleProfile()"
-            class="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2 transition">
-
-            <div class="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold uppercase">
-                {{ request.user.first_name|default:request.user.username|slice:":1" }}
-            </div>
-
-            <div class="hidden md:block text-left">
-                <p class="text-sm font-semibold text-gray-800">
-                    {{ request.user.get_full_name|default:request.user.username }}
-                </p>
-
-                <p class="text-xs text-gray-500">
-                    {{ request.user.email }}
-                </p>
-            </div>
-
-            <i class="fa-solid fa-chevron-down text-gray-500 text-sm"></i>
-
-        </button>
-
+<body class="text-slate-800 antialiased">
+
+
+<div class="flex h-screen overflow-hidden">
+
+
+    <!-- ========================================================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================================================= -->
+
+    <aside
+        id="sidebar"
+        class="
+            fixed
+            md:relative
+            inset-y-0
+            left-0
+            z-[60]
+            w-[270px]
+            bg-slate-950
+            text-slate-300
+            flex
+            flex-col
+            transform
+            -translate-x-full
+            md:translate-x-0
+            transition-transform
+            duration-300
+            ease-in-out
+            shadow-2xl
+        "
+    >
+
+
+        <!-- BRAND -->
 
         <div
-            id="profileDropdown"
-            class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border overflow-hidden">
+            class="
+                h-[72px]
+                min-h-[72px]
+                px-6
+                flex
+                items-center
+                justify-between
+                border-b
+                border-slate-800
+            "
+        >
 
-            <div class="px-5 py-4 border-b">
+            <a
+                href="{% url 'dashboard' %}"
+                class="flex items-center gap-3"
+            >
 
-                <div class="flex items-center gap-3">
+                <div
+                    class="
+                        w-10
+                        h-10
+                        rounded-xl
+                        bg-gradient-to-br
+                        from-teal-400
+                        to-emerald-600
+                        flex
+                        items-center
+                        justify-center
+                        shadow-lg
+                        shadow-teal-500/20
+                    "
+                >
 
-                    <div class="w-12 h-12 rounded-full bg-teal-600 flex items-center justify-center text-white text-lg font-bold uppercase">
-                        {{ request.user.first_name|default:request.user.username|slice:":1" }}
-                    </div>
+                    <i
+                        class="fa-solid fa-compass text-white text-lg"
+                    ></i>
 
-                    <div>
+                </div>
 
-                        <h4 class="font-semibold">
-                            {{ request.user.get_full_name|default:request.user.username }}
-                        </h4>
 
-                        <p class="text-sm text-gray-500">
-                            {{ request.user.email }}
-                        </p>
+                <div>
+
+                    <h1
+                        class="
+                            text-white
+                            font-bold
+                            text-lg
+                            tracking-tight
+                        "
+                    >
+                        TourAdmin
+                    </h1>
+
+                    <p
+                        class="
+                            text-[10px]
+                            text-slate-500
+                            uppercase
+                            tracking-[0.18em]
+                        "
+                    >
+                        Management Panel
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- MOBILE CLOSE -->
+
+            <button
+                id="closeSidebar"
+                class="
+                    md:hidden
+                    w-9
+                    h-9
+                    rounded-lg
+                    hover:bg-slate-800
+                    flex
+                    items-center
+                    justify-center
+                    text-slate-400
+                    hover:text-white
+                "
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- SIDEBAR CONTENT -->
+
+        <div class="flex-1 overflow-y-auto py-5">
+
+
+            <!-- MAIN -->
+
+            <div class="px-4 mb-2">
+
+                <p
+                    class="
+                        px-3
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-[0.18em]
+                        text-slate-500
+                    "
+                >
+                    Overview
+                </p>
+
+            </div>
+
+
+            <nav class="px-3 space-y-1">
+
+
+                <!-- Dashboard -->
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        px-3
+                        py-3
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        {% if request.resolver_match.url_name == 'dashboard' %}
+                            active
+                        {% else %}
+                            hover:bg-slate-900 hover:text-white
+                        {% endif %}
+                    "
+                >
+
+                    <span
+                        class="
+                            w-9
+                            h-9
+                            rounded-lg
+                            flex
+                            items-center
+                            justify-center
+                            bg-slate-900/70
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-chart-pie
+                                text-sm
+                                text-teal-400
+                            "
+                        ></i>
+
+                    </span>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- ================================================= -->
+            <!-- TOUR MANAGEMENT -->
+            <!-- ================================================= -->
+
+            <div class="px-4 mt-7 mb-2">
+
+                <p
+                    class="
+                        px-3
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-[0.18em]
+                        text-slate-500
+                    "
+                >
+                    Tour Management
+                </p>
+
+            </div>
+
+
+            <nav class="px-3 space-y-1">
+
+
+                <!-- Category -->
+
+                <a
+                    href="{% url 'tour_category_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-layer-group
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Categories</span>
+
+                </a>
+
+
+                <!-- Highlights -->
+
+                <a
+                    href="{% url 'tour_highlight_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-star
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Highlights</span>
+
+                </a>
+
+
+                <!-- Includes -->
+
+                <a
+                    href="{% url 'tour_include_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-circle-check
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Includes</span>
+
+                </a>
+
+
+                <!-- Excludes -->
+
+                <a
+                    href="{% url 'tour_exclude_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-circle-xmark
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Excludes</span>
+
+                </a>
+
+
+                <!-- Important Information -->
+
+                <a
+                    href="{% url 'important_information_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-circle-info
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Important Information</span>
+
+                </a>
+
+
+                <!-- Amenities -->
+
+                <a
+                    href="{% url 'amenity_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-spa
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Amenities</span>
+
+                </a>
+
+
+                <!-- Schedule -->
+
+                <a
+                    href="{% url 'tour_schedule_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-calendar-days
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Schedules</span>
+
+                </a>
+
+
+                <!-- Pricing -->
+
+                <a
+                    href="{% url 'tour_pricing_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-indian-rupee-sign
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Pricing</span>
+
+                </a>
+
+
+                <!-- Tours -->
+
+                <a
+                    href="{% url 'tour_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-map-location-dot
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Tours</span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- ================================================= -->
+            <!-- BOOKING & USERS -->
+            <!-- ================================================= -->
+
+            <div class="px-4 mt-7 mb-2">
+
+                <p
+                    class="
+                        px-3
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-[0.18em]
+                        text-slate-500
+                    "
+                >
+                    Operations
+                </p>
+
+            </div>
+
+
+            <nav class="px-3 space-y-1">
+
+
+                <!-- Bookings -->
+
+                <a
+                    href="{% url 'booking_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-calendar-check
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Bookings</span>
+
+                </a>
+
+
+                <!-- Locations -->
+
+                <a
+                    href="{% url 'location_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-location-dot
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Locations</span>
+
+                </a>
+
+
+                <!-- Users -->
+
+                <a
+                    href="{% url 'user_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-users
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Users</span>
+
+                </a>
+
+
+                <!-- Ratings -->
+
+                <a
+                    href="{% url 'rating_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-star-half-stroke
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Ratings</span>
+
+                </a>
+
+
+                <!-- Coupons -->
+
+                <a
+                    href="{% url 'coupon_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-ticket
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Coupons</span>
+
+                </a>
+
+
+                <!-- Payment Policy -->
+
+                <a
+                    href="{% url 'payment_policy_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-credit-card
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Payment Policy</span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- ================================================= -->
+            <!-- BLOG -->
+            <!-- ================================================= -->
+
+            <div class="px-4 mt-7 mb-2">
+
+                <p
+                    class="
+                        px-3
+                        text-[10px]
+                        font-bold
+                        uppercase
+                        tracking-[0.18em]
+                        text-slate-500
+                    "
+                >
+                    Content
+                </p>
+
+            </div>
+
+
+            <nav class="px-3 space-y-1">
+
+
+                <!-- Blog Categories -->
+
+                <a
+                    href="{% url 'blog_category_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-folder-tree
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Blog Categories</span>
+
+                </a>
+
+
+                <!-- Blogs -->
+
+                <a
+                    href="{% url 'blog_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-blog
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Blogs</span>
+
+                </a>
+
+
+                <!-- Contact -->
+
+                <a
+                    href="{% url 'contact_us_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-envelope
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Contact Messages</span>
+
+                </a>
+
+
+                <!-- Cancel Reasons -->
+
+                <a
+                    href="{% url 'cancel_reason_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-ban
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Cancel Reasons</span>
+
+                </a>
+
+
+                <!-- Cancel Comments -->
+
+                <a
+                    href="{% url 'booking_cancel_comment_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-comment-dots
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Cancel Comments</span>
+
+                </a>
+
+
+            </nav>
+
+
+        </div>
+
+
+        <!-- ===================================================== -->
+        <!-- SIDEBAR USER -->
+        <!-- ===================================================== -->
+
+        <div
+            class="
+                p-4
+                border-t
+                border-slate-800
+                bg-slate-950
+            "
+        >
+
+            <div
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    p-3
+                    rounded-xl
+                    bg-slate-900
+                "
+            >
+
+                <div
+                    class="
+                        w-10
+                        h-10
+                        rounded-xl
+                        bg-gradient-to-br
+                        from-teal-400
+                        to-emerald-600
+                        flex
+                        items-center
+                        justify-center
+                        text-white
+                        font-bold
+                    "
+                >
+
+                    {{ request.user.first_name|default:request.user.username|slice:":1" }}
+
+                </div>
+
+
+                <div class="flex-1 min-w-0">
+
+                    <p
+                        class="
+                            text-sm
+                            font-semibold
+                            text-white
+                            truncate
+                        "
+                    >
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-slate-500
+                            truncate
+                        "
+                    >
+                        Administrator
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'admin_logout' %}"
+                    class="
+                        w-8
+                        h-8
+                        rounded-lg
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-500
+                        hover:text-red-400
+                        hover:bg-red-500/10
+                        transition
+                    "
+                    title="Logout"
+                >
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        id="sidebarOverlay"
+        class="
+            fixed
+            inset-0
+            z-50
+            bg-slate-950/60
+            backdrop-blur-sm
+            hidden
+            md:hidden
+        "
+    ></div>
+
+
+
+    <!-- ========================================================= -->
+    <!-- MAIN AREA -->
+    <!-- ========================================================= -->
+
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+
+        <!-- ===================================================== -->
+        <!-- TOP NAVBAR -->
+        <!-- ===================================================== -->
+
+        <header
+            class="
+                h-[72px]
+                min-h-[72px]
+                bg-white
+                border-b
+                border-slate-200
+                flex
+                items-center
+                justify-between
+                px-4
+                sm:px-6
+                lg:px-8
+                z-40
+            "
+        >
+
+
+            <!-- LEFT -->
+
+            <div class="flex items-center gap-4">
+
+
+                <!-- MOBILE MENU -->
+
+                <button
+                    id="menuBtn"
+                    class="
+                        md:hidden
+                        w-10
+                        h-10
+                        rounded-xl
+                        bg-slate-100
+                        text-slate-700
+                        flex
+                        items-center
+                        justify-center
+                        hover:bg-slate-200
+                    "
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div>
+
+                    <h1
+                        class="
+                            text-lg
+                            sm:text-xl
+                            font-bold
+                            text-slate-900
+                        "
+                    >
+
+                        {% block dynamic_header %}
+                            Dashboard
+                        {% endblock %}
+
+                    </h1>
+
+
+                    <div
+                        class="
+                            hidden
+                            sm:flex
+                            items-center
+                            gap-2
+                            text-xs
+                            text-slate-400
+                            mt-0.5
+                        "
+                    >
+
+                        <i class="fa-solid fa-house"></i>
+
+                        <span>/</span>
+
+                        <span class="text-slate-500">
+                            Admin Panel
+                        </span>
 
                     </div>
 
@@ -293,94 +1276,662 @@ md:flex">
             </div>
 
 
-            <a href="#"
-               class="flex items-center gap-3 px-5 py-3 hover:bg-gray-100">
 
-                <i class="fa-solid fa-user text-teal-600"></i>
+            <!-- RIGHT -->
 
-                My Profile
-            </a>
+            <div class="flex items-center gap-2 sm:gap-4">
 
-            <a href="{% url 'admin_logout' %}"
-               class="flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            </a>
-        </div>
-    </div>
 
-</header>
+                <!-- SEARCH -->
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+                <button
+                    class="
+                        hidden
+                        lg:flex
+                        items-center
+                        gap-3
+                        w-52
+                        xl:w-64
+                        px-4
+                        py-2.5
+                        rounded-xl
+                        bg-slate-50
+                        border
+                        border-slate-200
+                        text-slate-400
+                        text-sm
+                        hover:border-slate-300
+                        transition
+                    "
+                >
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <span>Search...</span>
+
+                    <span
+                        class="
+                            ml-auto
+                            text-[10px]
+                            bg-white
+                            border
+                            px-1.5
+                            py-0.5
+                            rounded
+                        "
+                    >
+                        Ctrl K
+                    </span>
+
+                </button>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button
+                    class="
+                        relative
+                        w-10
+                        h-10
+                        rounded-xl
+                        bg-slate-50
+                        border
+                        border-slate-200
+                        text-slate-500
+                        hover:text-teal-600
+                        hover:bg-teal-50
+                        transition
+                    "
+                    title="Notifications"
+                >
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span
+                        class="
+                            absolute
+                            top-2
+                            right-2
+                            w-2
+                            h-2
+                            rounded-full
+                            bg-red-500
+                            border-2
+                            border-white
+                        "
+                    ></span>
+
+                </button>
+
+
+
+                <!-- PROFILE -->
+
+                <div class="relative">
+
+
+                    <button
+                        id="profileBtn"
+                        class="
+                            flex
+                            items-center
+                            gap-2
+                            sm:gap-3
+                            px-1.5
+                            sm:px-2
+                            py-1.5
+                            rounded-xl
+                            hover:bg-slate-50
+                            transition
+                        "
+                    >
+
+
+                        <div
+                            class="
+                                w-10
+                                h-10
+                                rounded-xl
+                                bg-gradient-to-br
+                                from-teal-500
+                                to-emerald-600
+                                flex
+                                items-center
+                                justify-center
+                                text-white
+                                font-bold
+                                shadow-sm
+                            "
+                        >
+
+                            {{ request.user.first_name|default:request.user.username|slice:":1" }}
+
+                        </div>
+
+
+                        <div class="hidden sm:block text-left">
+
+                            <p
+                                class="
+                                    text-sm
+                                    font-semibold
+                                    text-slate-800
+                                    max-w-[150px]
+                                    truncate
+                                "
+                            >
+                                {{ request.user.get_full_name|default:request.user.username }}
+                            </p>
+
+                            <p
+                                class="
+                                    text-[11px]
+                                    text-slate-400
+                                "
+                            >
+                                Administrator
+                            </p>
+
+                        </div>
+
+
+                        <i
+                            class="
+                                hidden
+                                sm:block
+                                fa-solid
+                                fa-chevron-down
+                                text-xs
+                                text-slate-400
+                            "
+                        ></i>
+
+
+                    </button>
+
+
+
+                    <!-- PROFILE DROPDOWN -->
+
+                    <div
+                        id="profileDropdown"
+                        class="
+                            profile-dropdown
+                            hidden
+                            absolute
+                            right-0
+                            top-full
+                            mt-3
+                            w-72
+                            bg-white
+                            rounded-2xl
+                            border
+                            border-slate-200
+                            shadow-2xl
+                            overflow-hidden
+                        "
+                    >
+
+
+                        <!-- PROFILE HEADER -->
+
+                        <div
+                            class="
+                                p-5
+                                bg-gradient-to-br
+                                from-slate-50
+                                to-white
+                                border-b
+                                border-slate-100
+                            "
+                        >
+
+                            <div class="flex items-center gap-3">
+
+                                <div
+                                    class="
+                                        w-12
+                                        h-12
+                                        rounded-xl
+                                        bg-gradient-to-br
+                                        from-teal-500
+                                        to-emerald-600
+                                        flex
+                                        items-center
+                                        justify-center
+                                        text-white
+                                        text-lg
+                                        font-bold
+                                    "
+                                >
+
+                                    {{ request.user.first_name|default:request.user.username|slice:":1" }}
+
+                                </div>
+
+
+                                <div class="min-w-0">
+
+                                    <h4
+                                        class="
+                                            font-bold
+                                            text-slate-900
+                                            truncate
+                                        "
+                                    >
+                                        {{ request.user.get_full_name|default:request.user.username }}
+                                    </h4>
+
+                                    <p
+                                        class="
+                                            text-xs
+                                            text-slate-500
+                                            truncate
+                                        "
+                                    >
+                                        {{ request.user.email }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PROFILE LINKS -->
+
+                        <div class="p-2">
+
+
+                            <a
+                                href="#"
+                                class="
+                                    flex
+                                    items-center
+                                    gap-3
+                                    px-3
+                                    py-3
+                                    rounded-xl
+                                    hover:bg-slate-50
+                                    transition
+                                "
+                            >
+
+                                <span
+                                    class="
+                                        w-9
+                                        h-9
+                                        rounded-lg
+                                        bg-teal-50
+                                        text-teal-600
+                                        flex
+                                        items-center
+                                        justify-center
+                                    "
+                                >
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                </span>
+
+                                <div>
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            font-medium
+                                            text-slate-800
+                                        "
+                                    >
+                                        My Profile
+                                    </p>
+
+                                    <p
+                                        class="
+                                            text-[11px]
+                                            text-slate-400
+                                        "
+                                    >
+                                        Manage your account
+                                    </p>
+
+                                </div>
+
+                            </a>
+
+
+                            <a
+                                href="{% url 'admin_logout' %}"
+                                class="
+                                    flex
+                                    items-center
+                                    gap-3
+                                    px-3
+                                    py-3
+                                    rounded-xl
+                                    hover:bg-red-50
+                                    transition
+                                "
+                            >
+
+                                <span
+                                    class="
+                                        w-9
+                                        h-9
+                                        rounded-lg
+                                        bg-red-50
+                                        text-red-500
+                                        flex
+                                        items-center
+                                        justify-center
+                                    "
+                                >
+
+                                    <i
+                                        class="fa-solid fa-right-from-bracket"
+                                    ></i>
+
+                                </span>
+
+                                <div>
+
+                                    <p
+                                        class="
+                                            text-sm
+                                            font-medium
+                                            text-red-600
+                                        "
+                                    >
+                                        Logout
+                                    </p>
+
+                                    <p
+                                        class="
+                                            text-[11px]
+                                            text-slate-400
+                                        "
+                                    >
+                                        Sign out from admin
+                                    </p>
+
+                                </div>
+
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ===================================================== -->
+        <!-- MAIN CONTENT -->
+        <!-- ===================================================== -->
+
+        <main
+            class="
+                flex-1
+                overflow-x-hidden
+                overflow-y-auto
+                bg-[#f5f7fb]
+                p-4
+                sm:p-6
+                lg:p-8
+            "
+        >
+
+
+            <!-- PAGE TOP -->
+
+            <div
+                class="
+                    max-w-[1600px]
+                    mx-auto
+                "
+            >
+
                 {% block content %}
+
                 {% endblock %}
-            </main>
-        </div>
+
+            </div>
+
+
+        </main>
+
+
     </div>
 
-    <script>
-const profileBtn = document.getElementById("profileBtn");
-const profileDropdown = document.getElementById("profileDropdown");
 
-profileBtn.addEventListener("click", function (e) {
-    e.stopPropagation();
-    profileDropdown.classList.toggle("hidden");
-});
+</div>
 
-// Close dropdown when clicking outside
-document.addEventListener("click", function (e) {
-    if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-        profileDropdown.classList.add("hidden");
-    }
-});
 
-// Prevent closing when clicking inside dropdown
-profileDropdown.addEventListener("click", function (e) {
-    e.stopPropagation();
-});
-</script>
+
+<!-- ============================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================================================= -->
 
 <script>
 
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("sidebarOverlay");
 
-const menuBtn = document.getElementById("menuBtn");
+    /* =========================================================
+       PROFILE DROPDOWN
+    ========================================================= */
 
-const closeBtn = document.getElementById("closeSidebar");
+    const profileBtn =
+        document.getElementById("profileBtn");
 
-menuBtn.addEventListener("click", function(){
+    const profileDropdown =
+        document.getElementById("profileDropdown");
 
-    sidebar.classList.remove("-translate-x-full");
 
-    overlay.classList.remove("hidden");
+    if (profileBtn && profileDropdown) {
 
-});
+        profileBtn.addEventListener(
+            "click",
+            function (event) {
 
-closeBtn.addEventListener("click", closeSidebar);
+                event.stopPropagation();
 
-overlay.addEventListener("click", closeSidebar);
+                profileDropdown.classList.toggle("hidden");
 
-function closeSidebar(){
+            }
+        );
 
-    sidebar.classList.add("-translate-x-full");
 
-    overlay.classList.add("hidden");
+        document.addEventListener(
+            "click",
+            function (event) {
 
-}
+                if (
+                    !profileDropdown.contains(event.target) &&
+                    !profileBtn.contains(event.target)
+                ) {
 
-window.addEventListener("resize", function(){
+                    profileDropdown.classList.add("hidden");
 
-    if(window.innerWidth >= 768){
+                }
 
-        sidebar.classList.remove("-translate-x-full");
-
-        overlay.classList.add("hidden");
+            }
+        );
 
     }
 
-});
+
+
+    /* =========================================================
+       MOBILE SIDEBAR
+    ========================================================= */
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("sidebarOverlay");
+
+    const menuBtn =
+        document.getElementById("menuBtn");
+
+    const closeBtn =
+        document.getElementById("closeSidebar");
+
+
+    function openSidebar() {
+
+        if (!sidebar || !overlay) return;
+
+        sidebar.classList.remove("-translate-x-full");
+
+        overlay.classList.remove("hidden");
+
+        document.body.classList.add("overflow-hidden");
+
+    }
+
+
+    function closeSidebar() {
+
+        if (!sidebar || !overlay) return;
+
+        sidebar.classList.add("-translate-x-full");
+
+        overlay.classList.add("hidden");
+
+        document.body.classList.remove("overflow-hidden");
+
+    }
+
+
+    if (menuBtn) {
+
+        menuBtn.addEventListener(
+            "click",
+            openSidebar
+        );
+
+    }
+
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    /* Close sidebar after clicking a link on mobile */
+
+    document
+        .querySelectorAll("#sidebar a")
+        .forEach(function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    if (window.innerWidth < 768) {
+
+                        closeSidebar();
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       RESIZE
+    ========================================================= */
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (window.innerWidth >= 768) {
+
+                if (sidebar) {
+
+                    sidebar.classList.remove(
+                        "-translate-x-full"
+                    );
+
+                }
+
+                if (overlay) {
+
+                    overlay.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+                document.body.classList.remove(
+                    "overflow-hidden"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       ESCAPE KEY
+    ========================================================= */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                closeSidebar();
+
+                if (profileDropdown) {
+
+                    profileDropdown.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
 
 </script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+
 </body>
+
 </html>

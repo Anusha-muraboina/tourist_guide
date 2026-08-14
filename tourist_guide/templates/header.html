@@ -32,7 +32,7 @@
   </style>
   <nav class="w-full bg-white shadow-sm fixed top-0 left-0 z-50">
 
-    <div class="w-full px-2 lg:px-28">
+    <div class="w-full px-2 sm:px-4  lg:px-32">
 
       <div class="h-[78px] flex items-center justify-between">
 
@@ -52,10 +52,10 @@
             <div>
 
                 <a href="/">
-    <h1 class="text-[20px] font-bold text-gray-900">
-        Travel Explorer
-    </h1>
-</a>
+                    <h1 class="md:text-[20px]  text-[14px] font-bold text-gray-900">
+                        Travel Explorer
+                    </h1>
+                </a>
 
               {% comment %} <h1 class="text-[20px] font-bold text-gray-900">
                 Travel Explorer
@@ -88,11 +88,14 @@
 </a>
 
 <a
-    href="{% url 'blog_list' %}"
+    href="{% url 'bloglisting' %}"
     class="hover:text-cyan-400 text-sm font-medium  transition-colors"
 >
     Blog
 </a>
+
+
+
     <!-- PLACES -->
 <div class="relative">
 
@@ -160,216 +163,381 @@
         <!-- RIGHT -->
         <div class="flex items-center gap-7">
 
-          <!-- <button class="text-gray-600 hover:text-cyan-600">
-            <i class="fa-regular fa-heart text-[18px]"></i>
-          </button>
-
-          <button class="text-gray-600 hover:text-cyan-600">
-            <i class="fa-solid fa-cart-shopping text-[18px]"></i>
-          </button> -->
-
-          <!-- <button class="text-gray-600 hover:text-cyan-600">
-            <i class="fa-regular fa-bookmark text-[18px]"></i>
-          </button> -->
-
-          <!-- <div class="flex items-center gap-3">
-
-
-            <img
-              src="https://i.pravatar.cc/100"
-              class="w-10 h-10 rounded-full object-cover"
-            />
-
-            <div class="hidden md:block">
-              <h3 class="text-[14px] font-semibold text-gray-800">
-                Anusha
-              </h3>
-
-         
-
-              <a href="/user/register/">
-  
-   Traveler
-
-</a>
-            </div>
-
-         
-<button
-    id="mobileMenuBtn"
-    class="lg:hidden w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center text-gray-700"
->
-
-    <i class="fa-solid fa-bars text-[18px]"></i>
-
-</button>
-
-          </div> -->
-
-
           <!-- RIGHT -->
 
 <div class="flex items-center gap-7">
 
+{% if request.user.is_authenticated %}
 
-    {% if request.user.is_authenticated %}
+<!-- ============================================================
+     USER DROPDOWN
+============================================================ -->
 
-    <!-- USER DROPDOWN -->
+<div class="relative group">
 
-    <div class="relative group">
+    <!-- USER BUTTON -->
 
-        <button
-            class="flex items-center gap-3">
+    <button
+        type="button"
+        class="flex items-center gap-3"
+    >
+
+        <!-- PROFILE IMAGE -->
+
+        {% if request.user.profile_image %}
 
             <img
-              src="https://i.pravatar.cc/100"
-              class="w-11 h-11 rounded-full object-cover border-2 border-cyan-500"
-            />
+                src="{{ request.user.profile_image.url }}"
+                alt="{{ request.user.username }}"
+                class="
+                    w-11
+                    h-11
+                    rounded-full
+                    object-cover
+                    border-2
+                    border-cyan-500
+                "
+            >
 
-            <div class="hidden md:block text-left">
+        {% else %}
 
-                <h3 class="text-[14px] font-semibold text-gray-800">
+            <!-- DEFAULT LETTER AVATAR -->
 
-                    {{ request.user.username }}
-
-                </h3>
-
-                <p class="text-[12px] text-gray-500 capitalize">
-
-                    {{ request.user.role }}
-
-                </p>
-
+            <div
+                class="
+                    w-11
+                    h-11
+                    rounded-full
+                    border-2
+                    border-cyan-500
+                    bg-cyan-50
+                    flex
+                    items-center
+                    justify-center
+                    text-cyan-700
+                    font-bold
+                    text-lg
+                "
+            >
+                {{ request.user.username|first|upper }}
             </div>
 
-            <i class="fa-solid fa-chevron-down text-[12px] text-gray-500"></i>
-
-        </button>
+        {% endif %}
 
 
+        <!-- USER INFORMATION -->
 
-        <!-- DROPDOWN -->
+        <div class="hidden md:block text-left">
 
-        <div class="absolute right-0 top-[45px] w-[220px] bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 overflow-hidden">
+            <h3
+                class="
+                    text-[14px]
+                    font-semibold
+                    text-gray-800
+                "
+            >
+                {{ request.user.username }}
+            </h3>
 
+            <p
+                class="
+                    text-[12px]
+                    text-gray-500
+                    capitalize
+                "
+            >
+                {{ request.user.role }}
+            </p>
 
-            <!-- TOP -->
-
-            <div class="p-5 border-b border-gray-100">
-
-                <h3 class="text-[15px] font-bold text-gray-900">
-
-                    {{ request.user.username }}
-
-                </h3>
-
-                <p class="text-[13px] text-gray-500 mt-1">
-
-                    {{ request.user.email }}
-
-                </p>
-
-            </div>
-            <!-- MENU -->
-
-            <div class="p-2">
-
-
-                <!-- PROFILE -->
-
-                <a href="/user/profile/"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
-
-                    <i class="fa-regular fa-user text-cyan-600"></i>
-
-                    <span class="text-[14px] font-medium text-gray-700">
-
-                        My Profile
-
-                    </span>
-
-                </a>
+        </div>
 
 
+        <!-- ARROW -->
 
-                <!-- BOOKINGS -->
+        <i
+            class="
+                fa-solid
+                fa-chevron-down
+                text-[12px]
+                text-gray-500
+            "
+        ></i>
 
-                <a href="/booking/my-bookings/"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
-
-                    <i class="fa-regular fa-bookmark text-cyan-600"></i>
-
-                    <span class="text-[14px] font-medium text-gray-700">
-
-                        My Bookings
-
-                    </span>
-
-                </a>
+    </button>
 
 
+    <!-- ========================================================
+         DROPDOWN
+    ========================================================= -->
 
-                <!-- SETTINGS -->
+    <div
+        class="
+            absolute
+            right-0
+            top-[45px]
+            w-[240px]
+            bg-white
+            rounded-2xl
+            shadow-2xl
+            border
+            border-gray-100
+            opacity-0
+            invisible
+            group-hover:opacity-100
+            group-hover:visible
+            transition
+            duration-300
+            overflow-hidden
+            z-[999]
+        "
+    >
 
-                <!-- <a href="#"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
+        <!-- ====================================================
+             USER HEADER
+        ===================================================== -->
 
-                    <i class="fa-solid fa-gear text-cyan-600"></i>
+        <div
+            class="
+                p-5
+                border-b
+                border-gray-100
+            "
+        >
 
-                    <span class="text-[14px] font-medium text-gray-700">
+            <div
+                class="
+                    flex
+                    items-center
+                    gap-3
+                "
+            >
 
-                        Settings
+                <!-- PROFILE IMAGE -->
 
-                    </span>
+                {% if request.user.profile_image %}
 
-                </a> -->
+                    <img
+                        src="{{ request.user.profile_image.url }}"
+                        alt="{{ request.user.username }}"
+                        class="
+                            w-12
+                            h-12
+                            rounded-full
+                            object-cover
+                            border-2
+                            border-cyan-100
+                        "
+                    >
+
+                {% else %}
+
+                    <div
+                        class="
+                            w-12
+                            h-12
+                            rounded-full
+                            bg-cyan-50
+                            text-cyan-700
+                            flex
+                            items-center
+                            justify-center
+                            font-bold
+                            text-lg
+                        "
+                    >
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                {% endif %}
 
 
+                <!-- USER DETAILS -->
 
-                <button
-    onclick="logoutUser()"
-    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition text-left">
+                <div
+                    class="
+                        min-w-0
+                    "
+                >
 
-    <i class="fa-solid fa-right-from-bracket text-red-500"></i>
+                    <h3
+                        class="
+                            text-[15px]
+                            font-bold
+                            text-gray-900
+                            truncate
+                        "
+                    >
+                        {{ request.user.username }}
+                    </h3>
 
-    <span class="text-[14px] font-medium text-red-500">
+                    <p
+                        class="
+                            text-[13px]
+                            text-gray-500
+                            mt-1
+                            truncate
+                        "
+                    >
+                        {{ request.user.email }}
+                    </p>
 
-        Logout
-
-    </span>
-
-</button>
-
-                <!-- LOGOUT -->
-                <!-- <a href="/user/api/logout/"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition">
-                    <i class="fa-solid fa-right-from-bracket text-red-500"></i>
-                    <span class="text-[14px] font-medium text-red-500">
-                        Logout
-                    </span>
-                </a> -->
+                </div>
 
             </div>
 
         </div>
 
+
+        <!-- ====================================================
+             MENU
+        ===================================================== -->
+
+        <div class="p-2">
+            <a
+                href="/user/profile/"
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    px-4
+                    py-3
+                    rounded-xl
+                    hover:bg-cyan-50
+                    transition
+                "
+            >
+
+                <i
+                    class="
+                        fa-regular
+                        fa-user
+                        text-cyan-600
+                    "
+                ></i>
+
+                <span
+                    class="
+                        text-[14px]
+                        font-medium
+                        text-gray-700
+                    "
+                >
+                    My Profile
+                </span>
+
+            </a>
+
+
+            <!-- BOOKINGS -->
+
+            <a
+                href="/booking/my-bookings/"
+                class="
+                    flex
+                    items-center
+                    gap-3
+                    px-4
+                    py-3
+                    rounded-xl
+                    hover:bg-cyan-50
+                    transition
+                "
+            >
+
+                <i
+                    class="
+                        fa-regular
+                        fa-bookmark
+                        text-cyan-600
+                    "
+                ></i>
+
+                <span
+                    class="
+                        text-[14px]
+                        font-medium
+                        text-gray-700
+                    "
+                >
+                    My Bookings
+                </span>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <button
+                type="button"
+                onclick="logoutUser()"
+                class="
+                    w-full
+                    flex
+                    items-center
+                    gap-3
+                    px-4
+                    py-3
+                    rounded-xl
+                    hover:bg-red-50
+                    transition
+                    text-left
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-right-from-bracket
+                        text-red-500
+                    "
+                ></i>
+
+                <span
+                    class="
+                        text-[14px]
+                        font-medium
+                        text-red-500
+                    "
+                >
+                    Logout
+                </span>
+
+            </button>
+
+
+        </div>
+
     </div>
 
+</div>
 
 
-    {% else %}
+{% else %}
 
-    <!-- LOGIN BUTTON -->
+<!-- ============================================================
+     LOGIN BUTTON
+============================================================ -->
 
-    <a href="/user/login/"
-       class="h-11 px-6 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center font-semibold transition">
+<a
+    href="/user/login/"
+    class="
+        h-11
+        px-6
+        rounded-xl
+        bg-cyan-600
+        hover:bg-cyan-700
+        text-white
+        flex
+        items-center
+        justify-center
+        font-semibold
+        transition
+    "
+>
+    Login
+</a>
 
-        Login
-
-    </a>
-
-    {% endif %}
-
+{% endif %}
 
 
     <!-- MOBILE MENU BUTTON -->
@@ -445,64 +613,7 @@
             </div>
 
             <!-- LINKS -->
-            <!-- <div class="space-y-3">
-
-                
-                <a href="#"
-                   class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
-
-                    <div class="flex items-center gap-4">
-
-                        <div class="w-11 h-11 rounded-xl bg-cyan-100 flex items-center justify-center text-cyan-600">
-
-                            <i class="fa-solid fa-location-dot"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[15px] font-semibold text-gray-900">
-                                Places to see
-                            </h3>
-                        </div>
-
-                    </div>
-
-                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
-
-                </a>
-
-                
-                <a href="#"
-                   class="flex items-center justify-between p-4 rounded-2xl hover:bg-cyan-50 transition">
-
-                    <div class="flex items-center gap-4">
-
-                        <div class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center text-orange-500">
-
-                            <i class="fa-solid fa-map"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[15px] font-semibold text-gray-900">
-                                Things to do
-                            </h3>
-
-                            <p class="text-[12px] text-gray-500">
-                                Activities & tours
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
-
-                </a>
-
-            </div> -->
+          
 
 <div class="space-y-3">
 
@@ -605,17 +716,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
 <script>
-
 document.addEventListener(
     "DOMContentLoaded",
     function(){

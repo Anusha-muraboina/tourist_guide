@@ -58,19 +58,28 @@ Premium Tour Details
 
                     <div class="flex items-center gap-2">
 
-                        <div class="text-yellow-400 text-lg">
-                            ★★★★★
-                        </div>
+    <!-- Dynamic Stars -->
+    <div
+        id="topRatingStars"
+        class="text-yellow-400 text-lg tracking-tight">
+        ☆☆☆☆☆
+    </div>
 
-                        <span class="font-bold text-gray-800">
-                            4.8
-                        </span>
+    <!-- Dynamic Rating -->
+    <span
+        id="topAverageRating"
+        class="font-bold text-gray-800">
+        0.0
+    </span>
 
-                        <span class="text-gray-500">
-                            (2,350 reviews)
-                        </span>
+    <!-- Dynamic Reviews -->
+    <span
+        id="topTotalRatings"
+        class="text-gray-500">
+        (0 reviews)
+    </span>
 
-                    </div>
+</div>
 
 <div class="flex items-center gap-2 text-gray-600">
 
@@ -192,18 +201,7 @@ Premium Tour Details
     </p>
 </div>
 
-    <!-- <div class="flex items-start gap-3 mt-5">
 
-        <i class="fa-solid fa-location-dot text-[#1677e6] mt-1"></i>
-
-        <p class="font-medium text-[#111827]">
-
-            Meet at Charminar Rd, Char Kaman,
-            Ghansi Bazaar, Hyderabad
-
-        </p>
-
-    </div> -->
 
     <!-- DIVIDER -->
 
@@ -244,37 +242,6 @@ Premium Tour Details
 
         </button>
 
-        <!-- <button
-            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
-        >
-
-            10:00 AM
-
-        </button> -->
-
-        <!-- <button
-            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
-        >
-
-            11:00 AM
-
-        </button> -->
-
-        <!-- <button
-            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
-        >
-
-            12:00 PM
-
-        </button> -->
-
-        <!-- <button
-            class="border border-gray-300 hover:border-[#1677e6] hover:text-[#1677e6] duration-300 font-semibold px-7 py-4 rounded-2xl"
-        >
-
-            1:00 PM
-
-        </button> -->
 
     </div>
 
@@ -435,7 +402,7 @@ BOOK NOW
 
 <!-- ================= TOUR FEATURES ================= -->
 
-<div class="mt-10 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-6 lg:p-8">
+<div class="mt-2 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-6 lg:p-8">
 
    
 
@@ -900,14 +867,14 @@ BOOK NOW
 
 <div class="lg:col-span-4">
     <!-- Sticky Card Container -->
-    <div class="sticky top-24 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] overflow-hidden transition-all">
+    <div class="sticky top-24 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] overflow-visible transition-all">
 
 
         <!-- CARD BODY -->
         <div class="p-6 space-y-6">
 
             <!-- DATE PICKER FIELD -->
-            <div>
+            <!-- <div>
                 <label for="bookingDate" class="block text-sm font-semibold text-slate-800 mb-2">
                     Select Date
                 </label>
@@ -922,7 +889,40 @@ BOOK NOW
                         class="w-full bg-slate-50/80 border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 shadow-sm hover:border-slate-300"
                     />
                 </div>
-            </div>
+            </div> -->
+
+
+            <!-- DATE PICKER FIELD -->
+<!-- DATE PICKER FIELD -->
+<div id="bookingDateWrapper" class="relative">
+
+    <label
+        for="bookingDate"
+        class="block text-sm font-semibold text-slate-800 mb-2"
+    >
+        Select Date
+    </label>
+
+    <div class="relative group">
+
+        <div
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-blue-600 transition-transform group-hover:scale-110"
+        >
+            <i class="fa-solid fa-calendar-days text-lg"></i>
+        </div>
+
+        <input
+            type="text"
+            id="bookingDate"
+            placeholder="Choose travel date"
+            autocomplete="off"
+            readonly
+            class="w-full bg-slate-50/80 border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm font-medium text-slate-800 placeholder-slate-400 outline-none transition-all duration-200 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 shadow-sm hover:border-slate-300"
+        />
+
+    </div>
+
+</div>
 
             <!-- TRAVELLERS FIELD -->
             <div class="relative">
@@ -1076,12 +1076,12 @@ BOOK NOW
             </div>
 
             <!-- ACTION BUTTON -->
-            <button
+            <!-- <button
                 type="button"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl text-sm tracking-wide shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-200 active:scale-[0.98]"
             >
                 BOOK NOW
-            </button>
+            </button> -->
 
         </div>
     </div>
@@ -1148,7 +1148,7 @@ BOOK NOW
 </div>
 <!-- ================= FLATPICKR CUSTOM CSS ================= -->
 
-
+<!-- 
 <style>
 
 .flatpickr-calendar {
@@ -1231,9 +1231,192 @@ BOOK NOW
     cursor: pointer !important;
 }
 
+</style> -->
+
+<style>
+
+/* ==========================================
+   FLATPICKR
+========================================== */
+
+.flatpickr-calendar {
+
+    border: none !important;
+
+    border-radius: 24px !important;
+
+    overflow: visible !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.15) !important;
+
+    padding: 12px !important;
+
+    width: 340px !important;
+
+    max-width: calc(100vw - 32px) !important;
+
+    z-index: 999999 !important;
+
+}
+
+
+/* ==========================================
+   MONTH
+========================================== */
+
+.flatpickr-months {
+
+    padding: 12px 8px;
+
+}
+
+
+.flatpickr-current-month {
+
+    font-size: 18px !important;
+
+    font-weight: 700 !important;
+
+    color: #212121 !important;
+
+}
+
+
+/* ==========================================
+   WEEK DAYS
+========================================== */
+
+.flatpickr-weekdays {
+
+    margin-top: 8px;
+
+}
+
+
+.flatpickr-weekday {
+
+    color: #878787 !important;
+
+    font-weight: 700 !important;
+
+    font-size: 13px !important;
+
+}
+
+
+/* ==========================================
+   DAYS
+========================================== */
+
+.flatpickr-days {
+
+    width: 100% !important;
+
+}
+
+
+.dayContainer {
+
+    min-width: 100% !important;
+
+    max-width: 100% !important;
+
+    width: 100% !important;
+
+}
+
+
+.flatpickr-day {
+
+    border-radius: 14px !important;
+
+    height: 42px !important;
+
+    line-height: 42px !important;
+
+    width: 42px !important;
+
+    max-width: 42px !important;
+
+    font-weight: 600 !important;
+
+}
+
+
+/* IMPORTANT
+   Correct hover selector
+*/
+
+.flatpickr-day:hover {
+
+    background: #e8f0fe !important;
+
+    color: #2874f0 !important;
+
+}
+
+
+.flatpickr-day.selected {
+
+    background: #2874f0 !important;
+
+    border-color: #2874f0 !important;
+
+    color: #ffffff !important;
+
+}
+
+
+.flatpickr-day.today {
+
+    border-color: #2874f0 !important;
+
+}
+
+
+/* ==========================================
+   INPUT
+========================================== */
+
+#bookingDate {
+
+    cursor: pointer !important;
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 640px) {
+
+    .flatpickr-calendar {
+
+        width: calc(100vw - 32px) !important;
+
+        max-width: calc(100vw - 32px) !important;
+
+    }
+
+    .flatpickr-day {
+
+        width: 38px !important;
+
+        max-width: 38px !important;
+
+        height: 38px !important;
+
+        line-height: 38px !important;
+
+    }
+
+}
+
 </style>
-
-
 <!-- ================= CSS ================= -->
 
 <style>
@@ -1292,34 +1475,347 @@ BOOK NOW
 
 <script>
 
-    flatpickr("#bookingDate", {
 
-        minDate: "today",
 
-        altInput: true,
 
-        altFormat: "F j, Y",
+document.addEventListener("DOMContentLoaded", function () {
 
-        dateFormat: "Y-m-d",
+    const bookingInput =
+        document.getElementById("bookingDate");
 
-        disableMobile: true,
+    if (!bookingInput) {
+        return;
+    }
 
-        onChange: function(selectedDates, dateStr, instance) {
 
-            document
-                .getElementById('selectedTourCard')
-                .classList.remove('hidden');
+    /* ==========================================
+       FLATPICKR
+    ========================================== */
 
-            const formattedDate =
-                instance.formatDate(selectedDates[0], "l, F j, Y");
+    const bookingCalendar = flatpickr(
+        bookingInput,
+        {
 
-            document
-                .getElementById('selectedDateText')
-                .innerText = formattedDate;
+            minDate: "today",
+
+            dateFormat: "Y-m-d",
+
+            disableMobile: true,
+
+            /*
+             * IMPORTANT:
+             * Don't use altInput.
+             */
+            altInput: false,
+
+            /*
+             * Calendar is attached to body.
+             * We manually position it.
+             */
+            appendTo: document.body,
+
+            static: false,
+
+            allowInput: false,
+
+            /*
+             * Open calendar below input
+             */
+            position: "below",
+
+            onOpen: function (
+                selectedDates,
+                dateStr,
+                instance
+            ) {
+
+                positionCalendar(instance);
+
+            },
+
+            onChange: function (
+                selectedDates,
+                dateStr,
+                instance
+            ) {
+
+                if (!selectedDates.length) {
+                    return;
+                }
+
+
+                /* =========================
+                   SHOW TOUR CARD
+                ========================= */
+
+                const selectedTourCard =
+                    document.getElementById(
+                        "selectedTourCard"
+                    );
+
+                if (selectedTourCard) {
+
+                    selectedTourCard.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+
+                /* =========================
+                   DISPLAY SELECTED DATE
+                ========================= */
+
+                const formattedDate =
+                    instance.formatDate(
+                        selectedDates[0],
+                        "l, F j, Y"
+                    );
+
+                const selectedDateText =
+                    document.getElementById(
+                        "selectedDateText"
+                    );
+
+                if (selectedDateText) {
+
+                    selectedDateText.innerText =
+                        formattedDate;
+
+                }
+
+            },
+
+            onClose: function () {
+
+                window.removeEventListener(
+                    "scroll",
+                    closeCalendarOnScroll
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
+       POSITION CALENDAR
+    ========================================== */
+
+    function positionCalendar(instance) {
+
+        const calendar =
+            instance.calendarContainer;
+
+        if (!calendar) {
+            return;
+        }
+
+
+        const rect =
+            bookingInput.getBoundingClientRect();
+
+
+        /*
+         * IMPORTANT:
+         * Use fixed position.
+         *
+         * This prevents the calendar
+         * from being affected by the
+         * sticky card.
+         */
+
+        calendar.style.position = "fixed";
+
+        calendar.style.top =
+            `${rect.bottom + 8}px`;
+
+        calendar.style.left =
+            `${rect.left}px`;
+
+        calendar.style.right =
+            "auto";
+
+        calendar.style.bottom =
+            "auto";
+
+        calendar.style.margin =
+            "0";
+
+        calendar.style.zIndex =
+            "999999";
+
+
+        /*
+         * Prevent calendar going outside
+         * the right side of screen.
+         */
+
+        const calendarWidth =
+            calendar.offsetWidth || 340;
+
+        const screenWidth =
+            window.innerWidth;
+
+        let left =
+            rect.left;
+
+
+        if (
+            left + calendarWidth >
+            screenWidth - 16
+        ) {
+
+            left =
+                screenWidth -
+                calendarWidth -
+                16;
 
         }
 
-    });
+
+        if (left < 16) {
+
+            left = 16;
+
+        }
+
+
+        calendar.style.left =
+            `${left}px`;
+
+    }
+
+
+    /* ==========================================
+       CLOSE WHEN PAGE SCROLLS
+    ========================================== */
+
+    function closeCalendarOnScroll() {
+
+        if (
+            bookingCalendar &&
+            bookingCalendar.isOpen
+        ) {
+
+            bookingCalendar.close();
+
+        }
+
+    }
+
+
+    /* ==========================================
+       WHEN CALENDAR OPENS
+    ========================================== */
+
+    bookingInput.addEventListener(
+        "click",
+        function () {
+
+            /*
+             * Flatpickr automatically opens.
+             * We just make sure it is positioned
+             * correctly.
+             */
+
+            setTimeout(function () {
+
+                if (
+                    bookingCalendar.isOpen
+                ) {
+
+                    positionCalendar(
+                        bookingCalendar
+                    );
+
+                    window.addEventListener(
+                        "scroll",
+                        closeCalendarOnScroll,
+                        {
+                            passive: true
+                        }
+                    );
+
+                }
+
+            }, 10);
+
+        }
+    );
+
+
+    /* ==========================================
+       RESIZE
+    ========================================== */
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (
+                bookingCalendar &&
+                bookingCalendar.isOpen
+            ) {
+
+                positionCalendar(
+                    bookingCalendar
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
+       CLICK OUTSIDE
+    ========================================== */
+
+    document.addEventListener(
+        "mousedown",
+        function (event) {
+
+            if (
+                !bookingCalendar.isOpen
+            ) {
+                return;
+            }
+
+
+            const calendar =
+                bookingCalendar.calendarContainer;
+
+
+            const clickedInput =
+                bookingInput.contains(
+                    event.target
+                );
+
+
+            const clickedCalendar =
+                calendar &&
+                calendar.contains(
+                    event.target
+                );
+
+
+            if (
+                !clickedInput &&
+                !clickedCalendar
+            ) {
+
+                bookingCalendar.close();
+
+            }
+
+        }
+    );
+
+});
+
+
 
 
 
@@ -1640,7 +2136,78 @@ function renderReviews(tourData){
 <!-- ================= SCRIPT ================= -->
 
 
+<script>
+    function renderTopRating(tour) {
 
+    const rating =
+        parseFloat(tour.average_rating) || 0;
+
+    const total =
+        parseInt(tour.total_ratings) || 0;
+
+    // Keep rating between 0 and 5
+    const safeRating =
+        Math.min(5, Math.max(0, rating));
+
+    const roundedRating =
+        Math.round(safeRating);
+
+    const fullStars =
+        "★".repeat(roundedRating);
+
+    const emptyStars =
+        "☆".repeat(5 - roundedRating);
+
+    const stars =
+        fullStars + emptyStars;
+
+
+    // =========================
+    // STARS
+    // =========================
+
+    const starsElement =
+        document.getElementById(
+            "topRatingStars"
+        );
+
+    if (starsElement) {
+        starsElement.innerText = stars;
+    }
+
+
+    // =========================
+    // AVERAGE RATING
+    // =========================
+
+    const ratingElement =
+        document.getElementById(
+            "topAverageRating"
+        );
+
+    if (ratingElement) {
+        ratingElement.innerText =
+            safeRating.toFixed(1);
+    }
+
+
+    // =========================
+    // TOTAL REVIEWS
+    // =========================
+
+    const totalElement =
+        document.getElementById(
+            "topTotalRatings"
+        );
+
+    if (totalElement) {
+
+        totalElement.innerText =
+            `(${total.toLocaleString("en-IN")} reviews)`;
+
+    }
+}
+</script>
 
 
 <!-- ================= SCRIPT ================= -->
@@ -1897,8 +2464,9 @@ async function fetchTourDetails(){
         const tour = tourData;
         console.log("FULL TOUR RESPONSE");
         console.log(tour);
-
-
+        
+        renderTopRating(tour);
+        
         renderReviews(
         tourData
     );

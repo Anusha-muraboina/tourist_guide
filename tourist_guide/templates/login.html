@@ -6,44 +6,71 @@ Login
 
 {% block content %}
 
-<section class="min-h-screen bg-gradient-to-br from-orange-50 to-white pt-24 flex items-center justify-center px-4 py-10">
+<div class="min-h-screen flex items-center justify-center px-4 py-10">
 
-    <div class="w-full max-w-5xl bg-white rounded-[35px] shadow-2xl overflow-hidden grid lg:grid-cols-2">
+    <div
+        class="w-full
+               max-w-5xl
+               bg-white
+               rounded-[35px]
+               shadow-2xl
+               overflow-hidden
+               grid
+               lg:grid-cols-2"
+    >
 
+        <!-- =====================================================
+             LEFT SIDE
+        ====================================================== -->
 
-        <!-- LEFT SIDE -->
-
-        <div class="relative hidden lg:block">
+        <div class="relative hidden lg:block min-h-[650px]">
 
             <img
                 src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop"
-                class="absolute inset-0 w-full h-full object-cover">
+                alt="Travel destination"
+                class="absolute inset-0 w-full h-full object-cover"
+            >
 
             <div class="absolute inset-0 bg-black/50"></div>
 
 
-            <div class="relative z-10 h-full flex flex-col justify-between p-10 text-white">
+            <div
+                class="relative z-10
+                       h-full
+                       flex
+                       flex-col
+                       justify-between
+                       p-10
+                       text-white"
+            >
+
+                <!-- LOGO -->
 
                 <div class="flex items-center gap-3">
 
-                    <div class="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl font-black">
-
+                    <div
+                        class="w-12
+                               h-12
+                               rounded-2xl
+                               bg-orange-500
+                               flex
+                               items-center
+                               justify-center
+                               text-2xl
+                               font-black"
+                    >
                         T
-
                     </div>
+
 
                     <div>
 
                         <h2 class="text-2xl font-black">
-
                             TravelGo
-
                         </h2>
 
                         <p class="text-orange-200 text-sm">
-
                             Tourist Guide Platform
-
                         </p>
 
                     </div>
@@ -51,78 +78,97 @@ Login
                 </div>
 
 
+                <!-- CONTENT -->
 
                 <div>
 
-                    <h1 class="text-5xl font-black leading-tight mb-5">
-
+                    <h1
+                        class="text-5xl
+                               font-black
+                               leading-tight
+                               mb-5"
+                    >
                         Welcome
+                        <br>
                         Back
-
                     </h1>
 
-                    <p class="text-lg text-gray-200 leading-relaxed">
 
+                    <p
+                        class="text-lg
+                               text-gray-200
+                               leading-relaxed"
+                    >
                         Login to explore destinations,
                         connect with guides,
                         and manage your travel journey.
-
                     </p>
 
                 </div>
 
 
+                <!-- STATS -->
 
                 <div class="grid grid-cols-3 gap-4">
 
-                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+                    <div
+                        class="bg-white/10
+                               backdrop-blur-xl
+                               rounded-2xl
+                               p-4
+                               text-center
+                               border
+                               border-white/10"
+                    >
 
                         <h3 class="text-2xl font-black">
-
                             120+
-
                         </h3>
 
                         <p class="text-xs text-gray-200 mt-1">
-
                             Destinations
-
                         </p>
 
                     </div>
 
 
-
-                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+                    <div
+                        class="bg-white/10
+                               backdrop-blur-xl
+                               rounded-2xl
+                               p-4
+                               text-center
+                               border
+                               border-white/10"
+                    >
 
                         <h3 class="text-2xl font-black">
-
                             15K+
-
                         </h3>
 
                         <p class="text-xs text-gray-200 mt-1">
-
                             Travelers
-
                         </p>
 
                     </div>
 
 
-
-                    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/10">
+                    <div
+                        class="bg-white/10
+                               backdrop-blur-xl
+                               rounded-2xl
+                               p-4
+                               text-center
+                               border
+                               border-white/10"
+                    >
 
                         <h3 class="text-2xl font-black">
-
                             500+
-
                         </h3>
 
                         <p class="text-xs text-gray-200 mt-1">
-
                             Guides
-
                         </p>
 
                     </div>
@@ -134,102 +180,172 @@ Login
         </div>
 
 
+        <!-- =====================================================
+             RIGHT SIDE
+        ====================================================== -->
 
-
-        <!-- RIGHT SIDE -->
-
-        <div class="p-8 md:p-12 flex flex-col justify-center">
-
+        <div
+            class="p-8
+                   md:p-12
+                   flex
+                   flex-col
+                   justify-center"
+        >
 
             <!-- HEADING -->
 
             <div class="mb-8 text-center lg:text-left">
 
-                <h2 class="text-4xl font-black text-blue-900 mb-2">
-
+                <h2
+                    class="text-4xl
+                           font-black
+                           text-blue-900
+                           mb-2"
+                >
                     Login
-
                 </h2>
 
                 <p class="text-gray-500">
-
                     Access your travel account
-
                 </p>
 
             </div>
 
 
-
-            <!-- SUCCESS MESSAGE -->
+            <!-- SUCCESS -->
 
             <div
                 id="successMessage"
-                class="hidden mb-4 px-4 py-3 rounded-xl bg-green-100 text-green-700 font-medium text-sm">
+                class="hidden
+                       mb-4
+                       px-4
+                       py-3
+                       rounded-xl
+                       bg-green-100
+                       text-green-700
+                       font-medium
+                       text-sm"
+            ></div>
 
-            </div>
 
-
-
-            <!-- ERROR MESSAGE -->
+            <!-- ERROR -->
 
             <div
                 id="errorMessage"
-                class="hidden mb-4 px-4 py-3 rounded-xl bg-red-100 text-red-700 font-medium text-sm">
+                class="hidden
+                       mb-4
+                       px-4
+                       py-3
+                       rounded-xl
+                       bg-red-100
+                       text-red-700
+                       font-medium
+                       text-sm"
+            ></div>
 
-            </div>
 
+            <!-- =================================================
+                 FORM
+            ================================================== -->
 
-
-            <!-- FORM -->
-
-            <form id="loginForm" class="space-y-5">
-
+            <form
+                id="loginForm"
+                class="space-y-5"
+                novalidate
+            >
 
                 <!-- EMAIL -->
 
                 <div>
 
-                    <label class="text-sm font-bold text-gray-700 block mb-2">
-
+                    <label
+                        for="email"
+                        class="text-sm
+                               font-bold
+                               text-gray-700
+                               block
+                               mb-2"
+                    >
                         Email Address
-
                     </label>
+
 
                     <input
                         type="email"
                         id="email"
+                        name="email"
                         placeholder="Enter Email Address"
-                        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                        autocomplete="email"
+                        required
+                        class="w-full
+                               h-12
+                               px-4
+                               rounded-xl
+                               border
+                               border-gray-200
+                               bg-gray-50
+                               focus:outline-none
+                               focus:ring-2
+                               focus:ring-orange-400"
+                    >
 
                 </div>
-
 
 
                 <!-- PASSWORD -->
 
                 <div>
 
-                    <label class="text-sm font-bold text-gray-700 block mb-2">
-
+                    <label
+                        for="password"
+                        class="text-sm
+                               font-bold
+                               text-gray-700
+                               block
+                               mb-2"
+                    >
                         Password
-
                     </label>
+
 
                     <div class="relative">
 
                         <input
                             type="password"
                             id="password"
+                            name="password"
                             placeholder="Enter Password"
-                            class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                            autocomplete="current-password"
+                            required
+                            class="w-full
+                                   h-12
+                                   px-4
+                                   pr-12
+                                   rounded-xl
+                                   border
+                                   border-gray-200
+                                   bg-gray-50
+                                   focus:outline-none
+                                   focus:ring-2
+                                   focus:ring-orange-400"
+                        >
+
 
                         <button
                             type="button"
                             onclick="togglePassword()"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            class="absolute
+                                   right-4
+                                   top-1/2
+                                   -translate-y-1/2
+                                   text-gray-500
+                                   hover:text-blue-900"
+                        >
 
-                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                            <i
+                                id="eyeIcon"
+                                class="fa-solid fa-eye"
+                            ></i>
 
                         </button>
 
@@ -238,55 +354,97 @@ Login
                 </div>
 
 
+                <!-- REMEMBER / FORGOT -->
 
-                <!-- REMEMBER -->
+                <div
+                    class="flex
+                           items-center
+                           justify-between
+                           text-sm"
+                >
 
-                <div class="flex items-center justify-between text-sm">
-
-                    <label class="flex items-center gap-2 text-gray-600">
+                    <label
+                        class="flex
+                               items-center
+                               gap-2
+                               text-gray-600
+                               cursor-pointer"
+                    >
 
                         <input
                             type="checkbox"
-                            class="accent-orange-500">
+                            id="rememberMe"
+                            class="accent-orange-500"
+                        >
 
                         Remember me
 
                     </label>
 
-                    <a href="/user/forgot-password/"
-                       class="text-blue-500 font-bold">
 
+                    <a
+                        href="/user/forgot-password/"
+                        class="text-blue-500 font-bold hover:text-blue-700"
+                    >
                         Forgot Password?
-
                     </a>
 
                 </div>
 
 
-
-                <!-- BUTTON -->
+                <!-- LOGIN BUTTON -->
 
                 <button
                     type="submit"
-                    class="w-full h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300 shadow-lg">
+                    id="loginButton"
+                    class="w-full
+                           h-12
+                           rounded-xl
+                           bg-blue-900
+                           hover:bg-blue-600
+                           text-white
+                           font-bold
+                           transition
+                           duration-300
+                           shadow-lg
+                           flex
+                           items-center
+                           justify-center
+                           gap-2"
+                >
 
-                    Login
+                    <span id="loginButtonText">
+                        Login
+                    </span>
+
+                    <span
+                        id="loginLoader"
+                        class="hidden"
+                    >
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                    </span>
 
                 </button>
 
 
-
                 <!-- REGISTER -->
 
-                <p class="text-center text-sm text-gray-500 pt-2">
+                <p
+                    class="text-center
+                           text-sm
+                           text-gray-500
+                           pt-2"
+                >
 
                     Don't have an account?
 
-                    <a href="/user/register/"
-                       class="text-blue-500 font-bold">
-
+                    <a
+                        href="/user/register/"
+                        class="text-blue-500
+                               font-bold
+                               hover:text-blue-700"
+                    >
                         Register
-
                     </a>
 
                 </p>
@@ -297,137 +455,443 @@ Login
 
     </div>
 
-</section>
-
-
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
+</div>
 
 
 <script>
 
-    // PASSWORD TOGGLE
+/* ============================================================
+   LOGIN API URL
+============================================================ */
 
-    function togglePassword() {
+const LOGIN_API_URL = "/user/api/login/";
 
-        const password = document.getElementById('password');
 
-        const eyeIcon = document.getElementById('eyeIcon');
+/* ============================================================
+   CSRF TOKEN
+============================================================ */
 
-        if (password.type === 'password') {
+function getCookie(name) {
 
-            password.type = 'text';
+    let cookieValue = null;
 
-            eyeIcon.classList.remove('fa-eye');
+    if (document.cookie) {
 
-            eyeIcon.classList.add('fa-eye-slash');
+        const cookies =
+            document.cookie.split(";");
 
+        for (let i = 0; i < cookies.length; i++) {
+
+            const cookie =
+                cookies[i].trim();
+
+            if (
+                cookie.startsWith(
+                    name + "="
+                )
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+            }
         }
+    }
 
-        else {
+    return cookieValue;
+}
 
-            password.type = 'password';
 
-            eyeIcon.classList.remove('fa-eye-slash');
+/* ============================================================
+   SHOW / HIDE PASSWORD
+============================================================ */
 
-            eyeIcon.classList.add('fa-eye');
+function togglePassword() {
 
-        }
+    const password =
+        document.getElementById("password");
+
+    const eyeIcon =
+        document.getElementById("eyeIcon");
+
+
+    if (
+        password.type === "password"
+    ) {
+
+        password.type = "text";
+
+        eyeIcon.classList.remove(
+            "fa-eye"
+        );
+
+        eyeIcon.classList.add(
+            "fa-eye-slash"
+        );
+
+    } else {
+
+        password.type = "password";
+
+        eyeIcon.classList.remove(
+            "fa-eye-slash"
+        );
+
+        eyeIcon.classList.add(
+            "fa-eye"
+        );
 
     }
 
+}
 
 
-    // LOGIN API
+/* ============================================================
+   SHOW ERROR
+============================================================ */
 
-    document
-        .getElementById('loginForm')
-        .addEventListener('submit', async function(e) {
+function showError(message) {
 
-        e.preventDefault();
+    const errorMessage =
+        document.getElementById(
+            "errorMessage"
+        );
 
-        let email = document.getElementById('email').value;
-
-        let password = document.getElementById('password').value;
-
-        let successMessage = document.getElementById('successMessage');
-
-        let errorMessage = document.getElementById('errorMessage');
-
-
-
-        successMessage.classList.add('hidden');
-
-        errorMessage.classList.add('hidden');
+    const successMessage =
+        document.getElementById(
+            "successMessage"
+        );
 
 
-
-        try {
-
-            let response = await fetch('/user/api/login/', {
-
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-
-                body: JSON.stringify({
-
-                    email: email,
-                    password: password
-
-                })
-
-            });
+    successMessage.classList.add(
+        "hidden"
+    );
 
 
-
-            let data = await response.json();
-
-
-
-            if (response.ok) {
-
-                successMessage.innerHTML =
-                    data.message;
-
-                successMessage.classList.remove('hidden');
+    errorMessage.innerHTML =
+        message;
 
 
+    errorMessage.classList.remove(
+        "hidden"
+    );
 
-                setTimeout(() => {
+}
 
-                    window.location.href = '/';
 
-                }, 1500);
+/* ============================================================
+   SHOW SUCCESS
+============================================================ */
 
+function showSuccess(message) {
+
+    const successMessage =
+        document.getElementById(
+            "successMessage"
+        );
+
+    const errorMessage =
+        document.getElementById(
+            "errorMessage"
+        );
+
+
+    errorMessage.classList.add(
+        "hidden"
+    );
+
+
+    successMessage.innerHTML =
+        message;
+
+
+    successMessage.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* ============================================================
+   LOGIN
+============================================================ */
+
+document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+
+            const loginButton =
+                document.getElementById(
+                    "loginButton"
+                );
+
+
+            const loginButtonText =
+                document.getElementById(
+                    "loginButtonText"
+                );
+
+
+            const loginLoader =
+                document.getElementById(
+                    "loginLoader"
+                );
+
+
+            /* ================================================
+               VALIDATION
+            ================================================ */
+
+            if (!email) {
+
+                showError(
+                    "Please enter your email address."
+                );
+
+                document
+                    .getElementById("email")
+                    .focus();
+
+                return;
             }
 
-            else {
 
-                errorMessage.innerHTML =
-                    JSON.stringify(data);
+            if (!password) {
 
-                errorMessage.classList.remove('hidden');
+                showError(
+                    "Please enter your password."
+                );
+
+                document
+                    .getElementById("password")
+                    .focus();
+
+                return;
+            }
+
+
+            /* ================================================
+               BUTTON LOADING
+            ================================================ */
+
+            loginButton.disabled = true;
+
+            loginButtonText.innerText =
+                "Logging in...";
+
+            loginLoader.classList.remove(
+                "hidden"
+            );
+
+
+            try {
+
+                /* ============================================
+                   SEND EMAIL + PASSWORD
+                ============================================ */
+
+                const response =
+                    await fetch(
+                        LOGIN_API_URL,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "X-CSRFToken":
+                                    getCookie(
+                                        "csrftoken"
+                                    )
+                            },
+
+                            credentials: "same-origin",
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                password: password
+
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "LOGIN RESPONSE:",
+                    result
+                );
+
+
+                /* ============================================
+                   SUCCESS
+                ============================================ */
+
+                if (
+                    response.ok &&
+                    result.success
+                ) {
+
+                    showSuccess(
+                        result.message ||
+                        "Login successful. Redirecting..."
+                    );
+
+
+                    /*
+                     * If API provides redirect URL
+                     */
+                    if (
+                        result.redirect_url
+                    ) {
+
+                        setTimeout(
+                            function() {
+
+                                window.location.href =
+                                    result.redirect_url;
+
+                            },
+                            700
+                        );
+
+                        return;
+                    }
+
+
+                    /*
+                     * Otherwise go home
+                     */
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "/";
+
+                        },
+                        700
+                    );
+
+
+                    return;
+                }
+
+
+                /* ============================================
+                   API ERROR
+                ============================================ */
+
+                let errorText =
+                    "Invalid email or password.";
+
+
+                if (result.errors) {
+
+                    if (
+                        result.errors.email
+                    ) {
+
+                        errorText =
+                            result.errors.email.join(
+                                "<br>"
+                            );
+
+                    }
+
+                    if (
+                        result.errors.password
+                    ) {
+
+                        errorText =
+                            result.errors.password.join(
+                                "<br>"
+                            );
+
+                    }
+
+                }
+
+
+                if (result.detail) {
+
+                    errorText =
+                        result.detail;
+
+                }
+
+
+                if (result.message) {
+
+                    errorText =
+                        result.message;
+
+                }
+
+
+                showError(
+                    errorText
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "LOGIN ERROR:",
+                    error
+                );
+
+
+                showError(
+                    "Unable to connect to the server. Please try again."
+                );
+
+
+            } finally {
+
+                loginButton.disabled =
+                    false;
+
+                loginButtonText.innerText =
+                    "Login";
+
+                loginLoader.classList.add(
+                    "hidden"
+                );
 
             }
 
         }
-
-        catch (error) {
-
-            errorMessage.innerHTML =
-                'Something went wrong';
-
-            errorMessage.classList.remove('hidden');
-
-        }
-
-    });
+    );
 
 </script>
 

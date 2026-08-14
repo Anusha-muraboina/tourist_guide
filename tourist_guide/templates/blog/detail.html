@@ -58,7 +58,7 @@
     const path = window.location.pathname;
     const slug = path.split('/').filter(Boolean).pop();
     
-    const API_URL = `http://127.0.0.1:9000/blog/blogs/${slug}/`;
+    const API_URL = `/blog/blogs/${slug}/`;
     
     console.log("Fetching from:", API_URL);
 

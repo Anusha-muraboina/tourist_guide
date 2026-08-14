@@ -61,24 +61,7 @@ from .models import Location
 from .serializers import LocationSerializer
 
 
-class LocationListAPIView(APIView):
 
-    # permission_classes = [
-    #     IsAuthenticated
-    # ]
-
-    def get(self, request):
-
-        locations = Location.objects.filter(
-            is_active=True
-        )
-
-        serializer = LocationSerializer(
-            locations,
-            many=True
-        )
-
-        return Response(serializer.data)
     
     
 class RegisterAPIView(APIView):
@@ -105,7 +88,6 @@ class RegisterAPIView(APIView):
         )
 
 
-
 class LoginAPIView(APIView):
 
     def post(self, request):
@@ -116,25 +98,28 @@ class LoginAPIView(APIView):
 
         if serializer.is_valid():
 
-            user = serializer.validated_data['user']
+            user = serializer.validated_data["user"]
 
-            # login(request, user)
             auth_login(request, user)
 
             return Response(
                 {
-                    'message': 'Login successful',
-                    'email': user.email,
-                    'role': user.role,
+                    "success": True,
+                    "message": "Login successful",
+                    "email": user.email,
+                    "role": user.role,
+                    "redirect_url": "/",
                 },
                 status=status.HTTP_200_OK
             )
 
         return Response(
-            serializer.errors,
+            {
+                "success": False,
+                "errors": serializer.errors
+            },
             status=status.HTTP_400_BAD_REQUEST
         )
-
 # from django.shortcuts import redirect
 # from django.contrib.auth import logout
 
@@ -299,20 +284,188 @@ from .serializers import (
 ProfileSerializer,
 ProfileUpdateSerializer
 )
+
+
+# from rest_framework.parsers import (
+#     MultiPartParser,
+#     FormParser
+# )
+# class ProfileAPIView(APIView):
+
+#     permission_classes = [
+#         IsAuthenticated
+#     ]
+    
+#     parser_classes = [
+#         MultiPartParser,
+#         FormParser
+#     ]
+
+#     def get(self, request):
+
+#         serializer = ProfileSerializer(
+#             request.user,
+#             context={
+#                 "request": request
+#             }
+#         )
+
+#         return Response({
+#             "success": True,
+#             "data": serializer.data
+#         })
+
+#     def put(self, request):
+
+#         serializer = ProfileUpdateSerializer(
+#             request.user,
+#             data=request.data,
+#             partial=True
+#         )
+
+#         if serializer.is_valid():
+
+#             serializer.save()
+
+#             return Response({
+#                 "success": True,
+#                 "message":
+#                     "Profile Updated Successfully",
+#                 "data":
+#                     ProfileSerializer(
+#                         request.user,
+#                         context={
+#                             "request": request
+#                         }
+#                     ).data
+#             })
+
+#         return Response({
+#             "success": False,
+#             "errors": serializer.errors
+#         })
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import (
+    ProfileSerializer,
+    ProfileUpdateSerializer,
+)
+
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.decorators import login_required
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import (
     MultiPartParser,
-    FormParser
+    FormParser,
 )
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import (
+    ProfileSerializer,
+    ProfileUpdateSerializer,
+)
+
+
+# ============================================================
+# PROFILE PAGE
+# ============================================================
+
+@login_required
+@ensure_csrf_cookie
+def profile_page(request):
+
+    return render(
+        request,
+        "profile.html"
+    )
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser,
+)
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import (
+    ProfileSerializer,
+    ProfileUpdateSerializer,
+)
+
+
+# ============================================================
+# PROFILE PAGE
+# ============================================================
+from django.contrib.auth.decorators import login_required
+from django.middleware.csrf import get_token
+from django.shortcuts import render
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser,
+)
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import (
+    ProfileSerializer,
+    ProfileUpdateSerializer,
+)
+
+
+# ============================================================
+# PROFILE PAGE
+# ============================================================
+
+@login_required
+def profile_page(request):
+
+    csrf_token = get_token(request)
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "csrf_token_value": csrf_token
+        }
+    )
+
+
+# ============================================================
+# PROFILE API
+# ============================================================
+
 class ProfileAPIView(APIView):
 
     permission_classes = [
         IsAuthenticated
     ]
-    
+
     parser_classes = [
         MultiPartParser,
         FormParser
     ]
+
+    # ========================================================
+    # GET
+    # ========================================================
 
     def get(self, request):
 
@@ -323,51 +476,142 @@ class ProfileAPIView(APIView):
             }
         )
 
-        return Response({
-            "success": True,
-            "data": serializer.data
-        })
+        return Response(
+            {
+                "success": True,
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+
+    # ========================================================
+    # PUT
+    # ========================================================
 
     def put(self, request):
+
+        print("====================================")
+        print("PROFILE UPDATE")
+        print("USER:", request.user)
+        print("DATA:", request.data)
+        print("FILES:", request.FILES)
+        print("====================================")
 
         serializer = ProfileUpdateSerializer(
             request.user,
             data=request.data,
-            partial=True
+            partial=True,
+            context={
+                "request": request
+            }
         )
 
-        if serializer.is_valid():
+        if not serializer.is_valid():
 
-            serializer.save()
+            print(
+                "PROFILE ERRORS:",
+                serializer.errors
+            )
 
-            return Response({
+            return Response(
+                {
+                    "success": False,
+                    "errors": serializer.errors
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer.save()
+
+        request.user.refresh_from_db()
+
+        profile_serializer = ProfileSerializer(
+            request.user,
+            context={
+                "request": request
+            }
+        )
+
+        return Response(
+            {
                 "success": True,
-                "message":
-                    "Profile Updated Successfully",
-                "data":
-                    ProfileSerializer(
-                        request.user,
-                        context={
-                            "request": request
-                        }
-                    ).data
-            })
+                "message": "Profile updated successfully.",
+                "data": profile_serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
 
-        return Response({
-            "success": False,
-            "errors": serializer.errors
-        })
+# from django.shortcuts import render
+# from django.contrib.auth.decorators import login_required
 
 
+# @login_required
+# def profile_page(request):
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+#     return render(
+#         request,
+#         "profile.html"
+#     )
 
 
-@login_required
-def profile_page(request):
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-    return render(
-        request,
-        "profile.html"
-    )
+from .models import Location
+from .serializers import LocationSerializer
+
+
+class LocationListAPIView(APIView):
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+
+    def get(
+        self,
+        request
+    ):
+
+        # Only guides should use this API
+
+        if request.user.role != "guide":
+
+            return Response([])
+
+
+        locations = Location.objects.filter(
+            is_active=True
+        )
+
+
+        serializer = LocationSerializer(
+            locations,
+            many=True
+        )
+
+
+        return Response(
+            serializer.data
+        )
+        
+        
+# class LocationListAPIView(APIView):
+
+#     # permission_classes = [
+#     #     IsAuthenticated
+#     # ]
+
+#     def get(self, request):
+
+#         locations = Location.objects.filter(
+#             is_active=True
+#         )
+
+#         serializer = LocationSerializer(
+#             locations,
+#             many=True
+#         )
+
+#         return Response(serializer.data)

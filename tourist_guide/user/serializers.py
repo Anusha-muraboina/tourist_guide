@@ -236,107 +236,331 @@ from .models import User
 
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    profile_image = serializers.SerializerMethodField()
-    locations = LocationSerializer(many=True, read_only=True)
+# class ProfileSerializer(serializers.ModelSerializer):
+#     profile_image = serializers.SerializerMethodField()
+#     locations = LocationSerializer(many=True, read_only=True)
 
-    # Convenience fields (optional but useful for frontend)
+#     # Convenience fields (optional but useful for frontend)
+#     country = serializers.SerializerMethodField()
+#     state = serializers.SerializerMethodField()
+#     district = serializers.SerializerMethodField()
+#     city = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = User
+#         fields = [
+#             "id",
+#             "username",
+#             "email",
+#             "phone_number",
+#             "role",                     # ← role
+#             "locations",                # ← full list of locations
+#             "country",                  # ← from first location
+#             "state",                    # ← from first location
+#             "district",                 # ← from first location
+#             "city",                     # ← from first location
+#             "profile_image",
+#             "is_verified",
+#             "created_at",
+#         ]
+
+#     def get_profile_image(self, obj):
+#         request = self.context.get("request")
+#         if obj.profile_image and hasattr(obj.profile_image, "url"):
+#             return request.build_absolute_uri(obj.profile_image.url)
+#         return None
+
+#     def get_country(self, obj):
+#         loc = obj.locations.first()
+#         return loc.country if loc else None
+
+#     def get_state(self, obj):
+#         loc = obj.locations.first()
+#         return loc.state if loc else None
+
+#     def get_district(self, obj):
+#         loc = obj.locations.first()
+#         return loc.district if loc else None
+
+#     def get_city(self, obj):
+#         loc = obj.locations.first()
+#         return loc.city if loc else None
+
+
+
+
+
+from rest_framework import serializers
+
+from .models import User, Location
+
+from rest_framework import serializers
+
+from .models import User, Location
+
+from rest_framework import serializers
+
+from .models import User, Location
+
+
+# ============================================================
+# LOCATION SERIALIZER
+# ============================================================
+
+class LocationSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = Location
+
+        fields = [
+            "id",
+            "country",
+            "state",
+            "district",
+            "city",
+        ]
+
+
+# ============================================================
+# PROFILE SERIALIZER
+# ============================================================
+
+class ProfileSerializer(
+    serializers.ModelSerializer
+):
+
+    profile_image = serializers.SerializerMethodField()
+
+    locations = serializers.SerializerMethodField()
+
     country = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
     city = serializers.SerializerMethodField()
 
+
     class Meta:
+
         model = User
+
         fields = [
             "id",
             "username",
             "email",
             "phone_number",
-            "role",                     # ← role
-            "locations",                # ← full list of locations
-            "country",                  # ← from first location
-            "state",                    # ← from first location
-            "district",                 # ← from first location
-            "city",                     # ← from first location
+            "role",
+
+            "locations",
+
+            "country",
+            "state",
+            "district",
+            "city",
+
             "profile_image",
+
             "is_verified",
             "created_at",
         ]
 
-    def get_profile_image(self, obj):
-        request = self.context.get("request")
-        if obj.profile_image and hasattr(obj.profile_image, "url"):
-            return request.build_absolute_uri(obj.profile_image.url)
+
+    # ========================================================
+    # PROFILE IMAGE
+    # ========================================================
+
+    def get_profile_image(
+        self,
+        obj
+    ):
+
+        request = self.context.get(
+            "request"
+        )
+
+
+        if (
+            obj.profile_image
+            and hasattr(
+                obj.profile_image,
+                "url"
+            )
+        ):
+
+            image_url = (
+                obj.profile_image.url
+            )
+
+
+            if request:
+
+                return request.build_absolute_uri(
+                    image_url
+                )
+
+
+            return image_url
+
+
         return None
 
-    def get_country(self, obj):
-        loc = obj.locations.first()
-        return loc.country if loc else None
 
-    def get_state(self, obj):
-        loc = obj.locations.first()
-        return loc.state if loc else None
+    # ========================================================
+    # LOCATIONS
+    #
+    # ONLY GUIDE
+    # ========================================================
 
-    def get_district(self, obj):
-        loc = obj.locations.first()
-        return loc.district if loc else None
+    def get_locations(
+        self,
+        obj
+    ):
 
-    def get_city(self, obj):
-        loc = obj.locations.first()
-        return loc.city if loc else None
+        if obj.role != "guide":
 
-# class ProfileUpdateSerializer(
-# serializers.ModelSerializer
-# ):
+            return []
 
-#     locations = serializers.PrimaryKeyRelatedField(
-#         queryset=Location.objects.filter(is_active=True),
-#         many=True,
-#         required=False
-#     )
 
-#     class Meta:
+        return LocationSerializer(
+            obj.locations.all(),
+            many=True
+        ).data
 
-#         model = User
 
-#         fields = [
-#             "username",
-#             "phone_number",
-#             "location",
-#             "state",
-#             "country",
-#             "profile_image",
-#             "locations",
-#         ]
-    
-#     def update(self, instance, validated_data):
+    # ========================================================
+    # COUNTRY
+    #
+    # ONLY GUIDE
+    # ========================================================
 
-#         locations = validated_data.pop(
-#             "locations",
-#             None
-#         )
+    def get_country(
+        self,
+        obj
+    ):
 
-#         instance = super().update(
-#             instance,
-#             validated_data
-#         )
+        if obj.role != "guide":
 
-#         if locations is not None:
-#             instance.locations.set(locations)
+            return None
 
-#         return instance
 
+        location = (
+            obj.locations.first()
+        )
+
+
+        if location:
+
+            return location.country
+
+
+        return None
+
+
+    # ========================================================
+    # STATE
+    #
+    # ONLY GUIDE
+    # ========================================================
+
+    def get_state(
+        self,
+        obj
+    ):
+
+        if obj.role != "guide":
+
+            return None
+
+
+        location = (
+            obj.locations.first()
+        )
+
+
+        if location:
+
+            return location.state
+
+
+        return None
+
+
+    # ========================================================
+    # DISTRICT
+    #
+    # ONLY GUIDE
+    # ========================================================
+
+    def get_district(
+        self,
+        obj
+    ):
+
+        if obj.role != "guide":
+
+            return None
+
+
+        location = (
+            obj.locations.first()
+        )
+
+
+        if location:
+
+            return location.district
+
+
+        return None
+
+
+    # ========================================================
+    # CITY
+    #
+    # ONLY GUIDE
+    # ========================================================
+
+    def get_city(
+        self,
+        obj
+    ):
+
+        if obj.role != "guide":
+
+            return None
+
+
+        location = (
+            obj.locations.first()
+        )
+
+
+        if location:
+
+            return location.city
+
+
+        return None
+
+
+# ============================================================
+# PROFILE UPDATE SERIALIZER
+# ============================================================
 
 class ProfileUpdateSerializer(
     serializers.ModelSerializer
 ):
 
     locations = serializers.PrimaryKeyRelatedField(
-        queryset=Location.objects.filter(is_active=True),
+        queryset=Location.objects.filter(
+            is_active=True
+        ),
         many=True,
         required=False
     )
+
 
     class Meta:
 
@@ -348,6 +572,11 @@ class ProfileUpdateSerializer(
             "profile_image",
             "locations",
         ]
+
+
+    # ========================================================
+    # UPDATE
+    # ========================================================
 
     def update(
         self,
@@ -360,12 +589,43 @@ class ProfileUpdateSerializer(
             None
         )
 
-        instance = super().update(
-            instance,
-            validated_data
-        )
 
-        if locations is not None:
-            instance.locations.set(locations)
+        # ====================================================
+        # UPDATE NORMAL USER FIELDS
+        # ====================================================
+
+        for field, value in validated_data.items():
+
+            setattr(
+                instance,
+                field,
+                value
+            )
+
+
+        instance.save()
+
+
+        # ====================================================
+        # GUIDE
+        # ====================================================
+
+        if instance.role == "guide":
+
+            if locations is not None:
+
+                instance.locations.set(
+                    locations
+                )
+
+
+        # ====================================================
+        # TOURIST / ADMIN
+        # ====================================================
+
+        else:
+
+            instance.locations.clear()
+
 
         return instance

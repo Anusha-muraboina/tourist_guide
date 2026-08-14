@@ -339,7 +339,7 @@ class Booking(models.Model):
             "confirmed": {
                 "user": "emails/user_booking_email.html",
                 "admin": "emails/admin_booking_email.html",
-                "subject_user": "✅ Booking Confirmed – Farmhousehyd",
+                "subject_user": "✅ Booking Confirmed – Tourist guide",
                 "subject_admin": f"Booking Confirmed - {self.booking_id}",
             },
             "cancelled": {

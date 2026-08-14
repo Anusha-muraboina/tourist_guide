@@ -226,9 +226,9 @@ Tours
     </td>
 
     <!-- Tour -->
-    <td class="px-6 py-4">
+    <td class="px-2 py-4">
 
-        <div class="font-semibold text-slate-800">
+        <div class="font-semibold text-sm text-slate-800">
             {{ item.title }}
         </div>
 
@@ -239,7 +239,7 @@ Tours
     </td>
 
     <!-- Category -->
-    <td class="px-6 py-4">
+    <td class="px-2 py-4 text-sm">
 
         {% if item.category %}
             {{ item.category.name }}
@@ -263,7 +263,7 @@ Tours
     </td>
 
     <!-- Tour Type -->
-    <td class="px-6 py-4">
+    <td class="px-2 py-4">
 
         {% if item.tour_type == "private" %}
 
@@ -286,14 +286,14 @@ Tours
     </td>
 
     <!-- Duration -->
-    <td class="px-6 py-4">
+    <td class="px-2 py-4">
 
         {{ item.duration }}
 
     </td>
 
     <!-- Price -->
-    <td class="px-6 py-4">
+    <td class="px-2 py-4">
 
         <div class="font-bold text-green-700">
 

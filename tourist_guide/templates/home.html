@@ -5,18 +5,34 @@ Home
 {% endblock %}
 
 {% block content %}
+
 <style>
   * {
     font-family: 'Inter', sans-serif;
   }
 
   body {
-    background: #F8FAFC;
+    background:
+        linear-gradient(
+            rgba(248, 250, 252, 0.90),
+            rgba(248, 250, 252, 0.94)
+        ),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   .hero-bg {
-    background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)),
-    url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+    background:
+        linear-gradient(
+            rgba(15, 23, 42, 0.65),
+            rgba(15, 23, 42, 0.85)
+        ),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+
     background-size: cover;
     background-position: center;
   }
@@ -27,7 +43,16 @@ Home
 
   .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+    box-shadow:
+        0 12px 20px -4px rgba(0, 0, 0, 0.08),
+        0 4px 12px -2px rgba(0, 0, 0, 0.04);
+  }
+
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .line-clamp-2 {
@@ -54,378 +79,1996 @@ Home
   }
 </style>
 
+
+<!-- ========================================================= -->
 <!-- HERO SECTION -->
+<!-- ========================================================= -->
+
 <section class="hero-bg pt-40 pb-32">
+
   <div class="max-w-7xl mx-auto px-6">
-    
+
+    <!-- HERO TITLE -->
     <div class="text-center mb-10">
+
       <h1 class="text-white text-3xl md:text-5xl font-black tracking-tight leading-tight">
         Discover & Book Things to Do
       </h1>
+
       <p class="text-slate-300 mt-3 text-base md:text-lg max-w-xl mx-auto font-medium">
         Explore handpicked tours, unique experiences, and hidden gems.
       </p>
+
     </div>
 
+
+    <!-- ===================================================== -->
     <!-- SEARCH BAR -->
+    <!-- ===================================================== -->
+
     <div class="max-w-3xl mx-auto">
-      <div class="bg-white rounded-2xl md:rounded-full shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 border border-white/20">
+
+      <div
+        class="bg-white rounded-2xl md:rounded-full shadow-xl p-2
+               flex flex-col md:flex-row items-center gap-2
+               border border-white/20"
+      >
+
+        <!-- SEARCH INPUT -->
         <div class="flex items-center flex-1 w-full px-4 py-2 md:py-0">
+
           <i class="fa-solid fa-location-dot text-indigo-600 text-lg shrink-0"></i>
+
           <div class="relative flex-1 px-3 w-full">
+
             <input
               type="text"
               id="searchInput"
               placeholder="Find places and things to do..."
-              class="w-full py-2 bg-transparent outline-none text-slate-800 placeholder-slate-400 text-sm font-medium"
-              onkeyup="searchSuggestions()"
+              autocomplete="off"
+              class="w-full py-2 bg-transparent outline-none
+                     text-slate-800 placeholder-slate-400
+                     text-sm font-medium"
+              onkeyup="handleSearchInput(event)"
               onfocus="showDefaultTours()"
             />
+
+
+            <!-- SEARCH DROPDOWN -->
             <div
               id="searchDropdown"
-              class="absolute left-0 right-0 top-full bg-white shadow-2xl rounded-2xl mt-4 hidden z-50 max-h-80 overflow-y-auto border border-slate-100 divide-y divide-slate-50"
+              class="absolute
+                     left-0
+                     right-0
+                     top-full
+                     bg-white
+                     shadow-2xl
+                     rounded-2xl
+                     mt-4
+                     hidden
+                     z-50
+                     max-h-80
+                     overflow-y-auto
+                     border
+                     border-slate-100
+                     divide-y
+                     divide-slate-50"
             ></div>
+
           </div>
+
         </div>
 
-        <button onclick="searchTours()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 transition text-white px-8 h-12 rounded-xl md:rounded-full font-bold text-sm tracking-wide shadow-md shadow-indigo-600/10 active:scale-[0.98]">
+
+        <!-- SEARCH BUTTON -->
+        <button
+          type="button"
+          onclick="searchTours()"
+          class="w-full
+                 md:w-auto
+                 bg-indigo-600
+                 hover:bg-indigo-700
+                 transition
+                 text-white
+                 px-8
+                 h-12
+                 rounded-xl
+                 md:rounded-full
+                 font-bold
+                 text-sm
+                 tracking-wide
+                 shadow-md
+                 shadow-indigo-600/10
+                 active:scale-[0.98]"
+        >
           Search
         </button>
-      </div>
-    </div>
 
-    <!-- TOP HANDPICKED CARDS -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-w-6xl mx-auto">
-      
-      <!-- Card 1 -->
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
-        <div class="relative shrink-0">
-          <img
-            src="https://images.unsplash.com/photo-1564507592333-c60657eea523"
-            class="w-28 h-28 rounded-xl object-cover"
-            alt="Heritage Tour"
-          />
-        </div>
-        <div class="flex flex-col justify-between flex-1 py-1">
-          <div>
-            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Heritage Tour</span>
-            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Hyderabad Walking Tour</h3>
-            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
-              <i class="fa-regular fa-clock"></i> 3 - 5 hours · Pickup optional
-            </p>
-          </div>
-          <div class="flex items-end justify-between mt-2">
-            <div class="flex items-center gap-1 text-xs">
-              <span class="text-amber-500 font-semibold">★ 4.0</span>
-              <span class="text-slate-400">(50)</span>
-            </div>
-            <span class="text-lg font-black text-slate-900">₹4,250</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
-        <div class="relative shrink-0">
-          <img
-            src="https://images.unsplash.com/photo-1548013146-72479768bada"
-            class="w-28 h-28 rounded-xl object-cover"
-            alt="Fort Tour"
-          />
-        </div>
-        <div class="flex flex-col justify-between flex-1 py-1">
-          <div>
-            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Fort Tour</span>
-            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Golconda Fort & Tombs</h3>
-            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
-              <i class="fa-regular fa-clock"></i> 5 - 6 hours · Private group
-            </p>
-          </div>
-          <div class="flex items-end justify-between mt-2">
-            <div class="flex items-center gap-1 text-xs">
-              <span class="text-amber-500 font-semibold">★ 4.2</span>
-              <span class="text-slate-400">(71)</span>
-            </div>
-            <span class="text-lg font-black text-slate-900">₹9,250</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 card-hover flex gap-4">
-        <div class="relative shrink-0">
-          <img
-            src="https://images.unsplash.com/photo-1599661046289-e31897846e41"
-            class="w-28 h-28 rounded-xl object-cover"
-            alt="Full Day Tour"
-          />
-        </div>
-        <div class="flex flex-col justify-between flex-1 py-1">
-          <div>
-            <span class="text-indigo-600 text-[11px] uppercase font-bold tracking-wider block">Full Day Tour</span>
-            <h3 class="text-base font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">Hyderabad Full Day Tour</h3>
-            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
-              <i class="fa-regular fa-clock"></i> 4 - 8 hours · Skip line
-            </p>
-          </div>
-          <div class="flex items-end justify-between mt-2">
-            <div class="flex items-center gap-1 text-xs">
-              <span class="text-amber-500 font-semibold">★ 4.5</span>
-              <span class="text-slate-400">(56)</span>
-            </div>
-            <span class="text-lg font-black text-rose-600">₹5,400</span>
-          </div>
-        </div>
       </div>
 
     </div>
+
+
+    <!-- ===================================================== -->
+    <!-- RECENT TOURS -->
+    <!-- ===================================================== -->
+
+    <div
+      id="recentToursGrid"
+      class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8"
+    >
+
+      <!-- Loading -->
+      <div class="md:col-span-2 lg:col-span-3 text-center py-10">
+
+        <div
+          class="animate-spin
+                 w-7
+                 h-7
+                 border-4
+                 border-indigo-500
+                 border-t-transparent
+                 rounded-full
+                 mx-auto"
+        ></div>
+
+        <p class="text-slate-400 text-sm mt-3">
+          Loading recent tours...
+        </p>
+
+      </div>
+
+    </div>
+
   </div>
+
 </section>
 
-<!-- DYNAMIC RECOMMENDED GRID SECTION -->
+
+
+<!-- ========================================================= -->
+<!-- SEARCH / RECOMMENDED TOURS SECTION -->
+<!-- ========================================================= -->
+
 <section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
-  <div class="mb-10">
-    <span class="text-indigo-600 text-xs font-bold uppercase tracking-widest block mb-1">Recommended Tours</span>
-    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
-      Based On Your Search In Hyderabad
-    </h2>
+
+  <!-- HEADER -->
+  <div
+    class="flex
+           flex-col
+           md:flex-row
+           md:items-end
+           md:justify-between
+           gap-4
+           mb-10"
+  >
+
+    <div>
+
+      <span
+        class="text-indigo-600
+               text-xs
+               font-bold
+               uppercase
+               tracking-widest
+               block
+               mb-1"
+      >
+        Recommended Tours
+      </span>
+
+
+      <!-- Dynamic Heading -->
+      <h2
+        id="tourSectionTitle"
+        class="text-2xl
+               md:text-3xl
+               font-extrabold
+               text-slate-950
+               tracking-tight"
+      >
+        Explore Popular Tours
+      </h2>
+
+
+      <!-- Search result count -->
+      <p
+        id="searchResultText"
+        class="text-slate-500
+               text-sm
+               mt-2
+               hidden"
+      ></p>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- VIEW ALL BUTTON -->
+    <!-- ===================================================== -->
+
+    <a
+      id="viewAllToursBtn"
+      href="{% url 'tourlist' %}"
+      class="hidden
+             shrink-0
+             self-start
+             md:self-auto
+             items-center
+             gap-2
+             border
+             border-slate-200
+             bg-white
+             px-5
+             py-2.5
+             rounded-xl
+             font-bold
+             text-xs
+             text-slate-700
+             hover:bg-slate-50
+             hover:shadow-sm
+             transition
+             active:scale-[0.98]"
+    >
+
+      View all
+
+      <i class="fa-solid fa-arrow-right text-[10px]"></i>
+
+    </a>
+
   </div>
 
-  <div id="tourGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+  <!-- ===================================================== -->
+  <!-- TOUR CARDS -->
+  <!-- ===================================================== -->
+
+  <div
+    id="tourGrid"
+    class="grid
+           grid-cols-1
+           sm:grid-cols-2
+           lg:grid-cols-3
+           xl:grid-cols-4
+           gap-6"
+  ></div>
+
 </section>
 
+
+
+<!-- ========================================================= -->
 <!-- DESTINATIONS SECTION -->
+<!-- ========================================================= -->
+
 <section class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-100">
+
   <div class="mb-8">
-    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
+
+    <h2
+      class="text-2xl
+             md:text-3xl
+             font-extrabold
+             text-slate-950
+             tracking-tight"
+    >
       Things to do wherever you're going
     </h2>
+
   </div>
 
-  <div id="destinationGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+
+  <div
+    id="destinationGrid"
+    class="grid
+           grid-cols-2
+           md:grid-cols-3
+           lg:grid-cols-5
+           gap-6"
+  ></div>
+
 </section>
 
+
+
+<!-- ========================================================= -->
 <!-- UNFORGETTABLE EXPERIENCES SECTION -->
-<section class="bg-slate-50 border-t border-b border-slate-100 py-16 md:py-24">
+<!-- ========================================================= -->
+
+<section
+  class="bg-slate-50
+         border-t
+         border-b
+         border-slate-100
+         py-16
+         md:py-24"
+>
+
   <div class="max-w-7xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+
+    <div
+      class="flex
+             flex-col
+             md:flex-row
+             md:items-end
+             md:justify-between
+             gap-4
+             mb-10"
+    >
+
       <div>
-        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight">
+
+        <h2
+          class="text-2xl
+                 md:text-3xl
+                 font-extrabold
+                 text-slate-950
+                 tracking-tight"
+        >
           Unforgettable travel experiences
         </h2>
-        <p class="text-slate-500 mt-2 text-sm md:text-base font-medium max-w-xl">
+
+        <p
+          class="text-slate-500
+                 mt-2
+                 text-sm
+                 md:text-base
+                 font-medium
+                 max-w-xl"
+        >
           Explore top-rated tours, adventures, and unique activities curated just for you.
         </p>
+
       </div>
-      
-      <button class="shrink-0 self-start md:self-auto flex items-center gap-2 border border-slate-200 bg-white px-5 py-2.5 rounded-xl font-bold text-xs text-slate-700 hover:bg-slate-50 hover:shadow-sm transition active:scale-[0.98]">
-        View all <i class="fa-solid fa-arrow-right text-[10px]"></i>
-      </button>
+
+
+      <!-- View All Unforgettable -->
+      <a
+        href="{% url 'tourlist' %}"
+        class="shrink-0
+               self-start
+               md:self-auto
+               flex
+               items-center
+               gap-2
+               border
+               border-slate-200
+               bg-white
+               px-5
+               py-2.5
+               rounded-xl
+               font-bold
+               text-xs
+               text-slate-700
+               hover:bg-slate-50
+               hover:shadow-sm
+               transition
+               active:scale-[0.98]"
+      >
+
+        View all
+
+        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+
+      </a>
+
     </div>
 
-    <div id="unforgettableGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+    <div
+      id="unforgettableGrid"
+      class="grid
+             sm:grid-cols-2
+             lg:grid-cols-4
+             gap-6"
+    ></div>
+
   </div>
+
 </section>
 
+
+
+<!-- ========================================================= -->
 <!-- APPLICATION SCRIPTS -->
+<!-- ========================================================= -->
+
 <script>
+
+/* ============================================================
+   GLOBAL HELPERS
+============================================================ */
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* ============================================================
+   RENDER TOUR CARDS
+============================================================ */
+
 function renderTours(tours) {
-    let html = "";
-    tours.forEach((tour) => {
 
-      let locationText = "Location not available";
-        if (tour.location) {
-            locationText = `${tour.location.city}, ${tour.location.state}`;
-        }
+    const container = document.getElementById("tourGrid");
 
-        html += `
-        <a href="/tour-details/${tour.slug}/" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col card-hover">
-            <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                <img src="${tour.thumbnail}" class="w-full h-full object-cover" alt="${tour.title}">
-                <div class="absolute top-3 left-3">
-                    <span class="bg-white/95 backdrop-blur-sm text-indigo-600 px-2.5 py-1 rounded-lg text-[11px] font-bold tracking-wide shadow-sm uppercase">
-                        ${tour.tour_type}
-                    </span>
-                </div>
-            </div>
-            <div class="p-4 flex flex-col flex-1 justify-between">
-                <div>
-                    <div class="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-                        <i class="fa-solid fa-location-dot text-indigo-500/80 text-[11px]"></i>
-                        <span>${locationText}</span>
-                    </div>
-                    <h3 class="font-bold text-base text-slate-900 mt-1.5 leading-snug line-clamp-1">
-                        ${tour.title}
-                    </h3>
-                    <p class="text-slate-500 text-xs mt-1.5 line-clamp-2 leading-relaxed">
-                        ${tour.short_description}
-                    </p>
-                </div>
-                <div class="pt-4 mt-4 border-t border-slate-50 flex items-center justify-between">
-                    <span class="text-slate-400 text-xs font-medium flex items-center gap-1">
-                        <i class="fa-regular fa-clock"></i> ${tour.duration}
-                    </span>
-                    <h4 class="text-xl font-black text-indigo-600">
-                        ₹${tour.adult_price}
-                    </h4>
-                </div>
-            </div>
-        </a>
-        `;
-    });
-    document.getElementById("tourGrid").innerHTML = html;
-}
-
-async function searchTours() {
-    const search = document.getElementById("searchInput").value;
-    const response = await fetch(`/api/home/?search=${search}`);
-    const data = await response.json();
-    renderTours(data.tours);
-}
-
-async function showDefaultTours() {
-    const response = await fetch("/api/home/");
-    const data = await response.json();
-    const tours = (data.tours || []).slice(0, 6);
-
-    let html = `
-        <div class="px-4 py-2.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
-            Popular Tours
-        </div>
-    `;
-
-    tours.forEach((tour) => {
-
-      // Inside showDefaultTours and searchSuggestions
-      const locationText = tour.location 
-          ? `${tour.location.city}, ${tour.location.state}` 
-          : "Location not available";
-        html += `
-        <a href="/tour-details/${tour.slug}/" class="block px-4 py-3 hover:bg-slate-50 transition">
-            <div class="font-semibold text-sm text-slate-900">${tour.title}</div>
-            <div class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
-                <i class="fa-solid fa-location-dot text-slate-300 text-[10px]"></i> ${locationText}
-            </div>
-        </a>
-        `;
-    });
-
-    const dropdown = document.getElementById("searchDropdown");
-    dropdown.innerHTML = html;
-    dropdown.classList.remove("hidden");
-}
-
-async function searchSuggestions() {
-    const search = document.getElementById("searchInput").value;
-    if (!search.trim()) {
-        showDefaultTours();
+    if (!container) {
         return;
     }
 
-    const response = await fetch(`/api/home/?search=${search}`);
-    const data = await response.json();
-    const tours = data.tours || [];
+
+    if (!tours || tours.length === 0) {
+
+        container.innerHTML = `
+            <div class="col-span-full text-center py-12">
+
+                <div class="text-slate-300 text-5xl mb-4">
+                    <i class="fa-solid fa-compass"></i>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-800">
+                    No tours found
+                </h3>
+
+                <p class="text-sm text-slate-400 mt-2">
+                    Try searching for another destination or tour.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
 
     let html = "";
+
+
     tours.forEach((tour) => {
 
-      // Inside showDefaultTours and searchSuggestions
-        const locationText = tour.location 
-            ? `${tour.location.city}, ${tour.location.state}` 
-            : "Location not available";
+        const locationText =
+            tour.location
+                ? `${escapeHTML(tour.location.city || "")}, ${escapeHTML(tour.location.state || "")}`
+                : "Location not available";
+
+
+        const image =
+            tour.thumbnail ||
+            "https://via.placeholder.com/600x450?text=Tour";
+
+
+        const title =
+            escapeHTML(tour.title || "Untitled Tour");
+
+
+        const tourType =
+            escapeHTML(tour.tour_type || "Tour");
+
+
+        const description =
+            escapeHTML(
+                tour.short_description ||
+                "Explore this amazing experience."
+            );
+
+
+        const duration =
+            escapeHTML(
+                tour.duration ||
+                "Duration unavailable"
+            );
+
+
+        const price =
+            Number(tour.adult_price || 0)
+                .toLocaleString("en-IN");
+
+
         html += `
-        <a href="/tour-details/${tour.slug}/" class="block px-4 py-3 hover:bg-slate-50 transition">
-            <div class="font-semibold text-sm text-slate-900">${tour.title}</div>
-            <div class="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
-                <i class="fa-solid fa-location-dot text-slate-300 text-[10px]"></i> ${locationText}
+
+        <a
+          href="/tour-details/${tour.slug}/"
+          class="bg-white
+                 rounded-2xl
+                 overflow-hidden
+                 shadow-sm
+                 border
+                 border-slate-100
+                 flex
+                 flex-col
+                 card-hover"
+        >
+
+          <!-- IMAGE -->
+          <div
+            class="relative
+                   aspect-[4/3]
+                   overflow-hidden
+                   bg-slate-100"
+          >
+
+            <img
+              src="${image}"
+              class="w-full h-full object-cover"
+              alt="${title}"
+              loading="lazy"
+              onerror="this.src='https://via.placeholder.com/600x450?text=Tour'"
+            >
+
+
+            <!-- TOUR TYPE -->
+            <div class="absolute top-3 left-3">
+
+              <span
+                class="bg-white/95
+                       backdrop-blur-sm
+                       text-indigo-600
+                       px-2.5
+                       py-1
+                       rounded-lg
+                       text-[11px]
+                       font-bold
+                       tracking-wide
+                       shadow-sm
+                       uppercase"
+              >
+                ${tourType}
+              </span>
+
             </div>
+
+          </div>
+
+
+          <!-- CONTENT -->
+          <div
+            class="p-4
+                   flex
+                   flex-col
+                   flex-1
+                   justify-between"
+          >
+
+            <div>
+
+              <!-- LOCATION -->
+              <div
+                class="flex
+                       items-center
+                       gap-1.5
+                       text-slate-400
+                       text-xs
+                       font-medium"
+              >
+
+                <i
+                  class="fa-solid
+                         fa-location-dot
+                         text-indigo-500/80
+                         text-[11px]"
+                ></i>
+
+                <span>
+                  ${locationText}
+                </span>
+
+              </div>
+
+
+              <!-- TITLE -->
+              <h3
+                class="font-bold
+                       text-base
+                       text-slate-900
+                       mt-1.5
+                       leading-snug
+                       line-clamp-1"
+              >
+                ${title}
+              </h3>
+
+
+              <!-- DESCRIPTION -->
+              <p
+                class="text-slate-500
+                       text-xs
+                       mt-1.5
+                       line-clamp-2
+                       leading-relaxed"
+              >
+                ${description}
+              </p>
+
+            </div>
+
+
+            <!-- BOTTOM -->
+            <div
+              class="pt-4
+                     mt-4
+                     border-t
+                     border-slate-50
+                     flex
+                     items-center
+                     justify-between"
+            >
+
+              <!-- DURATION -->
+              <span
+                class="text-slate-400
+                       text-xs
+                       font-medium
+                       flex
+                       items-center
+                       gap-1"
+              >
+
+                <i class="fa-regular fa-clock"></i>
+
+                ${duration}
+
+              </span>
+
+
+              <!-- PRICE -->
+              <h4
+                class="text-xl
+                       font-black
+                       text-indigo-600"
+              >
+                ₹${price}
+              </h4>
+
+            </div>
+
+          </div>
+
         </a>
+
         `;
+
     });
 
-    const dropdown = document.getElementById("searchDropdown");
-    dropdown.innerHTML = html;
-    dropdown.classList.remove("hidden");
+
+    container.innerHTML = html;
 }
 
-document.addEventListener("click", function(e) {
-    const input = document.getElementById("searchInput");
-    const dropdown = document.getElementById("searchDropdown");
-    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+
+
+/* ============================================================
+   SEARCH TOURS
+============================================================ */
+
+async function searchTours() {
+
+    const input =
+        document.getElementById("searchInput");
+
+    const tourGrid =
+        document.getElementById("tourGrid");
+
+    const viewAllBtn =
+        document.getElementById("viewAllToursBtn");
+
+    const sectionTitle =
+        document.getElementById("tourSectionTitle");
+
+    const searchResultText =
+        document.getElementById("searchResultText");
+
+    const dropdown =
+        document.getElementById("searchDropdown");
+
+
+    if (!input) {
+        return;
+    }
+
+
+    const search =
+        input.value.trim();
+
+
+    // Hide dropdown
+    if (dropdown) {
         dropdown.classList.add("hidden");
     }
-});
+
+
+    /* ========================================================
+       EMPTY SEARCH
+    ======================================================== */
+
+    if (!search) {
+
+        sectionTitle.textContent =
+            "Explore Popular Tours";
+
+        searchResultText.textContent = "";
+
+        searchResultText.classList.add("hidden");
+
+        viewAllBtn.classList.add("hidden");
+
+        try {
+
+            const response =
+                await fetch("/api/home/");
+
+            const data =
+                await response.json();
+
+            const tours =
+                data.tours || [];
+
+            renderTours(
+                tours.slice(0, 6)
+            );
+
+        } catch (error) {
+
+            console.error(
+                "DEFAULT TOUR ERROR:",
+                error
+            );
+
+        }
+
+        return;
+    }
+
+
+    /* ========================================================
+       LOADING
+    ======================================================== */
+
+    tourGrid.innerHTML = `
+
+        <div
+          class="col-span-full
+                 text-center
+                 py-12"
+        >
+
+          <div
+            class="animate-spin
+                   w-8
+                   h-8
+                   border-4
+                   border-indigo-500
+                   border-t-transparent
+                   rounded-full
+                   mx-auto"
+          ></div>
+
+          <p class="text-slate-400 text-sm mt-3">
+            Searching tours...
+          </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        /* ====================================================
+           API REQUEST
+        ==================================================== */
+
+        const response =
+            await fetch(
+                `/api/home/?search=${encodeURIComponent(search)}`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP error ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const tours =
+            data.tours || [];
+
+
+        /* ====================================================
+           UPDATE HEADING
+        ==================================================== */
+
+        sectionTitle.textContent =
+            `Tours for "${search}"`;
+
+
+        /* ====================================================
+           UPDATE RESULT COUNT
+        ==================================================== */
+
+        searchResultText.textContent =
+            `${tours.length} tour${tours.length !== 1 ? "s" : ""} found`;
+
+        searchResultText.classList.remove("hidden");
+
+
+        /* ====================================================
+           RESULTS FOUND
+        ==================================================== */
+
+        if (tours.length > 0) {
+
+            /*
+             * Show only first 6 cards
+             * on home page.
+             */
+            renderTours(
+                tours.slice(0, 6)
+            );
+
+
+            /* =================================================
+               VIEW ALL URL
+            ================================================= */
+
+            viewAllBtn.href =
+                `{% url 'tourlist' %}?search=${encodeURIComponent(search)}`;
+
+
+            /*
+             * Show View All
+             */
+            viewAllBtn.classList.remove("hidden");
+
+
+        } else {
+
+            /* ================================================
+               NO RESULTS
+            ================================================ */
+
+            tourGrid.innerHTML = `
+
+                <div
+                  class="col-span-full
+                         text-center
+                         py-12"
+                >
+
+                  <div
+                    class="text-slate-300
+                           text-5xl
+                           mb-4"
+                  >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+
+
+                  <h3
+                    class="text-lg
+                           font-bold
+                           text-slate-800"
+                  >
+                    No tours found
+                  </h3>
+
+
+                  <p
+                    class="text-sm
+                           text-slate-400
+                           mt-2"
+                  >
+                    Try searching for another destination or tour.
+                  </p>
+
+                </div>
+
+            `;
+
+
+            /*
+             * Hide View All
+             */
+            viewAllBtn.classList.add("hidden");
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "SEARCH ERROR:",
+            error
+        );
+
+
+        tourGrid.innerHTML = `
+
+            <div
+              class="col-span-full
+                     text-center
+                     py-12"
+            >
+
+              <div
+                class="text-red-400
+                       text-4xl
+                       mb-3"
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+              </div>
+
+
+              <p
+                class="text-red-500
+                       text-sm"
+              >
+                Something went wrong while searching.
+              </p>
+
+            </div>
+
+        `;
+
+
+        viewAllBtn.classList.add("hidden");
+
+    }
+
+}
+
+
+
+/* ============================================================
+   SEARCH INPUT HANDLER
+============================================================ */
+
+function handleSearchInput(event) {
+
+    /*
+     * Press Enter
+     */
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        searchTours();
+
+        return;
+    }
+
+
+    /*
+     * Normal typing
+     */
+    searchSuggestions();
+
+}
+
+
+
+/* ============================================================
+   SHOW DEFAULT SEARCH SUGGESTIONS
+============================================================ */
+
+async function showDefaultTours() {
+
+    const dropdown =
+        document.getElementById("searchDropdown");
+
+
+    /*
+     * Prevent duplicate API requests
+     * if dropdown is already visible.
+     */
+
+    try {
+
+        const response =
+            await fetch("/api/home/");
+
+        const data =
+            await response.json();
+
+
+        const tours =
+            (data.tours || []).slice(0, 6);
+
+
+        let html = `
+
+            <div
+              class="px-4
+                     py-2.5
+                     text-[11px]
+                     font-bold
+                     text-slate-400
+                     uppercase
+                     tracking-wider
+                     bg-slate-50/50"
+            >
+              Popular Tours
+            </div>
+
+        `;
+
+
+        if (tours.length === 0) {
+
+            html += `
+
+                <div
+                  class="px-4
+                         py-5
+                         text-center
+                         text-sm
+                         text-slate-400"
+                >
+                  No tours available
+                </div>
+
+            `;
+
+        }
+
+
+        tours.forEach((tour) => {
+
+            const locationText =
+                tour.location
+                    ? `${escapeHTML(tour.location.city || "")}, ${escapeHTML(tour.location.state || "")}`
+                    : "Location not available";
+
+
+            html += `
+
+                <a
+                  href="/tour-details/${tour.slug}/"
+                  class="block
+                         px-4
+                         py-3
+                         hover:bg-slate-50
+                         transition"
+                >
+
+                  <div
+                    class="font-semibold
+                           text-sm
+                           text-slate-900"
+                  >
+                    ${escapeHTML(tour.title || "Untitled Tour")}
+                  </div>
+
+
+                  <div
+                    class="text-xs
+                           text-slate-400
+                           mt-0.5
+                           flex
+                           items-center
+                           gap-1"
+                  >
+
+                    <i
+                      class="fa-solid
+                             fa-location-dot
+                             text-slate-300
+                             text-[10px]"
+                    ></i>
+
+                    ${locationText}
+
+                  </div>
+
+                </a>
+
+            `;
+
+        });
+
+
+        dropdown.innerHTML =
+            html;
+
+        dropdown.classList.remove(
+            "hidden"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "DEFAULT SUGGESTIONS ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* ============================================================
+   SEARCH SUGGESTIONS
+============================================================ */
+
+async function searchSuggestions() {
+
+    const input =
+        document.getElementById("searchInput");
+
+    const dropdown =
+        document.getElementById("searchDropdown");
+
+
+    const search =
+        input.value.trim();
+
+
+    /*
+     * Empty search
+     */
+    if (!search) {
+
+        showDefaultTours();
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/home/?search=${encodeURIComponent(search)}`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP error ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const tours =
+            data.tours || [];
+
+
+        let html = "";
+
+
+        /*
+         * Header
+         */
+        html += `
+
+            <div
+              class="px-4
+                     py-2.5
+                     text-[11px]
+                     font-bold
+                     text-slate-400
+                     uppercase
+                     tracking-wider
+                     bg-slate-50/50"
+            >
+              Search Results
+            </div>
+
+        `;
+
+
+        /*
+         * No results
+         */
+        if (tours.length === 0) {
+
+            html += `
+
+                <div
+                  class="px-4
+                         py-6
+                         text-center"
+                >
+
+                  <div
+                    class="text-slate-300
+                           text-3xl
+                           mb-2"
+                  >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+
+                  <p
+                    class="text-sm
+                           font-semibold
+                           text-slate-700"
+                  >
+                    No tours found
+                  </p>
+
+                  <p
+                    class="text-xs
+                           text-slate-400
+                           mt-1"
+                  >
+                    Try another search
+                  </p>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /*
+         * Results
+         */
+        tours
+            .slice(0, 8)
+            .forEach((tour) => {
+
+                const locationText =
+                    tour.location
+                        ? `${escapeHTML(tour.location.city || "")}, ${escapeHTML(tour.location.state || "")}`
+                        : "Location not available";
+
+
+                html += `
+
+                    <a
+                      href="/tour-details/${tour.slug}/"
+                      class="block
+                             px-4
+                             py-3
+                             hover:bg-slate-50
+                             transition"
+                    >
+
+                      <div
+                        class="font-semibold
+                               text-sm
+                               text-slate-900"
+                      >
+                        ${escapeHTML(tour.title || "Untitled Tour")}
+                      </div>
+
+
+                      <div
+                        class="text-xs
+                               text-slate-400
+                               mt-0.5
+                               flex
+                               items-center
+                               gap-1"
+                      >
+
+                        <i
+                          class="fa-solid
+                                 fa-location-dot
+                                 text-slate-300
+                                 text-[10px]"
+                        ></i>
+
+                        ${locationText}
+
+                      </div>
+
+                    </a>
+
+                `;
+
+            });
+
+
+        dropdown.innerHTML =
+            html;
+
+
+        dropdown.classList.remove(
+            "hidden"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "SEARCH SUGGESTION ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* ============================================================
+   CLOSE SEARCH DROPDOWN OUTSIDE CLICK
+============================================================ */
+
+document.addEventListener(
+    "click",
+    function(e) {
+
+        const input =
+            document.getElementById(
+                "searchInput"
+            );
+
+        const dropdown =
+            document.getElementById(
+                "searchDropdown"
+            );
+
+
+        if (
+            input &&
+            dropdown &&
+            !input.contains(e.target) &&
+            !dropdown.contains(e.target)
+        ) {
+
+            dropdown.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* ============================================================
+   RENDER RECENT TOURS
+============================================================ */
+
+function renderRecentTours(tours) {
+
+    const container =
+        document.getElementById(
+            "recentToursGrid"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (
+        !tours ||
+        tours.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div
+              class="md:col-span-2
+                     lg:col-span-3
+                     text-center
+                     py-10"
+            >
+
+                <p
+                  class="text-slate-400
+                         text-sm"
+                >
+                    No recent tours available.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    let html = "";
+
+
+    tours.forEach((tour) => {
+
+        const locationText =
+            tour.location
+                ? `${tour.location.city || ""}, ${tour.location.state || ""}`
+                : "Location not available";
+
+
+        const image =
+            tour.thumbnail ||
+            "https://via.placeholder.com/300x300?text=Tour";
+
+
+        const price =
+            Number(
+                tour.adult_price || 0
+            ).toLocaleString("en-IN");
+
+
+        html += `
+
+        <a
+          href="/tour-details/${tour.slug}/"
+          class="bg-white
+                 rounded-2xl
+                 p-3
+                 shadow-sm
+                 border
+                 border-slate-100
+                 card-hover
+                 flex
+                 gap-4"
+        >
+
+          <!-- IMAGE -->
+
+          <div class="relative shrink-0">
+
+            <img
+              src="${image}"
+              class="w-28 h-28 rounded-xl object-cover"
+              alt="${escapeHTML(tour.title || "Tour")}"
+              loading="lazy"
+              onerror="this.src='https://via.placeholder.com/300x300?text=Tour'"
+            />
+
+
+            <!-- NEW BADGE -->
+
+            <span
+              class="absolute
+                     top-2
+                     left-2
+                     bg-indigo-600
+                     text-white
+                     text-[9px]
+                     font-bold
+                     px-2
+                     py-1
+                     rounded-md
+                     uppercase
+                     tracking-wide"
+            >
+              New
+            </span>
+
+          </div>
+
+
+          <!-- CONTENT -->
+
+          <div
+            class="flex
+                   flex-col
+                   justify-between
+                   flex-1
+                   py-1
+                   min-w-0"
+          >
+
+            <div>
+
+              <!-- TOUR TYPE -->
+
+              <span
+                class="text-indigo-600
+                       text-[11px]
+                       uppercase
+                       font-bold
+                       tracking-wider
+                       block"
+              >
+                ${escapeHTML(tour.tour_type || "Tour")}
+              </span>
+
+
+              <!-- TITLE -->
+
+              <h3
+                class="text-base
+                       font-bold
+                       text-slate-900
+                       leading-tight
+                       mt-0.5
+                       line-clamp-1"
+              >
+                ${escapeHTML(tour.title || "Untitled Tour")}
+              </h3>
+
+
+              <!-- LOCATION -->
+
+              <p
+                class="text-xs
+                       text-slate-400
+                       mt-1
+                       flex
+                       items-center
+                       gap-1
+                       truncate"
+              >
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                ${locationText}
+
+              </p>
+
+
+              <!-- DURATION -->
+
+              <p
+                class="text-xs
+                       text-slate-400
+                       mt-1
+                       flex
+                       items-center
+                       gap-1"
+              >
+
+                <i class="fa-regular fa-clock"></i>
+
+                ${escapeHTML(
+                    tour.duration ||
+                    "Duration unavailable"
+                )}
+
+              </p>
+
+            </div>
+
+
+            <!-- BOTTOM -->
+
+            <div
+              class="flex
+                     items-end
+                     justify-between
+                     mt-2"
+            >
+
+              <!-- RATING -->
+
+              <div
+                class="flex
+                       items-center
+                       gap-1
+                       text-xs"
+              >
+
+                <span
+                  class="text-amber-500
+                         font-semibold"
+                >
+                  ★ New
+                </span>
+
+              </div>
+
+
+              <!-- PRICE -->
+
+              <span
+                class="text-lg
+                       font-black
+                       text-slate-900"
+              >
+                ₹${price}
+              </span>
+
+            </div>
+
+          </div>
+
+        </a>
+
+        `;
+
+    });
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+
+/* ============================================================
+   FETCH HOME DATA
+============================================================ */
 
 async function fetchHomeTours() {
+
     try {
-        const response = await fetch("/api/home/");
-        const data = await response.json();
 
-        const tours = data.tours || [];
-        const destinations = data.destinations || [];
-        const unforgettable = data.unforgettable || [];
+        const response =
+            await fetch(
+                "/api/home/"
+            );
 
-        renderTours(tours);
 
-        let destinationHTML = "";
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP error ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const tours =
+            data.tours || [];
+
+        const recentTours =
+            data.recent_tours || [];
+
+        const destinations =
+            data.destinations || [];
+
+        const unforgettable =
+            data.unforgettable || [];
+
+
+        /*
+         * Default home tours
+         *
+         * Show only 6
+         */
+        renderTours(
+            tours.slice(0, 6)
+        );
+
+
+        /*
+         * Recent tours
+         */
+        renderRecentTours(
+            recentTours
+        );
+
+
+
+        /* ====================================================
+           DESTINATIONS
+        ==================================================== */
+
+        let destinationHTML =
+            "";
+
+
         destinations.forEach((item) => {
-          
+
             destinationHTML += `
-            <div class="group cursor-pointer">
-                <div class="overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm border border-slate-100">
-                    <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${item.state}">
-                </div>
-                <h3 class="mt-2.5 text-base font-bold text-slate-900 group-hover:text-indigo-600 transition truncate px-1">
-                    ${item.state}
-                </h3>
-            </div>
-            `;
-        });
-        document.getElementById("destinationGrid").innerHTML = destinationHTML;
 
-        let unforgettableHTML = "";
+                <a
+                  href="{% url 'tourlist' %}?search=${encodeURIComponent(item.state)}"
+                  class="group block"
+                >
+
+                  <div
+                    class="overflow-hidden
+                           rounded-2xl
+                           aspect-[4/3]
+                           bg-slate-100
+                           shadow-sm
+                           border
+                           border-slate-100"
+                  >
+
+                    <img
+                      src="${item.image}"
+                      class="w-full
+                             h-full
+                             object-cover
+                             group-hover:scale-105
+                             transition
+                             duration-500"
+                      alt="${escapeHTML(item.state)}"
+                      loading="lazy"
+                    >
+
+                  </div>
+
+
+                  <h3
+                    class="mt-2.5
+                           text-base
+                           font-bold
+                           text-slate-900
+                           group-hover:text-indigo-600
+                           transition
+                           truncate
+                           px-1"
+                  >
+                    ${escapeHTML(item.state)}
+                  </h3>
+
+                </a>
+
+            `;
+
+        });
+
+
+        const destinationGrid =
+            document.getElementById(
+                "destinationGrid"
+            );
+
+
+        if (destinationGrid) {
+
+            destinationGrid.innerHTML =
+                destinationHTML;
+
+        }
+
+
+
+        /* ====================================================
+           UNFORGETTABLE EXPERIENCES
+        ==================================================== */
+
+        let unforgettableHTML =
+            "";
+
+
         unforgettable.forEach((tour) => {
+
+            const image =
+                tour.thumbnail ||
+                "https://via.placeholder.com/600x450?text=Tour";
+
+
+            const title =
+                escapeHTML(
+                    tour.title ||
+                    "Untitled Tour"
+                );
+
+
+            const duration =
+                escapeHTML(
+                    tour.duration ||
+                    "Duration unavailable"
+                );
+
+
+            const price =
+                Number(
+                    tour.adult_price || 0
+                ).toLocaleString("en-IN");
+
+
             unforgettableHTML += `
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col card-hover">
-                <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                    <img src="${tour.thumbnail}" class="w-full h-full object-cover" alt="${tour.title}">
-                </div>
-                <div class="p-4 flex flex-col flex-1 justify-between">
+
+                <a
+                  href="/tour-details/${tour.slug}/"
+                  class="bg-white
+                         rounded-2xl
+                         overflow-hidden
+                         shadow-sm
+                         border
+                         border-slate-100
+                         flex
+                         flex-col
+                         card-hover"
+                >
+
+                  <div
+                    class="relative
+                           aspect-[4/3]
+                           overflow-hidden
+                           bg-slate-100"
+                  >
+
+                    <img
+                      src="${image}"
+                      class="w-full
+                             h-full
+                             object-cover"
+                      alt="${title}"
+                      loading="lazy"
+                      onerror="this.src='https://via.placeholder.com/600x450?text=Tour'"
+                    >
+
+                  </div>
+
+
+                  <div
+                    class="p-4
+                           flex
+                           flex-col
+                           flex-1
+                           justify-between"
+                  >
+
                     <div>
-                        <h3 class="font-bold text-base text-slate-900 leading-snug line-clamp-1">
-                            ${tour.title}
-                        </h3>
-                        <p class="text-slate-400 text-xs mt-1 flex items-center gap-1">
-                            <i class="fa-regular fa-clock"></i> ${tour.duration}
-                        </p>
+
+                      <h3
+                        class="font-bold
+                               text-base
+                               text-slate-900
+                               leading-snug
+                               line-clamp-1"
+                      >
+                        ${title}
+                      </h3>
+
+
+                      <p
+                        class="text-slate-400
+                               text-xs
+                               mt-1
+                               flex
+                               items-center
+                               gap-1"
+                      >
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        ${duration}
+
+                      </p>
+
                     </div>
-                    <div class="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between">
-                        <span class="text-xs text-slate-400 font-medium">Starting at</span>
-                        <h4 class="text-xl font-black text-indigo-600">
-                            ₹${tour.adult_price}
-                        </h4>
+
+
+                    <div
+                      class="mt-4
+                             pt-3
+                             border-t
+                             border-slate-50
+                             flex
+                             items-center
+                             justify-between"
+                    >
+
+                      <span
+                        class="text-xs
+                               text-slate-400
+                               font-medium"
+                      >
+                        Starting at
+                      </span>
+
+
+                      <h4
+                        class="text-xl
+                               font-black
+                               text-indigo-600"
+                      >
+                        ₹${price}
+                      </h4>
+
                     </div>
-                </div>
-            </div>
+
+                  </div>
+
+                </a>
+
             `;
+
         });
-        document.getElementById("unforgettableGrid").innerHTML = unforgettableHTML;
-    } catch(error) {
-        console.error("HOME API ERROR", error);
+
+
+        const unforgettableGrid =
+            document.getElementById(
+                "unforgettableGrid"
+            );
+
+
+        if (unforgettableGrid) {
+
+            unforgettableGrid.innerHTML =
+                unforgettableHTML;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "HOME API ERROR:",
+            error
+        );
+
     }
+
 }
 
-fetchHomeTours();
 
-const showMoreBtn = document.getElementById("showMoreBtn");
-if (showMoreBtn) {
-    showMoreBtn.addEventListener("click", function () {
-        const hiddenTours = document.querySelectorAll(".extra-tour");
-        hiddenTours.forEach((card) => {
-            card.classList.remove("hidden");
-        });
-        showMoreBtn.style.display = "none";
-    });
-}
+
+/* ============================================================
+   INITIAL PAGE LOAD
+============================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const initialSearch =
+            params.get("search");
+
+
+        /*
+         * If URL contains search:
+         *
+         * /home/?search=Hyderabad
+         *
+         * Load search results.
+         */
+
+        if (initialSearch) {
+
+            const input =
+                document.getElementById(
+                    "searchInput"
+                );
+
+
+            if (input) {
+
+                input.value =
+                    initialSearch;
+
+            }
+
+
+            searchTours();
+
+
+        } else {
+
+            /*
+             * Normal home page
+             */
+            fetchHomeTours();
+
+        }
+
+    }
+);
+
 </script>
+
 {% endblock %}

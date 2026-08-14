@@ -230,6 +230,9 @@ class TourPricingSerializer(serializers.ModelSerializer):
             "price",
         ]
 
+
+
+
 class TourListSerializer(
     serializers.ModelSerializer
 ):
@@ -427,6 +430,7 @@ class TourDetailSerializer(serializers.ModelSerializer):
         guides = User.objects.filter(
             role="guide",
             is_active=True,
+            is_verified=True ,
             locations=obj.location
         ).distinct()
 

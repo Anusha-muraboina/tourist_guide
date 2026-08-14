@@ -111,6 +111,10 @@ class TourForm(forms.ModelForm):
             "important_information",
             "amenities",
             "is_active",
+            
+            "seo_title",
+            "seo_description",
+            "seo_keywords",
         ]
 
         widgets = {
@@ -286,6 +290,7 @@ class ContactUsForm(forms.ModelForm):
                 "placeholder": "Type customer message...",
             }
         )
+
 
         self.fields["is_read"].widget.attrs.update({
             "class": checkbox_class,

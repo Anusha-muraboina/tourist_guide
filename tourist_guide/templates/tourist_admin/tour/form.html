@@ -93,6 +93,114 @@
                         </div>
                     </div>
 
+
+
+
+
+
+<!-- ============================================================
+     SEO SETTINGS
+============================================================ -->
+
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+
+    <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
+
+        <div class="p-2 bg-teal-50 text-teal-600 rounded-lg">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        </div>
+
+        <div>
+            <h3 class="text-xl font-bold text-slate-800">
+                SEO Settings
+            </h3>
+
+            <p class="text-xs text-gray-400 mt-1">
+                Optimize this tour for search engines.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="space-y-6 form-styles">
+
+        <!-- SEO TITLE -->
+
+        <div>
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                SEO Title
+            </label>
+
+            {{ form.seo_title }}
+
+            <p class="text-xs text-gray-400 mt-1">
+                Recommended length: 50–60 characters.
+            </p>
+
+            {% if form.seo_title.errors %}
+                <p class="text-red-500 text-xs mt-1">
+                    {{ form.seo_title.errors.0 }}
+                </p>
+            {% endif %}
+
+        </div>
+
+
+        <!-- SEO DESCRIPTION -->
+
+        <div>
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                SEO Description
+            </label>
+
+            {{ form.seo_description }}
+
+            <p class="text-xs text-gray-400 mt-1">
+                Recommended length: 120–160 characters.
+            </p>
+
+            {% if form.seo_description.errors %}
+                <p class="text-red-500 text-xs mt-1">
+                    {{ form.seo_description.errors.0 }}
+                </p>
+            {% endif %}
+
+        </div>
+
+
+        <!-- SEO KEYWORDS -->
+
+        <div>
+
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                SEO Keywords
+            </label>
+
+            {{ form.seo_keywords }}
+
+            <p class="text-xs text-gray-400 mt-1">
+                Example: Hyderabad tours, tourist places,
+                guided tours, travel packages
+            </p>
+
+            {% if form.seo_keywords.errors %}
+                <p class="text-red-500 text-xs mt-1">
+                    {{ form.seo_keywords.errors.0 }}
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
                     <!-- Location Information -->
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
                         <div class="flex items-center gap-3 border-b border-gray-100 pb-4 mb-6">
@@ -187,29 +295,6 @@
     </div>
 
 </div>
-
-                        {% comment %} <div class="grid grid-cols-1 md:grid-cols-2 gap-6 form-styles">
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Includes</label>
-                                {{ form.includes }}
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Excludes</label>
-                                {{ form.excludes }}
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tour Highlights</label>
-                                {{ form.highlights }}
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Important Info</label>
-                                {{ form.important_information }}
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Amenities</label>
-                                {{ form.amenities }}
-                            </div>
-                        </div> {% endcomment %}
                     </div>
 
                 </div>

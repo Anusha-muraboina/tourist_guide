@@ -59,15 +59,12 @@ class GuideSerializer(
             "profile_image"
         ]
     def get_profile_image(self, obj):
-
         request = self.context.get("request")
-
         if obj.profile_image and request:
 
             return request.build_absolute_uri(
                 obj.profile_image.url
             )
-
         return None
 
 # =====================================
@@ -77,11 +74,8 @@ class GuideSerializer(
 class TourPricingSerializer(
     serializers.ModelSerializer
 ):
-
     class Meta:
-
         model = TourPricing
-
         fields = [
 
             "person_type",
@@ -109,21 +103,7 @@ class TourSerializer(
 
         fields = [
 
-            "id",
-
-            "title",
-
-            "slug",
-
-            "city",
-
-            "state",
-
-            "country",
-
-            "duration",
-
-            "pricing"
+            "id", "title", "slug", "city", "state", "country", "duration", "pricing"
         ]
 
 
@@ -134,23 +114,18 @@ class TourSerializer(
 class BookingCreateSerializer(
     serializers.ModelSerializer
 ):
-
     # =================================
     # OPTIONAL GUIDE
     # =================================
 
     guide = serializers.PrimaryKeyRelatedField(
-
         queryset=User.objects.filter(
             role="guide",
             is_active=True
         ),
-
         required=False,
-
         allow_null=True
     )
-    
     coupon_code = serializers.CharField(
         required=False,
         allow_blank=True
@@ -161,23 +136,14 @@ class BookingCreateSerializer(
     # =================================
 
     tour_details = serializers.SerializerMethodField()
-
     selected_guide = serializers.SerializerMethodField()
-
     matching_guides = serializers.SerializerMethodField()
-
     advance_amount = serializers.ReadOnlyField()
-
     remaining_amount = serializers.ReadOnlyField()
-
     available_slots = serializers.SerializerMethodField()
-
     remaining_slots = serializers.SerializerMethodField()
-
     adult_total = serializers.SerializerMethodField()
-
     child_total = serializers.SerializerMethodField()
-
     infant_total = serializers.SerializerMethodField()
 
     # =================================
@@ -188,109 +154,14 @@ class BookingCreateSerializer(
 
         model = Booking
 
-        fields = [
-
-            "id",
-
-            "booking_id",
-
-            "tour",
-
-            "tour_details",
-
-            "guide",
-
-            "selected_guide",
-
-            "guest_name",
-
-            "guest_email",
-
-            "guest_phone",
-
-            "adults",
-
-            "children",
-
-            "infants",
-
-            "tour_date",
-
-            "tour_time",
-            "coupon_code",
-
-            "special_requests",
-
-            "payment_method",
-
-            "payment_status",
-
-            "adult_total",
-
-            "child_total",
-
-            "infant_total",
-
-            "sub_total",
-
-            "discount_amount",
-
-            "tax_amount",
-
-            "total_amount",
-
-            "advance_amount",
-
-            "remaining_amount",
-
-            "status",
-
-            "available_slots",
-
-            "remaining_slots",
-
-            "matching_guides",
-
-            "created_at"
+        fields = [  "id",  "booking_id",  "tour",  "tour_details",  "guide",  "selected_guide",  "guest_name",  "guest_email",  "guest_phone",   "adults",
+           "children", "infants",  "tour_date",  "tour_time", "coupon_code", "special_requests", "payment_method", "payment_status", "adult_total", "child_total","infant_total",  "sub_total",
+           "discount_amount", "tax_amount","total_amount","advance_amount","remaining_amount","status","available_slots","remaining_slots","matching_guides", "created_at"
         ]
 
         read_only_fields = [
-
-            "booking_id",
-
-            "payment_status",
-
-            "adult_total",
-
-            "child_total",
-
-            "infant_total",
-
-            "sub_total",
-
-            "discount_amount",
-
-            "tax_amount",
-
-            "total_amount",
-
-            "advance_amount",
-
-            "remaining_amount",
-
-            "status",
-
-            "available_slots",
-
-            "remaining_slots",
-
-            "matching_guides",
-
-            "selected_guide",
-
-            "tour_details",
-
-            "created_at"
+        "booking_id","payment_status","adult_total","child_total","infant_total","sub_total","discount_amount","tax_amount","total_amount","advance_amount",
+        "remaining_amount", "status",  "available_slots",  "remaining_slots",  "matching_guides",  "selected_guide",  "tour_details",  "created_at"
         ]
 
     # =================================
@@ -370,33 +241,6 @@ class BookingCreateSerializer(
                     "guide": "Selected guide is not available for this location"
                 })
 
-        # if selected_guide:
-
-        #     if not selected_guide.location:
-
-        #         raise serializers.ValidationError({
-
-        #             "guide": (
-        #                 "Guide location missing"
-        #             )
-
-        #         })
-
-            
-        #     if (
-        #         selected_guide.location.strip().lower()
-        #         != tour.city.strip().lower()
-        #         or
-        #         selected_guide.state.strip().lower()
-        #         != tour.state.strip().lower()
-        #     ):
-
-        #         raise serializers.ValidationError({
-        #             "guide": (
-        #                 "Selected guide is not available "
-        #                 "for this location"
-        #             )
-        #         })
 
                 raise serializers.ValidationError({
 
@@ -915,7 +759,7 @@ class BookingCreateSerializer(
 
             role="guide",
 
-            location__iexact=obj.tour.city,
+            # location__iexact=obj.tour.city,
             
             # state__iexact=obj.tour.state,
             locations=obj.tour.location ,

@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-6a)d2b@!-5&_2x4#g@&$(z&firm2qj5bih9&c7pgwe9u$$oboj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
+
+
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "08dd-103-5-135-107.ngrok-free.app",
+]
 
 
 
@@ -151,7 +158,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "anushamuraboina9@gmail.com"
 EMAIL_HOST_PASSWORD = "mpywwnwfrubgkxoe"
 
-DEFAULT_FROM_EMAIL = "Farmhouses Hyderabad <anushamuraboina9@gmail.com>"
+DEFAULT_FROM_EMAIL = "Tourist Guide <anushamuraboina9@gmail.com>"
 
 # Admin Email
 ADMIN_EMAIL = "anushamuraboina9@gmail.com"
@@ -161,6 +168,11 @@ CC_EMAIL = ["anushamuraboina99@gmail.com"]
 
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1",
+    "http://localhost",
+    "https://08dd-103-5-135-107.ngrok-free.app"
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

@@ -1,216 +1,1725 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="bg-slate-50 min-h-screen py-12">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-10 relative overflow-hidden">
-            
-            <!-- Decorative glows -->
-            <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full filter blur-3xl opacity-60 -mr-20 -mt-20 pointer-events-none"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full filter blur-3xl opacity-60 -ml-20 -mb-20 pointer-events-none"></div>
 
-            <!-- Header -->
-            <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center pb-8 border-b border-slate-100">
-                <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
-                    <div class="relative group">
-                        <img id="profileImage" src="" alt="Profile Picture"
-                            class="w-32 h-32 rounded-full object-cover ring-4 ring-slate-50 shadow-md">
+<!-- ============================================================
+     CSRF FORM
+============================================================ -->
+
+<form
+    id="csrfForm"
+    style="display:none;"
+>
+    {% csrf_token %}
+</form>
+
+
+<section
+    class="
+        bg-slate-50
+        min-h-screen
+        py-12
+    "
+>
+
+    <div
+        class="
+            max-w-5xl
+            mx-auto
+            px-4
+            sm:px-6
+        "
+    >
+
+        <!-- =====================================================
+             MAIN CARD
+        ====================================================== -->
+
+        <div
+            class="
+                bg-white
+                rounded-3xl
+                shadow-sm
+                border
+                border-slate-100
+                p-6
+                md:p-10
+                relative
+                overflow-hidden
+            "
+        >
+
+            <!-- Background decoration -->
+
+            <div
+                class="
+                    absolute
+                    top-0
+                    right-0
+                    w-64
+                    h-64
+                    bg-cyan-50
+                    rounded-full
+                    blur-3xl
+                    opacity-60
+                    -mr-20
+                    -mt-20
+                    pointer-events-none
+                "
+            ></div>
+
+
+            <div
+                class="
+                    absolute
+                    bottom-0
+                    left-0
+                    w-64
+                    h-64
+                    bg-purple-50
+                    rounded-full
+                    blur-3xl
+                    opacity-60
+                    -ml-20
+                    -mb-20
+                    pointer-events-none
+                "
+            ></div>
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <div
+                class="
+                    relative
+                    z-10
+                    flex
+                    flex-col
+                    gap-6
+                    lg:flex-row
+                    lg:justify-between
+                    lg:items-center
+                    pb-8
+                    border-b
+                    border-slate-100
+                "
+            >
+
+                <div
+                    class="
+                        flex
+                        flex-col
+                        sm:flex-row
+                        items-center
+                        gap-6
+                        text-center
+                        sm:text-left
+                    "
+                >
+
+                    <!-- Profile Image -->
+
+                    <div
+                        class="
+                            relative
+                        "
+                    >
+
+                        <img
+                            id="profileImage"
+                            src=""
+                            alt="Profile"
+                            class="
+                                w-32
+                                h-32
+                                rounded-full
+                                object-cover
+                                ring-4
+                                ring-slate-50
+                                shadow-md
+                                bg-slate-100
+                            "
+                        >
+
+                        <span
+                            class="
+                                absolute
+                                bottom-2
+                                right-2
+                                w-5
+                                h-5
+                                bg-emerald-500
+                                border-4
+                                border-white
+                                rounded-full
+                            "
+                        ></span>
+
                     </div>
+
+
+                    <!-- User -->
+
                     <div>
-                        <h1 id="username" class="text-3xl font-bold text-slate-900">Loading...</h1>
-                        <p id="email" class="text-slate-500 mt-1 font-medium"></p>
-                        <span id="role" class="inline-flex items-center mt-3 bg-cyan-50 text-cyan-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase">-</span>
+
+                        <h1
+                            id="username"
+                            class="
+                                text-3xl
+                                font-bold
+                                text-slate-900
+                            "
+                        >
+                            Loading...
+                        </h1>
+
+
+                        <p
+                            id="email"
+                            class="
+                                text-slate-500
+                                mt-1
+                                font-medium
+                            "
+                        ></p>
+
+
+                        <span
+                            id="role"
+                            class="
+                                inline-flex
+                                items-center
+                                mt-3
+                                bg-cyan-50
+                                text-cyan-700
+                                px-4
+                                py-1.5
+                                rounded-full
+                                text-xs
+                                font-semibold
+                                uppercase
+                            "
+                        >
+                            -
+                        </span>
+
                     </div>
+
                 </div>
 
-                <button id="updateProfileBtn"
-                    class="w-full lg:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-xl font-semibold shadow-sm transition">
+
+                <!-- Save -->
+
+                <button
+                    id="updateProfileBtn"
+                    type="button"
+                    class="
+                        w-full
+                        lg:w-auto
+                        bg-slate-900
+                        hover:bg-slate-800
+                        text-white
+                        px-8
+                        py-3.5
+                        rounded-xl
+                        font-semibold
+                        shadow-sm
+                        transition
+                        disabled:opacity-50
+                        disabled:cursor-not-allowed
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-floppy-disk
+                            mr-2
+                        "
+                    ></i>
+
                     Save Changes
+
                 </button>
+
             </div>
 
-            <!-- Quick Stats -->
-            <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Account Type</p>
-                    <h3 id="accountRole" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+
+            <!-- =================================================
+                 GUIDE LOCATION STATS
+            ================================================== -->
+
+            <div
+                id="locationStats"
+                class="
+                    relative
+                    z-10
+                    grid
+                    grid-cols-2
+                    md:grid-cols-4
+                    gap-4
+                    mt-8
+                    hidden
+                "
+            >
+
+                <!-- Account -->
+
+                <div
+                    class="
+                        bg-slate-50/70
+                        border
+                        border-slate-100
+                        rounded-2xl
+                        p-4
+                    "
+                >
+
+                    <p
+                        class="
+                            text-slate-400
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-wider
+                        "
+                    >
+                        Account Type
+                    </p>
+
+
+                    <h3
+                        id="accountRole"
+                        class="
+                            text-base
+                            font-bold
+                            text-slate-800
+                            mt-1.5
+                        "
+                    >
+                        -
+                    </h3>
+
                 </div>
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Country</p>
-                    <h3 id="countryText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+
+
+                <!-- Country -->
+
+                <div
+                    class="
+                        bg-slate-50/70
+                        border
+                        border-slate-100
+                        rounded-2xl
+                        p-4
+                    "
+                >
+
+                    <p
+                        class="
+                            text-slate-400
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-wider
+                        "
+                    >
+                        Country
+                    </p>
+
+
+                    <h3
+                        id="countryText"
+                        class="
+                            text-base
+                            font-bold
+                            text-slate-800
+                            mt-1.5
+                        "
+                    >
+                        -
+                    </h3>
+
                 </div>
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">State</p>
-                    <h3 id="stateText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+
+
+                <!-- State -->
+
+                <div
+                    class="
+                        bg-slate-50/70
+                        border
+                        border-slate-100
+                        rounded-2xl
+                        p-4
+                    "
+                >
+
+                    <p
+                        class="
+                            text-slate-400
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-wider
+                        "
+                    >
+                        State
+                    </p>
+
+
+                    <h3
+                        id="stateText"
+                        class="
+                            text-base
+                            font-bold
+                            text-slate-800
+                            mt-1.5
+                        "
+                    >
+                        -
+                    </h3>
+
                 </div>
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">District</p>
-                    <h3 id="districtText" class="text-base font-bold text-slate-800 mt-1.5">-</h3>
+
+
+                <!-- District -->
+
+                <div
+                    class="
+                        bg-slate-50/70
+                        border
+                        border-slate-100
+                        rounded-2xl
+                        p-4
+                    "
+                >
+
+                    <p
+                        class="
+                            text-slate-400
+                            text-xs
+                            font-medium
+                            uppercase
+                            tracking-wider
+                        "
+                    >
+                        District
+                    </p>
+
+
+                    <h3
+                        id="districtText"
+                        class="
+                            text-base
+                            font-bold
+                            text-slate-800
+                            mt-1.5
+                        "
+                    >
+                        -
+                    </h3>
+
                 </div>
+
             </div>
 
-            <!-- Form -->
-            <div class="relative z-10 mt-10">
-                <h2 class="text-xl font-bold text-slate-900 mb-6">Personal Information</h2>
 
-                <div class="grid md:grid-cols-2 gap-6">
+            <!-- =================================================
+                 PERSONAL INFORMATION
+            ================================================== -->
+
+            <div
+                class="
+                    relative
+                    z-10
+                    mt-10
+                "
+            >
+
+                <div
+                    class="
+                        mb-6
+                    "
+                >
+
+                    <h2
+                        class="
+                            text-xl
+                            font-bold
+                            text-slate-900
+                        "
+                    >
+                        Personal Information
+                    </h2>
+
+
+                    <p
+                        class="
+                            text-sm
+                            text-slate-400
+                            mt-1
+                        "
+                    >
+                        Update your personal details and
+                        profile picture.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="
+                        grid
+                        md:grid-cols-2
+                        gap-6
+                    "
+                >
+
+                    <!-- =================================================
+                         USERNAME
+                    ================================================== -->
+
                     <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Username</label>
-                        <input id="editUsername" type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none">
-                    </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Phone Number</label>
-                        <input id="editPhone" type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none">
-                    </div>
-
-                    <!-- Locations Multi Select -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-2">
-                            Locations (City, District, State, Country)
+                        <label
+                            class="
+                                block
+                                text-sm
+                                font-medium
+                                text-slate-600
+                                mb-2
+                            "
+                        >
+                            Username
                         </label>
-                        <select id="editLocations" multiple
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-slate-50/30 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none min-h-[160px]">
-                        </select>
-                        <p class="text-xs text-slate-400 mt-1">Hold <b>Ctrl</b> (Windows) or <b>Cmd</b> (Mac) to select multiple locations</p>
+
+
+                        <input
+                            id="editUsername"
+                            type="text"
+                            autocomplete="username"
+                            class="
+                                w-full
+                                border
+                                border-slate-200
+                                rounded-xl
+                                px-4
+                                py-3
+                                bg-slate-50/30
+                                focus:border-cyan-500
+                                focus:ring-4
+                                focus:ring-cyan-500/10
+                                outline-none
+                            "
+                        >
+
                     </div>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Profile Image</label>
-                        <div class="relative w-full border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50/30">
-                            <input id="editProfileImage" type="file" accept="image/*"
-                                class="w-full text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
-                        </div>
+
+                    <!-- =================================================
+                         PHONE
+                    ================================================== -->
+
+                    <div>
+
+                        <label
+                            class="
+                                block
+                                text-sm
+                                font-medium
+                                text-slate-600
+                                mb-2
+                            "
+                        >
+                            Phone Number
+                        </label>
+
+
+                        <input
+                            id="editPhone"
+                            type="tel"
+                            inputmode="tel"
+                            autocomplete="tel"
+                            placeholder="Enter phone number"
+                            class="
+                                w-full
+                                border
+                                border-slate-200
+                                rounded-xl
+                                px-4
+                                py-3
+                                bg-slate-50/30
+                                focus:border-cyan-500
+                                focus:ring-4
+                                focus:ring-cyan-500/10
+                                outline-none
+                            "
+                        >
+
                     </div>
+
+
+                    <!-- =================================================
+                         LOCATIONS
+                         GUIDE ONLY
+                    ================================================== -->
+
+                    <div
+                        id="locationsSection"
+                        class="
+                            md:col-span-2
+                            hidden
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                justify-between
+                                mb-2
+                            "
+                        >
+
+                            <label
+                                class="
+                                    block
+                                    text-sm
+                                    font-medium
+                                    text-slate-600
+                                "
+                            >
+                                Locations
+                            </label>
+
+
+                            <span
+                                class="
+                                    text-xs
+                                    bg-cyan-50
+                                    text-cyan-700
+                                    px-3
+                                    py-1
+                                    rounded-full
+                                "
+                            >
+                                Guide Only
+                            </span>
+
+                        </div>
+
+
+                        <select
+                            id="editLocations"
+                            multiple
+                            class="
+                                w-full
+                                border
+                                border-slate-200
+                                rounded-xl
+                                px-4
+                                py-3
+                                bg-slate-50/30
+                                focus:border-cyan-500
+                                focus:ring-4
+                                focus:ring-cyan-500/10
+                                outline-none
+                                min-h-[180px]
+                            "
+                        >
+                        </select>
+
+
+                        <p
+                            class="
+                                text-xs
+                                text-slate-400
+                                mt-2
+                            "
+                        >
+                            Hold
+                            <b>Ctrl</b>
+                            on Windows or
+                            <b>Cmd</b>
+                            on Mac to select
+                            multiple locations.
+                        </p>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PROFILE IMAGE
+                    ================================================== -->
+
+                    <div
+                        class="
+                            md:col-span-2
+                        "
+                    >
+
+                        <label
+                            class="
+                                block
+                                text-sm
+                                font-medium
+                                text-slate-600
+                                mb-2
+                            "
+                        >
+                            Profile Image
+                        </label>
+
+
+                        <div
+                            class="
+                                flex
+                                flex-col
+                                sm:flex-row
+                                items-center
+                                gap-4
+                                border
+                                border-slate-200
+                                rounded-2xl
+                                p-4
+                                bg-slate-50/30
+                            "
+                        >
+
+                            <!-- Preview -->
+
+                            <img
+                                id="imagePreview"
+                                src=""
+                                alt="Preview"
+                                class="
+                                    w-20
+                                    h-20
+                                    rounded-xl
+                                    object-cover
+                                    border
+                                    border-slate-200
+                                    bg-white
+                                "
+                            >
+
+
+                            <div
+                                class="
+                                    flex-1
+                                    w-full
+                                "
+                            >
+
+                                <input
+                                    id="editProfileImage"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    class="
+                                        w-full
+                                        text-sm
+                                        text-slate-500
+                                        file:mr-4
+                                        file:py-2
+                                        file:px-4
+                                        file:rounded-lg
+                                        file:border-0
+                                        file:text-xs
+                                        file:font-semibold
+                                        file:bg-cyan-50
+                                        file:text-cyan-700
+                                        hover:file:bg-cyan-100
+                                        cursor-pointer
+                                    "
+                                >
+
+
+                                <p
+                                    class="
+                                        text-xs
+                                        text-slate-400
+                                        mt-2
+                                    "
+                                >
+                                    JPG, PNG or WEBP.
+                                    Maximum 5 MB.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </section>
 
+
 <script>
+
+
+// ============================================================
+// CSRF
+// ============================================================
+
+function getCSRFToken() {
+
+    const csrfInput =
+        document.querySelector(
+            '#csrfForm input[name="csrfmiddlewaretoken"]'
+        );
+
+
+    if (!csrfInput) {
+
+        console.error(
+            "CSRF input not found"
+        );
+
+        return null;
+    }
+
+
+    return csrfInput.value;
+}
+
+
+// ============================================================
+// DEFAULT AVATAR
+// ============================================================
+
+function getDefaultAvatar(
+    username
+) {
+
+    return (
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+            username || "User"
+        ) +
+        "&background=0f172a&color=ffffff"
+    );
+
+}
+
+
+// ============================================================
+// LOAD LOCATIONS
+// ============================================================
+
 async function loadAllLocations() {
+
     try {
-        const res = await fetch("/user/api/locations/");
-        if (!res.ok) throw new Error("Failed to load locations");
-        
-        const locations = await res.json();
-        const select = document.getElementById("editLocations");
+
+        const response =
+            await fetch(
+                "/user/api/locations/",
+                {
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load locations"
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        const locations =
+            Array.isArray(result)
+                ? result
+                : (
+                    result.data ||
+                    result.results ||
+                    []
+                );
+
+
+        const select =
+            document.getElementById(
+                "editLocations"
+            );
+
+
         select.innerHTML = "";
 
-        locations.forEach(loc => {
-            const option = document.createElement("option");
-            option.value = loc.id;
-            option.textContent = `${loc.city}, ${loc.district}, ${loc.state}, ${loc.country}`;
-            select.appendChild(option);
-        });
+
+        locations.forEach(
+            function (location) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    location.id;
+
+
+                option.textContent =
+                    [
+                        location.city,
+                        location.district,
+                        location.state,
+                        location.country
+                    ]
+                    .filter(Boolean)
+                    .join(", ");
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
         return locations;
-    } catch (err) {
-        console.error(err);
-        return [];
-    }
-}
-
-async function loadProfile() {
-    try {
-        await loadAllLocations();
-
-        const response = await fetch("/user/api/profile/");
-        if (!response.ok) throw new Error("Failed to load profile");
-        
-        const result = await response.json();
-        const user = result.data || result;
-
-        console.log("User Profile:", user);
-
-        // Header
-        document.getElementById("profileImage").src =
-            user.profile_image || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username || "User")}`;
-        
-        document.getElementById("username").innerText = user.username || "User";
-        document.getElementById("email").innerText = user.email || "";
-        document.getElementById("role").innerText = (user.role || "Member").toUpperCase();
-        document.getElementById("accountRole").innerText = user.role || "-";
-
-        // ========== Country / State / District ==========
-        document.getElementById("countryText").innerText = user.country || "-";
-        document.getElementById("stateText").innerText = user.state || "-";
-        document.getElementById("districtText").innerText = user.district || "-";
-
-        // Form fields
-        document.getElementById("editUsername").value = user.username || "";
-        document.getElementById("editPhone").value = user.phone_number || "";
-
-        // Pre-select locations
-        const select = document.getElementById("editLocations");
-        const userLocationIds = (user.locations || []).map(l => String(l.id));
-
-        Array.from(select.options).forEach(opt => {
-            opt.selected = userLocationIds.includes(opt.value);
-        });
 
     } catch (error) {
-        console.error(error);
-        alert("Failed to load profile");
+
+        console.error(
+            "LOCATION ERROR:",
+            error
+        );
+
+
+        return [];
+
     }
+
 }
 
-// Image preview
-document.getElementById("editProfileImage").addEventListener("change", function (e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            document.getElementById("profileImage").src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
 
-// ========== UPDATE (Country, State, District, Locations) ==========
-document.getElementById("updateProfileBtn").addEventListener("click", async () => {
-    const formData = new FormData();
-    
-    formData.append("username", document.getElementById("editUsername").value);
-    formData.append("phone_number", document.getElementById("editPhone").value);
+// ============================================================
+// LOAD PROFILE
+// ============================================================
 
-    // Locations (this updates country, state, district automatically)
-    const selected = Array.from(document.getElementById("editLocations").selectedOptions)
-                          .map(opt => opt.value);
-    
-    selected.forEach(id => formData.append("locations", id));
-
-    const imageInput = document.getElementById("editProfileImage");
-    if (imageInput.files[0]) {
-        formData.append("profile_image", imageInput.files[0]);
-    }
+async function loadProfile() {
 
     try {
-        const res = await fetch("/user/api/profile/", {
-            method: "PUT",
-            body: formData,
-        });
 
-        const data = await res.json();
+        const response =
+            await fetch(
+                "/user/api/profile/",
+                {
+                    credentials:
+                        "same-origin"
+                }
+            );
 
-        if (res.ok) {
-            alert("Profile updated successfully!");
-            loadProfile(); // refresh country, state, district, locations
-        } else {
-            console.error(data);
-            alert("Update failed");
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load profile"
+            );
+
         }
-    } catch (err) {
-        console.error(err);
-        alert("Something went wrong");
+
+
+        const result =
+            await response.json();
+
+
+        const user =
+            result.data || result;
+
+
+        console.log(
+            "PROFILE:",
+            user
+        );
+
+
+        // =====================================================
+        // ROLE
+        // =====================================================
+
+        const role =
+            String(
+                user.role || ""
+            )
+            .toLowerCase()
+            .trim();
+
+
+        console.log(
+            "ROLE:",
+            role
+        );
+
+
+        // =====================================================
+        // PROFILE IMAGE
+        // =====================================================
+
+        const profileImage =
+            user.profile_image ||
+            getDefaultAvatar(
+                user.username
+            );
+
+
+        document
+            .getElementById(
+                "profileImage"
+            )
+            .src =
+                profileImage;
+
+
+        document
+            .getElementById(
+                "imagePreview"
+            )
+            .src =
+                profileImage;
+
+
+        // =====================================================
+        // BASIC DETAILS
+        // =====================================================
+
+        document
+            .getElementById(
+                "username"
+            )
+            .innerText =
+                user.username ||
+                "User";
+
+
+        document
+            .getElementById(
+                "email"
+            )
+            .innerText =
+                user.email ||
+                "";
+
+
+        document
+            .getElementById(
+                "role"
+            )
+            .innerText =
+                role.toUpperCase();
+
+
+        document
+            .getElementById(
+                "accountRole"
+            )
+            .innerText =
+                role || "-";
+
+
+        // =====================================================
+        // FORM USERNAME
+        // =====================================================
+
+        document
+            .getElementById(
+                "editUsername"
+            )
+            .value =
+                user.username || "";
+
+
+        // =====================================================
+        // FORM PHONE
+        // =====================================================
+
+        document
+            .getElementById(
+                "editPhone"
+            )
+            .value =
+                user.phone_number !== null &&
+                user.phone_number !== undefined
+                    ? String(
+                        user.phone_number
+                    )
+                    : "";
+
+
+        // =====================================================
+        // GUIDE
+        // =====================================================
+
+        if (
+            role === "guide"
+        ) {
+
+            console.log(
+                "GUIDE USER - SHOW LOCATIONS"
+            );
+
+
+            // Show location stats
+
+            document
+                .getElementById(
+                    "locationStats"
+                )
+                .classList
+                .remove("hidden");
+
+
+            // Show location selector
+
+            document
+                .getElementById(
+                    "locationsSection"
+                )
+                .classList
+                .remove("hidden");
+
+
+            // Country
+
+            document
+                .getElementById(
+                    "countryText"
+                )
+                .innerText =
+                    user.country || "-";
+
+
+            // State
+
+            document
+                .getElementById(
+                    "stateText"
+                )
+                .innerText =
+                    user.state || "-";
+
+
+            // District
+
+            document
+                .getElementById(
+                    "districtText"
+                )
+                .innerText =
+                    user.district || "-";
+
+
+            // Load available locations
+
+            await loadAllLocations();
+
+
+            // Select existing locations
+
+            const select =
+                document.getElementById(
+                    "editLocations"
+                );
+
+
+            const userLocationIds =
+                (
+                    user.locations ||
+                    []
+                )
+                .map(
+                    location =>
+                        String(
+                            location.id
+                        )
+                );
+
+
+            Array
+                .from(
+                    select.options
+                )
+                .forEach(
+                    option => {
+
+                        option.selected =
+                            userLocationIds.includes(
+                                option.value
+                            );
+
+                    }
+                );
+
+        }
+
+
+        // =====================================================
+        // TOURIST / ADMIN
+        // =====================================================
+
+        else {
+
+            console.log(
+                "TOURIST / ADMIN - HIDE LOCATIONS"
+            );
+
+
+            // Hide location stats
+
+            document
+                .getElementById(
+                    "locationStats"
+                )
+                .classList
+                .add("hidden");
+
+
+            // Hide location selector
+
+            document
+                .getElementById(
+                    "locationsSection"
+                )
+                .classList
+                .add("hidden");
+
+
+            // Clear location data
+
+            document
+                .getElementById(
+                    "editLocations"
+                )
+                .innerHTML = "";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "PROFILE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Failed to load profile."
+        );
+
     }
-});
+
+}
+
+
+// ============================================================
+// IMAGE PREVIEW
+// ============================================================
+
+document
+    .getElementById(
+        "editProfileImage"
+    )
+    .addEventListener(
+        "change",
+        function (event) {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+
+                return;
+            }
+
+
+            // =================================================
+            // FILE TYPE
+            // =================================================
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+
+            if (
+                !allowedTypes.includes(
+                    file.type
+                )
+            ) {
+
+                alert(
+                    "Only JPG, PNG and WEBP images are allowed."
+                );
+
+
+                event.target.value = "";
+
+
+                return;
+            }
+
+
+            // =================================================
+            // FILE SIZE
+            // =================================================
+
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
+
+                alert(
+                    "Image must be less than 5 MB."
+                );
+
+
+                event.target.value = "";
+
+
+                return;
+            }
+
+
+            // =================================================
+            // PREVIEW
+            // =================================================
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    document
+                        .getElementById(
+                            "profileImage"
+                        )
+                        .src =
+                            event.target.result;
+
+
+                    document
+                        .getElementById(
+                            "imagePreview"
+                        )
+                        .src =
+                            event.target.result;
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+
+// ============================================================
+// UPDATE PROFILE
+// ============================================================
+
+document
+    .getElementById(
+        "updateProfileBtn"
+    )
+    .addEventListener(
+        "click",
+        async function () {
+
+            const button = this;
+
+
+            button.disabled = true;
+
+
+            button.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                Saving...
+            `;
+
+
+            try {
+
+                // =================================================
+                // CSRF
+                // =================================================
+
+                const csrfToken =
+                    getCSRFToken();
+
+
+                console.log(
+                    "CSRF TOKEN:",
+                    csrfToken
+                );
+
+
+                if (!csrfToken) {
+
+                    alert(
+                        "CSRF token not found. Please refresh the page."
+                    );
+
+
+                    return;
+                }
+
+
+                // =================================================
+                // FORM DATA
+                // =================================================
+
+                const formData =
+                    new FormData();
+
+
+                // =================================================
+                // USERNAME
+                // =================================================
+
+                const username =
+                    document
+                        .getElementById(
+                            "editUsername"
+                        )
+                        .value
+                        .trim();
+
+
+                if (!username) {
+
+                    alert(
+                        "Username is required."
+                    );
+
+
+                    return;
+                }
+
+
+                formData.append(
+                    "username",
+                    username
+                );
+
+
+                // =================================================
+                // PHONE
+                // =================================================
+
+                const phone =
+                    document
+                        .getElementById(
+                            "editPhone"
+                        )
+                        .value
+                        .trim();
+
+
+                formData.append(
+                    "phone_number",
+                    phone
+                );
+
+
+                // =================================================
+                // IMAGE
+                // =================================================
+
+                const imageInput =
+                    document.getElementById(
+                        "editProfileImage"
+                    );
+
+
+                if (
+                    imageInput.files &&
+                    imageInput.files.length > 0
+                ) {
+
+                    formData.append(
+                        "profile_image",
+                        imageInput.files[0]
+                    );
+
+                }
+
+
+                // =================================================
+                // ROLE
+                // =================================================
+
+                const role =
+                    document
+                        .getElementById(
+                            "role"
+                        )
+                        .innerText
+                        .trim()
+                        .toLowerCase();
+
+
+                // =================================================
+                // LOCATIONS
+                //
+                // ONLY GUIDE
+                // =================================================
+
+                if (
+                    role === "guide"
+                ) {
+
+                    const select =
+                        document.getElementById(
+                            "editLocations"
+                        );
+
+
+                    const selectedLocations =
+                        Array.from(
+                            select.selectedOptions
+                        )
+                        .map(
+                            option =>
+                                option.value
+                        );
+
+
+                    selectedLocations.forEach(
+                        locationId => {
+
+                            formData.append(
+                                "locations",
+                                locationId
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                // =================================================
+                // DEBUG
+                // =================================================
+
+                console.log(
+                    "========== FORM DATA =========="
+                );
+
+
+                for (
+                    const [
+                        key,
+                        value
+                    ]
+                    of formData.entries()
+                ) {
+
+                    if (
+                        value instanceof File
+                    ) {
+
+                        console.log(
+                            key,
+                            value.name
+                        );
+
+                    } else {
+
+                        console.log(
+                            key,
+                            value
+                        );
+
+                    }
+
+                }
+
+
+                // =================================================
+                // PUT REQUEST
+                // =================================================
+
+                const response =
+                    await fetch(
+                        "/user/api/profile/",
+                        {
+                            method: "PUT",
+
+                            headers: {
+
+                                "X-CSRFToken":
+                                    csrfToken,
+
+                                "Accept":
+                                    "application/json"
+
+                            },
+
+                            credentials:
+                                "same-origin",
+
+                            body:
+                                formData
+                        }
+                    );
+
+
+                // =================================================
+                // RESPONSE
+                // =================================================
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "STATUS:",
+                    response.status
+                );
+
+
+                console.log(
+                    "UPDATE RESPONSE:",
+                    data
+                );
+
+
+                // =================================================
+                // SUCCESS
+                // =================================================
+
+                if (
+                    response.ok &&
+                    data.success
+                ) {
+
+                    alert(
+                        "Profile updated successfully!"
+                    );
+
+
+                    imageInput.value = "";
+
+
+                    await loadProfile();
+
+                }
+
+
+                // =================================================
+                // ERROR
+                // =================================================
+
+                else {
+
+                    console.error(
+                        "PROFILE UPDATE FAILED:",
+                        data
+                    );
+
+
+                    if (
+                        data.detail
+                    ) {
+
+                        alert(
+                            data.detail
+                        );
+
+                    }
+
+                    else if (
+                        data.errors
+                    ) {
+
+                        alert(
+                            JSON.stringify(
+                                data.errors,
+                                null,
+                                2
+                            )
+                        );
+
+                    }
+
+                    else {
+
+                        alert(
+                            "Profile update failed."
+                        );
+
+                    }
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "UPDATE ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "Something went wrong while updating your profile."
+                );
+
+            }
+
+
+            finally {
+
+                button.disabled = false;
+
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+                    Save Changes
+                `;
+
+            }
+
+        }
+    );
+
+
+// ============================================================
+// INITIAL LOAD
+// ============================================================
 
 loadProfile();
+
 </script>
+
 {% endblock %}
 
 
