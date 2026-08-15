@@ -8,7 +8,7 @@ from django.db import models
 from django.db import models
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
-
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class BlogCategory(models.Model):
 
@@ -75,7 +75,7 @@ class Blog(models.Model):
         help_text="Short summary"
     )
 
-    description = RichTextField()
+    description = RichTextUploadingField()
 
     image = models.ImageField(
         upload_to="blogs/"

@@ -263,11 +263,11 @@ class Tour(models.Model):
         related_name="tours"
     )
 
-    city = models.CharField(max_length=100 , null=True , blank= True)
+    # city = models.CharField(max_length=100 , null=True , blank= True)
 
-    state = models.CharField( max_length=100, null=True , blank= True)
+    # state = models.CharField( max_length=100, null=True , blank= True)
 
-    country = models.CharField( max_length=100, default="India", null=True , blank= True)
+    # country = models.CharField( max_length=100, default="India", null=True , blank= True)
 
     address = models.TextField( blank=True, null=True)
 
@@ -354,6 +354,10 @@ class Tour(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField( auto_now=True)
+    
+    def __str__(self):
+
+        return self.title
 
     def save(self, *args, **kwargs):
 

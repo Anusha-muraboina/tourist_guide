@@ -1,5 +1,14 @@
 {% extends "tourist_admin/base.html" %}
+{# =========================================================
+   IMPORTANT: CKEDITOR MEDIA
+   This MUST be present in the page
+   ========================================================= #}
 
+{% block extra_css %}
+
+    {{ form.media }}
+
+{% endblock %}
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ activeTab: 'general' }">
 
@@ -133,17 +142,31 @@
                 {% endif %}
 
                 <!-- Rich Text Content Editor -->
-                {% if form.description %}
-                <div class="space-y-1.5">
-                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-semibold text-slate-800">
-                        Full Article Content <span class="text-rose-500">*</span>
-                    </label>
-                    <div class="prose-editor-container rounded-lg border border-slate-200 overflow-hidden">
-                        {{ form.description }}
-                    </div>
-                    {% if form.description.errors %}<p class="text-xs text-rose-600 mt-1">{{ form.description.errors.0 }}</p>{% endif %}
-                </div>
-                {% endif %}
+ <div class="mb-8">
+
+    <label
+        for="{{ form.description.id_for_label }}"
+        class="block mb-2 font-semibold text-gray-800"
+    >
+        Full Article Content
+        <span class="text-red-500">*</span>
+    </label>
+
+    <div class="bg-white rounded-xl">
+
+        {{ form.description }}
+
+    </div>
+
+    {% if form.description.errors %}
+        <p class="text-red-500 text-sm mt-2">
+            {{ form.description.errors.0 }}
+        </p>
+    {% endif %}
+
+</div>
+
+
 
             </div>
 

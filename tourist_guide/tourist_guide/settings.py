@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     
     
     "ckeditor",
+    "ckeditor_uploader",
     
     
     # Third Party Apps
@@ -216,3 +217,119 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 RAZORPAY_KEY_ID = "rzp_test_TLgM6rGEzdnI2f"
 RAZORPAY_KEY_SECRET = "nYxaJ8B25H3iaarqahRQGdlR"
 RAZORPAY_WEBHOOK_SECRET = "shisugdbgdvbrysdbgh347547635#$^DF#$TDY%dy54y4%^e5"
+
+
+
+CKEDITOR_UPLOAD_PATH = "ckeditor/"
+
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "full",
+        "height": 500,
+        "width": "100%",
+        "removePlugins": "stylesheetparser",
+    },
+}
+
+# CKEDITOR_CONFIGS = {
+
+#     "default": {
+
+#         "toolbar": "Full",
+
+#         "toolbar_Full": [
+
+#             {
+#                 "name": "document",
+#                 "items": [
+#                     "Source",
+#                     "Preview"
+#                 ]
+#             },
+
+#             {
+#                 "name": "clipboard",
+#                 "items": [
+#                     "Cut",
+#                     "Copy",
+#                     "Paste",
+#                     "PasteText",
+#                     "PasteFromWord",
+#                     "Undo",
+#                     "Redo"
+#                 ]
+#             },
+
+#             {
+#                 "name": "styles",
+#                 "items": [
+#                     "Format",
+#                     "Font",
+#                     "FontSize"
+#                 ]
+#             },
+
+#             {
+#                 "name": "basicstyles",
+#                 "items": [
+#                     "Bold",
+#                     "Italic",
+#                     "Underline",
+#                     "Strike",
+#                     "RemoveFormat"
+#                 ]
+#             },
+
+#             {
+#                 "name": "paragraph",
+#                 "items": [
+#                     "NumberedList",
+#                     "BulletedList",
+#                     "Outdent",
+#                     "Indent",
+#                     "Blockquote",
+#                     "JustifyLeft",
+#                     "JustifyCenter",
+#                     "JustifyRight",
+#                     "JustifyBlock"
+#                 ]
+#             },
+
+#             {
+#                 "name": "links",
+#                 "items": [
+#                     "Link",
+#                     "Unlink"
+#                 ]
+#             },
+
+#             {
+#                 "name": "insert",
+#                 "items": [
+#                     "Image",
+#                     "Table",
+#                     "HorizontalRule",
+#                     "SpecialChar"
+#                 ]
+#             },
+
+#             {
+#                 "name": "tools",
+#                 "items": [
+#                     "Maximize",
+#                     "ShowBlocks"
+#                 ]
+#             }
+#         ],
+
+#         "height": 500,
+
+#         "width": "100%",
+
+#         "allowedContent": True,
+
+#         "removePlugins": "stylesheetparser",
+
+#     }
+# }

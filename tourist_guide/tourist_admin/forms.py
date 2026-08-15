@@ -60,8 +60,8 @@ class TourScheduleForm(forms.ModelForm):
                 attrs={"type": "time"}
             ),
         }
-
-
+        
+        
 class TourPricingForm(forms.ModelForm):
     class Meta:
         model = TourPricing
@@ -77,6 +77,116 @@ class TourPricingForm(forms.ModelForm):
 # )
 
 
+# class TourForm(forms.ModelForm):
+
+#     class Meta:
+
+#         model = Tour
+
+#         fields = [
+#             "category",
+#             "title",
+#             "slug",
+#             "short_description",
+#             "full_description",
+#             # "city",
+#             # "state",
+#             # "country",
+#             "address",
+#             "meeting_point",
+#             "duration",
+#             "language",
+#             "tour_type",
+#             "max_people",
+#             "min_age",
+#             "free_cancellation",
+#             "instant_confirmation",
+#             "pickup_available",
+#             "wheelchair_accessible",
+#             "featured",
+#             "slot_position",
+#             "includes",
+#             "excludes",
+#             "highlights",
+#             "important_information",
+#             "amenities",
+#             "is_active",
+            
+#             "seo_title",
+#             "seo_description",
+#             "seo_keywords",
+#         ]
+
+#         widgets = {
+
+#             "short_description": forms.Textarea(
+#                 attrs={
+#                     "rows": 3
+#                 }
+#             ),
+
+#             "full_description": forms.Textarea(
+#                 attrs={
+#                     "rows": 6
+#                 }
+#             ),
+
+#             "address": forms.Textarea(
+#                 attrs={
+#                     "rows": 3
+#                 }
+#             ),
+
+#             "meeting_point": forms.Textarea(
+#                 attrs={
+#                     "rows": 3
+#                 }
+#             ),
+
+#             "includes": forms.SelectMultiple(
+#                 attrs={
+#                     "class": "form-control"
+#                 }
+#             ),
+#             "excludes": forms.SelectMultiple(
+#                 attrs={
+#                     "class": "form-control"
+#                 }
+#             ),
+#             "highlights": forms.SelectMultiple(
+#                 attrs={
+#                     "class": "form-control"
+#                 }
+#             ),
+#             "important_information": forms.SelectMultiple(
+#                 attrs={
+#                     "class": "form-control"
+#                 }
+#             ),
+
+#             "amenities": forms.SelectMultiple(
+#                 attrs={
+#                     "class": "form-control"
+#                 }
+#             ),
+
+#         }
+        
+        
+from django import forms
+
+from tourist.models import (
+    Tour,
+    TourInclude,
+    TourExclude,
+    TourHighlight,
+    ImportantInformation,
+    Amenity,
+)
+
+
+
+
 class TourForm(forms.ModelForm):
 
     class Meta:
@@ -89,29 +199,33 @@ class TourForm(forms.ModelForm):
             "slug",
             "short_description",
             "full_description",
-            "city",
-            "state",
-            "country",
+
+            # LOCATION
+            "location",
             "address",
             "meeting_point",
+
             "duration",
             "language",
             "tour_type",
             "max_people",
             "min_age",
+
             "free_cancellation",
             "instant_confirmation",
             "pickup_available",
             "wheelchair_accessible",
             "featured",
             "slot_position",
+
             "includes",
             "excludes",
             "highlights",
             "important_information",
             "amenities",
+
             "is_active",
-            
+
             "seo_title",
             "seo_description",
             "seo_keywords",
@@ -119,64 +233,150 @@ class TourForm(forms.ModelForm):
 
         widgets = {
 
+            # ==========================================
+            # LOCATION
+            # ==========================================
+
+            "location": forms.Select(
+                attrs={
+                    "class": "location-input",
+                    "data-placeholder": "Choose a tour location"
+                }
+            ),
+
+            # ==========================================
+            # TEXT AREAS
+            # ==========================================
+
             "short_description": forms.Textarea(
                 attrs={
-                    "rows": 3
+                    "rows": 4,
+                    "placeholder":
+                        "Write a short description..."
                 }
             ),
 
             "full_description": forms.Textarea(
                 attrs={
-                    "rows": 6
+                    "rows": 7,
+                    "placeholder":
+                        "Write the complete tour description..."
                 }
             ),
 
             "address": forms.Textarea(
                 attrs={
-                    "rows": 3
+                    "rows": 3,
+                    "placeholder":
+                        "Enter the complete tour address..."
                 }
             ),
 
             "meeting_point": forms.Textarea(
                 attrs={
-                    "rows": 3
+                    "rows": 3,
+                    "placeholder":
+                        "Example: Main entrance of Charminar..."
                 }
             ),
 
-            "includes": forms.SelectMultiple(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            # ==========================================
+            # MANY TO MANY
+            # ==========================================
 
-            "excludes": forms.SelectMultiple(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            "includes": forms.CheckboxSelectMultiple(),
 
-            "highlights": forms.SelectMultiple(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            "excludes": forms.CheckboxSelectMultiple(),
 
-            "important_information": forms.SelectMultiple(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            "highlights": forms.CheckboxSelectMultiple(),
 
-            "amenities": forms.SelectMultiple(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
+            "important_information":
+                forms.CheckboxSelectMultiple(),
 
+            "amenities":
+                forms.CheckboxSelectMultiple(),
         }
-        
-        
 
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # ==============================================
+        # ACTIVE LOCATIONS ONLY
+        # ==============================================
+
+        self.fields["location"].queryset = (
+            Location.objects
+            .filter(is_active=True)
+            .order_by(
+                "state",
+                "district",
+                "city"
+            )
+        )
+
+        # ==============================================
+        # CATEGORY
+        # ==============================================
+
+        self.fields["category"].queryset = (
+            TourCategory.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "name"
+            )
+        )
+
+        # ==============================================
+        # M2M
+        # ==============================================
+
+        self.fields["includes"].queryset = (
+            TourInclude.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "title"
+            )
+        )
+
+        self.fields["excludes"].queryset = (
+            TourExclude.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "title"
+            )
+        )
+
+        self.fields["highlights"].queryset = (
+            TourHighlight.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "title"
+            )
+        )
+
+        self.fields["important_information"].queryset = (
+            ImportantInformation.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "title"
+            )
+        )
+
+        self.fields["amenities"].queryset = (
+            Amenity.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "name"
+            )
+        )
 
 
 from django import forms
@@ -497,10 +697,10 @@ class BlogCategoryForm(forms.ModelForm):
         fields = "__all__"
 
 
-class BlogForm(forms.ModelForm):
-    class Meta:
-        model = Blog
-        fields = "__all__"
+# class BlogForm(forms.ModelForm):
+#     class Meta:
+#         model = Blog
+#         fields = "__all__"
         
         
 
@@ -509,27 +709,225 @@ from django import forms
 from blog.models import Blog
 
 
+# class BlogForm(forms.ModelForm):
+
+#     class Meta:
+
+#         model = Blog
+
+#         fields = "__all__"
+
+#     def __init__(self, *args, **kwargs):
+
+#         super().__init__(*args, **kwargs)
+
+#         for field in self.fields.values():
+
+#             if field.widget.__class__.__name__ != "CKEditorWidget":
+
+#                 field.widget.attrs.update({
+#                     "class": "w-full border rounded-lg px-4 py-2"
+#                 })
+                
+     
+from django import forms
+
+from blog.models import Blog, BlogCategory
+
+from ckeditor.widgets import CKEditorWidget
+
+
+# class BlogCategoryForm(forms.ModelForm):
+
+#     class Meta:
+
+#         model = BlogCategory
+
+#         fields = [
+#             "name",
+#             "slug",
+#             "is_active",
+#             "slot_position",
+#         ]
+
+
 class BlogForm(forms.ModelForm):
+
+    description = forms.CharField(
+        widget=CKEditorWidget(
+            config_name="default"
+        )
+    )
 
     class Meta:
 
         model = Blog
 
-        fields = "__all__"
+        fields = [
+            "category",
+            "title",
+            "slug",
+            "short_description",
+            "description",
+            "image",
+            "author",
+            "reading_time",
+            "featured",
+            "is_active",
+            "slot_position",
+            "meta_title",
+            "meta_description",
+            "meta_keywords",
+        ]
 
-    def __init__(self, *args, **kwargs):
+        widgets = {
 
-        super().__init__(*args, **kwargs)
+            "category": forms.Select(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    )
+                }
+            ),
 
-        for field in self.fields.values():
+            "title": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "placeholder": "Enter blog title"
+                }
+            ),
 
-            if field.widget.__class__.__name__ != "CKEditorWidget":
+            "slug": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "placeholder": "blog-url-slug"
+                }
+            ),
 
-                field.widget.attrs.update({
-                    "class": "w-full border rounded-lg px-4 py-2"
-                })
-                
-                
+            "short_description": forms.Textarea(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "rows": 4,
+                    "placeholder": "Enter short description"
+                }
+            ),
+
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 bg-white"
+                    ),
+                    "accept": "image/*"
+                }
+            ),
+
+            "author": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "placeholder": "Author name"
+                }
+            ),
+
+            "reading_time": forms.NumberInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "min": 1
+                }
+            ),
+
+            "slot_position": forms.NumberInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "min": 0
+                }
+            ),
+
+            "meta_title": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "maxlength": 255,
+                    "placeholder": "SEO title"
+                }
+            ),
+
+            "meta_description": forms.Textarea(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "rows": 4,
+                    "maxlength": 160,
+                    "placeholder": "SEO description"
+                }
+            ),
+
+            "meta_keywords": forms.Textarea(
+                attrs={
+                    "class": (
+                        "w-full border border-slate-300 "
+                        "rounded-xl px-4 py-3 "
+                        "focus:ring-2 focus:ring-cyan-500 "
+                        "focus:border-cyan-500 outline-none"
+                    ),
+                    "rows": 3,
+                    "placeholder": "travel, hyderabad, tourism, tours"
+                }
+            ),
+
+            "featured": forms.CheckboxInput(
+                attrs={
+                    "class": "w-5 h-5 text-cyan-600"
+                }
+            ),
+
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "w-5 h-5 text-cyan-600"
+                }
+            ),
+        }    
                 
 
 from booking.models import CancelReason ,BookingCancelComment

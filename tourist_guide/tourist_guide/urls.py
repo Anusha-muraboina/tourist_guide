@@ -31,6 +31,11 @@ urlpatterns = [
     path('tourist_admin/' , include('tourist_admin.urls')),
     
     path('contact/',include('contact.urls')),
+    
+    path(
+        "ckeditor/",
+        include("ckeditor_uploader.urls")
+    ),
 
 ]
 
