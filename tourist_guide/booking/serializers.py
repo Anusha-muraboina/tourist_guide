@@ -103,7 +103,7 @@ class TourSerializer(
 
         fields = [
 
-            "id", "title", "slug", "city", "state", "country", "duration", "pricing"
+            "id", "title", "slug",   "duration", "pricing"
         ]
 
 
