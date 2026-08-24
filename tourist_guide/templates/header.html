@@ -1,5 +1,5 @@
   <!-- ================= NAVBAR ================= -->
-
+{% load static %}
   <style>
 
     *{
@@ -43,27 +43,35 @@
           <!-- LOGO -->
           <div class="flex items-center gap-3">
 
-            <div class="w-11 h-11 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white text-lg">
+            {% comment %} <div class="w-11 h-11 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white text-lg">
 
               <i class="fa-solid fa-earth-asia"></i>
 
-            </div>
+            </div> {% endcomment %}
+
+            <div class="  flex items-center justify-center overflow-hidden">
+    <img
+        src="{% static 'images\GET OUR GUIDE LOGO (revised) 200x70.png' %}"
+        alt="World"
+        class="w-40 h-13 object-contain"
+    >
+</div>
 
             <div>
 
-                <a href="/">
+                {% comment %} <a href="/">
                     <h1 class="md:text-[20px]  text-[14px] font-bold text-gray-900">
                         Travel Explorer
                     </h1>
-                </a>
+                </a> {% endcomment %}
 
               {% comment %} <h1 class="text-[20px] font-bold text-gray-900">
                 Travel Explorer
               </h1> {% endcomment %}
 
-              <p class="text-[11px] text-gray-500">
+              {% comment %} <p class="text-[11px] text-gray-500">
                 Explore the world
-              </p>
+              </p> {% endcomment %}
 
             </div>
 

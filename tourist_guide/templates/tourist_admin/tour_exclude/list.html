@@ -1,19 +1,19 @@
 {% extends "tourist_admin/base.html" %}
 
-{% block title %}Tour Includes{% endblock %}
+{% block title %}Tour Exclude{% endblock %}
 
 {% block content %}
 <div class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
     
     <div class="px-6 py-5 bg-gray-50 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-            <h2 class="text-xl font-bold text-slate-800 tracking-tight">Tour Includes</h2>
+            <h2 class="text-xl font-bold text-slate-800 tracking-tight">Tour Exclude</h2>
             <p class="text-xs text-slate-500 mt-0.5">Manage the default items, services, or perks included in tour packages.</p>
         </div>
 
         <a href="{% url 'tour_exclude_add' %}"
            class="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm px-4 py-2.5 rounded-lg transition-colors shadow-xs group cursor-pointer">
-            <i class="fa-solid fa-plus mr-2 text-xs transition-transform group-hover:rotate-90"></i> Add Include
+            <i class="fa-solid fa-plus mr-2 text-xs transition-transform group-hover:rotate-90"></i> Add Exclude
         </a>
     </div>
 

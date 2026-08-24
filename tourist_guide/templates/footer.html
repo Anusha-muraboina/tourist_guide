@@ -1,4 +1,5 @@
 <!-- ================= FOOTER ================= -->
+{% load static %}
 <footer class="bg-[#071B3B] text-white mt-12 relative overflow-hidden">
     <!-- Optional Subtle Decorative Background Glow -->
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -11,7 +12,14 @@
             <!-- BRAND COLUMN (Spans 2 columns on wide screens) -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/20">
+                        <img
+        src="{% static 'images\GET OUR GUIDE LOGO (revised) 200x70.png' %}"
+        alt="World"
+        class="w-40 h-13 object-contain"
+    >
+
+
+                    {% comment %} <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/20">
                         <i class="fa-solid fa-earth-asia"></i>
                     </div>
                     <div>
@@ -21,7 +29,7 @@
                         <p class="text-cyan-400 font-medium text-xs tracking-wider uppercase mt-0.5">
                             Live Your Adventure
                         </p>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
 
                 <p class="text-gray-400 text-sm leading-relaxed max-w-sm">

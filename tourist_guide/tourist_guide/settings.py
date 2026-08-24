@@ -32,7 +32,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "2dfe-157-50-122-231.ngrok-free.app",
+    # "2dfe-157-50-122-231.ngrok-free.app",
+    
+    "getourguide.in",
+    "www.getourguide.in",
 ]
 
 # Application definition
@@ -183,7 +186,10 @@ CC_EMAIL = ["anushamuraboina99@gmail.com"]
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1",
     "http://localhost",
-    "https://2dfe-157-50-122-231.ngrok-free.app"
+    # "https://2dfe-157-50-122-231.ngrok-free.app"
+    
+        "https://getourguide.in",
+    "https://www.getourguide.in",
 ]
 
 # Internationalization
