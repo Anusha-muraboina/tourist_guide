@@ -4,12 +4,14 @@
 
 from django.urls import path
 from . import views
-
+# from . views import terms ,policy
 from tourist.views import (
     HomeAPIView,
     TourDetailAPIView,
     CategoryTourAPIView,
     TourListAPIView,
+    terms,
+    policy,
     tour_list
 )
 urlpatterns = [
@@ -60,4 +62,24 @@ urlpatterns = [
         CategoryTourAPIView.as_view()
     ),
     
+    
+    
+    path(
+        "terms/",
+        terms,
+        name="terms"
+    ),
+
+    path(
+        "policy/",
+        policy,
+        name="policy"
+    ),
+    
+    path(
+        "about-us/",
+        views.about_us,
+        name="about_us"
+    ),
+        
 ]

@@ -733,3 +733,30 @@ class CategoryTourAPIView(APIView):
         return Response(
             response_data
         )
+        
+        
+        
+        
+        
+        
+
+
+def terms(request):
+    return render(
+        request,
+        "pages/terms_condition.html"
+    )
+    
+def policy(request):
+    return render(
+        request,
+        "pages/policy.html"
+    )
+    
+from django.shortcuts import render
+
+def about_us(request):
+    return render(
+        request,
+        "pages/about_us.html"
+    )

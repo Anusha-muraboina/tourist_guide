@@ -7,25 +7,6 @@ from django.shortcuts import render
 
 from django.shortcuts import render
 
-def terms(request):
-    return render(
-        request,
-        "pages/terms_condition.html"
-    )
-    
-def policy(request):
-    return render(
-        request,
-        "pages/policy.html"
-    )
-    
-from django.shortcuts import render
-
-def about_us(request):
-    return render(
-        request,
-        "pages/about_us.html"
-    )
 
 
 # def contact_us(request):

@@ -49,12 +49,23 @@
 
             </div> {% endcomment %}
 
-            <div class="  flex items-center justify-center overflow-hidden">
+            {% comment %} <div class="  flex items-center justify-center overflow-hidden">
     <img
         src="{% static 'images\GET OUR GUIDE LOGO (revised) 200x70.png' %}"
         alt="World"
         class="w-40 h-13 object-contain"
     >
+</div> {% endcomment %}
+
+
+<div class="flex items-center justify-center overflow-hidden">
+    <a href="{% url 'home' %}">
+        <img 
+            src="{% static 'images/GET OUR GUIDE LOGO (revised) 200x70.png' %}" 
+            alt="Get Our Guide" 
+            class="w-40 h-13 object-contain"
+        >
+    </a>
 </div>
 
             <div>
@@ -123,7 +134,7 @@
         id="placesDropdown"
         class="hidden fixed left-0 top-[78px] w-full bg-white shadow-2xl border-t border-gray-200 z-50"
     >
-                <div class="w-full px-20 py-12">
+                <div class="w-full md:px-40 py-12">
 
                 <div class="grid grid-cols-12 gap-10">
 

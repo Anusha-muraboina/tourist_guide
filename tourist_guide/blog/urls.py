@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import terms ,policy
+# from .views import terms ,policy
 from . import views
 
 from .views import (
@@ -7,23 +7,23 @@ from .views import (
     BlogDetailAPIView,
 )
 urlpatterns = [
-    path(
-        "terms/",
-        terms,
-        name="terms"
-    ),
+    # path(
+    #     "terms/",
+    #     terms,
+    #     name="terms"
+    # ),
 
-    path(
-        "policy/",
-        policy,
-        name="policy"
-    ),
+    # path(
+    #     "policy/",
+    #     policy,
+    #     name="policy"
+    # ),
     
-        path(
-        "about-us/",
-        views.about_us,
-        name="about_us"
-    ),
+    #     path(
+    #     "about-us/",
+    #     views.about_us,
+    #     name="about_us"
+    # ),
         
 
     path("api/blogs/", BlogListAPIView.as_view(), name="blog_list_api"),

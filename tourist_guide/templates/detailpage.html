@@ -359,13 +359,13 @@ BOOK NOW
 
             <div class="flex min-w-max text-sm font-bold">
 
-                <button onclick="showTab('overview')" id="tab-overview"
+                {% comment %} <button onclick="showTab('overview')" id="tab-overview"
                     class="tourTab activeTab">
                     Overview
-                </button>
+                </button> {% endcomment %}
 
                 <button onclick="showTab('highlights')" id="tab-highlights"
-                    class="tourTab">
+                    class="tourTab activeTab">
                     Highlights
                 </button>
 
@@ -398,76 +398,20 @@ BOOK NOW
 
     <!-- ================= OVERVIEW ================= -->
 
-    <div id="overview" class="tabContent mt-8">
+    {% comment %} <div id="overview" class="tabContent mt-8">
 
-<!-- ================= TOUR FEATURES ================= -->
 
 <div class="mt-2 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-6 lg:p-8">
 
-   
-
-    <div class="flex items-center justify-between flex-wrap gap-4 mb-8">
-
-        <div>
-
-            <h2 class=" text-md md:text-xl fond-medium font-black text-[#111827]">
-
-                Tour Features
-
-            </h2>
-
-            <p class="text-gray-500 mt-2">
-                Everything included in your premium experience
-            </p>
-
-        </div>
-
-        <div
-            class="bg-[#f8fbff] border border-blue-100 rounded-full px-5 py-2 text-[#1677e6] font-semibold text-sm"
-        >
-
-            Premium Experience
-
-        </div>
-
-    </div>
-
-
-
-
-    
-    <!-- FEATURES GRID -->
-
- 
-
-<div
-    id="tourFeaturesContainer"
-    class="grid md:grid-cols-2 gap-5"
-></div>
-
-
-        <!-- CARD -->
-
-
-        <!-- CARD -->
-
-
-        <!-- CARD -->
-
-
-        <!-- CARD -->
-
-
-        <!-- CARD -->
 
 
 </div>
 
-    </div>
+    </div> {% endcomment %}
 
     <!-- ================= HIGHLIGHTS ================= -->
 
-    <div id="highlights" class="tabContent hidden mt-8">
+    <div id="highlights" class="tabContent  mt-8">
 
 <!-- ================= HIGHLIGHTS ================= -->
 
@@ -844,7 +788,7 @@ BOOK NOW
 
                 <!-- ================= DESCRIPTION ================= -->
 
-            <div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
+            {% comment %} <div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
 
     <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-6">
 
@@ -857,9 +801,35 @@ BOOK NOW
         class="text-gray-600 leading-6  text-[15px]"
     ></p>
 
+</div> {% endcomment %}
+<style>
+    .description-content {
+        max-height: 150px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+</style>
+<div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
+
+    <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-6">
+        Full Description
+    </h2>
+
+    <div
+        id="tourDescription"
+        class="text-gray-600 leading-6 text-[15px] description-content"
+    ></div>
+
+    <button
+        type="button"
+        id="descriptionToggle"
+        onclick="toggleDescription()"
+        class="mt-4 text-[#1677e6] font-semibold text-sm hover:underline"
+    >
+        Read More
+    </button>
+
 </div>
-
-
 
             </div>
 
@@ -2424,10 +2394,10 @@ function renderReviews(tourData){
 
 <!-- ================= DYNAMIC IMAGE GALLERY ================= -->
 
-<div
+{% comment %} <div
     id="tourImages"
     class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
-></div>
+></div> {% endcomment %}
 
 
 <!-- ================= API INTEGRATION SECTION ================= -->
@@ -2462,10 +2432,12 @@ async function fetchTourDetails(){
       
         tourData = await response.json();
         const tour = tourData;
+        renderTourDescription(tour.full_description);
         console.log("FULL TOUR RESPONSE");
         console.log(tour);
         
         renderTopRating(tour);
+        
         
         renderReviews(
         tourData
@@ -2759,7 +2731,7 @@ async function fetchTourDetails(){
 
                     <img
                         src="${tour.images[0]?.image || ''}"
-                        class="w-full h-[460px] object-cover"
+                        class="w-full h-full md:h-[460px] object-cover"
                     >
 
                 </div>
@@ -3813,5 +3785,85 @@ document.addEventListener(
     }
 );
 
+</script>
+
+<script>
+let descriptionExpanded = false;
+
+function renderTourDescription(description) {
+
+    const descriptionElement = document.getElementById("tourDescription");
+    const toggleButton = document.getElementById("descriptionToggle");
+
+    if (!descriptionElement || !toggleButton) return;
+
+    if (!description) {
+        descriptionElement.innerHTML =
+            "No description available.";
+
+        toggleButton.classList.add("hidden");
+        return;
+    }
+
+    // CKEditor content / HTML content
+    descriptionElement.innerHTML = description;
+
+    // Check whether content is actually longer than the collapsed area
+    setTimeout(() => {
+
+        if (descriptionElement.scrollHeight > 95) {
+
+            descriptionElement.style.maxHeight = "95px";
+            descriptionElement.style.overflow = "hidden";
+
+            toggleButton.classList.remove("hidden");
+            toggleButton.innerText = "Read More";
+
+        } else {
+
+            descriptionElement.style.maxHeight = "none";
+            descriptionElement.style.overflow = "visible";
+
+            toggleButton.classList.add("hidden");
+        }
+
+    }, 100);
+}
+
+
+function toggleDescription() {
+
+    const descriptionElement = document.getElementById("tourDescription");
+    const toggleButton = document.getElementById("descriptionToggle");
+
+    if (!descriptionElement) return;
+
+    if (!descriptionExpanded) {
+
+        // Show full description
+        descriptionElement.style.maxHeight = "none";
+        descriptionElement.style.overflow = "visible";
+
+        toggleButton.innerText = "Read Less";
+
+        descriptionExpanded = true;
+
+    } else {
+
+        // Collapse description
+        descriptionElement.style.maxHeight = "95px";
+        descriptionElement.style.overflow = "hidden";
+
+        toggleButton.innerText = "Read More";
+
+        descriptionExpanded = false;
+
+        // Scroll back to description
+        descriptionElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
 </script>
 {% endblock %}

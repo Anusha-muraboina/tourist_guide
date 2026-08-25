@@ -467,7 +467,7 @@ class TourSchedule(models.Model):
     tour = models.ForeignKey(
         Tour,
         on_delete=models.CASCADE,
-        related_name="schedules"
+        related_name="schedules",
     )
 
     start_time = models.TimeField()

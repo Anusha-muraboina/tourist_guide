@@ -51,17 +51,41 @@ class AmenityForm(forms.ModelForm):
 from tourist.models import TourSchedule, TourPricing
 
 
+# class TourScheduleForm(forms.ModelForm):
+#     class Meta:
+#         model = TourSchedule
+#         fields = "__all__"
+#         widgets = {
+#             "start_time": forms.TimeInput(
+#                 attrs={"type": "time"}
+#             ),
+#         }
+        
+
 class TourScheduleForm(forms.ModelForm):
     class Meta:
         model = TourSchedule
         fields = "__all__"
+
         widgets = {
             "start_time": forms.TimeInput(
-                attrs={"type": "time"}
+                format="%H:%M",
+                attrs={
+                    "type": "time",
+                    "step": "60",  # 1-minute intervals
+                },
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["start_time"].input_formats = [
+            "%H:%M",
+            "%H:%M:%S",
+        ]
         
-        
+           
 class TourPricingForm(forms.ModelForm):
     class Meta:
         model = TourPricing
