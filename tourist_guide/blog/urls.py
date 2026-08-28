@@ -31,7 +31,7 @@ urlpatterns = [
     
     # HTML Views
     path("blog_list/", views.blog_list, name="bloglisting"),
-    path("blog_detail/<slug:slug>/", views.blog_detail, name="blog_detail"),
+    path("<slug:slug>/", views.blog_detail, name="blog_detail"),
 
         
 #     path(

@@ -58,10 +58,13 @@ INSTALLED_APPS = [
     'tourist_admin',
     
     
+    # "django.contrib.sites",
+    "django.contrib.sitemaps",
+    
+    
     
     "ckeditor",
     "ckeditor_uploader",
-    
     
     # Third Party Apps
     'rest_framework',

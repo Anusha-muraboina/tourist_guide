@@ -95,10 +95,13 @@ class Booking(models.Model):
     adults = models.PositiveIntegerField(default=1)
 
     children = models.PositiveIntegerField(default=0)
-
     infants = models.PositiveIntegerField(default=0)
 
+
+
     # =========================
+
+    
     # TOUR DATE & TIME
     # =========================
 

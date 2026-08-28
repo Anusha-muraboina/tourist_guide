@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from rating.models import Rating
 from .serializers import RatingCreateSerializer
 from booking.models import Booking
+
+
 class AddRatingAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

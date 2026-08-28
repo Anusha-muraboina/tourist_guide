@@ -12,14 +12,12 @@ Premium Tour Details
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <section class="bg-[#f6f8fc] min-h-screen pt-28 pb-4">
-
-    <div class=" mx-auto px-4 lg:px-28">
-
+    <div class=" mx-auto px-4 lg:px-40">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-
             <!-- ================= LEFT ================= -->
 
             <div class="lg:col-span-8">
+
 
                 <!-- BREADCRUMB -->
 
@@ -32,13 +30,13 @@ Premium Tour Details
 
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
 
-                    <a href="#" class="hover:text-cyan-600">
+                    <a href="#" class="hover:text-cyan-600 text-sm">
                         Hyderabad
                     </a>
 
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
 
-                    <span class="text-gray-700 font-medium">
+                    <span class="text-gray-700 font-medium text-sm">
                         Tour Details
                     </span>
 
@@ -69,7 +67,7 @@ Premium Tour Details
     <span
         id="topAverageRating"
         class="font-bold text-gray-800">
-        0.0
+        0.0 hours
     </span>
 
     <!-- Dynamic Reviews -->
@@ -104,13 +102,9 @@ Premium Tour Details
 
 <div
     id="tourImages"
-    class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 items-start"
+    class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4 mt-8 items-start"
 ></div>
                
-                <!-- ================= HIGHLIGHTS ================= -->
-
-
-                <!-- ================= SELECTED TOUR OPTION ================= -->
 
 <div
     id="selectedTourCard"
@@ -151,40 +145,18 @@ Premium Tour Details
 
     <div class="flex flex-wrap gap-8 mt-6">
 
-        <!-- <div class="flex items-center gap-3 text-[#111827]">
-
-            <i class="fa-regular fa-clock text-[#1677e6]"></i>
-
-            <span class="font-medium">
-
-                Duration: 4 Hours
-
-            </span>
-
-        </div>
-
-        <div class="flex items-center gap-3 text-[#111827]">
-
-            <i class="fa-solid fa-user-group text-[#1677e6]"></i>
-
-            <span class="font-medium">
-
-                Guide: Hindi
-
-            </span>
-
-        </div> -->
+    
 
         <div class="flex items-center gap-3 text-[#111827]">
         <i class="fa-regular fa-clock text-[#1677e6]"></i>
-        <span class="font-medium">
+        <span class="font-small text-md">
             Duration: <span id="cardDuration">-</span>
         </span>
     </div>
 
     <div class="flex items-center gap-3 text-[#111827]">
         <i class="fa-solid fa-language text-[#1677e6]"></i>
-        <span class="font-medium">
+        <span class="font-small text-md">
             Language: <span id="cardLanguage">-</span>
         </span>
     </div>
@@ -200,6 +172,35 @@ Premium Tour Details
         -
     </p>
 </div>
+
+
+    <div class="space-y-4 pt-3">
+
+        <div class="flex items-center gap-3">
+
+            <i class="fa-regular fa-calendar-check text-[#1677e6]"></i>
+
+            <span class="text-[#111827]">
+
+                Cancel before 9:00 AM for full refund
+
+            </span>
+
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <i class="fa-regular fa-credit-card text-[#1677e6]"></i>
+
+            <span class="text-[#111827]">
+
+                Reserve now & pay later
+
+            </span>
+
+        </div>
+
+    </div>
 
 
 
@@ -229,6 +230,16 @@ Premium Tour Details
     </div>
 
 
+
+
+
+
+
+
+
+
+
+
     
     <!-- TIME BUTTONS -->
 
@@ -247,37 +258,8 @@ Premium Tour Details
 
     <!-- DIVIDER -->
 
-    <div class="border-t border-gray-200 my-7"></div>
-
     <!-- FEATURES -->
 
-    <div class="space-y-4">
-
-        <div class="flex items-center gap-3">
-
-            <i class="fa-regular fa-calendar-check text-[#1677e6]"></i>
-
-            <span class="text-[#111827]">
-
-                Cancel before 9:00 AM for full refund
-
-            </span>
-
-        </div>
-
-        <div class="flex items-center gap-3">
-
-            <i class="fa-regular fa-credit-card text-[#1677e6]"></i>
-
-            <span class="text-[#111827]">
-
-                Reserve now & pay later
-
-            </span>
-
-        </div>
-
-    </div>
 
     <!-- DIVIDER -->
 
@@ -415,7 +397,7 @@ BOOK NOW
 
 <!-- ================= HIGHLIGHTS ================= -->
 
-<div class="mt-8 bg-white border border-gray-200 rounded-2xl p-6">
+<div class="mt-8 bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
 
     <!-- TITLE -->
 
@@ -429,6 +411,40 @@ BOOK NOW
 
 
     <ul id="highlightsList" class="space-y-4 text-sm"></ul>
+
+
+
+    <style>
+    .description-content {
+        max-height: 150px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+</style>
+<div class="bg-white  mt-10">
+
+    <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-6">
+        Full Description
+    </h2>
+
+    <div
+        id="tourDescription"
+        class="text-gray-600 leading-6 text-[15px] description-content"
+    ></div>
+
+    <button
+        type="button"
+        id="descriptionToggle"
+        onclick="toggleDescription()"
+        class="mt-4 text-[#1677e6] font-semibold text-sm hover:underline"
+    >
+        Read More
+    </button>
+
+</div>
+
+
+
 
 
 </div>
@@ -459,36 +475,34 @@ BOOK NOW
 
     <div id="itinerary" class="tabContent hidden mt-8">
 
-<!-- ================= IMPORTANT INFO SECTION ================= -->
 
 <div class="mt-8 grid md:grid-cols-1 gap-6">
 
 
-        <div class="bg-white border border-gray-200 rounded-2xl p-6">
+        {% comment %} <div class="bg-white border border-gray-200 rounded-2xl p-2 md:p-6"> {% endcomment %}
 
-        <!-- TITLE -->
 
-        <h2 class="text-md md:text-xl font-bold text-[#111827] mb-6">
+        {% comment %} <h2 class="text-md md:text-xl font-bold text-[#111827] mb-6">
 
             Know before you go
 
-        </h2>
+        </h2> {% endcomment %}
 
-        <!-- ALERT BOX -->
+       
 
-        <div class="bg-orange-50 border border-orange-200 rounded-xl p-5">
+        {% comment %} <div class="bg-orange-50 border border-orange-200 rounded-xl p-5">
 
-            <div class="flex items-start gap-4">
+            <div class="flex items-start gap-4"> {% endcomment %}
 
-                <div
+                {% comment %} <div
                     class="w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center shrink-0"
                 >
 
                     <i class="fa-solid fa-circle-info"></i>
 
-                </div>
+                </div> {% endcomment %}
 
-                <div>
+                {% comment %} <div>
 
                     <h3 class="font-semibold text-[#111827]">
 
@@ -498,23 +512,18 @@ BOOK NOW
 
                     <div id="importantInfoList"></div>
 
-                    <!-- <p class="text-gray-600 leading-7 mt-2">
+                 
 
-                        Mecca Masjid or Chowmahalla Palace may remain closed
-                        on Fridays due to weekly holidays or prayer timings.
+                </div> {% endcomment %}
 
-                    </p> -->
+            {% comment %} </div>
 
-                </div>
+        </div> {% endcomment %}
 
-            </div>
-
-        </div>
-
-    </div>
+    {% comment %} </div> {% endcomment %}
     <!-- ================= WHAT TO BRING ================= -->
 
-    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+    <div class="bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
 
         <!-- HEADER -->
 
@@ -802,40 +811,15 @@ BOOK NOW
     ></p>
 
 </div> {% endcomment %}
-<style>
-    .description-content {
-        max-height: 150px;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-    }
-</style>
-<div class="bg-white rounded-[35px] shadow-lg p-8 mt-10">
 
-    <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-6">
-        Full Description
-    </h2>
 
-    <div
-        id="tourDescription"
-        class="text-gray-600 leading-6 text-[15px] description-content"
-    ></div>
 
-    <button
-        type="button"
-        id="descriptionToggle"
-        onclick="toggleDescription()"
-        class="mt-4 text-[#1677e6] font-semibold text-sm hover:underline"
-    >
-        Read More
-    </button>
-
-</div>
 
             </div>
 
 
 
-<div class="lg:col-span-4">
+<div  id="bookingCardColumn" class="lg:col-span-4">
     <!-- Sticky Card Container -->
     <div class="sticky top-24 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] overflow-visible transition-all">
 
@@ -2106,6 +2090,7 @@ function renderReviews(tourData){
 <!-- ================= SCRIPT ================= -->
 
 
+
 <script>
     function renderTopRating(tour) {
 
@@ -2553,11 +2538,11 @@ async function fetchTourDetails(){
                 breadcrumbContainer.innerHTML = `
                     <a href="#" class="hover:text-cyan-600">${country || "India"}</a>
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    <a href="#" class="hover:text-cyan-600">${state || ""}</a>
+                    <a href="#" class="hover:text-cyan-600 text-[15px]">${state || ""}</a>
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    <a href="#" class="hover:text-cyan-600">${city || ""}</a>
+                    <a href="#" class="hover:text-cyan-600 text-[15px]">${city || ""}</a>
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    <span class="text-gray-700 font-medium">Tour Details</span>
+                    {% comment %} <span class="text-gray-700 font-medium">Tour Details</span> {% endcomment %}
                 `;
             }
         }
@@ -2720,82 +2705,147 @@ async function fetchTourDetails(){
                 // =====================================================
         // MAIN IMAGE GALLERY
         // =====================================================
-        const imageContainer =
-            document.getElementById("tourImages");
+    // =====================================================
+// MAIN IMAGE GALLERY
+// =====================================================
 
-        if (imageContainer && tour.images.length > 0) {
+const imageContainer = document.getElementById("tourImages");
 
-            imageContainer.innerHTML = `
+if (imageContainer && tour.images.length > 0) {
 
-                <div class="md:col-span-2 overflow-hidden rounded-[30px]">
+    imageContainer.innerHTML = `
 
-                    <img
-                        src="${tour.images[0]?.image || ''}"
-                        class="w-full h-full md:h-[460px] object-cover"
-                    >
-
-                </div>
-
-                <div class="flex flex-col gap-4">
-
-                    ${
-                        tour.images[1]
-                        ?
-                        `
-                        <div class="overflow-hidden rounded-[30px]">
-
-                            <img
-                                src="${tour.images[1].image}"
-                                class="w-full h-[220px] object-cover"
-                            >
-
-                        </div>
-                        `
-                        : ""
-                    }
-
-                    ${
-                        tour.images[2]
-                        ?
-                        `
-<div
-    onclick="openGallery(2)"
-    class="relative overflow-hidden rounded-[30px] cursor-pointer"
->
-
-    <img
-        src="${tour.images[2].image}"
-        class="w-full h-[220px] object-cover"
-    >
-
-    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-
-        <button
-            type="button"
-            class="bg-white px-6 py-3 rounded-full font-bold shadow-lg"
+        <!-- IMAGE 1 -->
+        <div
+            class="
+                col-span-2
+                row-start-1
+                md:col-span-2
+                md:row-span-2
+                overflow-hidden
+                rounded-[18px]
+                md:rounded-[30px]
+            "
         >
+            <img
+                src="${tour.images[0]?.image || ''}"
+                class="
+                    block
+                    w-full
+                    h-[180px]
+                    md:h-[460px]
+                    object-cover
+                "
+                alt="${tour.title || 'Tour image'}"
+            >
+        </div>
 
-            ${
-                tour.images.length > 3
-                ?
-                `+${tour.images.length - 3} More Photos`
-                :
-                `View Gallery`
-            }
 
-        </button>
-
-    </div>
-
-</div>
-                        `
-                        : ""
-                    }
-
-                </div>
-
-            `;
+        <!-- IMAGE 2 -->
+        ${
+            tour.images[1]
+            ? `
+            <div
+                class="
+                    col-span-1
+                    col-start-1
+                    row-start-2
+                    md:col-start-3
+                    md:row-start-1
+                    md:row-span-1
+                    overflow-hidden
+                    rounded-[18px]
+                    md:rounded-[30px]
+                "
+            >
+                <img
+                    src="${tour.images[1].image}"
+                    class="
+                        block
+                        w-full
+                        h-[115px]
+                        md:h-[220px]
+                        object-cover
+                    "
+                    alt="${tour.title || 'Tour image'}"
+                >
+            </div>
+            `
+            : ""
         }
+
+
+        <!-- IMAGE 3 -->
+        ${
+            tour.images[2]
+            ? `
+            <div
+                onclick="openGallery(2)"
+                class="
+                    col-span-1
+                    col-start-2
+                    row-start-2
+                    md:col-start-3
+                    md:row-start-2
+                    md:row-span-1
+                    relative
+                    overflow-hidden
+                    rounded-[18px]
+                    md:rounded-[30px]
+                    cursor-pointer
+                "
+            >
+                <img
+                    src="${tour.images[2].image}"
+                    class="
+                        block
+                        w-full
+                        h-[115px]
+                        md:h-[220px]
+                        object-cover
+                    "
+                    alt="${tour.title || 'Tour image'}"
+                >
+
+                <div
+                    class="
+                        absolute
+                        inset-0
+                        bg-black/10
+                        flex
+                        items-center
+                        justify-center
+                    "
+                >
+                    <button
+                        type="button"
+                        class="
+                            bg-white
+                            px-3
+                            py-1.5
+                            rounded-full
+                            text-[11px]
+                            md:text-sm
+                            shadow-lg
+                        "
+                    >
+                        ${
+                            tour.images.length > 3
+                            ? `+${tour.images.length - 3} More Photos`
+                            : `View Gallery`
+                        }
+                    </button>
+                </div>
+            </div>
+            `
+            : ""
+        }
+
+    `;
+}
+
+
+
 
 
         // =====================================================
@@ -3264,132 +3314,71 @@ function getCookie(name) {
     return cookieValue;
 }
 
+const continueBtn = document.getElementById("continueBtn");
 
+if (continueBtn) {
+    continueBtn.addEventListener("click", function () {
 
-const continueBtn =
-    document.getElementById(
-        "continueBtn"
-    );
-
-if(continueBtn){
-
-    continueBtn.addEventListener(
-    "click",
-    function(){
-
-        const bookingDate =
-            document.getElementById(
-                "bookingDate"
-            ).value;
-
-        if(!bookingDate){
-
-            alert(
-                "Please select a date"
-            );
-
+        if (!tourData || !tourData.id) {
+            alert("Tour data is not available. Please reload the page.");
             return;
         }
 
-        if(!selectedTourTime){
-
-            alert(
-                "Please select a time slot"
-            );
-
+        const bookingDate = document.getElementById("bookingDate")?.value;
+        if (!bookingDate) {
+            alert("Please select a date");
             return;
         }
+
+        if (!selectedTourTime) {
+            alert("Please select a time slot");
+            return;
+        }
+
+        // ---------- LOCATION (always store as clean object) ----------
+        let locationObj = null;
+        if (tourData.location && typeof tourData.location === "object") {
+            locationObj = {
+                city: tourData.location.city || "",
+                district: tourData.location.district || "",
+                state: tourData.location.state || "",
+                country: tourData.location.country || ""
+            };
+        }
+
+        // ---------- GUIDES (always an array) ----------
+        const guides = Array.isArray(tourData.guides) ? tourData.guides : [];
+
+        const adultEl  = document.getElementById("adultCount");
+        const childEl  = document.getElementById("childCount");
+        const infantEl = document.getElementById("infantCount");
+        const totalEl  = document.getElementById("totalDisplay");
 
         const bookingDraft = {
-
-            tour: selectedTourId,
-
-            tour_title:
-                document.getElementById(
-                    "tourTitle"
-                ).innerText,
-
-            location: tourData.location
-            ? `${tourData.location.city}, ${tourData.location.district}, ${tourData.location.state}, ${tourData.location.country}`
-            : "Location not available",
-
-            tour_slug:
-                tourData.slug,
-
-            adults: parseInt(
-                document.getElementById(
-                    "adultCount"
-                ).innerText
-            ),
-
-            children: parseInt(
-                document.getElementById(
-                    "childCount"
-                ).innerText
-            ),
-
-            guides:
-               tourData.guides || [],
-
-            schedules:
-               tourData.schedules || [],
-
-            infants: parseInt(
-                document.getElementById(
-                    "infantCount"
-                ).innerText
-            ),
-
-
-            tour_title:
-                tourData.title,
-
-            tour_image:
-                tourData.images?.find(
-                    img => img.is_primary
-                )?.image ||
-                tourData.images?.[0]?.image,
-
-            average_rating:
-                tourData.average_rating,
-
-            total_ratings:
-                tourData.total_ratings,
-
-            tour_date:
-                bookingDate,
-
-            tour_time:
-                selectedTourTime,
-
-            total_amount:
-                document.getElementById(
-                    "totalDisplay"
-                ).innerText
-
-
-            
+            tour: tourData.id,
+            tour_title: tourData.title || "",
+            tour_slug: tourData.slug || "",
+            location: locationObj,                    // clean object
+            adults: adultEl  ? parseInt(adultEl.innerText)  || 1 : 1,
+            children: childEl ? parseInt(childEl.innerText) || 0 : 0,
+            infants: infantEl ? parseInt(infantEl.innerText) || 0 : 0,
+            guides: guides,                           // full guide objects
+            schedules: Array.isArray(tourData.schedules) ? tourData.schedules : [],
+            tour_image: (tourData.images && tourData.images.length)
+                ? (tourData.images.find(i => i.is_primary)?.image || tourData.images[0].image)
+                : "",
+            average_rating: tourData.average_rating || 0,
+            total_ratings: tourData.total_ratings || 0,
+            tour_date: bookingDate,
+            tour_time: selectedTourTime,              // "09:30:00"
+            total_amount: totalEl ? totalEl.innerText : "₹0"
         };
 
-        localStorage.setItem(
+        console.log("SAVING BOOKING DRAFT → guides:", bookingDraft.guides);
+        localStorage.setItem("bookingDraft", JSON.stringify(bookingDraft));
 
-            "bookingDraft",
-
-            JSON.stringify(
-                bookingDraft
-            )
-
-        );
-
-        console.log(
-            bookingDraft
-        );
-
-        window.location.href =
-            "{% url 'payment_details' %}";
-
+        window.location.href = "{% url 'payment_details' %}";
     });
-
 }
 </script>
 
@@ -3865,5 +3854,97 @@ function toggleDescription() {
         });
     }
 }
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const bookingCardColumn = document.getElementById("bookingCardColumn");
+    const tourImages = document.getElementById("tourImages");
+    const selectedTourCard = document.getElementById("selectedTourCard");
+
+    if (!bookingCardColumn || !tourImages) {
+        return;
+    }
+
+    // Store original desktop position
+    const originalParent = bookingCardColumn.parentElement;
+    const originalNextSibling = bookingCardColumn.nextElementSibling;
+
+    function moveBookingCard() {
+
+        const isMobile = window.innerWidth < 1024;
+
+        if (isMobile) {
+
+            /*
+             * MOBILE:
+             * Gallery
+             * ↓
+             * Select Date / Travellers
+             * ↓
+             * Selected Tour Card
+             * ↓
+             * Highlights
+             */
+
+            if (selectedTourCard) {
+                selectedTourCard.parentNode.insertBefore(
+                    bookingCardColumn,
+                    selectedTourCard
+                );
+            } else {
+                tourImages.parentNode.insertBefore(
+                    bookingCardColumn,
+                    tourImages.nextSibling
+                );
+            }
+
+            // Remove desktop grid column styling
+            bookingCardColumn.classList.remove("lg:col-span-4");
+
+            // Make booking card full width on mobile
+            bookingCardColumn.classList.add("w-full");
+
+        } else {
+
+            /*
+             * DESKTOP:
+             * Restore original right-side column
+             */
+
+            if (originalNextSibling) {
+                originalParent.insertBefore(
+                    bookingCardColumn,
+                    originalNextSibling
+                );
+            } else {
+                originalParent.appendChild(
+                    bookingCardColumn
+                );
+            }
+
+            bookingCardColumn.classList.add("lg:col-span-4");
+            bookingCardColumn.classList.add("w-full");
+        }
+    }
+
+    // Initial position
+    moveBookingCard();
+
+    // Handle screen resize
+    let resizeTimer;
+
+    window.addEventListener("resize", function () {
+
+        clearTimeout(resizeTimer);
+
+        resizeTimer = setTimeout(function () {
+            moveBookingCard();
+        }, 150);
+
+    });
+
+});
 </script>
 {% endblock %}

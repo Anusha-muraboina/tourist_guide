@@ -18,6 +18,26 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+
+
+from django.contrib.sitemaps.views import sitemap
+from django.urls import path, include
+
+from .sitemaps import (
+    StaticViewSitemap,
+    TourSitemap,
+    BlogSitemap,
+    
+)
+
+sitemaps = {
+    "static": StaticViewSitemap,
+    "tours": TourSitemap,
+    "blogs": BlogSitemap,
+    
+
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('tourist.urls')),
@@ -37,6 +57,13 @@ urlpatterns = [
         include("ckeditor_uploader.urls")
     ),
 
+
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]
 
 if settings.DEBUG:

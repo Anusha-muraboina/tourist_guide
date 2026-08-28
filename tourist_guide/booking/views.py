@@ -874,28 +874,6 @@ def view_invoice(request, booking_id):
         }
     ) 
 
-# def view_invoice(request, booking_id):
-
-#     booking = get_object_or_404(
-#         Booking.objects.select_related("farmhouse"),
-#         booking_id=booking_id
-#     )
-
-#     invoice, _ = Invoice.objects.get_or_create(
-#         booking=booking,
-#         defaults={"user": booking.user}
-#     )
-
-#     return render(
-#         request,
-#         "emails/invoice.html",
-#         {
-#             "invoice": invoice,
-#             "booking": booking
-#         }
-#     )
-
-
 from booking.serializers import *
 
 class CancelReasonListAPI(ListAPIView):

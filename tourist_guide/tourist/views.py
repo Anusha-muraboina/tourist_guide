@@ -3,12 +3,41 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+
+from tourist.models import Tour
+
+from .serializers import (
+    TourListSerializer,
+    TourDetailSerializer,
+)
+
+
+
+from tourist.serializers import CategorySerializer
+from tourist.models import (
+    TourCategory
+)
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
+from tourist.models import Tour
+from tourist.serializers import TourListSerializer
+
+
+from django.db.models import Q
+from rating.serializers import RatingSerializer
+
+
 def home(request):
     # return HttpResponse("Welcome to Tourist Guide")
     # render(request )
     return render(request, 'home.html')
-
-
 
 def tour_details(request):
 
@@ -16,7 +45,6 @@ def tour_details(request):
         request,
         'detailpage.html'
     )
-
 
 def payment_details(request):
 
@@ -59,97 +87,6 @@ class HomeListAPIView(
 
 
 
-# views.py
-
-# from django.shortcuts import render
-
-
-# def home(request):
-
-#     tours = Tour.objects.filter(
-#         is_active=True
-#     ).prefetch_related(
-#         "images"
-#     ).order_by("-id")
-
-#     context = {
-
-#         "tours": tours
-
-#     }
-
-#     return render(
-#         request,
-#         "home.html",
-#         context
-#     )
-
-# =========================================
-# TOUR DETAIL API
-# =========================================
-# tours/api/views.py
-
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
-
-from tourist.models import Tour
-
-from .serializers import (
-    TourListSerializer,
-    TourDetailSerializer,
-)
-
-
-# =========================================
-# HOME TOUR LIST API
-# =========================================
-
-
-# class HomeListAPIView(
-#     generics.ListAPIView
-# ):
-
-#     serializer_class = TourListSerializer
-
-#     permission_classes = [AllowAny]
-
-#     queryset = (
-#         Tour.objects
-#         .filter(
-#             is_active=True
-#         )
-#         .select_related(
-#             "category",
-#             "guide",
-#         )
-#         .prefetch_related(
-#             "images",
-#             "pricing"
-#         )
-#         .order_by(
-#             "slot_position",
-#             "-id",
-#         )
-#     )
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-
-from tourist.models import Tour
-from tourist.serializers import TourListSerializer
-
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from django.db.models import Q
-
-from tourist.models import Tour
-from tourist.serializers import TourListSerializer
-
-from rating.serializers import RatingSerializer
 class HomeAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -327,14 +264,6 @@ class HomeAPIView(APIView):
 #  tour list api
 
 
-from django.db.models import Q
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-
-from tourist.models import Tour
-from .serializers import TourListSerializer
-
 
 
 
@@ -495,79 +424,8 @@ class TourListAPIView(APIView):
             "results": serializer.data,
 
         })
-# class TourListAPIView(APIView):
-
-#     permission_classes = [AllowAny]
-
-#     def get(self, request):
-
-#         search = request.GET.get("search", "").strip()
-
-#         tours = (
-#             Tour.objects
-#             .filter(is_active=True)
-#             .select_related(
-#                 "location",
-#                 "category"
-#             )
-#             .prefetch_related(
-#                 "images",
-#                 "pricing"
-#             )
-#             .order_by("-created_at")
-#         )
-
-#         # ==========================================
-#         # SEARCH
-#         # ==========================================
-
-#         if search:
-
-#             tours = tours.filter(
-
-#                 Q(title__icontains=search) |
-
-#                 Q(short_description__icontains=search) |
-
-#                 Q(location__city__icontains=search) |
-
-#                 Q(location__state__icontains=search) |
-
-#                 Q(location__district__icontains=search) |
-
-#                 Q(category__name__icontains=search)
-
-#             ).distinct()
-
-
-#         # ==========================================
-#         # SERIALIZER
-#         # ==========================================
-
-#         serializer = TourListSerializer(
-#             tours,
-#             many=True,
-#             context={
-#                 "request": request
-#             }
-#         )
-
-
-#         # ==========================================
-#         # RESPONSE
-#         # ==========================================
-
-#         return Response({
-
-#             "success": True,
-
-#             "count": tours.count(),
-
-#             "results": serializer.data
-
-#         })
-
-
+        
+        
 
 def tour_list(request):
     return render(
@@ -640,18 +498,7 @@ def tour_details(request, slug):
 
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
-from tourist.models import TourCategory
-from tourist.serializers import CategorySerializer
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from tourist.models import (
-    TourCategory
-)
 
 
 class CategoryTourAPIView(APIView):

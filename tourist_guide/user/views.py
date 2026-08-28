@@ -286,66 +286,6 @@ ProfileUpdateSerializer
 )
 
 
-# from rest_framework.parsers import (
-#     MultiPartParser,
-#     FormParser
-# )
-# class ProfileAPIView(APIView):
-
-#     permission_classes = [
-#         IsAuthenticated
-#     ]
-    
-#     parser_classes = [
-#         MultiPartParser,
-#         FormParser
-#     ]
-
-#     def get(self, request):
-
-#         serializer = ProfileSerializer(
-#             request.user,
-#             context={
-#                 "request": request
-#             }
-#         )
-
-#         return Response({
-#             "success": True,
-#             "data": serializer.data
-#         })
-
-#     def put(self, request):
-
-#         serializer = ProfileUpdateSerializer(
-#             request.user,
-#             data=request.data,
-#             partial=True
-#         )
-
-#         if serializer.is_valid():
-
-#             serializer.save()
-
-#             return Response({
-#                 "success": True,
-#                 "message":
-#                     "Profile Updated Successfully",
-#                 "data":
-#                     ProfileSerializer(
-#                         request.user,
-#                         context={
-#                             "request": request
-#                         }
-#                     ).data
-#             })
-
-#         return Response({
-#             "success": False,
-#             "errors": serializer.errors
-#         })
-
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -555,63 +495,71 @@ class ProfileAPIView(APIView):
 
 
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 
 from .models import Location
 from .serializers import LocationSerializer
 
 
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+from .models import Location
+
+
 class LocationListAPIView(APIView):
 
-    permission_classes = [
-        IsAuthenticated
-    ]
+    permission_classes = [AllowAny]
 
-
-    def get(
-        self,
-        request
-    ):
-
-        # Only guides should use this API
-
-        if request.user.role != "guide":
-
-            return Response([])
-
+    def get(self, request):
 
         locations = Location.objects.filter(
             is_active=True
+        ).order_by(
+            "state",
+            "district",
+            "city"
         )
-
 
         serializer = LocationSerializer(
             locations,
             many=True
         )
 
-
-        return Response(
-            serializer.data
-        )
-        
-        
+        return Response(serializer.data)
 # class LocationListAPIView(APIView):
 
-#     # permission_classes = [
-#     #     IsAuthenticated
-#     # ]
+#     permission_classes = [AllowAny]
 
-#     def get(self, request):
+#     def get(
+#         self,
+#         request
+#     ):
+
+#         # Only guides should use this API
+
+#         if request.user.role != "guide":
+
+#             return Response([])
+
 
 #         locations = Location.objects.filter(
 #             is_active=True
 #         )
+
 
 #         serializer = LocationSerializer(
 #             locations,
 #             many=True
 #         )
 
-#         return Response(serializer.data)
+
+#         return Response(
+#             serializer.data
+#         )
+        
+        
