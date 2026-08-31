@@ -85,6 +85,7 @@ class TourScheduleForm(forms.ModelForm):
             "%H:%M:%S",
         ]
         
+        
            
 class TourPricingForm(forms.ModelForm):
     class Meta:
@@ -1124,9 +1125,9 @@ class BookingForm(forms.ModelForm):
             "guest_name",
             "guest_email",
             "guest_phone",
-            "adults",
-            "children",
-            "infants",
+            # "adults",
+            # "children",
+            # "infants",
             "tour_date",
             "tour_time",
             "special_requests",
@@ -1140,9 +1141,9 @@ class BookingForm(forms.ModelForm):
             "guest_name": forms.TextInput(attrs={"class": "form-control"}),
             "guest_email": forms.EmailInput(attrs={"class": "form-control"}),
             "guest_phone": forms.TextInput(attrs={"class": "form-control"}),
-            "adults": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
-            "children": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
-            "infants": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
+            # "adults": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
+            # "children": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
+            # "infants": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
             "tour_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
             "tour_time": forms.TimeInput(attrs={"class": "form-control", "type": "time"}),
             "special_requests": forms.Textarea(attrs={"class": "form-control", "rows": 3}),

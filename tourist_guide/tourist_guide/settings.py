@@ -234,10 +234,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-RAZORPAY_KEY_ID = "rzp_test_TLgM6rGEzdnI2f"
-RAZORPAY_KEY_SECRET = "nYxaJ8B25H3iaarqahRQGdlR"
+RAZORPAY_KEY_ID = "rzp_test_TWFr85ul8kiZjW"
+RAZORPAY_KEY_SECRET = "qfvERkPjgiplmTp1qwjq3S6I"
 RAZORPAY_WEBHOOK_SECRET = "shisugdbgdvbrysdbgh347547635#$^DF#$TDY%dy54y4%^e5"
-
 
 
 CKEDITOR_UPLOAD_PATH = "ckeditor/"
@@ -249,8 +248,11 @@ CKEDITOR_CONFIGS = {
         "height": 500,
         "width": "100%",
         "removePlugins": "stylesheetparser",
+        
     },
 }
+
+
 
 # CKEDITOR_CONFIGS = {
 

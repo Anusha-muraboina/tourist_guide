@@ -569,10 +569,19 @@ function renderTours(tours) {
                 "Duration unavailable"
             );
 
+        const upto9Pricing =
+          Array.isArray(tour.pricing)
+              ? tour.pricing.find(
+                  pricing =>
+                      pricing.group_type === "upto_9" &&
+                      pricing.is_active !== false
+              )
+              : null;
 
-        const price =
-            Number(tour.adult_price || 0)
-                .toLocaleString("en-IN");
+      const price =
+          Number(
+              upto9Pricing?.group_price || 0
+          ).toLocaleString("en-IN");
 
 
         html += `
@@ -1507,11 +1516,26 @@ function renderRecentTours(tours) {
             "https://via.placeholder.com/300x300?text=Tour";
 
 
+        const upto9Pricing =
+            Array.isArray(tour.pricing)
+                ? tour.pricing.find(
+                    pricing =>
+                        pricing.group_type === "upto_9" &&
+                        pricing.is_active !== false
+                )
+                : null;
+
         const price =
-            Number(
-                tour.adult_price || 0
+            parseFloat(
+                upto9Pricing?.group_price || 0
             ).toLocaleString("en-IN");
 
+        console.log(
+            "RECENT TOUR:",
+            tour.title,
+            "UP TO 9 PRICE:",
+            upto9Pricing?.group_price
+        );
 
         html += `
 
@@ -1642,6 +1666,7 @@ function renderRecentTours(tours) {
                 )}
 
               </p>
+              
 
             </div>
 
@@ -1866,11 +1891,28 @@ async function fetchHomeTours() {
                     "Duration unavailable"
                 );
 
+            const upto9Pricing =
+                Array.isArray(tour.pricing)
+                    ? tour.pricing.find(
+                        pricing =>
+                            pricing.group_type === "upto_9" &&
+                            pricing.is_active !== false
+                    )
+                    : null;
+
 
             const price =
                 Number(
-                    tour.adult_price || 0
+                    upto9Pricing?.group_price || 0
                 ).toLocaleString("en-IN");
+
+
+            console.log(
+                "TOUR:",
+                tour.title,
+                "UP TO 9 PRICE:",
+                upto9Pricing?.group_price
+            );
 
 
             unforgettableHTML += `
@@ -2069,6 +2111,40 @@ document.addEventListener(
     }
 );
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
+
+
+
 
 {% endblock %}

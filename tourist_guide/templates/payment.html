@@ -1178,7 +1178,79 @@ function renderGuides(guides) {
         return;
     }
 
-    guides.forEach(guide => {
+guides.forEach(guide => {
+    const loc = (guide.locations && guide.locations.length)
+        ? `${guide.locations[0].city || ""}, ${guide.locations[0].state || ""}`
+        : "Location not available";
+
+    const img = guide.profile_image || "/static/images/default-user.png";
+
+    container.innerHTML += `
+        <div class="guide-card bg-white border border-gray-200 rounded-2xl 
+                    overflow-hidden cursor-pointer transition-all duration-300
+                    hover:-translate-y-1 hover:border-blue-500 hover:shadow-xl"
+             data-id="${guide.id}">
+
+            <!-- BIG PROFILE IMAGE -->
+            <div class="relative w-full h-40 bg-gray-100 overflow-hidden">
+
+                <img src="${img}"
+                     alt="${guide.name || "Guide"}"
+                     class="w-full h-full object-cover transition-transform duration-500
+                            hover:scale-105"
+                     onerror="this.src='/static/images/default-user.png'">
+
+                <!-- Guide Badge -->
+                <div class="absolute top-4 left-4">
+                    <span class="bg-blue-800 text-white text-xs font-semibold
+                                 px-3 py-1.5 rounded-full shadow">
+                        Tour Guide
+                    </span>
+                </div>
+
+                {% comment %} <!-- Location -->
+                <div class="absolute bottom-4 left-4 right-4">
+                    <div class="inline-flex items-center gap-2
+                                bg-black/60 backdrop-blur-sm
+                                text-white text-sm px-3 py-2 rounded-lg">
+                        <span>📍</span>
+                        <span>${loc}</span>
+                    </div>
+                </div> {% endcomment %}
+
+            </div>
+
+            <!-- GUIDE DETAILS -->
+            <div class="p-2">
+
+                <div class="flex items-center justify-between gap-3">
+
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">
+                            ${guide.name || "Guide"}
+                        </h3>
+
+                        <p class="text-sm text-gray-500 mt-1">
+                            Professional Tour Guide
+                        </p>
+                    </div>
+
+                    <!-- Arrow -->
+                    {% comment %} <div class="w-10 h-10 rounded-full bg-blue-50
+                                flex items-center justify-center
+                                text-blue-800 transition
+                                group-hover:bg-blue-800">
+                        <span class="text-lg">→</span>
+                    </div> {% endcomment %}
+
+                </div>
+
+            </div>
+
+        </div>`;
+});
+
+    {% comment %} guides.forEach(guide => {
         const loc = (guide.locations && guide.locations.length)
             ? `${guide.locations[0].city || ""}, ${guide.locations[0].state || ""}`
             : "Location not available";
@@ -1204,9 +1276,9 @@ function renderGuides(guides) {
                     <p>📍 ${loc}</p>
                     <p>📞 ${guide.phone || "Not available"}</p>
                     <p class="break-all">✉️ ${guide.email || "Not available"}</p>
-                </div>
+                </div> 
             </div>`;
-    });
+    }); {% endcomment %}
 
     // Click to select
     document.querySelectorAll(".guide-card").forEach(card => {
@@ -1308,6 +1380,10 @@ document.getElementById("confirmBookingBtn").addEventListener("click", async fun
     const loader = document.getElementById("confirmLoader");
     const text = document.getElementById("confirmBtnText");
 
+
+        // Show overlay immediately
+    showPaymentOverlay();
+
     btn.disabled = true;
     loader.classList.remove("hidden");
     text.innerText = "Please wait...";
@@ -1404,9 +1480,8 @@ document.getElementById("confirmBookingBtn").addEventListener("click", async fun
 
                         // Booking Data
                         tour: bookingDraft.tour,
-                        adults: bookingDraft.adults,
-                        children: bookingDraft.children,
-                        infants: bookingDraft.infants,
+                        pricing: bookingDraft.pricing_id,                 // ← REQUIRED
+                        group_members: bookingDraft.group_members || 1,
                         tour_date: bookingDraft.tour_date,
                         tour_time: bookingDraft.tour_time,
                         guest_name: guestName,
@@ -1459,6 +1534,8 @@ document.getElementById("confirmBookingBtn").addEventListener("click", async fun
         btn.disabled = false;
         loader.classList.add("hidden");
         text.innerText = "Confirm Booking";
+
+        hidePaymentOverlay();
     }
 });
 
@@ -1469,9 +1546,8 @@ async function createBookingDirectly(paymentMethod) {
 
     const payload = {
         tour: bookingDraft.tour,
-        adults: bookingDraft.adults,
-        children: bookingDraft.children,
-        infants: bookingDraft.infants,
+        pricing: bookingDraft.pricing_id,                 // ← REQUIRED
+        group_members: bookingDraft.group_members || 1,
         tour_date: bookingDraft.tour_date,
         tour_time: bookingDraft.tour_time,
         guest_name: document.getElementById("guestName").value,
@@ -1669,15 +1745,8 @@ document.addEventListener(
 
                                     tour:
                                         bookingDraft.tour,
-
-                                    adults:
-                                        bookingDraft.adults,
-
-                                    children:
-                                        bookingDraft.children,
-
-                                    infants:
-                                        bookingDraft.infants
+                                    
+                                    pricing: bookingDraft.pricing_id
 
                                 })
 
@@ -1980,12 +2049,7 @@ async function(){
                                 bookingDraft.coupon_code || "",
                             tour:
                                 bookingDraft.tour,
-                            adults:
-                                bookingDraft.adults,
-                            children:
-                                bookingDraft.children,
-                            infants:
-                                bookingDraft.infants
+                            pricing: bookingDraft.pricing_id
                         })
                     }
                 );
@@ -2071,14 +2135,7 @@ async function(){
 
                     body: JSON.stringify({
 
-                        adults:
-                            bookingDraft.adults,
-
-                        children:
-                            bookingDraft.children,
-
-                        infants:
-                            bookingDraft.infants,
+                        pricing: bookingDraft.pricing_id ,
 
                         tour_date:
                             bookingDraft.tour_date,
@@ -2277,5 +2334,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const interval = setInterval(updateTimer, 1000);
 
 });
+
+
+
+
+function showPaymentOverlay() {
+    const overlay = document.getElementById("paymentOverlay");
+    if (overlay) {
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";   // prevent scrolling
+    }
+}
+
+function hidePaymentOverlay() {
+    const overlay = document.getElementById("paymentOverlay");
+    if (overlay) {
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+    }
+}
 </script>
 {% endblock %}

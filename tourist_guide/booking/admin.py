@@ -80,9 +80,10 @@ class BookingAdmin(admin.ModelAdmin):
 
         ("Travellers", {
             "fields": (
-                "adults",
-                "children",
-                "infants",
+                # "adults",
+                # "children",
+                # "infants",
+                "pricing",
             )
         }),
 

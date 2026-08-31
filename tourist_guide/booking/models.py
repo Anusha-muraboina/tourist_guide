@@ -22,11 +22,10 @@ from tourist.models import Tour
 from coupon.models import Coupon
 from user.models import User
 
-
+from tourist.models import TourPricing
 # =========================
 # TOUR BOOKING
 # =========================
-
 class Booking(models.Model):
 
     STATUS_CHOICES = [
@@ -41,6 +40,7 @@ class Booking(models.Model):
         ('partial_payment', 'Pay 30% Advance'),
         ('full_payment', 'Full Payment'),
     ]
+    
 
     PAYMENT_STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -62,26 +62,12 @@ class Booking(models.Model):
     tour = models.ForeignKey(  Tour,  on_delete=models.CASCADE,  related_name="bookings")
 
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,blank=True,related_name="guide_bookings", limit_choices_to={ "role": "guide" } )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="bookings"
-    )
+    user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="bookings")
+    guide = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="tour_guide_bookings", limit_choices_to={"role": "guide"})
 
-    guide = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="tour_guide_bookings",
-        limit_choices_to={"role": "guide"}
-    )
     # =========================
     # GUEST DETAILS
     # =========================
-
     guest_name = models.CharField(max_length=200)
 
     guest_email = models.EmailField()
@@ -92,16 +78,30 @@ class Booking(models.Model):
     # TRAVELLERS
     # =========================
 
-    adults = models.PositiveIntegerField(default=1)
+    # adults = models.PositiveIntegerField(default=1)
 
-    children = models.PositiveIntegerField(default=0)
-    infants = models.PositiveIntegerField(default=0)
+    # children = models.PositiveIntegerField(default=0)
+    # infants = models.PositiveIntegerField(default=0)
+
+    pricing = models.ForeignKey(
+        TourPricing,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="bookings"
+        
+    )
 
 
 
+
+
+    group_members = models.PositiveIntegerField(
+        default=1
+    )
     # =========================
 
-    
+
     # TOUR DATE & TIME
     # =========================
 

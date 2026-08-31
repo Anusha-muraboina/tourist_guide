@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAMANVAYA — Harmony in Tradition | Architecture, Construction, Interiors</title>
+  <meta name="description" content="Samanvaya is a design-and-build studio uniting architecture, construction and interiors under one roof — spaces that age, protect and endure for generations." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#f6f0e6',
+            sand: '#efe6d6',
+            ink: '#2a211a',
+            bark: '#3b2f25',
+            umber: '#4a382a',
+            terracotta: '#a4502c',
+            terradark: '#8a3f21',
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['Jost', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #f6f0e6; overflow-x: hidden; }
+    .eyebrow { letter-spacing: 0.35em; }
+    .divider-dot::before {
+      content: '';
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 9999px;
+      background: #a4502c;
+      margin: 0 auto 10px;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 100%; height: 1px;
+      background: #a4502c;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+    }
+    .nav-link:hover::after { transform: scaleX(1); }
+    #siteHeader.scrolled {
+      background: rgba(42, 33, 26, 0.95);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="font-sans text-ink antialiased">
+
+  <header id="siteHeader" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-4 sm:py-5 lg:px-10">
+      <a href="#" class="group flex items-center gap-2.5 sm:gap-3 text-cream">
+        <span class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center border border-cream/40 transition group-hover:border-terracotta flex-shrink-0">
+          <svg class="h-4 w-4 sm:h-5 sm:w-5 text-cream transition group-hover:text-terracotta" fill="none" stroke="currentColor" stroke-width="1.3" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 21h16M5 21v-9.5M19 21v-9.5M5 11.5C5 7.9 8.1 5 12 5s7 2.9 7 6.5M9 21v-5a3 3 0 0 1 6 0v5" />
+          </svg>
+        </span>
+        <span class="leading-none">
+          <span class="block font-serif text-base sm:text-lg tracking-[0.3em] sm:tracking-[0.4em]">SAMANVAYA</span>
+          <span class="mt-1 block text-[7px] sm:text-[8px] tracking-[0.25em] sm:tracking-[0.35em] text-cream/60">ARCHITECTURE · BUILD · INTERIORS</span>
+        </span>
+      </a>
+      <nav class="hidden items-center gap-9 text-[11px] font-medium tracking-[0.25em] text-cream/90 md:flex">
+        <a href="#about" class="nav-link relative py-1 transition hover:text-cream">ABOUT</a>
+        <a href="#services" class="nav-link relative py-1 transition hover:text-cream">SERVICES</a>
+        <a href="#work" class="nav-link relative py-1 transition hover:text-cream">PROJECTS</a>
+        <a href="#values" class="nav-link relative py-1 transition hover:text-cream">VALUES</a>
+        <a href="#contact" class="nav-link relative py-1 transition hover:text-cream">CONTACT</a>
+        <a href="#contact" class="bg-terracotta px-6 py-3 text-cream shadow-lg shadow-ink/20 transition hover:bg-terradark">ENQUIRE</a>
+      </nav>
+      <button id="menuBtn" class="text-cream p-2 md:hidden focus:outline-none" aria-label="Open menu">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden bg-ink/98 px-6 py-6 backdrop-blur md:hidden border-t border-cream/10">
+      <nav class="flex flex-col gap-4 text-xs tracking-[0.25em] text-cream">
+        <a href="#about" class="py-1">ABOUT</a>
+        <a href="#services" class="py-1">SERVICES</a>
+        <a href="#work" class="py-1">PROJECTS</a>
+        <a href="#values" class="py-1">VALUES</a>
+        <a href="#contact" class="py-1">CONTACT</a>
+        <a href="#contact" class="w-max bg-terracotta px-5 py-2.5 mt-2">ENQUIRE</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="relative flex min-h-screen items-center bg-ink">
+    <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?q=80&w=2000&auto=format&fit=crop"
+         alt="Ornate Indian heritage facade with arched windows at dusk"
+         class="absolute inset-0 h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/60 to-ink/30 md:from-ink/80 md:via-ink/40 md:to-ink/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/50"></div>
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 pt-32 pb-20 lg:px-10">
+      <p class="eyebrow mb-4 sm:mb-6 flex items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] text-cream/80">
+        <span class="inline-block h-px w-8 sm:w-10 bg-terracotta flex-shrink-0"></span>
+        <span class="tracking-[0.2em] sm:tracking-[0.35em]">ARCHITECTURE · CONSTRUCTION · INTERIORS</span>
+      </p>
+      <h1 class="font-serif text-4xl sm:text-6xl leading-[1.1] sm:leading-[1.02] text-cream md:text-8xl">Harmony in<br /><em class="text-cream/90 font-normal">Tradition</em></h1>
+      <p class="mt-5 sm:mt-7 max-w-md text-xs sm:text-sm leading-relaxed text-cream/85 md:text-base">
+        We design and build homes where heritage craft meets contemporary living —
+        spaces that age, protect and endure for generations.
+      </p>
+      <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 text-[11px] tracking-[0.2em]">
+        <a href="#work" class="border border-cream/70 px-6 sm:px-8 py-3.5 sm:py-4 text-center text-cream transition hover:bg-cream hover:text-ink">VIEW OUR WORK&nbsp;&nbsp;→</a>
+        <a href="#contact" class="bg-terracotta px-6 sm:px-8 py-3.5 sm:py-4 text-center text-cream shadow-xl shadow-ink/30 transition hover:bg-terradark">START A PROJECT</a>
+      </div>
+    </div>
+    <div class="absolute bottom-6 sm:bottom-8 left-1/2 z-10 -translate-x-1/2 text-center text-[9px] tracking-[0.35em] text-cream/60 hidden sm:block">
+      <span class="mx-auto mb-3 block h-10 w-px bg-cream/40"></span>
+      SCROLL
+    </div>
+  </section>
+
+  <section id="about" class="py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 sm:gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
+      <div>
+        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop"
+             alt="Hand-drawn elevation sketch of a heritage facade"
+             class="w-full border border-sand object-cover shadow-xl aspect-[4/3] sm:aspect-auto" />
+      </div>
+      <div>
+        <p class="eyebrow text-[10px] text-terracotta">ABOUT SAMANVAYA</p>
+        <h2 class="mt-3 sm:mt-4 font-serif text-3xl sm:text-4xl leading-tight md:text-5xl">A bond of craft. A promise<br class="hidden sm:inline" /> of quality. A legacy that<br class="hidden sm:inline" /> lasts.</h2>
+        <p class="mt-5 sm:mt-7 text-xs sm:text-sm leading-relaxed text-ink/70">
+          <span class="font-semibold">Samanvaya</span> — meaning <em>harmony</em> — is a design-and-build studio uniting
+          architecture, construction and interiors under one roof. From the first pencil
+          detail to the final brass fitting, our team carries your home, so nothing is
+          lost between drawing board and door.
+        </p>
+        <p class="mt-3 sm:mt-4 text-xs sm:text-sm leading-relaxed text-ink/70">
+          Relationships that endure, profiles that hold, builds that last
+          tomorrow — with our clients, our craftsmen and the tradition we build
+          upon.
+        </p>
+        <div class="mt-8 sm:mt-10 grid grid-cols-3 gap-4 sm:gap-6 border-t border-ink/10 pt-6 sm:pt-8">
+          <div>
+            <p class="font-serif text-2xl sm:text-3xl text-terracotta">15<span class="text-lg sm:text-xl">+</span></p>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/60">YEARS OF PRACTICE</p>
+          </div>
+          <div>
+            <p class="font-serif text-2xl sm:text-3xl text-terracotta">120<span class="text-lg sm:text-xl">+</span></p>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/60">PROJECTS DELIVERED</p>
+          </div>
+          <div>
+            <p class="font-serif text-2xl sm:text-3xl text-terracotta">40<span class="text-lg sm:text-xl">+</span></p>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/60">MASTER CRAFTSMEN</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="bg-sand py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="text-center">
+        <p class="eyebrow divider-dot text-[10px] text-terracotta">WHAT WE DO</p>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl">One studio, from sketch to keys</h2>
+      </div>
+      <div class="mt-12 sm:mt-16 grid gap-6 sm:gap-8 md:grid-cols-3">
+        <div class="bg-cream p-6 sm:p-9 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <svg class="h-8 w-8 sm:h-9 sm:w-9 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M4 21h16M6 21V10l6-5 6 5v11M9 14h.01M15 14h.01"/>
+          </svg>
+          <h3 class="mt-5 sm:mt-6 font-serif text-xl sm:text-2xl">Architecture</h3>
+          <p class="mt-3 text-xs sm:text-sm leading-relaxed text-ink/70">
+            Bespoke residences and considered design that honour vernacular Indian form —
+            courtyards, jaalis, verandas — detailed with contemporary planning and light.
+          </p>
+          <ul class="mt-5 sm:mt-6 space-y-2 text-xs text-ink/70">
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Concept &amp; master planning</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Working drawings</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> 3D visualisation &amp; walkthroughs</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Statutory approvals &amp; liaison</li>
+          </ul>
+        </div>
+        <div class="bg-cream p-6 sm:p-9 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <svg class="h-8 w-8 sm:h-9 sm:w-9 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.8 2.8-2.1-2.1 2.9-2.7z"/>
+          </svg>
+          <h3 class="mt-5 sm:mt-6 font-serif text-xl sm:text-2xl">Construction</h3>
+          <p class="mt-3 text-xs sm:text-sm leading-relaxed text-ink/70">
+            In-house execution with our own site teams and master craftsmen. Honest materials,
+            rigorous billing and supervision at every stage, from foundation to finish.
+          </p>
+          <ul class="mt-5 sm:mt-6 space-y-2 text-xs text-ink/70">
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Turnkey civil execution</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Skilled in-house masonry</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Quality-audited materials</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> On-time, on-budget delivery</li>
+          </ul>
+        </div>
+        <div class="bg-cream p-6 sm:p-9 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+          <svg class="h-8 w-8 sm:h-9 sm:w-9 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 21V8l8-5 8 5v13M4 12h16M9 21v-5h6v5"/>
+          </svg>
+          <h3 class="mt-5 sm:mt-6 font-serif text-xl sm:text-2xl">Interiors</h3>
+          <p class="mt-3 text-xs sm:text-sm leading-relaxed text-ink/70">
+            Interiors that carry the architecture inward — carved timber, brass, terrazzo and handloom
+            textiles composed into warm, liveable, enduring spaces.
+          </p>
+          <ul class="mt-5 sm:mt-6 space-y-2 text-xs text-ink/70">
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Complete interior design</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Custom furniture &amp; joinery</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Art &amp; artisan curation</li>
+            <li class="flex gap-2"><span class="text-terracotta">◆</span> Lighting &amp; styling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <p class="eyebrow text-[10px] text-terracotta">SELECTED WORK</p>
+          <h2 class="mt-2 sm:mt-3 font-serif text-3xl sm:text-4xl md:text-5xl">Homes built on trust</h2>
+        </div>
+        <a href="#contact" class="text-[11px] tracking-[0.2em] text-ink/60 transition hover:text-terracotta">DISCUSS YOUR PROJECT&nbsp;&nbsp;→</a>
+      </div>
+      <div class="mt-10 sm:mt-14 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <figure class="group">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1200&auto=format&fit=crop"
+                 alt="The Courtyard House" class="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105" />
+          </div>
+          <figcaption class="mt-4 sm:mt-5">
+            <h3 class="font-serif text-lg sm:text-xl">The Courtyard House</h3>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/55">ALIBAUG, MAHARASHTRA&nbsp;&nbsp;·&nbsp;&nbsp;ARCHITECTURE + INTERIORS</p>
+          </figcaption>
+        </figure>
+        <figure class="group">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1200&auto=format&fit=crop"
+                 alt="Raas Residence" class="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105" />
+            <span class="absolute right-3 top-3 bg-terracotta px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-cream">2024</span>
+          </div>
+          <figcaption class="mt-4 sm:mt-5">
+            <h3 class="font-serif text-lg sm:text-xl">Raas Residence</h3>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/55">JAIPUR, RAJASTHAN&nbsp;&nbsp;·&nbsp;&nbsp;INTERIORS</p>
+          </figcaption>
+        </figure>
+        <figure class="group sm:col-span-2 md:col-span-1">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop"
+                 alt="Kochi villa under construction" class="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105" />
+            <span class="absolute right-3 top-3 bg-bark px-2.5 sm:px-3 py-0.5 sm:py-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-cream">ONGOING</span>
+          </div>
+          <figcaption class="mt-4 sm:mt-5">
+            <h3 class="font-serif text-lg sm:text-xl">Kochi under Construction</h3>
+            <p class="mt-1 text-[9px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] text-ink/55">KOCHI, KERALA&nbsp;&nbsp;·&nbsp;&nbsp;ARCHITECTURE + CONSTRUCTION</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-bark py-20 sm:py-24 text-cream lg:py-32">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="text-center">
+        <p class="eyebrow divider-dot text-[10px] text-cream/60">HOW WE WORK</p>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl">Four steps to your forever home</h2>
+      </div>
+      <div class="mt-12 sm:mt-16 grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="border-t border-cream/20 pt-5 sm:pt-6">
+          <p class="font-serif text-3xl sm:text-4xl text-terracotta">01</p>
+          <h3 class="mt-3 sm:mt-4 font-serif text-xl">Listen</h3>
+          <p class="mt-2.5 sm:mt-3 text-xs leading-relaxed text-cream/65">
+            We begin with your family, your site and your story — understanding how you live before we draw a line.
+          </p>
+        </div>
+        <div class="border-t border-cream/20 pt-5 sm:pt-6">
+          <p class="font-serif text-3xl sm:text-4xl text-terracotta">02</p>
+          <h3 class="mt-3 sm:mt-4 font-serif text-xl">Design</h3>
+          <p class="mt-2.5 sm:mt-3 text-xs leading-relaxed text-cream/65">
+            Concepts, sketches and 3D views refined with you until every arch and courtyard feels inevitable.
+          </p>
+        </div>
+        <div class="border-t border-cream/20 pt-5 sm:pt-6">
+          <p class="font-serif text-3xl sm:text-4xl text-terracotta">03</p>
+          <h3 class="mt-3 sm:mt-4 font-serif text-xl">Build</h3>
+          <p class="mt-2.5 sm:mt-3 text-xs leading-relaxed text-cream/65">
+            Our own teams and craftsmen execute with audited materials, weekly reports and transparent billing.
+          </p>
+        </div>
+        <div class="border-t border-cream/20 pt-5 sm:pt-6">
+          <p class="font-serif text-3xl sm:text-4xl text-terracotta">04</p>
+          <h3 class="mt-3 sm:mt-4 font-serif text-xl">Handover</h3>
+          <p class="mt-2.5 sm:mt-3 text-xs leading-relaxed text-cream/65">
+            Interiors finished, every detail checked — we hand over keys to a home ready for generations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="values" class="py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="text-center">
+        <p class="eyebrow divider-dot text-[10px] text-terracotta">OUR FOUNDATION</p>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl">Values we build upon</h2>
+      </div>
+      <div class="mt-12 sm:mt-16 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 sm:gap-y-12 text-center sm:grid-cols-3 lg:grid-cols-5">
+        <div>
+          <svg class="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M5 21h14M7 21V9l5-4 5 4v12"/></svg>
+          <h3 class="mt-3 sm:mt-4 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.25em]">TRADITION</h3>
+          <p class="mx-auto mt-2.5 sm:mt-3 max-w-[160px] sm:max-w-[180px] text-xs leading-relaxed text-ink/60">Every craft lineage from generation of artisan holding wisdom.</p>
+        </div>
+        <div>
+          <svg class="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+          <h3 class="mt-3 sm:mt-4 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.25em]">CRAFTSMANSHIP</h3>
+          <p class="mx-auto mt-2.5 sm:mt-3 max-w-[160px] sm:max-w-[180px] text-xs leading-relaxed text-ink/60">Handmade details and honest material — wood, stone, lime.</p>
+        </div>
+        <div>
+          <svg class="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-5M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7l7-4z"/></svg>
+          <h3 class="mt-3 sm:mt-4 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.25em]">QUALITY</h3>
+          <p class="mx-auto mt-2.5 sm:mt-3 max-w-[160px] sm:max-w-[180px] text-xs leading-relaxed text-ink/60">Audited materials and rigorous checks at every stage of the build.</p>
+        </div>
+        <div>
+          <svg class="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-5-4-8-7.5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 3.5-3 7-8 11z"/></svg>
+          <h3 class="mt-3 sm:mt-4 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.25em]">HARMONY</h3>
+          <p class="mx-auto mt-2.5 sm:mt-3 max-w-[160px] sm:max-w-[180px] text-xs leading-relaxed text-ink/60">Spaces designed to flow, in landscape and the people who live in them.</p>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <svg class="mx-auto h-7 w-7 sm:h-8 sm:w-8 text-terracotta" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"/></svg>
+          <h3 class="mt-3 sm:mt-4 text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] sm:tracking-[0.25em]">TIMELESS DESIGN</h3>
+          <p class="mx-auto mt-2.5 sm:mt-3 max-w-[160px] sm:max-w-[180px] text-xs leading-relaxed text-ink/60">Homes that remain beautiful long after trends pass.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="bg-sand py-20 sm:py-24 lg:py-32">
+    <div class="mx-auto grid max-w-6xl gap-10 sm:gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
+      <div>
+        <p class="eyebrow text-[10px] text-terracotta">BEGIN A CONVERSATION</p>
+        <h2 class="mt-3 sm:mt-4 font-serif text-3xl sm:text-4xl leading-tight md:text-5xl">Let's build your legacy<br />together.</h2>
+        <p class="mt-5 sm:mt-6 max-w-sm text-xs sm:text-sm leading-relaxed text-ink/70">
+          Share your site, your dreams or just a sketch on a napkin — we'll respond within two working days.
+        </p>
+        <ul class="mt-8 sm:mt-10 space-y-4 sm:space-y-5 text-xs sm:text-sm text-ink/80">
+          <li class="flex items-center gap-3 sm:gap-4">
+            <span class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center border border-ink/15 text-terracotta flex-shrink-0">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2l2 5-2.5 1.5a12 12 0 0 0 6 6L14 13l5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 3 5z"/></svg>
+            </span>
+            +91 98200 00000
+          </li>
+          <li class="flex items-center gap-3 sm:gap-4 break-all">
+            <span class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center border border-ink/15 text-terracotta flex-shrink-0">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg>
+            </span>
+            hello@samanvaya.studio
+          </li>
+          <li class="flex items-center gap-3 sm:gap-4">
+            <span class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center border border-ink/15 text-terracotta flex-shrink-0">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4-4.5-7-8-7-11a7 7 0 0 1 14 0c0 3-3 6.5-7 11zM12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg>
+            </span>
+            Studio 12, Heritage Quarter, Mumbai, India
+          </li>
+        </ul>
+      </div>
+      <form class="bg-cream p-6 sm:p-9 shadow-sm" onsubmit="event.preventDefault(); alert('Thank you — we will respond within two working days.');">
+        <label class="block text-[10px] font-medium tracking-[0.25em] text-ink/60">NAME</label>
+        <input required type="text" placeholder="Your full name" class="mt-2 w-full border border-ink/15 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm outline-none transition focus:border-terracotta" />
+        <label class="mt-5 sm:mt-6 block text-[10px] font-medium tracking-[0.25em] text-ink/60">EMAIL</label>
+        <input required type="email" placeholder="you@example.com" class="mt-2 w-full border border-ink/15 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm outline-none transition focus:border-terracotta" />
+        <label class="mt-5 sm:mt-6 block text-[10px] font-medium tracking-[0.25em] text-ink/60">I'M INTERESTED IN</label>
+        <select class="mt-2 w-full border border-ink/15 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm outline-none transition focus:border-terracotta">
+          <option>Architecture</option>
+          <option>Construction</option>
+          <option>Interiors</option>
+          <option>Full project (all three)</option>
+        </select>
+        <label class="mt-5 sm:mt-6 block text-[10px] font-medium tracking-[0.25em] text-ink/60">MESSAGE</label>
+        <textarea rows="4" placeholder="Tell us about your plot, your home, your dreams..." class="mt-2 w-full resize-none border border-ink/15 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-sm outline-none transition focus:border-terracotta"></textarea>
+        <button type="submit" class="mt-6 sm:mt-8 w-full bg-terracotta py-3.5 sm:py-4 text-[11px] font-medium tracking-[0.25em] text-cream transition hover:bg-terradark">SEND ENQUIRY</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="bg-bark py-10 sm:py-12 text-cream">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+      <div class="flex flex-col items-center gap-5 sm:gap-6 text-center">
+        <p class="font-serif text-lg tracking-[0.35em]">SAMANVAYA</p>
+        <nav class="flex flex-wrap justify-center gap-4 sm:gap-6 text-[10px] tracking-[0.25em] text-cream/60">
+          <a href="#about" class="transition hover:text-cream">ABOUT</a>
+          <a href="#services" class="transition hover:text-cream">SERVICES</a>
+          <a href="#work" class="transition hover:text-cream">PROJECTS</a>
+          <a href="#values" class="transition hover:text-cream">VALUES</a>
+          <a href="#contact" class="transition hover:text-cream">CONTACT</a>
+        </nav>
+        <p class="text-[11px] text-cream/40">© 2026 Samanvaya Studio &nbsp;·&nbsp; <a href="#" class="underline-offset-2 hover:text-cream">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
+
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+</body>
+</html>

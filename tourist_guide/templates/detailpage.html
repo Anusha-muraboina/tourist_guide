@@ -879,12 +879,12 @@ BOOK NOW
 </div>
 
             <!-- TRAVELLERS FIELD -->
-            <div class="relative">
+            <!-- <div class="relative">
                 <label class="block text-sm font-semibold text-slate-800 mb-2">
                     Travellers
                 </label>
 
-                <!-- Select Button Toggle -->
+                
                 <button
                     type="button"
                     onclick="toggleTravellers()"
@@ -903,13 +903,13 @@ BOOK NOW
                     <i id="travellerArrow" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 group-hover:text-slate-600"></i>
                 </button>
 
-                <!-- DROPDOWN POPUP -->
+               
                 <div
                     id="travellerDropdown"
                     class="hidden absolute left-0 right-0 mt-3 bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200"
                 >
                     <div class="p-5 space-y-4">
-                        <!-- ADULT COUNTER -->
+                       
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-sm text-slate-800">Adult</h4>
@@ -932,7 +932,7 @@ BOOK NOW
 
                         <hr class="border-slate-100" />
 
-                        <!-- CHILD COUNTER -->
+                     
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-sm text-slate-800">Child</h4>
@@ -955,7 +955,7 @@ BOOK NOW
 
                         <hr class="border-slate-100" />
 
-                        <!-- INFANT COUNTER -->
+                      
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-sm text-slate-800">Infant</h4>
@@ -978,7 +978,7 @@ BOOK NOW
                     </div>
 
                     
-                    <!-- DROPDOWN FOOTER -->
+                  
                     <div class="p-4 bg-slate-50 border-t border-slate-100">
                         <button
                             type="button"
@@ -989,7 +989,97 @@ BOOK NOW
                         </button>
                     </div>
                 </div>
+            </div> -->
+
+
+
+            <!-- ================= GROUP PRICING ================= -->
+<!-- <div class="relative">
+    <label class="block text-sm font-semibold text-slate-800 mb-3">
+        Select Group Size
+    </label>
+
+    <div id="groupPricingOptions" class="space-y-3">
+       
+        <p class="text-sm text-gray-400">Loading pricing...</p>
+    </div>
+</div> -->
+
+
+
+
+<!-- ================= GROUP SIZE DROPDOWN ================= -->
+{% comment %} <div class="relative">
+    <label class="block text-sm font-semibold text-slate-800 mb-2">
+        Select Group Size
+    </label>
+
+    <div class="relative group">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-blue-600">
+            <i class="fa-solid fa-users text-sm"></i>
+        </div>
+
+        <select
+            id="groupSizeSelect"
+            class="w-full bg-slate-50/80 border border-slate-200 rounded-2xl pl-12 pr-10 py-3.5 text-sm font-medium text-slate-800 outline-none transition-all duration-200 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 shadow-sm appearance-none cursor-pointer"
+        >
+            <option value="">Loading pricing...</option>
+        </select>
+
+        <!-- Custom arrow -->
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+
+
+
+
+<!-- ================= GROUP SIZE ================= -->
+<!-- ================= GROUP SIZE ================= -->
+<div class="mt-5">
+    <label class="block text-sm font-semibold text-slate-800 mb-2">
+        Select Group Size
+    </label>
+
+    <div class="relative" id="groupDropdown">
+        <!-- Button -->
+        <button
+            type="button"
+            id="groupDropdownBtn"
+            class="w-full flex items-center justify-between bg-white border border-slate-200 
+                   rounded-2xl px-4 py-3.5 text-left transition-all duration-200
+                   hover:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 shadow-sm"
+        >
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <p id="groupSelectedLabel" class="text-sm font-semibold text-slate-800">
+                        Choose group size
+                    </p>
+                    <p id="groupSelectedPrice" class="text-xs text-slate-400 hidden"></p>
+                </div>
             </div>
+            <i id="groupArrow" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+            id="groupDropdownMenu"
+            class="hidden absolute left-0 right-0 mt-2 bg-white rounded-2xl border border-slate-100 
+                   shadow-xl overflow-hidden z-50"
+        >
+            <div id="groupOptionsList" class="py-2 max-h-64 overflow-y-auto">
+                <!-- options will be added by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <!-- FEATURES LIST -->
             <ul class="space-y-3 pt-2">
@@ -1100,6 +1190,25 @@ BOOK NOW
     </button>
 
 </div>
+
+
+
+
+
+
+
+
+<!-- Full screen loading overlay -->
+<div id="paymentOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9999] hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl px-8 py-6 shadow-2xl flex flex-col items-center gap-4">
+        <i class="fa-solid fa-spinner fa-spin text-3xl text-blue-600"></i>
+        <p class="font-semibold text-gray-800">Please wait...</p>
+        <p class="text-sm text-gray-500">Do not refresh or go back</p>
+    </div>
+</div>
+
+
+
 <!-- ================= FLATPICKR CUSTOM CSS ================= -->
 
 <!-- 
@@ -1403,6 +1512,14 @@ BOOK NOW
 <!-- ================= SCRIPT ================= -->
 
 <script>
+
+
+
+
+
+    let selectedPricing = null;
+
+    let allPricing = [];
 
     function showTab(tabId){
 
@@ -2056,11 +2173,13 @@ function renderReviews(tourData){
 
     function toggleBring(){
 
+
         const content = document.getElementById('bringContent');
 
         const btn = document.getElementById('bringBtn');
 
         if(!bringExpanded){
+
 
             content.classList.remove('max-h-[180px]');
 
@@ -2079,7 +2198,6 @@ function renderReviews(tourData){
             btn.innerText = 'See more';
 
             bringExpanded = false;
-
         }
 
     }
@@ -2092,6 +2210,10 @@ function renderReviews(tourData){
 
 
 <script>
+
+
+
+
     function renderTopRating(tour) {
 
     const rating =
@@ -2396,6 +2518,7 @@ function renderReviews(tourData){
     
 
 
+
 const slug = "{{ slug }}";
 
 let tourData = {};   
@@ -2405,6 +2528,252 @@ let selectedTourTime = null;
 let adultPrice = 0;
 let childPrice = 0;
 let infantPrice = 0;
+
+
+
+
+// =========================
+// RENDER GROUP PRICING
+// =========================
+
+
+// =========================
+// GLOBAL (declare only once)
+// =========================
+{% comment %} let selectedPricing = null;
+let allPricing = [];
+let selectedTourTime = null;
+let tourData = null; {% endcomment %}
+
+// =========================
+// FORMAT LABEL
+// =========================
+function formatGroupLabel(item) {
+    if (item.group_label) return item.group_label;
+
+    if (item.group_type) {
+        return item.group_type
+            .replace(/_/g, " ")
+            .replace(/upto/i, "Up to")
+            .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    if (item.group_members) return `Up to ${item.group_members} people`;
+    return "Group Package";
+}
+
+// =========================
+// SELECT GROUP
+// =========================
+function selectGroup(p, label, price) {
+    selectedPricing = p;
+
+    const labelEl = document.getElementById("groupSelectedLabel");
+    const priceEl = document.getElementById("groupSelectedPrice");
+
+    if (labelEl) labelEl.innerText = label;
+
+    
+    if (priceEl) {
+        priceEl.innerText = `₹${price}`;
+        priceEl.classList.remove("hidden");
+    }
+
+    // Update price on card
+    const totalEl = document.getElementById("tourCardTotal") || document.getElementById("totalDisplay");
+    if (totalEl) totalEl.innerText = `₹${price}`;
+
+    const calcEl = document.getElementById("tourCardCalculation");
+    if (calcEl) calcEl.innerText = label;
+
+    // Close dropdown
+    const menu = document.getElementById("groupDropdownMenu");
+    const arrow = document.getElementById("groupArrow");
+    if (menu) menu.classList.add("hidden");
+    if (arrow) arrow.classList.remove("rotate-180");
+}
+
+// =========================
+// RENDER GROUP PRICING
+// =========================
+function renderGroupPricing(pricingList) {
+    const optionsList = document.getElementById("groupOptionsList");
+    const dropdownBtn = document.getElementById("groupDropdownBtn");
+    const dropdownMenu = document.getElementById("groupDropdownMenu");
+    const arrow = document.getElementById("groupArrow");
+
+    if (!optionsList || !dropdownBtn || !dropdownMenu) {
+        console.warn("Group dropdown elements not found");
+        return;
+    }
+
+    optionsList.innerHTML = "";
+
+    allPricing = (pricingList || [])
+        .filter(p => p.is_active !== false)
+        .sort((a, b) => parseFloat(a.group_price) - parseFloat(b.group_price));
+
+    if (allPricing.length === 0) {
+        optionsList.innerHTML = `
+            <div class="px-4 py-4 text-sm text-slate-500 text-center">
+                No pricing available
+            </div>`;
+        return;
+    }
+
+    allPricing.forEach((p, index) => {
+        const label = formatGroupLabel(p);
+        const price = parseFloat(p.group_price).toLocaleString("en-IN");
+
+        const option = document.createElement("div");
+        option.className = `
+            flex items-center justify-between px-4 py-3.5 cursor-pointer
+            hover:bg-blue-50 transition-colors group
+        `;
+
+        option.innerHTML = `
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 
+                            flex items-center justify-center text-sm 
+                            group-hover:bg-blue-100 group-hover:text-blue-600">
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-slate-800">${label}</p>
+                    <p class="text-xs text-slate-400">Group package</p>
+                </div>
+            </div>
+            <p class="text-sm font-bold text-blue-700">₹${price}</p>
+        `;
+
+        option.addEventListener("click", () => {
+            selectGroup(p, label, price);
+        });
+
+        optionsList.appendChild(option);
+
+        // Auto-select first option
+        if (index === 0) {
+            selectGroup(p, label, price);
+        }
+    });
+
+    // Toggle open/close
+    dropdownBtn.onclick = function (e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+        if (arrow) arrow.classList.toggle("rotate-180");
+    };
+
+    // Close when clicking outside
+    document.addEventListener("click", function (e) {
+        const dropdown = document.getElementById("groupDropdown");
+        if (dropdown && !dropdown.contains(e.target)) {
+            dropdownMenu.classList.add("hidden");
+            if (arrow) arrow.classList.remove("rotate-180");
+        }
+    });
+}
+{% comment %} function renderGroupPricing(pricingList) {
+    const select = document.getElementById("groupSizeSelect");
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    if (!pricingList || pricingList.length === 0) {
+        select.innerHTML = `<option value="">No pricing available</option>`;
+        return;
+    }
+
+    // Only active + sorted by price
+    allPricing = pricingList
+        .filter(p => p.is_active !== false)
+        .sort((a, b) => parseFloat(a.group_price) - parseFloat(b.group_price));
+
+    // Default option
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "Choose group size";
+    select.appendChild(defaultOpt);
+
+    allPricing.forEach((item, index) => {
+        const label = item.group_label 
+                   || item.group_members 
+                   || item.group_type 
+                   || "Group";
+
+        const priceText = `₹${parseFloat(item.group_price).toLocaleString("en-IN")}`;
+
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = `${label} — ${priceText}`;
+        option.dataset.price = item.group_price;
+
+        select.appendChild(option);
+
+        // Auto-select first option
+        if (index === 0) {
+            option.selected = true;
+            selectedPricing = item;
+        }
+    });
+
+    // Change event
+    select.addEventListener("change", function () {
+        const selectedId = this.value;
+
+        if (!selectedId) {
+            selectedPricing = null;
+            calculateTotal();
+            return;
+        }
+
+        selectedPricing = allPricing.find(p => String(p.id) === String(selectedId));
+        calculateTotal();
+    });
+
+    calculateTotal();
+} {% endcomment %}
+
+// =========================
+// CALCULATE TOTAL
+// =========================
+function calculateTotal() {
+    if (!selectedPricing) {
+        document.getElementById("tourPriceDisplay").innerText = "₹0";
+        document.getElementById("taxDisplay").innerText = "₹0";
+        document.getElementById("totalDisplay").innerText = "₹0";
+        return;
+    }
+
+    const price = parseFloat(selectedPricing.group_price) || 0;
+    const tax = 0;
+    const total = price + tax;
+
+    document.getElementById("tourPriceDisplay").innerText =
+        `₹${price.toLocaleString("en-IN")}`;
+
+    document.getElementById("taxDisplay").innerText =
+        `₹${tax}`;
+
+    document.getElementById("totalDisplay").innerText =
+        `₹${total.toLocaleString("en-IN")}`;
+
+    // Left side selected tour card
+    const tourCardTotal = document.getElementById("tourCardTotal");
+    if (tourCardTotal) {
+        tourCardTotal.innerText = `₹${total.toLocaleString("en-IN")}`;
+    }
+
+    const tourCardCalculation = document.getElementById("tourCardCalculation");
+    if (tourCardCalculation) {
+        const label = selectedPricing.group_label 
+                   || selectedPricing.group_members 
+                   || selectedPricing.group_type 
+                   || "Group";
+        tourCardCalculation.innerText = label;
+    }
+}
 
 async function fetchTourDetails(){
 
@@ -2428,24 +2797,15 @@ async function fetchTourDetails(){
         tourData
     );
 
-        if (tour.pricing && tour.pricing.length > 0){
-
-            tour.pricing.forEach(item => {
-
-                if(item.person_type === "adult"){
-                    adultPrice = parseFloat(item.price);
-                }
-
-                if(item.person_type === "child"){
-                    childPrice = parseFloat(item.price);
-                }
-
-                if(item.person_type === "infant"){
-                    infantPrice = parseFloat(item.price);
-                }
-
-            });
-
+        // ===== GROUP BASED PRICING =====
+        if (tour.pricing && tour.pricing.length > 0) {
+            renderGroupPricing(tour.pricing);
+        } else {
+            console.warn("No pricing found for this tour");
+            const container = document.getElementById("groupPricingOptions");
+            if (container) {
+                container.innerHTML = `<p class="text-sm text-red-500">Pricing not available</p>`;
+            }
         }
 
         calculateTotal();
@@ -3314,6 +3674,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
+
 const continueBtn = document.getElementById("continueBtn");
 
 if (continueBtn) {
@@ -3335,7 +3696,12 @@ if (continueBtn) {
             return;
         }
 
-        // ---------- LOCATION (always store as clean object) ----------
+        if (!selectedPricing) {
+            alert("Please select a group size");
+            return;
+        }
+
+        // Location object
         let locationObj = null;
         if (tourData.location && typeof tourData.location === "object") {
             locationObj = {
@@ -3346,23 +3712,23 @@ if (continueBtn) {
             };
         }
 
-        // ---------- GUIDES (always an array) ----------
         const guides = Array.isArray(tourData.guides) ? tourData.guides : [];
-
-        const adultEl  = document.getElementById("adultCount");
-        const childEl  = document.getElementById("childCount");
-        const infantEl = document.getElementById("infantCount");
-        const totalEl  = document.getElementById("totalDisplay");
+        const totalEl = document.getElementById("totalDisplay");
 
         const bookingDraft = {
             tour: tourData.id,
             tour_title: tourData.title || "",
             tour_slug: tourData.slug || "",
-            location: locationObj,                    // clean object
-            adults: adultEl  ? parseInt(adultEl.innerText)  || 1 : 1,
-            children: childEl ? parseInt(childEl.innerText) || 0 : 0,
-            infants: infantEl ? parseInt(infantEl.innerText) || 0 : 0,
-            guides: guides,                           // full guide objects
+            location: locationObj,
+
+            // ===== NEW GROUP FIELDS =====
+            pricing_id: selectedPricing.id,
+            group_type: selectedPricing.group_type,
+            group_label: selectedPricing.group_label || selectedPricing.group_members || selectedPricing.group_type,
+            group_members: selectedPricing.group_members || "",
+            group_price: selectedPricing.group_price,
+
+            guides: guides,
             schedules: Array.isArray(tourData.schedules) ? tourData.schedules : [],
             tour_image: (tourData.images && tourData.images.length)
                 ? (tourData.images.find(i => i.is_primary)?.image || tourData.images[0].image)
@@ -3370,11 +3736,11 @@ if (continueBtn) {
             average_rating: tourData.average_rating || 0,
             total_ratings: tourData.total_ratings || 0,
             tour_date: bookingDate,
-            tour_time: selectedTourTime,              // "09:30:00"
+            tour_time: selectedTourTime,
             total_amount: totalEl ? totalEl.innerText : "₹0"
         };
 
-        console.log("SAVING BOOKING DRAFT → guides:", bookingDraft.guides);
+        console.log("SAVING BOOKING DRAFT →", bookingDraft);
         localStorage.setItem("bookingDraft", JSON.stringify(bookingDraft));
 
         window.location.href = "{% url 'payment_details' %}";
@@ -3419,6 +3785,10 @@ document.getElementById("confirmBookingBtn").addEventListener("click", async fun
     const btn = this;
     const loader = document.getElementById("confirmLoader");
     const text = document.getElementById("confirmBtnText");
+
+
+    // Show overlay immediately
+    showPaymentOverlay();
 
     btn.disabled = true;
     loader.classList.remove("hidden");
@@ -3567,6 +3937,8 @@ document.getElementById("confirmBookingBtn").addEventListener("click", async fun
         btn.disabled = false;
         loader.classList.add("hidden");
         text.innerText = "Confirm Booking";
+
+        hidePaymentOverlay();
     }
 });
 
@@ -3577,9 +3949,8 @@ async function createBookingDirectly(paymentMethod) {
 
     const payload = {
         tour: bookingDraft.tour,
-        adults: bookingDraft.adults,
-        children: bookingDraft.children,
-        infants: bookingDraft.infants,
+        pricing: bookingDraft.pricing_id,                 // ← REQUIRED
+        group_members: bookingDraft.group_members || 1,
         tour_date: bookingDraft.tour_date,
         tour_time: bookingDraft.tour_time,
         guest_name: document.getElementById("guestName").value,
@@ -3946,5 +4317,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+
+
+
+
+
+
+
+
+function showPaymentOverlay() {
+    const overlay = document.getElementById("paymentOverlay");
+    if (overlay) {
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";   // prevent scrolling
+    }
+}
+
+function hidePaymentOverlay() {
+    const overlay = document.getElementById("paymentOverlay");
+    if (overlay) {
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+    }
+}
 </script>
+
+
+
 {% endblock %}

@@ -360,6 +360,7 @@ class Tour(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        
 
         if not self.slug:
             self.slug = slugify(self.title)
@@ -373,60 +374,129 @@ class Tour(models.Model):
     
     
     
+    # @property
+    # def final_price(self):
 
-    
-    
-    
+    #     adult_price = self.pricing.filter(
+    #         person_type="adult",
+    #         is_active=True
+    #     ).first()
+
+    #     if adult_price:
+
+    #         return adult_price.price
+
+    #     return 0
     
     @property
     def final_price(self):
+        """
+        Returns the lowest active group price for this tour.
+        """
 
-        adult_price = self.pricing.filter(
-            person_type="adult",
+        pricing = self.pricing.filter(
             is_active=True
-        ).first()
+        ).order_by("group_price").first()
 
-        if adult_price:
-
-            return adult_price.price
+        if pricing:
+            return pricing.group_price
 
         return 0
     
+    
+    
     @property
-    def adult_price(self):
+    def upto_9_price(self):
 
-        price = self.pricing.filter(
-            person_type="adult",
-            is_active=True
-        ).first()
+        pricing = (
+            self.pricing
+            .filter(
+                group_type="upto_9",
+                is_active=True
+            )
+            .first()
+        )
 
-        return price.price if price else 0
+        if pricing:
+            return pricing.group_price
 
-
-    @property
-    def child_price(self):
-
-        price = self.pricing.filter(
-            person_type="child",
-            is_active=True
-        ).first()
-
-        return price.price if price else 0
+        return 0
 
 
     @property
-    def infant_price(self):
+    def price_10_20(self):
 
-        price = self.pricing.filter(
-            person_type="infant",
-            is_active=True
-        ).first()
+        pricing = (
+            self.pricing
+            .filter(
+                group_type="10_20",
+                is_active=True
+            )
+            .first()
+        )
 
-        return price.price if price else 0
+        if pricing:
+            return pricing.group_price
+
+        return 0
+
+
+    @property
+    def price_20_50(self):
+
+        pricing = (
+            self.pricing
+            .filter(
+                group_type="20_50",
+                is_active=True
+            )
+            .first()
+        )
+
+        if pricing:
+            return pricing.group_price
+
+        return 0
+
 
     def __str__(self):
-
         return self.title
+    
+    # @property
+    # def adult_price(self):
+
+    #     price = self.pricing.filter(
+    #         person_type="adult",
+    #         is_active=True
+    #     ).first()
+
+    #     return price.price if price else 0
+
+
+    # @property
+    # def child_price(self):
+
+    #     price = self.pricing.filter(
+    #         person_type="child",
+    #         is_active=True
+    #     ).first()
+
+    #     return price.price if price else 0
+
+
+    # @property
+    # def infant_price(self):
+
+    #     price = self.pricing.filter(
+    #         person_type="infant",
+    #         is_active=True
+    #     ).first()
+
+    #     return price.price if price else 0
+
+    # def __str__(self):
+
+    #     return self.title
 
 
 # =========================
@@ -503,14 +573,22 @@ class TourSchedule(models.Model):
 
 class TourPricing(models.Model):
 
-    PERSON_TYPE_CHOICES = [
+    # PERSON_TYPE_CHOICES = [
 
-        ("adult", "Adult"),
+    #     ("adult", "Adult"),
 
-        ("child", "Child"),
+    #     ("child", "Child"),
 
-        ("infant", "Infant"),
+    #     ("infant", "Infant"),
+    # ]
+    
+    
+    GROUP_TYPE_CHOICES = [
+        ("upto_9", "Up to 9 members"),
+        ("10_20", "10 - 20 members"),
+        ("20_50", "20 - 50 members"),
     ]
+
 
     tour = models.ForeignKey(
 
@@ -521,14 +599,20 @@ class TourPricing(models.Model):
         related_name="pricing"
     )
 
-    person_type = models.CharField(
+    group_type = models.CharField(
 
         max_length=20,
 
-        choices=PERSON_TYPE_CHOICES
+        choices=GROUP_TYPE_CHOICES
+    )
+    
+    group_members = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
     )
 
-    price = models.DecimalField(
+    group_price = models.DecimalField(
 
         max_digits=10,
 
@@ -540,10 +624,10 @@ class TourPricing(models.Model):
     )
 
     def __str__(self):
-
         return (
             f"{self.tour.title} - "
-            f"{self.person_type}"
+            f"{self.get_group_type_display()} - "
+            f"₹{self.group_price}"
         )
 
 

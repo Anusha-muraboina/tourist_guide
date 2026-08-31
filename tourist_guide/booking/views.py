@@ -87,9 +87,11 @@ class VerifyAndCreateBookingAPIView(APIView):
         # ========== 2. Prepare Booking Data ==========
         booking_data = {
             "tour": data.get("tour"),
-            "adults": data.get("adults"),
-            "children": data.get("children"),
-            "infants": data.get("infants"),
+            "pricing": data.get("pricing"),                 # ← required
+            "group_members": data.get("group_members", 1),
+            # "adults": data.get("adults"),
+            # "children": data.get("children"),
+            # "infants": data.get("infants"),
             "tour_date": data.get("tour_date"),
             "tour_time": data.get("tour_time"),
             "guest_name": data.get("guest_name"),
@@ -400,173 +402,232 @@ class BookingUpdateAPIView(APIView):
 from django.utils import timezone
 from tourist.models import Tour
 from coupon.models import Coupon
-from decimal import Decimal       
+from decimal import Decimal
+
+       
+# class ApplyCouponAPIView(APIView):
+
+#     def post(self, request):
+
+#         coupon_code = request.data.get(
+#             "coupon_code"
+#         )
+
+#         tour_id = request.data.get(
+#             "tour"
+#         )
+
+#         adults = int(
+#             request.data.get(
+#                 "adults",
+#                 0
+#             )
+#         )
+
+#         children = int(
+#             request.data.get(
+#                 "children",
+#                 0
+#             )
+#         )
+
+#         infants = int(
+#             request.data.get(
+#                 "infants",
+#                 0
+#             )
+#         )
+
+#         try:
+
+#             tour = Tour.objects.get(
+#                 id=tour_id
+#             )
+
+#         except Tour.DoesNotExist:
+
+#             return Response({
+
+#                 "success": False,
+
+#                 "message":
+#                     "Tour not found"
+
+#             })
+
+#         adult_price = Decimal("0")
+#         child_price = Decimal("0")
+#         infant_price = Decimal("0")
+        
+#         adult_obj = tour.pricing.filter(
+#             person_type="adult"
+#         ).first()
+
+#         child_obj = tour.pricing.filter(
+#             person_type="child"
+#         ).first()
+
+#         infant_obj = tour.pricing.filter(
+#             person_type="infant"
+#         ).first()
+
+#         if adult_obj:
+#             adult_price = adult_obj.price
+
+#         if child_obj:
+#             child_price = child_obj.price
+
+#         if infant_obj:
+#             infant_price = infant_obj.price
+
+#         sub_total = (
+
+#             Decimal(adults) * adult_price +
+
+#             Decimal(children) * child_price +
+
+#             Decimal(infants) * infant_price
+
+#         )
+
+#         coupon = Coupon.objects.filter(
+
+#             code__iexact=
+#             coupon_code.strip()
+
+#         ).first()
+
+#         if not coupon:
+
+#             return Response({
+
+#                 "success": False,
+
+#                 "message":
+#                     "Invalid coupon code"
+
+#             })
+
+#         print("========== COUPON DEBUG ==========")
+#         print("Code:", coupon.code)
+#         print("Active:", coupon.is_active)
+#         print("Today:", timezone.now().date())
+#         print("Start:", coupon.start_date)
+#         print("End:", coupon.end_date)
+#         print("Usage Limit:", coupon.usage_limit)
+#         print("Used Count:", coupon.used_count)
+#         print("Valid:", coupon.is_valid())
+#         print("==================================")
+
+#         if not coupon.is_valid():
+
+#             return Response({
+
+#                 "success": False,
+
+#                 "message":
+#                     "Coupon expired or inactive"
+
+#             })
+
+#         # discount_amount = (
+#         #     coupon.calculate_discount(
+#         #         sub_total
+#         #     )
+#         # )
+        
+        
+#         print("SUB TOTAL =", sub_total)
+#         print("DISCOUNT TYPE =", coupon.discount_type)
+#         print("DISCOUNT VALUE =", coupon.discount_value)
+
+#         discount_amount = coupon.calculate_discount(sub_total)
+
+#         print("DISCOUNT AMOUNT =", discount_amount)
+
+#         total_amount = (
+#             sub_total -
+#             discount_amount
+#         )
+
+#         return Response({
+
+#             "success": True,
+
+#             "coupon":
+#                 coupon.code,
+
+#             "sub_total":
+#                 str(sub_total),
+
+#             "discount_amount":
+#                 str(discount_amount),
+
+#             "total_amount":
+#                 str(total_amount)
+
+#         })
+        
+        
+        
+
+
 class ApplyCouponAPIView(APIView):
 
     def post(self, request):
-
-        coupon_code = request.data.get(
-            "coupon_code"
-        )
-
-        tour_id = request.data.get(
-            "tour"
-        )
-
-        adults = int(
-            request.data.get(
-                "adults",
-                0
-            )
-        )
-
-        children = int(
-            request.data.get(
-                "children",
-                0
-            )
-        )
-
-        infants = int(
-            request.data.get(
-                "infants",
-                0
-            )
-        )
+        coupon_code = request.data.get("coupon_code")
+        tour_id = request.data.get("tour")
+        pricing_id = request.data.get("pricing")          # ← new
 
         try:
-
-            tour = Tour.objects.get(
-                id=tour_id
-            )
-
+            tour = Tour.objects.get(id=tour_id)
         except Tour.DoesNotExist:
-
             return Response({
-
                 "success": False,
-
-                "message":
-                    "Tour not found"
-
+                "message": "Tour not found"
             })
 
-        adult_price = Decimal("0")
-        child_price = Decimal("0")
-        infant_price = Decimal("0")
+        # ---------- Get price from selected group ----------
+        try:
+            pricing = TourPricing.objects.get(
+                id=pricing_id,
+                tour=tour,
+                is_active=True
+            )
+            sub_total = Decimal(str(pricing.group_price))
+        except TourPricing.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Invalid pricing selected"
+            })
 
-        adult_obj = tour.pricing.filter(
-            person_type="adult"
-        ).first()
-
-        child_obj = tour.pricing.filter(
-            person_type="child"
-        ).first()
-
-        infant_obj = tour.pricing.filter(
-            person_type="infant"
-        ).first()
-
-        if adult_obj:
-            adult_price = adult_obj.price
-
-        if child_obj:
-            child_price = child_obj.price
-
-        if infant_obj:
-            infant_price = infant_obj.price
-
-        sub_total = (
-
-            Decimal(adults) * adult_price +
-
-            Decimal(children) * child_price +
-
-            Decimal(infants) * infant_price
-
-        )
-
+        # ---------- Coupon ----------
         coupon = Coupon.objects.filter(
-
-            code__iexact=
-            coupon_code.strip()
-
+            code__iexact=coupon_code.strip()
         ).first()
 
         if not coupon:
-
             return Response({
-
                 "success": False,
-
-                "message":
-                    "Invalid coupon code"
-
+                "message": "Invalid coupon code"
             })
-
-        print("========== COUPON DEBUG ==========")
-        print("Code:", coupon.code)
-        print("Active:", coupon.is_active)
-        print("Today:", timezone.now().date())
-        print("Start:", coupon.start_date)
-        print("End:", coupon.end_date)
-        print("Usage Limit:", coupon.usage_limit)
-        print("Used Count:", coupon.used_count)
-        print("Valid:", coupon.is_valid())
-        print("==================================")
 
         if not coupon.is_valid():
-
             return Response({
-
                 "success": False,
-
-                "message":
-                    "Coupon expired or inactive"
-
+                "message": "Coupon expired or inactive"
             })
 
-        # discount_amount = (
-        #     coupon.calculate_discount(
-        #         sub_total
-        #     )
-        # )
-        
-        
-        print("SUB TOTAL =", sub_total)
-        print("DISCOUNT TYPE =", coupon.discount_type)
-        print("DISCOUNT VALUE =", coupon.discount_value)
-
         discount_amount = coupon.calculate_discount(sub_total)
-
-        print("DISCOUNT AMOUNT =", discount_amount)
-
-        total_amount = (
-            sub_total -
-            discount_amount
-        )
+        total_amount = sub_total - discount_amount
 
         return Response({
-
             "success": True,
-
-            "coupon":
-                coupon.code,
-
-            "sub_total":
-                str(sub_total),
-
-            "discount_amount":
-                str(discount_amount),
-
-            "total_amount":
-                str(total_amount)
-
+            "coupon": coupon.code,
+            "sub_total": str(sub_total),
+            "discount_amount": str(discount_amount),
+            "total_amount": str(total_amount)
         })
-        
-        
-        
-        
         
         
         

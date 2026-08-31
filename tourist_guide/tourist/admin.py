@@ -534,18 +534,18 @@ class TourPricingAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "tour",
-        "person_type",
-        "price",
+        "group_type",
+        "group_price",
         "is_active",
     )
 
     list_editable = (
-        "price",
+        "group_price",
         "is_active",
     )
 
     list_filter = (
-        "person_type",
+        "group_type",
         "is_active",
     )
 
@@ -555,7 +555,7 @@ class TourPricingAdmin(admin.ModelAdmin):
 
     ordering = (
         "tour",
-        "person_type",
+        "group_type",
     )
 # =========================
 # CUSTOM TIME INPUT

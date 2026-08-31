@@ -440,6 +440,8 @@ def tour_list(request):
 # TOUR DETAIL API
 # =========================================
 
+
+
 class TourDetailAPIView(
     generics.RetrieveAPIView
 ):
@@ -501,7 +503,13 @@ def tour_details(request, slug):
 
 
 
+
+
+
+
 class CategoryTourAPIView(APIView):
+
+    permission_classes = [AllowAny]
 
     def get(self, request):
 
@@ -524,22 +532,50 @@ class CategoryTourAPIView(APIView):
             tours = category.tours.filter(
                 is_active=True
             )
+            
 
             for tour in tours:
 
                 image = tour.images.first()
 
-                adult_price = 0
+                # ==========================================
+                # GROUP PRICING
+                # ==========================================
+
+                pricing_data = []
 
                 pricing = tour.pricing.filter(
-                    person_type="adult",
                     is_active=True
-                ).first()
+                ).order_by("id")
 
-                if pricing:
-                    adult_price = pricing.price
+                for price in pricing:
+
+                    pricing_data.append({
+
+                        "id": price.id,
+
+                        "group_type":
+                            price.group_type,
+
+                        "group_members":
+                            price.group_members,
+
+                        "group_price":
+                            float(
+                                price.group_price
+                            ),
+
+                        "label":
+                            price.get_group_type_display(),
+
+                    })
+
+                # ==========================================
+                # TOUR DATA
+                # ==========================================
 
                 tours_data.append({
+                    
 
                     "id":
                         tour.id,
@@ -550,10 +586,8 @@ class CategoryTourAPIView(APIView):
                     "slug":
                         tour.slug,
 
-                    "adult_price":
-                        float(
-                            adult_price
-                        ),
+                    "pricing":
+                        pricing_data,
 
                     "image":
                         request.build_absolute_uri(
@@ -580,6 +614,86 @@ class CategoryTourAPIView(APIView):
         return Response(
             response_data
         )
+
+# class CategoryTourAPIView(APIView):
+
+#     def get(self, request):
+
+#         response_data = []
+
+#         categories = (
+#             TourCategory.objects
+#             .filter(is_active=True)
+#             .prefetch_related(
+#                 "tours__images",
+#                 "tours__pricing"
+#             )
+#             .order_by("name")
+#         )
+
+#         for category in categories:
+
+#             tours_data = []
+
+#             tours = category.tours.filter(
+#                 is_active=True
+#             )
+
+#             for tour in tours:
+
+#                 image = tour.images.first()
+
+#                 adult_price = 0
+
+#                 pricing = tour.pricing.filter(
+#                     person_type="adult",
+#                     is_active=True
+#                 ).first()
+
+#                 if pricing:
+#                     adult_price = pricing.price
+
+#                 tours_data.append({
+
+#                     "id":
+#                         tour.id,
+
+#                     "title":
+#                         tour.title,
+
+#                     "slug":
+#                         tour.slug,
+
+#                     "adult_price":
+#                         float(
+#                             adult_price
+#                         ),
+
+#                     "image":
+#                         request.build_absolute_uri(
+#                             image.image.url
+#                         )
+#                         if image
+#                         else None
+
+#                 })
+
+#             response_data.append({
+
+#                 "id":
+#                     category.id,
+
+#                 "name":
+#                     category.name,
+
+#                 "tours":
+#                     tours_data
+
+#             })
+
+#         return Response(
+#             response_data
+#         )
         
         
         

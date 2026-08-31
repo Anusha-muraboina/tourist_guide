@@ -218,7 +218,35 @@ from tourist.models import (
     TourImage,
     TourPricing
 )
-class TourPricingSerializer(serializers.ModelSerializer):
+# class TourPricingSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+
+#         model = TourPricing
+
+#         fields = [
+#             "id",
+            
+#             "group_type",
+#             "group_members",
+#             "group_price",
+#             "label",
+#             "is_active",
+#         ]
+
+
+# =========================================
+# TOUR PRICING
+# =========================================
+
+class TourPricingSerializer(
+    serializers.ModelSerializer
+):
+
+    label = serializers.CharField(
+        source="get_group_type_display",
+        read_only=True
+    )
 
     class Meta:
 
@@ -226,10 +254,12 @@ class TourPricingSerializer(serializers.ModelSerializer):
 
         fields = [
             "id",
-            "person_type",
-            "price",
+            "group_type",
+            "group_members",
+            "group_price",
+            "label",
+            "is_active",
         ]
-
 
 
 
@@ -239,7 +269,12 @@ class TourListSerializer(
 
     thumbnail = serializers.SerializerMethodField()
 
-    adult_price = serializers.SerializerMethodField()
+    # adult_price = serializers.SerializerMethodField()
+    
+    pricing = TourPricingSerializer(
+        many=True,
+        read_only=True
+    )
     
     location = LocationSerializer(read_only=True)
 
@@ -261,7 +296,10 @@ class TourListSerializer(
 
             "duration",
 
-            "adult_price",
+            # "adult_price",
+            
+              # NEW GROUP PRICING
+            "pricing",
 
             "featured",
 
@@ -294,21 +332,21 @@ class TourListSerializer(
     # ADULT PRICE
     # ==========================
 
-    def get_adult_price(self, obj):
+    # def get_adult_price(self, obj):
 
-        pricing = obj.pricing.filter(
+    #     pricing = obj.pricing.filter(
 
-            person_type="adult",
+    #         person_type="adult",
 
-            is_active=True
+    #         is_active=True
 
-        ).first()
+    #     ).first()
 
-        if pricing:
+    #     if pricing:
 
-            return pricing.price
+    #         return pricing.price
 
-        return 0
+    #     return 0
 
 
 # =========================================
@@ -382,6 +420,7 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "full_description",
             "pricing",
              "guides",
+             
             # "city",
             # "state",
             # "country",
@@ -587,18 +626,53 @@ from rest_framework import serializers
 from tourist.models import Tour, TourCategory
 
 
-class TourCardSerializer(serializers.ModelSerializer):
+# class TourCardSerializer(serializers.ModelSerializer):
+
+#     image = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Tour
+#         fields = [
+#             "id",
+#             "title",
+#             "slug",
+#             "adult_price",
+#             "image"
+#         ]
+
+#     def get_image(self, obj):
+
+#         image = obj.images.filter(
+#             is_primary=True
+#         ).first()
+
+#         if not image:
+#             image = obj.images.first()
+
+#         return image.image.url if image else None
+
+
+class TourCardSerializer(
+    serializers.ModelSerializer
+):
 
     image = serializers.SerializerMethodField()
 
+    pricing = TourPricingSerializer(
+        many=True,
+        read_only=True
+    )
+
     class Meta:
+
         model = Tour
+
         fields = [
             "id",
             "title",
             "slug",
-            "adult_price",
-            "image"
+            "pricing",
+            "image",
         ]
 
     def get_image(self, obj):
@@ -608,10 +682,24 @@ class TourCardSerializer(serializers.ModelSerializer):
         ).first()
 
         if not image:
+
             image = obj.images.first()
 
-        return image.image.url if image else None
+        if image:
 
+            request = self.context.get(
+                "request"
+            )
+
+            if request:
+
+                return request.build_absolute_uri(
+                    image.image.url
+                )
+
+            return image.image.url
+
+        return None
 
 class CategorySerializer(serializers.ModelSerializer):
 
