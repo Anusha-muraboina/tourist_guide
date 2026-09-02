@@ -6,422 +6,202 @@
     <title>Booking Pending - Tourist Guide</title>
 </head>
 
-<body style="margin:0;padding:0;background:#f7f4f0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f7f4f0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;-webkit-font-smoothing:antialiased;">
 
-<table width="100%" cellspacing="0" cellpadding="0" style="background:#f7f4f0;">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f7f4f0;padding:40px 15px;">
 <tr>
-<td align="center" style="padding:40px 20px;">
+<td align="center">
 
-<table width="600"
-       cellspacing="0"
-       cellpadding="0"
-       style="
-            background:#ffffff;
-            border-radius:16px;
-            overflow:hidden;
-            box-shadow:0 4px 24px rgba(0,0,0,0.08);
-       ">
+<table width="600" cellspacing="0" cellpadding="0" border="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);max-width:100%;">
 
     <!-- HEADER -->
-
     <tr>
-        <td style="
-            background:linear-gradient(135deg,#065823 0%,#024827 100%);
-            padding:40px 50px;
-            text-align:center;
-        ">
-
-            <h1 style="
-                margin:0;
-                color:#ffffff;
-                font-size:32px;
-                font-weight:600;
-            ">
+        <td style="background:linear-gradient(135deg, #071B3B 0%, #033469 100%);padding:40px 30px;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;letter-spacing:-0.5px;">
                 Tourist Guide
             </h1>
-
         </td>
     </tr>
 
-    <!-- PENDING -->
-
+    <!-- PENDING BADGE & HEADER -->
     <tr>
-        <td style="
-            padding:40px 50px 30px;
-            text-align:center;
-            border-bottom:1px solid #e8e4df;
-        ">
-
-            <div style="
-                width:70px;
-                height:70px;
-                background:linear-gradient(135deg,#f59e0b 0%,#fbbf24 100%);
-                border-radius:50%;
-                margin:0 auto 20px;
-                line-height:70px;
-            ">
-                <span style="
-                    font-size:32px;
-                    color:#fff;
-                ">
-                    ⏳
-                </span>
+        <td style="padding:40px 40px 25px;text-align:center;border-bottom:1px solid #e8e4df;">
+            <div style="width:68px;height:68px;background:linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);border-radius:50%;margin:0 auto 20px;line-height:68px;box-shadow:0 4px 14px rgba(245,158,11,0.3);">
+                <span style="font-size:30px;color:#ffffff;">⏳</span>
             </div>
 
-            <h2 style="
-                margin:0 0 10px;
-                color:#92400e;
-                font-size:28px;
-                font-weight:600;
-            ">
-                Booking Pending
+            <h2 style="margin:0 0 8px;color:#92400e;font-size:24px;font-weight:700;">
+                Booking Pending Confirmation
             </h2>
 
-            <p style="
-                margin:0;
-                color:#6b7280;
-                font-size:16px;
-            ">
-                Payment required to confirm your booking
+            <p style="margin:0;color:#6b7280;font-size:15px;">
+                Complete your payment to secure your reservation
             </p>
-
         </td>
     </tr>
 
-    <!-- MESSAGE -->
-
+    <!-- GREETING & NOTICE -->
     <tr>
-        <td style="padding:30px 50px 20px;">
-
-            <p style="
-                margin:0;
-                color:#374151;
-                font-size:16px;
-                line-height:1.6;
-            ">
-                Hello
-                <strong style="color:#92400e;">
-                    {{ booking.guest_name }}
-                </strong>,
+        <td style="padding:30px 40px 15px;">
+            <p style="margin:0;color:#374151;font-size:16px;line-height:1.6;">
+                Hello <strong>{{ booking.guest_name }}</strong>,
             </p>
 
-            <p style="
-                margin:15px 0 0;
-                color:#6b7280;
-                font-size:15px;
-                line-height:1.8;
-            ">
-                Thank you for booking with
-                <strong>Tourist Guide</strong>.
+            <p style="margin:12px 0 0;color:#6b7280;font-size:14px;line-height:1.6;">
+                Your reservation request for <strong>{{ booking.tour.title }}</strong> has been created, but your spot is currently <strong style="color:#b45309;">held pending payment</strong>.
             </p>
-
-            <p style="
-                margin:12px 0 0;
-                color:#6b7280;
-                font-size:15px;
-                line-height:1.8;
-            ">
-                Your booking has been successfully created,
-                but it is currently
-                <strong style="color:#b45309;">
-                    pending confirmation.
-                </strong>
-            </p>
-
         </td>
     </tr>
 
-    <!-- NOTICE -->
-
+    <!-- IMPORTANT CALLOUT BOX -->
     <tr>
-        <td style="padding:0 50px 30px;">
-
-            <div style="
-                background:#fff7ed;
-                border-left:5px solid #f59e0b;
-                padding:20px;
-                border-radius:10px;
-            ">
-
-                <p style="
-                    margin:0;
-                    font-size:15px;
-                    color:#92400e;
-                    line-height:1.7;
-                ">
-                    ⚠️ <strong>Important:</strong><br><br>
-
-                    To confirm your booking,
-                    please pay at least
-                    <strong>30% advance</strong>
-                    or the
-                    <strong>full amount</strong>.
-
-                    <br><br>
-
-                    Once payment is received,
-                    your booking will be
-                    automatically confirmed.
+        <td style="padding:0 40px 25px;">
+            <div style="background:#fff7ed;border-left:4px solid #f59e0b;padding:16px 20px;border-radius:8px;">
+                <p style="margin:0;font-size:13px;color:#92400e;line-height:1.6;">
+                    ⚠️ <strong>Payment Required:</strong><br>
+                    Please pay at least the <strong>30% advance deposit</strong> (or the full package amount) to automatically confirm your slot and receive your official tour voucher.
                 </p>
-
             </div>
-
         </td>
     </tr>
 
-    <!-- BOOKING SUMMARY -->
-
+    <!-- BOOKING DETAILS CARD -->
     <tr>
-        <td style="padding:0 50px 30px;">
-
-            <table width="100%"
-                   style="
-                        background:#f9fafb;
-                        border-radius:12px;
-                        border:1px solid #e5e7eb;
-                   ">
-
+        <td style="padding:0 40px 25px;">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f8fafc;border-radius:12px;border:1px solid #e5e7eb;">
                 <tr>
-                    <td style="padding:25px;">
-
-                        <h3 style="
-                            margin:0 0 15px;
-                            color:#045019;
-                        ">
-                            📋 Booking Summary
+                    <td style="padding:22px;">
+                        <h3 style="margin:0 0 15px;color:#071B3B;font-size:15px;font-weight:700;border-bottom:1px solid #e5e7eb;padding-bottom:8px;">
+                            📋 Reservation Details
                         </h3>
 
-                        <table width="100%">
-
+                        <table width="100%" cellspacing="0" cellpadding="6" border="0" style="font-size:13px;color:#374151;">
                             <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Booking ID
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.booking_id }}
+                                <td width="38%" style="color:#6b7280;">Booking ID:</td>
+                                <td style="font-weight:700;color:#111827;font-family:monospace;">#{{ booking.id }}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#6b7280;">Tour Title:</td>
+                                <td style="font-weight:600;color:#071B3B;">{{ booking.tour.title }}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#6b7280;">Tour Date:</td>
+                                <td style="color:#111827;font-weight:500;">{{ booking.tour_date }}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#6b7280;">Tour Time:</td>
+                                <td style="color:#111827;font-weight:500;">{{ booking.tour_time }}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#6b7280;">Package / Group:</td>
+                                <td style="font-weight:600;color:#111827;">
+                                    {% if booking.pricing.group_label %}
+                                        {{ booking.pricing.group_label }}
+                                    {% elif booking.pricing.group_type %}
+                                        {{ booking.pricing.group_type|title }} Package
+                                    {% elif booking.group_members %}
+                                        Up to {{ booking.group_members }} Guests
+                                    {% else %}
+                                        Standard Group
+                                    {% endif %}
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Tour
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.tour.title }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Tour Date
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.tour_date }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Tour Time
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.tour_time }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Travellers
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.adults }} Adult,
-                                    {{ booking.children }} Child,
-                                    {{ booking.infants }} Infant
-                                </td>
-                            </tr>
-
                             {% if booking.guide %}
                             <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Guide
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.guide.username }}
+                                <td style="color:#6b7280;">Selected Guide:</td>
+                                <td style="color:#111827;font-weight:600;">
+                                    {{ booking.guide.name|default:booking.guide.username }}
                                 </td>
                             </tr>
                             {% endif %}
-
                             <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Total Amount
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    ₹{{ booking.total_amount }}
+                                <td style="color:#6b7280;">Status:</td>
+                                <td>
+                                    <span style="background:#fef3c7;color:#b45309;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px;text-transform:uppercase;">
+                                        Pending Payment
+                                    </span>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td style="padding:8px 0;color:#6b7280;">
-                                    Payment Method
-                                </td>
-
-                                <td style="padding:8px 0;font-weight:600;">
-                                    {{ booking.get_payment_method_display }}
-                                </td>
-                            </tr>
-
                         </table>
-
                     </td>
                 </tr>
-
             </table>
-
         </td>
     </tr>
 
-    <!-- PAYMENT SUMMARY -->
-
+    <!-- FINANCIAL BREAKDOWN -->
     <tr>
-        <td style="padding:0 50px 30px;">
-
-            <table width="100%"
-                   style="
-                        background:#fff8f0;
-                        border-radius:12px;
-                        border:2px solid #d4a574;
-                   ">
-
+        <td style="padding:0 40px 30px;">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#fffcf8;border-radius:12px;border:1px solid #fed7aa;">
                 <tr>
-                    <td style="padding:25px;">
-
-                        <h3 style="
-                            margin:0 0 20px;
-                            color:#92400e;
-                        ">
-                            💰 Payment Summary
+                    <td style="padding:22px;">
+                        <h3 style="margin:0 0 15px;color:#92400e;font-size:15px;font-weight:700;border-bottom:1px solid #ffedd5;padding-bottom:8px;">
+                            💰 Amount Payable
                         </h3>
 
-                        <table width="100%">
-
+                        <table width="100%" cellspacing="0" cellpadding="5" border="0" style="font-size:13px;color:#374151;">
                             <tr>
-                                <td>Sub Total</td>
-                                <td align="right">
-                                    ₹{{ booking.sub_total }}
+                                <td style="color:#6b7280;">Base Package Price:</td>
+                                <td align="right" style="color:#111827;font-weight:500;">₹{{ booking.sub_total|default:booking.total_amount }}</td>
+                            </tr>
+                            {% if booking.discount_amount and booking.discount_amount > 0 %}
+                            <tr>
+                                <td style="color:#059669;">Promo Savings {% if booking.coupon_code %}({{ booking.coupon_code }}){% endif %}:</td>
+                                <td align="right" style="color:#059669;font-weight:600;">- ₹{{ booking.discount_amount }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if booking.tax_amount and booking.tax_amount > 0 %}
+                            <tr>
+                                <td style="color:#6b7280;">Taxes & Service Fees:</td>
+                                <td align="right" style="color:#111827;">₹{{ booking.tax_amount }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr style="border-top:1px solid #fed7aa;">
+                                <td style="font-weight:700;color:#111827;padding-top:8px;">Total Booking Value:</td>
+                                <td align="right" style="font-weight:700;font-size:15px;color:#071B3B;padding-top:8px;">₹{{ booking.total_amount }}</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#059669;">Minimum Advance Required:</td>
+                                <td align="right" style="font-weight:600;color:#059669;">
+                                    ₹{{ booking.advance_amount|default:booking.total_amount }}
                                 </td>
                             </tr>
-
                             <tr>
-                                <td>Discount</td>
-                                <td align="right">
-                                    ₹{{ booking.discount_amount }}
+                                <td style="color:#92400e;font-weight:600;">Balance Due at Venue:</td>
+                                <td align="right" style="font-weight:700;color:#92400e;">
+                                    ₹{{ booking.remaining_amount|default:"0.00" }}
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td>Total Amount</td>
-                                <td align="right">
-                                    ₹{{ booking.total_amount }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Advance Amount</td>
-                                <td align="right">
-                                    ₹{{ booking.advance_amount }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="font-weight:bold;">
-                                    Remaining Amount
-                                </td>
-
-                                <td align="right"
-                                    style="
-                                        font-weight:bold;
-                                        color:#92400e;
-                                    ">
-                                    ₹{{ booking.remaining_amount }}
-                                </td>
-                            </tr>
-
                         </table>
-
                     </td>
                 </tr>
-
             </table>
-
         </td>
     </tr>
 
-    <!-- INVOICE -->
-
-    {% if invoice_url %}
+    <!-- COMPLETE PAYMENT CTA -->
+    {% if payment_url %}
     <tr>
-        <td style="padding:0 50px 40px;text-align:center;">
-
-            <a href="{{ invoice_url }}"
-               style="
-                    display:inline-block;
-                    background:#c28b5a;
-                    color:#ffffff;
-                    text-decoration:none;
-                    padding:16px 40px;
-                    border-radius:8px;
-                    font-size:16px;
-                    font-weight:600;
-               ">
-                📄 View Invoice
+        <td align="center" style="padding:0 40px 35px;">
+            <a href="{{ payment_url }}" target="_blank" style="display:inline-block;background:#071B3B;color:#ffffff;text-decoration:none;padding:14px 34px;border-radius:10px;font-size:14px;font-weight:700;box-shadow:0 3px 8px rgba(7,27,59,0.2);">
+                💳 Complete Payment Now
             </a>
-
-            <p style="
-                margin-top:15px;
-                color:#9ca3af;
-                font-size:13px;
-            ">
-                Your invoice is also attached to this email.
-            </p>
-
         </td>
     </tr>
     {% endif %}
 
     <!-- FOOTER -->
-
     <tr>
-        <td style="
-            background:#2d3a35;
-            padding:30px 50px;
-            text-align:center;
-        ">
-
-            <p style="
-                margin:0;
-                color:#ffffff;
-                font-size:15px;
-                font-weight:600;
-            ">
-                Tourist Guide Team
+        <td style="background:#111827;padding:30px 40px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.6;">
+            <p style="margin:0 0 8px;color:#ffffff;font-size:15px;font-weight:600;">
+                Tourist Guide Support Team
             </p>
-
-            <p style="
-                margin:10px 0 0;
-                color:rgba(255,255,255,0.7);
-                font-size:13px;
-            ">
-                📧 support@touristguide.com |
-                📞 +91 9989380114
+            <p style="margin:0 0 16px;color:#9ca3af;font-size:13px;">
+                Need help with your booking? Reach out to us anytime.
             </p>
-
+            <div style="border-top:1px solid #374151;padding-top:14px;color:#6b7280;font-size:12px;">
+                📞 +91 9989380114 &nbsp;|&nbsp; ✉️ support@touristguide.com
+            </div>
         </td>
     </tr>
 

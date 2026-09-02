@@ -34,14 +34,12 @@ class Booking(models.Model):
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     ]
-
     PAYMENT_METHOD_CHOICES = [
         ('pay_at_location', 'Pay At Location'),
         ('partial_payment', 'Pay 30% Advance'),
         ('full_payment', 'Full Payment'),
     ]
     
-
     PAYMENT_STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('partial', 'Partial'),
@@ -91,9 +89,6 @@ class Booking(models.Model):
         related_name="bookings"
         
     )
-
-
-
 
 
     group_members = models.PositiveIntegerField(

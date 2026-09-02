@@ -442,44 +442,70 @@ def tour_list(request):
 
 
 
-class TourDetailAPIView(
-    generics.RetrieveAPIView
-):
+class TourDetailAPIView(generics.RetrieveAPIView):
 
     serializer_class = TourDetailSerializer
-
     permission_classes = [AllowAny]
 
     lookup_field = "slug"
 
     queryset = (
         Tour.objects
-        .filter(
-            is_active=True
-        )
+        .filter(is_active=True)
         .select_related(
             "category",
-            # "guide",
+            "location",
         )
         .prefetch_related(
-
             "images",
-
             "highlights",
-
             "includes",
-
             "excludes",
-
             "important_information",
-
             "schedules",
-
             "amenities",
             "pricing",
-
         )
     )
+
+# class TourDetailAPIView(
+#     generics.RetrieveAPIView
+# ):
+
+#     serializer_class = TourDetailSerializer
+
+#     permission_classes = [AllowAny]
+
+#     lookup_field = "slug"
+
+#     queryset = (
+#         Tour.objects
+#         .filter(
+#             is_active=True
+#         )
+#         .select_related(
+#             "category",
+#             # "guide",
+#         )
+#         .prefetch_related(
+
+#             "images",
+
+#             "highlights",
+
+#             "includes",
+
+#             "excludes",
+
+#             "important_information",
+
+#             "schedules",
+
+#             "amenities",
+#             "pricing",
+
+#         )
+#     )
 def tour_details(request, slug):
 
     return render(

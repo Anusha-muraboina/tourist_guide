@@ -465,13 +465,25 @@ class TourDetailSerializer(serializers.ModelSerializer):
 
         if not obj.location:
             return []
+        
+        guides = (
+            User.objects
+            .filter(
+                role="guide",
+                is_active=True,
+                is_verified=True,
+                locations=obj.location,
+            )
+            .prefetch_related("locations")
+            .distinct()
+        )
 
-        guides = User.objects.filter(
-            role="guide",
-            is_active=True,
-            is_verified=True ,
-            locations=obj.location
-        ).distinct()
+        # guides = User.objects.filter(
+        #     role="guide",
+        #     is_active=True,
+        #     is_verified=True ,
+        #     locations=obj.location
+        # ).distinct()
 
         return [
             {

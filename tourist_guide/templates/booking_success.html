@@ -1,65 +1,78 @@
 {% extends 'base.html' %}
 
+{% block title %}
+Booking Confirmed!
+{% endblock %}
+
 {% block content %}
-<section class="bg-slate-50 min-h-screen py-16 md:py-24 antialiased">
+<section class="bg-slate-50 min-h-screen py-12 md:py-20 antialiased">
     <div class="max-w-4xl mx-auto px-4">
         <!-- Main Card Wrapper -->
         <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
             
-            <!-- Success Header Header -->
+            <!-- Success Header -->
             <div class="bg-[#071B3B] text-white text-center py-10 px-6 relative">
                 <div class="w-16 h-16 mx-auto bg-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-900/30">
                     <i class="fa-solid fa-check text-white text-2xl"></i>
                 </div>
                 <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight mt-5">
-                    Booking Successful!
+                    Booking Confirmed!
                 </h1>
-                <p class="mt-2 text-slate-300 text-base md:text-lg max-w-md mx-auto font-light">
-                    Your adventure is secured. Thank you for booking with us.
+                <p class="mt-2 text-slate-300 text-sm md:text-base max-w-md mx-auto font-light">
+                    Your tour package has been reserved. A confirmation voucher has been sent to your email.
                 </p>
+                <!-- 2-Minute Countdown Banner -->
+                <div class="inline-flex items-center gap-2 mt-4 px-3.5 py-1.5 bg-white/10 rounded-full text-xs text-slate-200 backdrop-blur-sm">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>Redirecting home in <strong id="redirectTimer" class="text-emerald-400 font-mono">02:00</strong></span>
+                </div>
             </div>
 
             <!-- Content Container -->
-            <div class="p-6 md:p-10 space-y-10">
+            <div class="p-6 md:p-10 space-y-8">
                 
                 <!-- Split: Booking & Guest Info -->
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Booking Information Card -->
                     <div class="bg-slate-50/60 rounded-2xl p-6 border border-slate-100">
-                        <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-receipt text-slate-400 text-sm"></i> Booking Details
                         </h2>
-                        <div class="space-y-3.5 text-sm">
-                            <div class="flex justify-between items-center py-1 border-b border-slate-100/80">
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-100">
                                 <span class="text-slate-500 font-medium">Booking ID</span>
-                                <span class="font-mono font-bold text-slate-800">{{ booking.booking_id }}</span>
+                                <span class="font-mono font-bold text-slate-800">#{{ booking.id }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-1 border-b border-slate-100/80">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-100">
                                 <span class="text-slate-500 font-medium">Status</span>
                                 <div>
-                                    {% if booking.status == "confirmed" %}
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>
+                                    {% if booking.status == "confirmed" or booking.status == "success" %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Confirmed</span>
                                     {% elif booking.status == "pending" %}
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>
-                                    {% elif booking.status == "completed" %}
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Completed</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Pending</span>
                                     {% else %}
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Cancelled</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">{{ booking.status|title }}</span>
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center py-1 border-b border-slate-100/80">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-100">
                                 <span class="text-slate-500 font-medium">Tour Date</span>
                                 <span class="font-semibold text-slate-800">{{ booking.tour_date }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-1 border-b border-slate-100/80">
-                                <span class="text-slate-500 font-medium">Tour Time</span>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                                <span class="text-slate-500 font-medium">Starting Time</span>
                                 <span class="font-semibold text-slate-800">{{ booking.tour_time }}</span>
                             </div>
                             <div class="flex justify-between items-center pt-1">
-                                <span class="text-slate-500 font-medium">Guests</span>
+                                <span class="text-slate-500 font-medium">Package Tier</span>
                                 <span class="font-semibold text-slate-800">
-                                    {{ booking.adults }} A · {{ booking.children }} C · {{ booking.infants }} I
+                                    {% if booking.pricing %}
+                                        {{ booking.pricing.group_label|default:booking.pricing.group_type|title }}
+                                    {% elif booking.group_members %}
+                                        Up to {{ booking.group_members }} People
+                                    {% else %}
+                                        Standard Group
+                                    {% endif %}
                                 </span>
                             </div>
                         </div>
@@ -67,136 +80,155 @@
 
                     <!-- Guest Information Card -->
                     <div class="bg-slate-50/60 rounded-2xl p-6 border border-slate-100">
-                        <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-user text-slate-400 text-sm"></i> Primary Contact
                         </h2>
-                        <div class="space-y-3.5 text-sm">
-                            <div class="flex flex-col py-1 border-b border-slate-100/80">
-                                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Full Name</span>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex flex-col py-1 border-b border-slate-100">
+                                <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Full Name</span>
                                 <span class="font-semibold text-slate-800 mt-0.5">{{ booking.guest_name }}</span>
                             </div>
-                            <div class="flex flex-col py-1 border-b border-slate-100/80">
-                                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Email Address</span>
+                            <div class="flex flex-col py-1 border-b border-slate-100">
+                                <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Email Address</span>
                                 <span class="font-semibold text-slate-800 mt-0.5 break-all">{{ booking.guest_email }}</span>
                             </div>
                             <div class="flex flex-col pt-1">
-                                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Phone Number</span>
+                                <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Phone Number</span>
                                 <span class="font-semibold text-slate-800 mt-0.5">{{ booking.guest_phone }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tour Details -->
+                <!-- Tour Overview -->
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <h2 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-map text-slate-400 text-sm"></i> Tour Overview
                     </h2>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                        <h3 class="text-xl font-bold text-slate-900">
-                            {{ booking.tour.title }}
-                        </h3>
-                        <p class="text-slate-500 text-sm mt-1.5 flex items-center gap-1.5">
-                            <i class="fa-solid fa-location-dot text-rose-500"></i>
-                            {{ booking.tour.city }}, {{ booking.tour.state }}, {{ booking.tour.country }}
-                        </p>
-                        <div class="inline-flex items-center gap-2 mt-4 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold text-slate-700">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">
+                                {{ booking.tour.title }}
+                            </h3>
+                            <p class="text-slate-500 text-xs mt-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot text-rose-500"></i>
+                                {{ booking.tour.city|default:"" }}{% if booking.tour.state %}, {{ booking.tour.state }}{% endif %}{% if booking.tour.country %}, {{ booking.tour.country }}{% endif %}
+                            </p>
+                        </div>
+                        {% if booking.tour.duration %}
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold text-slate-700 self-start md:self-auto">
                             <i class="fa-solid fa-clock"></i> Duration: {{ booking.tour.duration }}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
-                <!-- Selected Guide (Conditional) -->
+                <!-- Guide Details (Conditional) -->
                 {% if booking.guide %}
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-id-badge text-slate-400 text-sm"></i> Assigned Expert Guide
+                    <h2 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-id-badge text-slate-400 text-sm"></i> Assigned Guide
                     </h2>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm grid sm:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm grid sm:grid-cols-2 gap-4 text-xs">
                         <div>
-                            <span class="text-xs text-slate-400 font-medium uppercase block">Guide Name</span>
-                            <span class="font-bold text-slate-800 text-base">{{ booking.guide.username }}</span>
+                            <span class="text-slate-400 font-semibold uppercase block mb-0.5">Guide Name</span>
+                            <span class="font-bold text-slate-800 text-sm">{{ booking.guide.name|default:booking.guide.username }}</span>
                         </div>
                         <div>
-                            <span class="text-xs text-slate-400 font-medium uppercase block">Base Location</span>
-                            <span class="font-medium text-slate-700">{{ booking.guide.location }}</span>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400 font-medium uppercase block">Contact Email</span>
-                            <span class="font-medium text-slate-700 break-all">{{ booking.guide.email }}</span>
-                        </div>
-                        <div>
-                            <span class="text-xs text-slate-400 font-medium uppercase block">Phone Contact</span>
-                            <span class="font-medium text-slate-700">{{ booking.guide.phone_number }}</span>
+                            <span class="text-slate-400 font-semibold uppercase block mb-0.5">Contact Email</span>
+                            <span class="font-medium text-slate-700 break-all">{{ booking.guide.email|default:"Provided on voucher" }}</span>
                         </div>
                     </div>
                 </div>
                 {% endif %}
 
-                <!-- Coupon Banner (Conditional) -->
-                {% if booking.coupon_applied %}
-                <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white text-sm shadow-md shadow-emerald-200">
-                            <i class="fa-solid fa-tags"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-emerald-900 text-sm">Promo Discount Applied</h3>
-                            <p class="text-emerald-700 text-xs mt-0.5">Code active on this transaction</p>
-                        </div>
-                    </div>
-                    <span class="font-mono font-bold text-sm bg-emerald-600 text-white px-3 py-1 rounded-lg shadow-sm">
-                        {{ booking.coupon_applied.code }}
-                    </span>
-                </div>
-                {% endif %}
-
-                <!-- Payment Summary -->
+                <!-- Financial Breakdown -->
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-credit-card text-slate-400 text-sm"></i> Financial Breakdown
+                    <h2 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-credit-card text-slate-400 text-sm"></i> Payment Breakdown
                     </h2>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4 text-sm">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3.5 text-xs md:text-sm">
+                        
                         <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                            <span class="text-slate-500 font-medium">Payment Mechanism</span>
-                            <span class="font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md text-xs">
-                                {{ booking.get_payment_method_display }}
+                            <span class="text-slate-500 font-medium">Payment Method</span>
+                            <span class="font-semibold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg text-xs uppercase">
+                                {% if booking.payment_method == "pay_at_location" %}
+                                    Pay at Location
+                                {% elif booking.payment_method == "partial_payment" %}
+                                    30% Advance Payment
+                                {% elif booking.payment_method == "full_payment" %}
+                                    Full Online Payment
+                                {% else %}
+                                    {{ booking.payment_method|default:"Standard" }}
+                                {% endif %}
                             </span>
                         </div>
-                        <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                            <span class="text-slate-500 font-medium">Settlement Status</span>
-                            <span class="font-semibold text-slate-800">
-                                {{ booking.get_payment_status_display }}
-                            </span>
+
+                        <!-- Subtotal / Base Price -->
+                        <div class="flex justify-between items-center text-slate-600">
+                            <span>Package Base Rate</span>
+                            <span class="font-medium text-slate-800">₹{{ booking.sub_total|default:booking.total_amount }}</span>
                         </div>
-                        <div class="flex justify-between items-center pt-1 text-slate-600">
-                            <span>Base Rate (Subtotal)</span>
-                            <span class="font-medium">₹{{ booking.sub_total }}</span>
-                        </div>
+
+                        <!-- Coupon Savings (Show only if discount exists) -->
+                        {% if booking.discount_amount and booking.discount_amount > 0 %}
                         <div class="flex justify-between items-center text-emerald-600 font-medium">
-                            <span>Coupon Savings</span>
+                            <span>Coupon Discount {% if booking.coupon_code %}({{ booking.coupon_code }}){% endif %}</span>
                             <span>- ₹{{ booking.discount_amount }}</span>
                         </div>
+                        {% endif %}
+
+                        <!-- Tax (Show only if applicable) -->
+                        {% if booking.tax_amount and booking.tax_amount > 0 %}
                         <div class="flex justify-between items-center text-slate-600">
-                            <span>Statutory Tax</span>
-                            <span class="font-medium">₹{{ booking.tax_amount }}</span>
+                            <span>Taxes & Service Fees</span>
+                            <span class="font-medium text-slate-800">₹{{ booking.tax_amount }}</span>
                         </div>
-                        <div class="flex justify-between items-center text-blue-600 font-medium">
-                            <span>Advance Remitted</span>
-                            <span>₹{{ booking.advance_amount }}</span>
+                        {% endif %}
+
+                        <!-- Total Package Price -->
+                        <div class="flex justify-between items-center py-2 border-t border-slate-100 font-bold text-slate-900 text-sm">
+                            <span>Total Package Price</span>
+                            <span>₹{{ booking.total_amount }}</span>
                         </div>
-                        <div class="flex justify-between items-center text-orange-600 font-medium">
-                            <span>Balance Due at Venue</span>
-                            <span>₹{{ booking.remaining_amount }}</span>
+
+                        <!-- Amount Settled vs Due -->
+                        <div class="bg-slate-50 rounded-xl p-3.5 space-y-2 text-xs border border-slate-100">
+                            <div class="flex justify-between items-center text-emerald-700 font-semibold">
+                                <span>Amount Paid Online</span>
+                                <span>
+                                    {% if booking.payment_method == "full_payment" %}
+                                        ₹{{ booking.total_amount }}
+                                    {% elif booking.payment_method == "partial_payment" %}
+                                        ₹{{ booking.advance_amount|default:"30% Advance" }}
+                                    {% else %}
+                                        ₹0.00
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center text-amber-700 font-semibold">
+                                <span>Balance Due at Meeting Point</span>
+                                <span>
+                                    {% if booking.payment_method == "full_payment" %}
+                                        ₹0.00
+                                    {% elif booking.payment_method == "partial_payment" %}
+                                        ₹{{ booking.remaining_amount|default:"Balance" }}
+                                    {% else %}
+                                        ₹{{ booking.total_amount }}
+                                    {% endif %}
+                                </span>
+                            </div>
                         </div>
-                        
-                        <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
-                            <span class="text-base font-bold text-slate-900">Total Price Paid</span>
-                            <span class="text-2xl font-black text-slate-900 tracking-tight">
-                                ₹{{ booking.total_amount }}
-                            </span>
-                        </div>
+
                     </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="pt-4">
+                    <a href="/" class="w-full bg-[#071B3B] hover:bg-blue-900 text-white font-bold py-4 rounded-2xl text-sm transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-house text-xs"></i> Return to Homepage
+                    </a>
                 </div>
 
             </div>
@@ -204,436 +236,33 @@
     </div>
 </section>
 
+<!-- Auto-Redirect Countdown (2 Minutes / 120 Seconds) -->
 <script>
-setTimeout(function(){
-    window.location.href = "/";
-}, 6000); // Redirects home in 6 seconds
+    document.addEventListener("DOMContentLoaded", function () {
+        // Clear cached booking draft
+        localStorage.removeItem("bookingDraft");
+        localStorage.removeItem("bookingExpiry");
+        localStorage.removeItem("bookingSeconds");
+
+        // 2-minute countdown (120 seconds)
+        let totalSeconds = 120;
+        const timerElement = document.getElementById("redirectTimer");
+
+        const countdownInterval = setInterval(function () {
+            totalSeconds--;
+            
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            if (timerElement) {
+                timerElement.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            if (totalSeconds <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = "/";
+            }
+        }, 1000);
+    });
 </script>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} {% extends 'base.html' %}
-
-{% block content %}
-
-<section class="bg-gray-50 min-h-screen py-24">
-
-    <div class="md:max-w-5xl mx-auto px-4 ">
-
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
-
-            <div class="bg-[#071B3B] text-white text-center py-2 md:py-10">
-
-                <div class="w-14 h-14 mx-auto bg-white rounded-full flex items-center justify-center">
-
-                    <i class="fa-solid fa-check text-green-600 text-2xl"></i>
-
-                </div>
-
-                <h1 class="md:text-4xl text-xl font-bold mt-6">
-
-                    Booking Success
-
-                </h1>
-
-                <p class="mt-3 text-lg">
-
-                    Thank you for booking with us
-
-                </p>
-
-            </div>
-
-            <div class="p-8">
-
-            
-                <div class="grid md:grid-cols-2 gap-8">
-
-                    <div>
-
-                        <h2 class="text-xl font-bold mb-5">
-
-                            Booking Information
-
-                        </h2>
-
-                        <div class="space-y-3">
-
-                            <p>
-                                <strong>Booking ID:</strong>
-                                {{ booking.booking_id }}
-                            </p>
-
-                            <p>
-
-                                <strong>Booking Status:</strong>
-
-                                {% if booking.status == "confirmed" %}
-
-                                    <span class="text-green-600 font-semibold">
-                                        Confirmed
-                                    </span>
-
-                                {% elif booking.status == "pending" %}
-
-                                    <span class="text-yellow-600 font-semibold">
-                                        Pending
-                                    </span>
-
-                                {% elif booking.status == "completed" %}
-
-                                    <span class="text-blue-600 font-semibold">
-                                        Completed
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="text-red-600 font-semibold">
-                                        Cancelled
-                                    </span>
-
-                                {% endif %}
-
-                            </p>
-
-                            <p>
-                                <strong>Tour Date:</strong>
-                                {{ booking.tour_date }}
-                            </p>
-
-                            <p>
-                                <strong>Tour Time:</strong>
-                                {{ booking.tour_time }}
-                            </p>
-
-                            <p>
-                                <strong>Adults:</strong>
-                                {{ booking.adults }}
-                            </p>
-
-                            <p>
-                                <strong>Children:</strong>
-                                {{ booking.children }}
-                            </p>
-
-                            <p>
-                                <strong>Infants:</strong>
-                                {{ booking.infants }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    
-                    <div>
-
-                        <h2 class="text-xl font-bold mb-5">
-
-                            Guest Information
-
-                        </h2>
-
-                        <div class="space-y-3">
-
-                            <p>
-                                <strong>Name:</strong>
-                                {{ booking.guest_name }}
-                            </p>
-
-                            <p>
-                                <strong>Email:</strong>
-                                {{ booking.guest_email }}
-                            </p>
-
-                            <p>
-                                <strong>Phone:</strong>
-                                {{ booking.guest_phone }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                
-                <div class="mt-10">
-
-                    <h2 class="text-xl font-bold mb-5">
-
-                        Tour Details
-
-                    </h2>
-
-                    <div class="border rounded-2xl p-5">
-
-                        <h3 class="text-xl font-bold">
-
-                            {{ booking.tour.title }}
-
-                        </h3>
-
-                        <p class="text-gray-600 mt-2">
-
-                            {{ booking.tour.city }},
-                            {{ booking.tour.state }},
-                            {{ booking.tour.country }}
-
-                        </p>
-
-                        <p class="mt-2">
-
-                            Duration:
-                            {{ booking.tour.duration }}
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-               
-                {% if booking.guide %}
-
-                <div class="mt-10">
-
-                    <h2 class="text-xl font-bold mb-5">
-
-                        Selected Guide
-
-                    </h2>
-
-                    <div class="border rounded-2xl p-5">
-
-                        <p>
-
-                            <strong>Name:</strong>
-
-                            {{ booking.guide.username }}
-
-                        </p>
-
-                        <p>
-
-                            <strong>Email:</strong>
-
-                            {{ booking.guide.email }}
-
-                        </p>
-
-                        <p>
-
-                            <strong>Phone:</strong>
-
-                            {{ booking.guide.phone_number }}
-
-                        </p>
-
-                        <p>
-
-                            <strong>Location:</strong>
-
-                            {{ booking.guide.location }}
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                {% endif %}
-
-               
-                {% if booking.coupon_applied %}
-
-                <div class="mt-10">
-
-                    <div class="bg-green-50 border border-green-200 rounded-2xl p-5">
-
-                        <h3 class="font-bold text-green-700">
-
-                            Coupon Applied
-
-                        </h3>
-
-                        <p class="mt-2">
-
-                            Coupon Code:
-
-                            <strong>
-
-                                {{ booking.coupon_applied.code }}
-
-                            </strong>
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                {% endif %}
-
-               
-                <div class="mt-10">
-
-                    <h2 class="text-xl font-bold mb-5">
-
-                        Payment Summary
-
-                    </h2>
-
-                    <div class="border rounded-2xl p-5">
-
-                        <div class="space-y-4">
-
-                            <div class="flex justify-between">
-
-                                <span>
-                                    Payment Method
-                                </span>
-
-                                <span class="font-semibold">
-
-                                    {{ booking.get_payment_method_display }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between">
-
-                                <span>
-                                    Payment Status
-                                </span>
-
-                                <span class="font-semibold">
-
-                                    {{ booking.get_payment_status_display }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between">
-
-                                <span>
-                                    Sub Total
-                                </span>
-
-                                <span>
-
-                                    ₹{{ booking.sub_total }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between text-green-600">
-
-                                <span>
-                                    Discount
-                                </span>
-
-                                <span>
-
-                                    - ₹{{ booking.discount_amount }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between">
-
-                                <span>
-                                    Tax
-                                </span>
-
-                                <span>
-
-                                    ₹{{ booking.tax_amount }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between text-blue-600">
-
-                                <span>
-                                    Advance Paid
-                                </span>
-
-                                <span>
-
-                                    ₹{{ booking.advance_amount }}
-
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between text-orange-600">
-
-                                <span>
-                                    Remaining Amount
-                                </span>
-
-                                <span>
-
-                                    ₹{{ booking.remaining_amount }}
-
-                                </span>
-
-                            </div>
-
-                            <hr>
-
-                            <div class="flex justify-between font-bold text-2xl">
-
-                                <span>
-                                    Total Amount
-                                </span>
-
-                                <span>
-
-                                    ₹{{ booking.total_amount }}
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-<script>
-
-setTimeout(function(){
-
-    window.location.href = "/";
-
-}, 6000); // 60 seconds
-
-</script>
-{% endblock %} {% endcomment %}

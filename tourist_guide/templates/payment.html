@@ -657,13 +657,13 @@ select:focus {
                 </div>
 
                     {% comment %} <a href="#" class="text-blue-600 text-sm font-medium hover:underline block mt-5">Change date or participants</a> {% endcomment %}
-<a
+{% comment %} <a
     href="#"
     id="changeBookingBtn"
     class="text-blue-900 text-sm font-medium hover:underline block mt-5"
 >
     Change date or participants
-</a>
+</a> {% endcomment %}
                     <div
     id="changeBookingSection"
     class="hidden mt-4 border rounded-2xl p-5 bg-gray-50"
@@ -2261,9 +2261,6 @@ function formatTime(timeString){
 
     return `${hour}:${minute} ${ampm}`;
 }
-
-
-
 
 document.addEventListener(
     "DOMContentLoaded",

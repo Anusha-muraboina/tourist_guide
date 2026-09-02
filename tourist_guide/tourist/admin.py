@@ -37,8 +37,8 @@ class TourPricingInline(admin.TabularInline):
     extra = 3
 
     fields = (
-        "person_type",
-        "price",
+        "group_type",
+        "group_price",
         "is_active",
     )
 # ==========================================
@@ -328,16 +328,16 @@ class TourScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
-    def adult_price(self, obj):
+    # def adult_price(self, obj):
 
-        pricing = obj.pricing.filter(
-            person_type="adult",
-            is_active=True
-        ).first()
+    #     pricing = obj.pricing.filter(
+    #         person_type="adult",
+    #         is_active=True
+    #     ).first()
 
-        return pricing.price if pricing else 0
+    #     return pricing.price if pricing else 0
 
-    adult_price.short_description = "Adult Price"
+    # adult_price.short_description = "Adult Price"
 
     list_display = (
         "id",
@@ -354,7 +354,7 @@ class TourAdmin(admin.ModelAdmin):
         "slot_position",
         "is_active",
         "created_at",
-        "adult_price",
+        # "adult_price",
     )
 
     list_editable = (
