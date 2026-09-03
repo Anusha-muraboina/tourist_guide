@@ -287,10 +287,7 @@ def booking_success(request, booking_id):
         {
             "booking": booking
         }
-    )
-    
-    
-    
+    )    
     
 # booking/api_views.py
 

@@ -378,12 +378,6 @@ class TourScheduleDeleteView(BaseDeleteView):
 # TOUR PRICING
 ######################################
 
-# class TourPricingListView(ListView):
-#     model = TourPricing
-#     template_name = "tourist_admin/tour_pricing/list.html"
-#     context_object_name = "items"
-from django.views.generic import ListView
-from tourist.models import TourPricing
 
 class TourPricingListView(ListView):
     model = TourPricing
@@ -392,20 +386,20 @@ class TourPricingListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = TourPricing.objects.select_related("tour")
+        queryset = TourPricing.objects.select_related("tour").order_by("-id")
 
-        search = self.request.GET.get("search")
-        person_type = self.request.GET.get("person_type")
-        status = self.request.GET.get("status")
+        search = self.request.GET.get("search", "").strip()
+        group_type = self.request.GET.get("group_type", "").strip()
+        status = self.request.GET.get("status", "").strip()
 
         if search:
             queryset = queryset.filter(
                 tour__title__icontains=search
             )
 
-        if person_type:
+        if group_type:
             queryset = queryset.filter(
-                person_type=person_type
+                group_type=group_type
             )
 
         if status == "1":
@@ -415,6 +409,18 @@ class TourPricingListView(ListView):
             queryset = queryset.filter(is_active=False)
 
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["search"] = self.request.GET.get("search", "")
+        context["group_type"] = self.request.GET.get("group_type", "")
+        context["status"] = self.request.GET.get("status", "")
+
+        context["group_type_choices"] = TourPricing.GROUP_TYPE_CHOICES
+
+        return context
+
 
 class TourPricingCreateView(CreateView):
     model = TourPricing
@@ -433,8 +439,6 @@ class TourPricingUpdateView(UpdateView):
 class TourPricingDeleteView(BaseDeleteView):
     model = TourPricing
     success_url = reverse_lazy("tour_pricing_list")
-    
-    
     
     
     

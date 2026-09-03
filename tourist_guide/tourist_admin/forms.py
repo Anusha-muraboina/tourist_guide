@@ -87,12 +87,59 @@ class TourScheduleForm(forms.ModelForm):
         
         
            
+# class TourPricingForm(forms.ModelForm):
+#     class Meta:
+#         model = TourPricing
+#         fields = "__all__"
+        
+    
+    
+
+
 class TourPricingForm(forms.ModelForm):
     class Meta:
         model = TourPricing
-        fields = "__all__"
-        
-        
+        fields = [
+            "tour",
+            "group_type",
+            "group_members",
+            "group_price",
+            "is_active",
+        ]
+
+        widgets = {
+            "tour": forms.Select(attrs={
+                "class": "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none",
+            }),
+
+            "group_type": forms.Select(attrs={
+                "class": "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none",
+            }),
+
+            "group_members": forms.TextInput(attrs={
+                "class": "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none",
+                "placeholder": "Example: 5 members",
+            }),
+
+            "group_price": forms.NumberInput(attrs={
+                "class": "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none",
+                "placeholder": "Enter group price",
+                "step": "0.01",
+                "min": "0",
+            }),
+
+            "is_active": forms.CheckboxInput(attrs={
+                "class": "h-5 w-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer",
+            }),
+        }
+
+        labels = {
+            "tour": "Tour",
+            "group_type": "Group Type",
+            "group_members": "Group Members",
+            "group_price": "Group Price",
+            "is_active": "Active Status",
+        }    
         
 
 # from django import forms
