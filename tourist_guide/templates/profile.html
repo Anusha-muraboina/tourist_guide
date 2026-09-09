@@ -2,162 +2,682 @@
 
 {% block content %}
 
+<!-- CSRF Token -->
+<form id="csrfForm" style="display:none;">
+    {% csrf_token %}
+</form>
+
+<section class="bg-slate-50/60 min-h-screen py-10 antialiased">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 md:p-10 relative overflow-hidden backdrop-blur-sm">
+            
+            <!-- Header Section -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-slate-100">
+                <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+                    <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-slate-50 shadow-md overflow-hidden bg-slate-100 flex-shrink-0">
+                        <img id="profileImage" src="" alt="Profile Avatar" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 id="username" class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Loading...</h1>
+                        <p id="email" class="text-slate-500 text-sm font-medium mt-0.5"></p>
+                        <div class="flex items-center gap-2 mt-3 justify-center sm:justify-start">
+                            <span id="roleBadge" class="inline-flex items-center bg-cyan-50 text-cyan-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">-</span>
+                            <span id="verificationBadge" class="hidden px-3 py-1 rounded-full text-xs font-semibold uppercase"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="updateProfileBtn" type="button" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white px-7 py-3 rounded-xl font-medium shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>Save Guide Details</span>
+                </button>
+            </div>
+
+            <!-- Rejection Notice Banner -->
+            <div id="rejectionBox" class="hidden mt-6 p-4 rounded-2xl bg-red-50/80 border border-red-200/60">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500 text-base mt-0.5"></i>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wide text-red-600">Verification Rejection Reason</h4>
+                        <p id="rejectionReason" class="text-sm text-red-700 mt-1 font-medium"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Form Content -->
+            <div class="mt-8 space-y-8">
+
+                <!-- 1. Read-Only Account Summary -->
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Account Information (Fixed)</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
+                        <div>
+                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Username</span>
+                            <p id="accountUsername" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Email</span>
+                            <p id="accountEmail" class="text-sm font-bold text-slate-800 mt-0.5 truncate">-</p>
+                        </div>
+                        <div>
+                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Phone</span>
+                            <p id="accountPhone" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. EDITABLE GUIDE FIELDS -->
+                <div class="space-y-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Guide Information & Location</h2>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Edit your operating region, tour details, and verification documents.</p>
+                    </div>
+
+                    <!-- Cascading Location Selectors (2x2 Grid) -->
+                    <div class="bg-slate-50/60 border border-slate-200/80 p-5 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Operating Location <span class="text-rose-500">*</span>
+                            </span>
+                            <span class="text-[11px] text-slate-400">Select city/monument</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Country -->
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-semibold text-slate-500 uppercase">1. Country</label>
+                                <select id="country" class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                                    <option value="">Select Country</option>
+                                </select>
+                            </div>
+
+                            <!-- State -->
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-semibold text-slate-500 uppercase">2. State</label>
+                                <select id="state" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+
+                            <!-- District -->
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-semibold text-slate-500 uppercase">3. District</label>
+                                <select id="district" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                                    <option value="">Select District</option>
+                                </select>
+                            </div>
+
+                            <!-- City / Monument -->
+                            <div class="space-y-1">
+                                <label class="text-[11px] font-semibold text-slate-500 uppercase">4. Monument / City</label>
+                                <select id="city" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                                    <option value="">Select Monument / City</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="space-y-1.5">
+                        <label for="editBio" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">About You</label>
+                        <textarea id="editBio" rows="4" maxlength="5000" placeholder="Tell tourists about yourself, your tour experience, and local expertise..." class="w-full p-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition resize-none"></textarea>
+                    </div>
+
+                    <!-- Experience & Languages -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label for="editExperience" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Experience (Years)</label>
+                            <input id="editExperience" type="number" min="0" max="100" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="editLanguages" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Languages <span class="text-rose-500">*</span></label>
+                            <input id="editLanguages" type="text" placeholder="English, Telugu, Hindi" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Document Uploads Grid -->
+                    <div class="pt-2">
+                        <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Verification Documents</h3>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            
+                            <!-- Identity Document Front -->
+                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-slate-700">Adhar Card (Front)</span>
+                                        <span id="aadhaarFrontStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
+                                    </div>
+                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editAadhaarFront').click()">
+                                        <img id="frontPreviewImg" src="" alt="Front Preview" class="hidden w-full h-full object-cover">
+                                        <div id="frontPlaceholder" class="text-center p-2">
+                                            <i class="fa-solid fa-id-card text-slate-300 text-2xl mb-1"></i>
+                                            <p class="text-[11px] text-slate-500">Change front</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input id="editAadhaarFront" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewFile(this, 'frontPreviewImg', 'frontPlaceholder', 'aadhaarFrontStatus')">
+                            </div>
+
+                            <!-- Identity Document Back -->
+                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-slate-700">Adhar Card(Back)</span>
+                                        <span id="aadhaarBackStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
+                                    </div>
+                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editAadhaarBack').click()">
+                                        <img id="backPreviewImg" src="" alt="Back Preview" class="hidden w-full h-full object-cover">
+                                        <div id="backPlaceholder" class="text-center p-2">
+                                            <i class="fa-regular fa-id-card text-slate-300 text-2xl mb-1"></i>
+                                            <p class="text-[11px] text-slate-500">Change back</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input id="editAadhaarBack" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewFile(this, 'backPreviewImg', 'backPlaceholder', 'aadhaarBackStatus')">
+                            </div>
+
+                            <!-- Certificate -->
+                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-slate-700">Certificate</span>
+                                        <span id="certificateStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
+                                    </div>
+                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editCertificates').click()">
+                                        <img id="certPreviewImg" src="" alt="Cert Preview" class="hidden w-full h-full object-cover">
+                                        <div id="certFileBadge" class="hidden text-center p-2">
+                                            <i class="fa-solid fa-file-pdf text-purple-600 text-2xl mb-1"></i>
+                                            <p id="certFileName" class="text-[11px] text-slate-700 font-medium truncate max-w-[140px]"></p>
+                                        </div>
+                                        <div id="certPlaceholder" class="text-center p-2">
+                                            <i class="fa-solid fa-award text-slate-300 text-2xl mb-1"></i>
+                                            <p class="text-[11px] text-slate-500">Change cert</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input id="editCertificates" type="file" accept=".pdf,image/jpeg,image/png" class="hidden" onchange="previewCert(this)">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+let allLocations = [];
+
+function getCSRFToken() {
+    const input = document.querySelector('#csrfForm input[name="csrfmiddlewaretoken"]');
+    return input ? input.value : null;
+}
+
+function getDefaultAvatar(username) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(username || "User")}&background=0f172a&color=ffffff`;
+}
+
+function setDocStatus(elId, uploaded) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.innerHTML = uploaded 
+        ? '<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Uploaded</span>'
+        : '<span class="text-slate-400">Missing</span>';
+}
+
+function previewFile(input, imgId, placeholderId, statusId) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = document.getElementById(imgId);
+        img.src = e.target.result;
+        img.classList.remove("hidden");
+        document.getElementById(placeholderId).classList.add("hidden");
+        document.getElementById(statusId).innerHTML = '<span class="text-cyan-600 font-semibold">New</span>';
+    };
+    reader.readAsDataURL(file);
+}
+
+function previewCert(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const img = document.getElementById("certPreviewImg");
+    const fileBadge = document.getElementById("certFileBadge");
+    const placeholder = document.getElementById("certPlaceholder");
+    const status = document.getElementById("certificateStatus");
+
+    if (file.type === "application/pdf") {
+        img.classList.add("hidden");
+        fileBadge.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+        document.getElementById("certFileName").textContent = file.name;
+    } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            img.src = e.target.result;
+            img.classList.remove("hidden");
+            fileBadge.classList.add("hidden");
+            placeholder.classList.add("hidden");
+        };
+        reader.readAsDataURL(file);
+    }
+    status.innerHTML = '<span class="text-purple-600 font-semibold">New</span>';
+}
+
+/* ============================================================
+   CASCADING LOCATIONS (Country -> State -> District -> City)
+============================================================ */
+function resetSelect(el, placeholder) {
+    el.innerHTML = `<option value="">${placeholder}</option>`;
+    el.disabled = true;
+}
+
+function fillSelect(el, items, placeholder) {
+    el.innerHTML = `<option value="">${placeholder}</option>`;
+    items.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item;
+        opt.textContent = item;
+        el.appendChild(opt);
+    });
+    el.disabled = items.length === 0;
+}
+
+async function loadLocations() {
+    try {
+        const res = await fetch("/user/api/locations/", { credentials: "same-origin" });
+        if (!res.ok) throw new Error();
+        const json = await res.json();
+        allLocations = Array.isArray(json) ? json : (json.data || json.results || []);
+
+        const countries = [...new Set(allLocations.map(l => l.country).filter(Boolean))];
+        fillSelect(document.getElementById("country"), countries, "Select Country");
+    } catch {
+        console.error("Failed to load locations");
+    }
+}
+
+document.getElementById("country")?.addEventListener("change", function () {
+    const selectedCountry = this.value;
+    const state = document.getElementById("state");
+    const district = document.getElementById("district");
+    const city = document.getElementById("city");
+
+    resetSelect(state, "Select State");
+    resetSelect(district, "Select District");
+    resetSelect(city, "Select Monument / City");
+
+    if (!selectedCountry) return;
+
+    const states = [...new Set(
+        allLocations
+            .filter(l => l.country === selectedCountry)
+            .map(l => l.state)
+            .filter(Boolean)
+    )];
+    fillSelect(state, states, "Select State");
+});
+
+document.getElementById("state")?.addEventListener("change", function () {
+    const country = document.getElementById("country").value;
+    const selectedState = this.value;
+    const district = document.getElementById("district");
+    const city = document.getElementById("city");
+
+    resetSelect(district, "Select District");
+    resetSelect(city, "Select Monument / City");
+
+    if (!country || !selectedState) return;
+
+    const districts = [...new Set(
+        allLocations
+            .filter(l => l.country === country && l.state === selectedState)
+            .map(l => l.district)
+            .filter(Boolean)
+    )];
+    fillSelect(district, districts, "Select District");
+});
+
+document.getElementById("district")?.addEventListener("change", function () {
+    const country = document.getElementById("country").value;
+    const state = document.getElementById("state").value;
+    const selectedDistrict = this.value;
+    const city = document.getElementById("city");
+
+    resetSelect(city, "Select Monument / City");
+    if (!country || !state || !selectedDistrict) return;
+
+    const cities = allLocations.filter(
+        l => l.country === country && l.state === state && l.district === selectedDistrict
+    );
+
+    city.innerHTML = '<option value="">Select Monument / City</option>';
+    cities.forEach(loc => {
+        const opt = document.createElement("option");
+        opt.value = loc.id;
+        opt.textContent = loc.city;
+        city.appendChild(opt);
+    });
+    city.disabled = cities.length === 0;
+});
+
+/* ============================================================
+   LOAD PROFILE DATA & PRE-FILL LOCATIONS
+============================================================ */
+async function loadProfile() {
+    try {
+        await loadLocations();
+
+        const res = await fetch("/user/api/profile/", { credentials: "same-origin" });
+        if (!res.ok) return;
+
+        const result = await res.json();
+        const user = result.data || result;
+
+        // Read-only account data
+        document.getElementById("profileImage").src = user.profile_image || getDefaultAvatar(user.username);
+        document.getElementById("username").innerText = user.username || "User";
+        document.getElementById("email").innerText = user.email || "";
+        document.getElementById("accountUsername").innerText = user.username || "-";
+        document.getElementById("accountEmail").innerText = user.email || "-";
+        document.getElementById("accountPhone").innerText = user.phone_number || "-";
+        document.getElementById("roleBadge").innerText = String(user.role || "").toUpperCase();
+
+        // Verification Badge
+        const badge = document.getElementById("verificationBadge");
+        const status = (user.verification_status || "pending").toLowerCase();
+        badge.classList.remove("hidden");
+        badge.innerText = status.toUpperCase();
+        if (status === "approved") {
+            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 uppercase";
+        } else if (status === "rejected") {
+            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 uppercase";
+            if (user.rejection_reason) {
+                document.getElementById("rejectionReason").innerText = user.rejection_reason;
+                document.getElementById("rejectionBox").classList.remove("hidden");
+            }
+        } else {
+            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 uppercase";
+        }
+
+        // Guide Editable Data
+        document.getElementById("editBio").value = user.bio || "";
+        document.getElementById("editExperience").value = user.experience_years ?? 0;
+        document.getElementById("editLanguages").value = user.languages || "";
+
+        // Pre-fill primary location in cascading dropdowns
+        const primaryLoc = (user.locations && user.locations.length > 0) ? user.locations[0] : null;
+        if (primaryLoc) {
+            const countryEl = document.getElementById("country");
+            countryEl.value = primaryLoc.country;
+            countryEl.dispatchEvent(new Event("change"));
+
+            const stateEl = document.getElementById("state");
+            stateEl.value = primaryLoc.state;
+            stateEl.dispatchEvent(new Event("change"));
+
+            const districtEl = document.getElementById("district");
+            districtEl.value = primaryLoc.district;
+            districtEl.dispatchEvent(new Event("change"));
+
+            const cityEl = document.getElementById("city");
+            cityEl.value = primaryLoc.id;
+        }
+
+        // Documents
+        setDocStatus("aadhaarFrontStatus", Boolean(user.aadhaar_front));
+        if (user.aadhaar_front) {
+            const img = document.getElementById("frontPreviewImg");
+            img.src = user.aadhaar_front;
+            img.classList.remove("hidden");
+            document.getElementById("frontPlaceholder").classList.add("hidden");
+        }
+
+        setDocStatus("aadhaarBackStatus", Boolean(user.aadhaar_back));
+        if (user.aadhaar_back) {
+            const img = document.getElementById("backPreviewImg");
+            img.src = user.aadhaar_back;
+            img.classList.remove("hidden");
+            document.getElementById("backPlaceholder").classList.add("hidden");
+        }
+
+        setDocStatus("certificateStatus", Boolean(user.certificates));
+        if (user.certificates) {
+            if (user.certificates.toLowerCase().endsWith(".pdf")) {
+                document.getElementById("certFileBadge").classList.remove("hidden");
+                document.getElementById("certFileName").textContent = "Uploaded PDF";
+                document.getElementById("certPlaceholder").classList.add("hidden");
+            } else {
+                const img = document.getElementById("certPreviewImg");
+                img.src = user.certificates;
+                img.classList.remove("hidden");
+                document.getElementById("certPlaceholder").classList.add("hidden");
+            }
+        }
+
+    } catch (err) {
+        console.error("Profile load error:", err);
+    }
+}
+
+/* ============================================================
+   SAVE ACTION (Submits only Guide fields)
+============================================================ */
+document.getElementById("updateProfileBtn").addEventListener("click", async function() {
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving...</span>';
+
+    try {
+        const csrfToken = getCSRFToken();
+        const formData = new FormData();
+
+        const selectedCity = document.getElementById("city").value;
+        if (!selectedCity) {
+            alert("Please select a complete location (Country, State, District, and Monument / City).");
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i><span>Save Guide Details</span>';
+            return;
+        }
+
+        // Append only Guide editable data
+        formData.append("bio", document.getElementById("editBio").value.trim());
+        formData.append("experience_years", document.getElementById("editExperience").value || "0");
+        formData.append("languages", document.getElementById("editLanguages").value.trim());
+        formData.append("locations", selectedCity);
+
+        const front = document.getElementById("editAadhaarFront");
+        if (front.files[0]) formData.append("aadhaar_front", front.files[0]);
+
+        const back = document.getElementById("editAadhaarBack");
+        if (back.files[0]) formData.append("aadhaar_back", back.files[0]);
+
+        const cert = document.getElementById("editCertificates");
+        if (cert.files[0]) formData.append("certificates", cert.files[0]);
+
+        const res = await fetch("/user/api/profile/", {
+            method: "PUT",
+            headers: { 
+                "X-CSRFToken": csrfToken, 
+                "Accept": "application/json" 
+            },
+            credentials: "same-origin",
+            body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && (data.success === true || data.status === "success")) {
+            alert("Guide profile updated successfully!");
+            await loadProfile();
+        } else {
+            alert(data.detail || "Update failed.");
+        }
+    } catch {
+        alert("An error occurred while saving.");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i><span>Save Guide Details</span>';
+    }
+});
+
+loadProfile();
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+
+{% block content %}
+
 <!-- ============================================================
-     CSRF FORM
+     CSRF
 ============================================================ -->
 
-<form
-    id="csrfForm"
-    style="display:none;"
->
+<form id="csrfForm" style="display:none;">
     {% csrf_token %}
 </form>
 
 
-<section
-    class="
-        bg-slate-50
-        min-h-screen
-        py-12
-    "
->
+<section class="bg-slate-50 min-h-screen py-12">
 
-    <div
-        class="
-            max-w-5xl
-            mx-auto
-            px-4
-            sm:px-6
-        "
-    >
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-        <!-- =====================================================
+        <!-- ====================================================
              MAIN CARD
-        ====================================================== -->
+        ===================================================== -->
 
-        <div
-            class="
-                bg-white
-                rounded-3xl
-                shadow-sm
-                border
-                border-slate-100
-                p-6
-                mt-8
-                md:p-10
-                relative
-                overflow-hidden
-            "
-        >
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100
+                    p-6 md:p-10 relative overflow-hidden">
 
             <!-- Background decoration -->
 
-            <div
-                class="
-                    absolute
-                    top-0
-                    right-0
-                    w-64
-                    h-64
-                    bg-cyan-50
-                    rounded-full
-                    blur-3xl
-                    opacity-60
-                    -mr-20
-                    -mt-20
-                    pointer-events-none
-                "
-            ></div>
+            <div class="absolute top-0 right-0 w-64 h-64
+                        bg-cyan-50 rounded-full blur-3xl opacity-60
+                        -mr-20 -mt-20 pointer-events-none"></div>
 
-
-            <div
-                class="
-                    absolute
-                    bottom-0
-                    left-0
-                    w-64
-                    h-64
-                    bg-purple-50
-                    rounded-full
-                    blur-3xl
-                    opacity-60
-                    -ml-20
-                    -mb-20
-                    pointer-events-none
-                "
-            ></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64
+                        bg-purple-50 rounded-full blur-3xl opacity-60
+                        -ml-20 -mb-20 pointer-events-none"></div>
 
 
             <!-- =================================================
                  HEADER
             ================================================== -->
 
-            <div
-                class="
-                    relative
-                    z-10
-                    flex
-                    flex-col
-                    gap-6
-                    lg:flex-row
-                    lg:justify-between
-                    lg:items-center
-                    md:pb-8
-                    pb-2
-                    border-b
-                    border-slate-100
-                "
-            >
+            <div class="relative z-10 flex flex-col lg:flex-row
+                        lg:justify-between lg:items-center gap-6
+                        pb-8 border-b border-slate-100">
 
-                <div
-                    class="
-                        flex
-                        flex-col
-                        sm:flex-row
-                        items-center
-                        gap-6
-                        text-center
-                        sm:text-left
-                    "
-                >
+                <div class="flex flex-col sm:flex-row items-center
+                            gap-6 text-center sm:text-left">
 
                     <!-- Profile Image -->
 
-                    <div
-                        class="
-                            relative
-                        "
-                    >
+                    <div class="relative">
 
                         <img
                             id="profileImage"
                             src=""
                             alt="Profile"
-                            class="
-                                w-32
-                                h-32
-                                rounded-full
-                                object-cover
-                                ring-4
-                                ring-slate-50
-                                shadow-md
-                                bg-slate-100
-                            "
+                            class="w-32 h-32 rounded-full object-cover
+                                   ring-4 ring-slate-50 shadow-md
+                                   bg-slate-100"
                         >
 
                         <span
-                            class="
-                                absolute
-                                bottom-2
-                                right-2
-                                w-5
-                                h-5
-                                bg-emerald-500
-                                border-4
-                                border-white
-                                rounded-full
-                            "
-                        ></span>
+                            class="absolute bottom-2 right-2 w-5 h-5
+                                   bg-emerald-500 border-4 border-white
+                                   rounded-full">
+                        </span>
 
                     </div>
 
@@ -168,41 +688,22 @@
 
                         <h1
                             id="username"
-                            class="
-                                text-3xl
-                                font-bold
-                                text-slate-900
-                            "
+                            class="text-3xl font-bold text-slate-900"
                         >
                             Loading...
                         </h1>
 
-
                         <p
                             id="email"
-                            class="
-                                text-slate-500
-                                mt-1
-                                font-medium
-                            "
+                            class="text-slate-500 mt-1 font-medium"
                         ></p>
-
 
                         <span
                             id="role"
-                            class="
-                                inline-flex
-                                items-center
-                                mt-3
-                                bg-cyan-50
-                                text-cyan-700
-                                px-4
-                                py-1.5
-                                rounded-full
-                                text-xs
-                                font-semibold
-                                uppercase
-                            "
+                            class="inline-flex items-center mt-3
+                                   bg-cyan-50 text-cyan-700
+                                   px-4 py-1.5 rounded-full
+                                   text-xs font-semibold uppercase"
                         >
                             -
                         </span>
@@ -212,35 +713,20 @@
                 </div>
 
 
-                <!-- Save -->
+                <!-- Save Button -->
 
                 <button
                     id="updateProfileBtn"
                     type="button"
-                    class="
-                        w-full
-                        lg:w-auto
-                        bg-slate-900
-                        hover:bg-slate-800
-                        text-white
-                        px-8
-                        py-3.5
-                        rounded-xl
-                        font-semibold
-                        shadow-sm
-                        transition
-                        disabled:opacity-50
-                        disabled:cursor-not-allowed
-                    "
+                    class="w-full lg:w-auto bg-slate-900
+                           hover:bg-slate-800 text-white
+                           px-8 py-3.5 rounded-xl font-semibold
+                           shadow-sm transition
+                           disabled:opacity-50
+                           disabled:cursor-not-allowed"
                 >
 
-                    <i
-                        class="
-                            fa-solid
-                            fa-floppy-disk
-                            mr-2
-                        "
-                    ></i>
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
 
                     Save Changes
 
@@ -250,56 +736,26 @@
 
 
             <!-- =================================================
-                 GUIDE LOCATION STATS
+                 LOCATION STATS
             ================================================== -->
 
             <div
                 id="locationStats"
-                class="
-                    relative
-                    z-10
-                    grid
-                    grid-cols-2
-                    md:grid-cols-4
-                    gap-4
-                    mt-8
-                    hidden
-                "
+                class="relative z-10 grid grid-cols-2 md:grid-cols-4
+                       gap-4 mt-8 hidden"
             >
 
-                <!-- Account -->
+                <div class="bg-slate-50/70 border border-slate-100
+                            rounded-2xl p-4">
 
-                <div
-                    class="
-                        bg-slate-50/70
-                        border
-                        border-slate-100
-                        rounded-2xl
-                        p-4
-                    "
-                >
-
-                    <p
-                        class="
-                            text-slate-400
-                            text-xs
-                            font-medium
-                            uppercase
-                            tracking-wider
-                        "
-                    >
+                    <p class="text-slate-400 text-xs font-medium
+                              uppercase tracking-wider">
                         Account Type
                     </p>
 
-
                     <h3
                         id="accountRole"
-                        class="
-                            text-base
-                            font-bold
-                            text-slate-800
-                            mt-1.5
-                        "
+                        class="text-base font-bold text-slate-800 mt-1.5"
                     >
                         -
                     </h3>
@@ -307,39 +763,17 @@
                 </div>
 
 
-                <!-- Country -->
+                <div class="bg-slate-50/70 border border-slate-100
+                            rounded-2xl p-4">
 
-                <div
-                    class="
-                        bg-slate-50/70
-                        border
-                        border-slate-100
-                        rounded-2xl
-                        p-4
-                    "
-                >
-
-                    <p
-                        class="
-                            text-slate-400
-                            text-xs
-                            font-medium
-                            uppercase
-                            tracking-wider
-                        "
-                    >
+                    <p class="text-slate-400 text-xs font-medium
+                              uppercase tracking-wider">
                         Country
                     </p>
 
-
                     <h3
                         id="countryText"
-                        class="
-                            text-base
-                            font-bold
-                            text-slate-800
-                            mt-1.5
-                        "
+                        class="text-base font-bold text-slate-800 mt-1.5"
                     >
                         -
                     </h3>
@@ -347,39 +781,17 @@
                 </div>
 
 
-                <!-- State -->
+                <div class="bg-slate-50/70 border border-slate-100
+                            rounded-2xl p-4">
 
-                <div
-                    class="
-                        bg-slate-50/70
-                        border
-                        border-slate-100
-                        rounded-2xl
-                        p-4
-                    "
-                >
-
-                    <p
-                        class="
-                            text-slate-400
-                            text-xs
-                            font-medium
-                            uppercase
-                            tracking-wider
-                        "
-                    >
+                    <p class="text-slate-400 text-xs font-medium
+                              uppercase tracking-wider">
                         State
                     </p>
 
-
                     <h3
                         id="stateText"
-                        class="
-                            text-base
-                            font-bold
-                            text-slate-800
-                            mt-1.5
-                        "
+                        class="text-base font-bold text-slate-800 mt-1.5"
                     >
                         -
                     </h3>
@@ -387,39 +799,17 @@
                 </div>
 
 
-                <!-- District -->
+                <div class="bg-slate-50/70 border border-slate-100
+                            rounded-2xl p-4">
 
-                <div
-                    class="
-                        bg-slate-50/70
-                        border
-                        border-slate-100
-                        rounded-2xl
-                        p-4
-                    "
-                >
-
-                    <p
-                        class="
-                            text-slate-400
-                            text-xs
-                            font-medium
-                            uppercase
-                            tracking-wider
-                        "
-                    >
+                    <p class="text-slate-400 text-xs font-medium
+                              uppercase tracking-wider">
                         District
                     </p>
 
-
                     <h3
                         id="districtText"
-                        class="
-                            text-base
-                            font-bold
-                            text-slate-800
-                            mt-1.5
-                        "
+                        class="text-base font-bold text-slate-800 mt-1.5"
                     >
                         -
                     </h3>
@@ -433,112 +823,89 @@
                  PERSONAL INFORMATION
             ================================================== -->
 
-            <div
-                class="
-                    relative
-                    z-10
-                    mt-10
-                "
-            >
+            <div class="relative z-10 mt-10">
 
-                <div
-                    class="
-                        mb-6
-                    "
-                >
+                <div class="mb-6">
 
-                    <h2
-                        class="
-                            text-xl
-                            font-bold
-                            text-slate-900
-                        "
-                    >
+                    <h2 class="text-xl font-bold text-slate-900">
                         Personal Information
                     </h2>
 
-
-                    <p
-                        class="
-                            text-sm
-                            text-slate-400
-                            mt-1
-                        "
-                    >
-                        Update your personal details and
-                        profile picture.
+                    <p class="text-sm text-slate-400 mt-1">
+                        Update your personal details and profile picture.
                     </p>
 
                 </div>
 
 
-                <div
-                    class="
-                        grid
-                        md:grid-cols-2
-                        gap-6
-                    "
-                >
+                <div class="grid md:grid-cols-2 gap-6">
 
-                    <!-- =================================================
-                         USERNAME
-                    ================================================== -->
+
+                    <!-- USERNAME -->
 
                     <div>
 
                         <label
-                            class="
-                                block
-                                text-sm
-                                font-medium
-                                text-slate-600
-                                mb-2
-                            "
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
                         >
                             Username
                         </label>
-
 
                         <input
                             id="editUsername"
                             type="text"
                             autocomplete="username"
-                            class="
-                                w-full
-                                border
-                                border-slate-200
-                                rounded-xl
-                                px-4
-                                py-3
-                                bg-slate-50/30
-                                focus:border-cyan-500
-                                focus:ring-4
-                                focus:ring-cyan-500/10
-                                outline-none
-                            "
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-50/30
+                                   focus:border-cyan-500
+                                   focus:ring-4
+                                   focus:ring-cyan-500/10
+                                   outline-none"
                         >
 
                     </div>
 
 
-                    <!-- =================================================
-                         PHONE
-                    ================================================== -->
+                    <!-- EMAIL -->
 
                     <div>
 
                         <label
-                            class="
-                                block
-                                text-sm
-                                font-medium
-                                text-slate-600
-                                mb-2
-                            "
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Email
+                        </label>
+
+                        <input
+                            id="editEmail"
+                            type="email"
+                            readonly
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-100 text-slate-500
+                                   cursor-not-allowed"
+                        >
+
+                        <p class="text-xs text-slate-400 mt-2">
+                            Email cannot be changed here.
+                        </p>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
                         >
                             Phone Number
                         </label>
-
 
                         <input
                             id="editPhone"
@@ -546,67 +913,122 @@
                             inputmode="tel"
                             autocomplete="tel"
                             placeholder="Enter phone number"
-                            class="
-                                w-full
-                                border
-                                border-slate-200
-                                rounded-xl
-                                px-4
-                                py-3
-                                bg-slate-50/30
-                                focus:border-cyan-500
-                                focus:ring-4
-                                focus:ring-cyan-500/10
-                                outline-none
-                            "
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-50/30
+                                   focus:border-cyan-500
+                                   focus:ring-4
+                                   focus:ring-cyan-500/10
+                                   outline-none"
+                        >
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Account Role
+                        </label>
+
+                        <input
+                            id="editRole"
+                            type="text"
+                            readonly
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-100 text-slate-500
+                                   cursor-not-allowed"
                         >
 
                     </div>
 
 
                     <!-- =================================================
-                         LOCATIONS
-                         GUIDE ONLY
+                         PROFILE IMAGE
+                    ================================================== -->
+
+                    <div class="md:col-span-2">
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Profile Image
+                        </label>
+
+                        <div
+                            class="flex flex-col sm:flex-row
+                                   items-center gap-4
+                                   border border-slate-200
+                                   rounded-2xl p-4
+                                   bg-slate-50/30"
+                        >
+
+                            <img
+                                id="imagePreview"
+                                src=""
+                                alt="Preview"
+                                class="w-20 h-20 rounded-xl
+                                       object-cover border
+                                       border-slate-200 bg-white"
+                            >
+
+                            <div class="flex-1 w-full">
+
+                                <input
+                                    id="editProfileImage"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    class="w-full text-sm text-slate-500
+                                           file:mr-4 file:py-2
+                                           file:px-4 file:rounded-lg
+                                           file:border-0 file:text-xs
+                                           file:font-semibold
+                                           file:bg-cyan-50
+                                           file:text-cyan-700
+                                           hover:file:bg-cyan-100
+                                           cursor-pointer"
+                                >
+
+                                <p class="text-xs text-slate-400 mt-2">
+                                    JPG, PNG or WEBP. Maximum 5 MB.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         GUIDE LOCATION
                     ================================================== -->
 
                     <div
                         id="locationsSection"
-                        class="
-                            md:col-span-2
-                            hidden
-                        "
+                        class="md:col-span-2 hidden"
                     >
 
-                        <div
-                            class="
-                                flex
-                                items-center
-                                justify-between
-                                mb-2
-                            "
-                        >
+                        <div class="flex items-center justify-between mb-2">
 
                             <label
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-slate-600
-                                "
+                                class="block text-sm font-medium
+                                       text-slate-600"
                             >
-                                Locations
+                                Guide Locations
                             </label>
 
-
                             <span
-                                class="
-                                    text-xs
-                                    bg-cyan-50
-                                    text-cyan-700
-                                    px-3
-                                    py-1
-                                    rounded-full
-                                "
+                                class="text-xs bg-cyan-50
+                                       text-cyan-700 px-3 py-1
+                                       rounded-full"
                             >
                                 Guide Only
                             </span>
@@ -617,137 +1039,378 @@
                         <select
                             id="editLocations"
                             multiple
-                            class="
-                                w-full
-                                border
-                                border-slate-200
-                                rounded-xl
-                                px-4
-                                py-3
-                                bg-slate-50/30
-                                focus:border-cyan-500
-                                focus:ring-4
-                                focus:ring-cyan-500/10
-                                outline-none
-                                min-h-[180px]
-                            "
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-50/30
+                                   focus:border-cyan-500
+                                   focus:ring-4
+                                   focus:ring-cyan-500/10
+                                   outline-none
+                                   min-h-[180px]"
                         >
                         </select>
 
 
-                        <p
-                            class="
-                                text-xs
-                                text-slate-400
-                                mt-2
-                            "
+                        <p class="text-xs text-slate-400 mt-2">
+                            Hold <b>Ctrl</b> on Windows or
+                            <b>Cmd</b> on Mac to select multiple locations.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 GUIDE PROFILE
+            ================================================== -->
+
+            <div
+                id="guideProfileSection"
+                class="relative z-10 mt-12 hidden"
+            >
+
+                <div class="mb-6">
+
+                    <div class="flex items-center gap-3">
+
+                        <div
+                            class="w-10 h-10 rounded-xl
+                                   bg-cyan-50 text-cyan-700
+                                   flex items-center justify-center"
                         >
-                            Hold
-                            <b>Ctrl</b>
-                            on Windows or
-                            <b>Cmd</b>
-                            on Mac to select
-                            multiple locations.
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+
+                        <div>
+
+                            <h2 class="text-xl font-bold text-slate-900">
+                                Guide Profile
+                            </h2>
+
+                            <p class="text-sm text-slate-400 mt-1">
+                                Add your professional guide information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <!-- BIO -->
+
+                    <div class="md:col-span-2">
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            About You
+                        </label>
+
+                        <textarea
+                            id="editBio"
+                            rows="5"
+                            maxlength="5000"
+                            placeholder="Tell tourists about yourself, your guiding experience and the places you know..."
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-50/30
+                                   focus:border-cyan-500
+                                   focus:ring-4
+                                   focus:ring-cyan-500/10
+                                   outline-none resize-none"
+                        ></textarea>
+
+                        <p class="text-xs text-slate-400 mt-2">
+                            Write a short professional introduction about yourself.
+                        </p>
+
+                    </div>
+
+
+                    <!-- EXPERIENCE -->
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Experience
+                        </label>
+
+                        <div class="relative">
+
+                            <input
+                                id="editExperience"
+                                type="number"
+                                min="0"
+                                max="100"
+                                placeholder="0"
+                                class="w-full border border-slate-200
+                                       rounded-xl px-4 py-3 pr-20
+                                       bg-slate-50/30
+                                       focus:border-cyan-500
+                                       focus:ring-4
+                                       focus:ring-cyan-500/10
+                                       outline-none"
+                            >
+
+                            <span
+                                class="absolute right-4 top-1/2
+                                       -translate-y-1/2
+                                       text-sm text-slate-400"
+                            >
+                                Years
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LANGUAGES -->
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Languages
+                        </label>
+
+                        <input
+                            id="editLanguages"
+                            type="text"
+                            maxlength="500"
+                            placeholder="English, Telugu, Hindi"
+                            class="w-full border border-slate-200
+                                   rounded-xl px-4 py-3
+                                   bg-slate-50/30
+                                   focus:border-cyan-500
+                                   focus:ring-4
+                                   focus:ring-cyan-500/10
+                                   outline-none"
+                        >
+
+                        <p class="text-xs text-slate-400 mt-2">
+                            Separate languages with commas.
                         </p>
 
                     </div>
 
 
                     <!-- =================================================
-                         PROFILE IMAGE
+                         AADHAAR FRONT
                     ================================================== -->
 
-                    <div
-                        class="
-                            md:col-span-2
-                        "
-                    >
+                    <div>
 
                         <label
-                            class="
-                                block
-                                text-sm
-                                font-medium
-                                text-slate-600
-                                mb-2
-                            "
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
                         >
-                            Profile Image
+                            Aadhaar Card - Front
                         </label>
 
-
                         <div
-                            class="
-                                flex
-                                flex-col
-                                sm:flex-row
-                                items-center
-                                gap-4
-                                border
-                                border-slate-200
-                                rounded-2xl
-                                p-4
-                                bg-slate-50/30
-                            "
+                            class="border border-slate-200
+                                   rounded-2xl p-4
+                                   bg-slate-50/30"
                         >
 
-                            <!-- Preview -->
-
-                            <img
-                                id="imagePreview"
-                                src=""
-                                alt="Preview"
-                                class="
-                                    w-20
-                                    h-20
-                                    rounded-xl
-                                    object-cover
-                                    border
-                                    border-slate-200
-                                    bg-white
-                                "
+                            <input
+                                id="editAadhaarFront"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                class="w-full text-sm text-slate-500
+                                       file:mr-4 file:py-2
+                                       file:px-4 file:rounded-lg
+                                       file:border-0 file:text-xs
+                                       file:font-semibold
+                                       file:bg-cyan-50
+                                       file:text-cyan-700
+                                       hover:file:bg-cyan-100"
                             >
+
+                            <p
+                                id="aadhaarFrontStatus"
+                                class="text-xs text-slate-400 mt-3"
+                            >
+                                No document uploaded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         AADHAAR BACK
+                    ================================================== -->
+
+                    <div>
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Aadhaar Card - Back
+                        </label>
+
+                        <div
+                            class="border border-slate-200
+                                   rounded-2xl p-4
+                                   bg-slate-50/30"
+                        >
+
+                            <input
+                                id="editAadhaarBack"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                class="w-full text-sm text-slate-500
+                                       file:mr-4 file:py-2
+                                       file:px-4 file:rounded-lg
+                                       file:border-0 file:text-xs
+                                       file:font-semibold
+                                       file:bg-cyan-50
+                                       file:text-cyan-700
+                                       hover:file:bg-cyan-100"
+                            >
+
+                            <p
+                                id="aadhaarBackStatus"
+                                class="text-xs text-slate-400 mt-3"
+                            >
+                                No document uploaded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         CERTIFICATE
+                    ================================================== -->
+
+                    <div class="md:col-span-2">
+
+                        <label
+                            class="block text-sm font-medium
+                                   text-slate-600 mb-2"
+                        >
+                            Guide Certificate
+                        </label>
+
+                        <div
+                            class="border border-slate-200
+                                   rounded-2xl p-4
+                                   bg-slate-50/30"
+                        >
+
+                            <input
+                                id="editCertificates"
+                                type="file"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                class="w-full text-sm text-slate-500
+                                       file:mr-4 file:py-2
+                                       file:px-4 file:rounded-lg
+                                       file:border-0 file:text-xs
+                                       file:font-semibold
+                                       file:bg-purple-50
+                                       file:text-purple-700
+                                       hover:file:bg-purple-100"
+                            >
+
+                            <p
+                                id="certificateStatus"
+                                class="text-xs text-slate-400 mt-3"
+                            >
+                                No certificate uploaded.
+                            </p>
+
+                            <p class="text-xs text-slate-400 mt-2">
+                                PDF, JPG or PNG.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- VERIFICATION STATUS -->
+
+                    <div class="md:col-span-2">
+
+                        <div
+                            class="rounded-2xl border border-slate-100
+                                   bg-slate-50 p-5"
+                        >
+
+                            <div class="flex items-center
+                                        justify-between gap-4">
+
+                                <div>
+
+                                    <p
+                                        class="text-xs uppercase
+                                               tracking-wider
+                                               text-slate-400
+                                               font-semibold"
+                                    >
+                                        Verification Status
+                                    </p>
+
+                                    <p
+                                        id="verificationStatus"
+                                        class="mt-1 text-base
+                                               font-bold text-slate-800"
+                                    >
+                                        Pending
+                                    </p>
+
+                                </div>
+
+                                <span
+                                    id="verificationBadge"
+                                    class="px-4 py-2 rounded-full
+                                           text-xs font-semibold
+                                           bg-amber-50 text-amber-700"
+                                >
+                                    PENDING
+                                </span>
+
+                            </div>
 
 
                             <div
-                                class="
-                                    flex-1
-                                    w-full
-                                "
+                                id="rejectionBox"
+                                class="hidden mt-4 p-4 rounded-xl
+                                       bg-red-50 border border-red-100"
                             >
 
-                                <input
-                                    id="editProfileImage"
-                                    type="file"
-                                    accept="image/jpeg,image/png,image/webp"
-                                    class="
-                                        w-full
-                                        text-sm
-                                        text-slate-500
-                                        file:mr-4
-                                        file:py-2
-                                        file:px-4
-                                        file:rounded-lg
-                                        file:border-0
-                                        file:text-xs
-                                        file:font-semibold
-                                        file:bg-cyan-50
-                                        file:text-cyan-700
-                                        hover:file:bg-cyan-100
-                                        cursor-pointer
-                                    "
+                                <p
+                                    class="text-xs uppercase
+                                           font-semibold
+                                           text-red-500"
                                 >
-
+                                    Rejection Reason
+                                </p>
 
                                 <p
-                                    class="
-                                        text-xs
-                                        text-slate-400
-                                        mt-2
-                                    "
+                                    id="rejectionReason"
+                                    class="text-sm text-red-700 mt-1"
                                 >
-                                    JPG, PNG or WEBP.
-                                    Maximum 5 MB.
                                 </p>
 
                             </div>
@@ -769,10 +1432,9 @@
 
 <script>
 
-
-// ============================================================
-// CSRF
-// ============================================================
+/* ============================================================
+   CSRF
+============================================================ */
 
 function getCSRFToken() {
 
@@ -781,43 +1443,133 @@ function getCSRFToken() {
             '#csrfForm input[name="csrfmiddlewaretoken"]'
         );
 
-
     if (!csrfInput) {
-
-        console.error(
-            "CSRF input not found"
-        );
-
+        console.error("CSRF token not found");
         return null;
     }
-
 
     return csrfInput.value;
 }
 
 
-// ============================================================
-// DEFAULT AVATAR
-// ============================================================
+/* ============================================================
+   DEFAULT AVATAR
+============================================================ */
 
-function getDefaultAvatar(
-    username
-) {
+function getDefaultAvatar(username) {
 
     return (
         "https://ui-avatars.com/api/?name=" +
-        encodeURIComponent(
-            username || "User"
-        ) +
+        encodeURIComponent(username || "User") +
         "&background=0f172a&color=ffffff"
     );
 
 }
 
 
-// ============================================================
-// LOAD LOCATIONS
-// ============================================================
+/* ============================================================
+   FILE STATUS
+============================================================ */
+
+function showFileStatus(elementId, uploaded) {
+
+    const element =
+        document.getElementById(elementId);
+
+    if (!element) return;
+
+    if (uploaded) {
+
+        element.innerHTML =
+            '<span class="text-emerald-600 font-medium">' +
+            '<i class="fa-solid fa-circle-check mr-1"></i>' +
+            'Document uploaded' +
+            '</span>';
+
+    } else {
+
+        element.innerHTML =
+            "No document uploaded.";
+
+    }
+
+}
+
+
+/* ============================================================
+   VERIFICATION STATUS
+============================================================ */
+
+function updateVerificationStatus(status, reason) {
+
+    const statusText =
+        document.getElementById("verificationStatus");
+
+    const badge =
+        document.getElementById("verificationBadge");
+
+    const rejectionBox =
+        document.getElementById("rejectionBox");
+
+    const rejectionReason =
+        document.getElementById("rejectionReason");
+
+
+    status = String(status || "pending")
+        .toLowerCase();
+
+
+    statusText.innerText =
+        status.charAt(0).toUpperCase() +
+        status.slice(1);
+
+
+    badge.innerText =
+        status.toUpperCase();
+
+
+    rejectionBox.classList.add("hidden");
+
+
+    if (status === "approved") {
+
+        badge.className =
+            "px-4 py-2 rounded-full text-xs font-semibold " +
+            "bg-emerald-50 text-emerald-700";
+
+    }
+
+    else if (status === "rejected") {
+
+        badge.className =
+            "px-4 py-2 rounded-full text-xs font-semibold " +
+            "bg-red-50 text-red-700";
+
+
+        if (reason) {
+
+            rejectionReason.innerText = reason;
+
+            rejectionBox.classList.remove("hidden");
+
+        }
+
+    }
+
+    else {
+
+        badge.className =
+            "px-4 py-2 rounded-full text-xs font-semibold " +
+            "bg-amber-50 text-amber-700";
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD LOCATIONS
+============================================================ */
 
 async function loadAllLocations() {
 
@@ -827,8 +1579,7 @@ async function loadAllLocations() {
             await fetch(
                 "/user/api/locations/",
                 {
-                    credentials:
-                        "same-origin"
+                    credentials: "same-origin"
                 }
             );
 
@@ -865,39 +1616,34 @@ async function loadAllLocations() {
         select.innerHTML = "";
 
 
-        locations.forEach(
-            function (location) {
+        locations.forEach(function(location) {
 
-                const option =
-                    document.createElement(
-                        "option"
-                    );
+            const option =
+                document.createElement("option");
 
 
-                option.value =
-                    location.id;
+            option.value =
+                location.id;
 
 
-                option.textContent =
-                    [
-                        location.city,
-                        location.district,
-                        location.state,
-                        location.country
-                    ]
-                    .filter(Boolean)
-                    .join(", ");
+            option.textContent =
+                [
+                    location.city,
+                    location.district,
+                    location.state,
+                    location.country
+                ]
+                .filter(Boolean)
+                .join(", ");
 
 
-                select.appendChild(
-                    option
-                );
+            select.appendChild(option);
 
-            }
-        );
+        });
 
 
         return locations;
+
 
     } catch (error) {
 
@@ -906,7 +1652,6 @@ async function loadAllLocations() {
             error
         );
 
-
         return [];
 
     }
@@ -914,9 +1659,9 @@ async function loadAllLocations() {
 }
 
 
-// ============================================================
-// LOAD PROFILE
-// ============================================================
+/* ============================================================
+   LOAD PROFILE
+============================================================ */
 
 async function loadProfile() {
 
@@ -926,13 +1671,22 @@ async function loadProfile() {
             await fetch(
                 "/user/api/profile/",
                 {
-                    credentials:
-                        "same-origin"
+                    credentials: "same-origin"
                 }
             );
 
 
         if (!response.ok) {
+
+            if (response.status === 401) {
+
+                alert(
+                    "Please login to view your profile."
+                );
+
+                return;
+
+            }
 
             throw new Error(
                 "Failed to load profile"
@@ -955,132 +1709,96 @@ async function loadProfile() {
         );
 
 
-        // =====================================================
-        // ROLE
-        // =====================================================
+        /* ====================================================
+           ROLE
+        ==================================================== */
 
         const role =
-            String(
-                user.role || ""
-            )
-            .toLowerCase()
-            .trim();
+            String(user.role || "")
+                .toLowerCase()
+                .trim();
 
 
-        console.log(
-            "ROLE:",
-            role
-        );
-
-
-        // =====================================================
-        // PROFILE IMAGE
-        // =====================================================
+        /* ====================================================
+           PROFILE IMAGE
+        ==================================================== */
 
         const profileImage =
             user.profile_image ||
-            getDefaultAvatar(
-                user.username
-            );
+            getDefaultAvatar(user.username);
 
 
-        document
-            .getElementById(
-                "profileImage"
-            )
-            .src =
-                profileImage;
+        document.getElementById(
+            "profileImage"
+        ).src = profileImage;
 
 
-        document
-            .getElementById(
-                "imagePreview"
-            )
-            .src =
-                profileImage;
+        document.getElementById(
+            "imagePreview"
+        ).src = profileImage;
 
 
-        // =====================================================
-        // BASIC DETAILS
-        // =====================================================
+        /* ====================================================
+           BASIC DETAILS
+        ==================================================== */
 
-        document
-            .getElementById(
-                "username"
-            )
-            .innerText =
-                user.username ||
-                "User";
+        document.getElementById(
+            "username"
+        ).innerText =
+            user.username || "User";
 
 
-        document
-            .getElementById(
-                "email"
-            )
-            .innerText =
-                user.email ||
-                "";
+        document.getElementById(
+            "email"
+        ).innerText =
+            user.email || "";
 
 
-        document
-            .getElementById(
-                "role"
-            )
-            .innerText =
-                role.toUpperCase();
+        document.getElementById(
+            "role"
+        ).innerText =
+            role.toUpperCase();
 
 
-        document
-            .getElementById(
-                "accountRole"
-            )
-            .innerText =
-                role || "-";
+        document.getElementById(
+            "accountRole"
+        ).innerText =
+            role || "-";
 
 
-        // =====================================================
-        // FORM USERNAME
-        // =====================================================
+        /* ====================================================
+           FORM DETAILS
+        ==================================================== */
 
-        document
-            .getElementById(
-                "editUsername"
-            )
-            .value =
-                user.username || "";
+        document.getElementById(
+            "editUsername"
+        ).value =
+            user.username || "";
 
 
-        // =====================================================
-        // FORM PHONE
-        // =====================================================
-
-        document
-            .getElementById(
-                "editPhone"
-            )
-            .value =
-                user.phone_number !== null &&
-                user.phone_number !== undefined
-                    ? String(
-                        user.phone_number
-                    )
-                    : "";
+        document.getElementById(
+            "editEmail"
+        ).value =
+            user.email || "";
 
 
-        // =====================================================
-        // GUIDE
-        // =====================================================
-
-        if (
-            role === "guide"
-        ) {
-
-            console.log(
-                "GUIDE USER - SHOW LOCATIONS"
-            );
+        document.getElementById(
+            "editPhone"
+        ).value =
+            user.phone_number || "";
 
 
-            // Show location stats
+        document.getElementById(
+            "editRole"
+        ).value =
+            role.toUpperCase();
+
+
+        /* ====================================================
+           GUIDE
+        ==================================================== */
+
+        if (role === "guide") {
 
             document
                 .getElementById(
@@ -1090,8 +1808,6 @@ async function loadProfile() {
                 .remove("hidden");
 
 
-            // Show location selector
-
             document
                 .getElementById(
                     "locationsSection"
@@ -1100,42 +1816,38 @@ async function loadProfile() {
                 .remove("hidden");
 
 
-            // Country
-
             document
                 .getElementById(
-                    "countryText"
+                    "guideProfileSection"
                 )
-                .innerText =
-                    user.country || "-";
+                .classList
+                .remove("hidden");
 
 
-            // State
+            /* LOCATION STATS */
 
-            document
-                .getElementById(
-                    "stateText"
-                )
-                .innerText =
-                    user.state || "-";
+            document.getElementById(
+                "countryText"
+            ).innerText =
+                user.country || "-";
 
 
-            // District
-
-            document
-                .getElementById(
-                    "districtText"
-                )
-                .innerText =
-                    user.district || "-";
+            document.getElementById(
+                "stateText"
+            ).innerText =
+                user.state || "-";
 
 
-            // Load available locations
+            document.getElementById(
+                "districtText"
+            ).innerText =
+                user.district || "-";
+
+
+            /* LOAD LOCATIONS */
 
             await loadAllLocations();
 
-
-            // Select existing locations
 
             const select =
                 document.getElementById(
@@ -1144,48 +1856,76 @@ async function loadProfile() {
 
 
             const userLocationIds =
-                (
-                    user.locations ||
-                    []
-                )
-                .map(
-                    location =>
-                        String(
-                            location.id
-                        )
-                );
+                (user.locations || [])
+                    .map(location =>
+                        String(location.id)
+                    );
 
 
-            Array
-                .from(
-                    select.options
-                )
-                .forEach(
-                    option => {
+            Array.from(
+                select.options
+            ).forEach(option => {
 
-                        option.selected =
-                            userLocationIds.includes(
-                                option.value
-                            );
+                option.selected =
+                    userLocationIds.includes(
+                        String(option.value)
+                    );
 
-                    }
-                );
-
-        }
+            });
 
 
-        // =====================================================
-        // TOURIST / ADMIN
-        // =====================================================
+            /* =================================================
+               GUIDE PROFILE DATA
+            ================================================= */
 
-        else {
+            document.getElementById(
+                "editBio"
+            ).value =
+                user.bio || "";
 
-            console.log(
-                "TOURIST / ADMIN - HIDE LOCATIONS"
+
+            document.getElementById(
+                "editExperience"
+            ).value =
+                user.experience_years ?? 0;
+
+
+            document.getElementById(
+                "editLanguages"
+            ).value =
+                user.languages || "";
+
+
+            /* DOCUMENT STATUS */
+
+            showFileStatus(
+                "aadhaarFrontStatus",
+                Boolean(user.aadhaar_front)
             );
 
 
-            // Hide location stats
+            showFileStatus(
+                "aadhaarBackStatus",
+                Boolean(user.aadhaar_back)
+            );
+
+
+            showFileStatus(
+                "certificateStatus",
+                Boolean(user.certificates)
+            );
+
+
+            /* VERIFICATION */
+
+            updateVerificationStatus(
+                user.verification_status,
+                user.rejection_reason
+            );
+
+        }
+
+        else {
 
             document
                 .getElementById(
@@ -1195,8 +1935,6 @@ async function loadProfile() {
                 .add("hidden");
 
 
-            // Hide location selector
-
             document
                 .getElementById(
                     "locationsSection"
@@ -1205,13 +1943,17 @@ async function loadProfile() {
                 .add("hidden");
 
 
-            // Clear location data
-
             document
                 .getElementById(
-                    "editLocations"
+                    "guideProfileSection"
                 )
-                .innerHTML = "";
+                .classList
+                .add("hidden");
+
+
+            document.getElementById(
+                "editLocations"
+            ).innerHTML = "";
 
         }
 
@@ -1233,31 +1975,23 @@ async function loadProfile() {
 }
 
 
-// ============================================================
-// IMAGE PREVIEW
-// ============================================================
+/* ============================================================
+   IMAGE PREVIEW
+============================================================ */
+
 
 document
-    .getElementById(
-        "editProfileImage"
-    )
+    .getElementById("editProfileImage")
     .addEventListener(
         "change",
-        function (event) {
+        function(event) {
 
             const file =
                 event.target.files[0];
 
 
-            if (!file) {
+            if (!file) return;
 
-                return;
-            }
-
-
-            // =================================================
-            // FILE TYPE
-            // =================================================
 
             const allowedTypes = [
                 "image/jpeg",
@@ -1276,17 +2010,12 @@ document
                     "Only JPG, PNG and WEBP images are allowed."
                 );
 
-
                 event.target.value = "";
 
-
                 return;
+
             }
 
-
-            // =================================================
-            // FILE SIZE
-            // =================================================
 
             if (
                 file.size >
@@ -1297,62 +2026,179 @@ document
                     "Image must be less than 5 MB."
                 );
 
-
                 event.target.value = "";
 
-
                 return;
+
             }
 
-
-            // =================================================
-            // PREVIEW
-            // =================================================
 
             const reader =
                 new FileReader();
 
 
             reader.onload =
-                function (event) {
+                function(event) {
 
-                    document
-                        .getElementById(
-                            "profileImage"
-                        )
-                        .src =
-                            event.target.result;
+                    document.getElementById(
+                        "profileImage"
+                    ).src =
+                        event.target.result;
 
 
-                    document
-                        .getElementById(
-                            "imagePreview"
-                        )
-                        .src =
-                            event.target.result;
+                    document.getElementById(
+                        "imagePreview"
+                    ).src =
+                        event.target.result;
 
                 };
 
 
-            reader.readAsDataURL(
-                file
-            );
+            reader.readAsDataURL(file);
 
         }
     );
 
 
-// ============================================================
-// UPDATE PROFILE
-// ============================================================
+/* ============================================================
+   GUIDE DOCUMENT VALIDATION
+============================================================ */
+
+function validateGuideImage(inputId) {
+
+    const input =
+        document.getElementById(inputId);
+
+
+    if (!input.files.length) {
+        return true;
+    }
+
+
+    const file =
+        input.files[0];
+
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        alert(
+            "Aadhaar must be JPG, PNG or WEBP."
+        );
+
+        input.value = "";
+
+        return false;
+
+    }
+
+
+    if (
+        file.size >
+        5 * 1024 * 1024
+    ) {
+
+        alert(
+            "Aadhaar image must be less than 5 MB."
+        );
+
+        input.value = "";
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* ============================================================
+   CERTIFICATE VALIDATION
+============================================================ */
+
+function validateCertificate() {
+
+    const input =
+        document.getElementById(
+            "editCertificates"
+        );
+
+
+    if (!input.files.length) {
+        return true;
+    }
+
+
+    const file =
+        input.files[0];
+
+
+    const allowedTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        alert(
+            "Certificate must be PDF, JPG or PNG."
+        );
+
+        input.value = "";
+
+        return false;
+
+    }
+
+
+    if (
+        file.size >
+        10 * 1024 * 1024
+    ) {
+
+        alert(
+            "Certificate must be less than 10 MB."
+        );
+
+        input.value = "";
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* ============================================================
+   UPDATE PROFILE
+============================================================ */
 
 document
-    .getElementById(
-        "updateProfileBtn"
-    )
+    .getElementById("updateProfileBtn")
     .addEventListener(
         "click",
-        async function () {
+        async function() {
 
             const button = this;
 
@@ -1360,26 +2206,17 @@ document
             button.disabled = true;
 
 
-            button.innerHTML = `
-                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
-                Saving...
-            `;
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin mr-2"></i>' +
+                'Saving...';
 
 
             try {
 
-                // =================================================
-                // CSRF
-                // =================================================
+                /* CSRF */
 
                 const csrfToken =
                     getCSRFToken();
-
-
-                console.log(
-                    "CSRF TOKEN:",
-                    csrfToken
-                );
 
 
                 if (!csrfToken) {
@@ -1388,22 +2225,18 @@ document
                         "CSRF token not found. Please refresh the page."
                     );
 
-
                     return;
+
                 }
 
 
-                // =================================================
-                // FORM DATA
-                // =================================================
+                /* FORM DATA */
 
                 const formData =
                     new FormData();
 
 
-                // =================================================
-                // USERNAME
-                // =================================================
+                /* USERNAME */
 
                 const username =
                     document
@@ -1420,8 +2253,8 @@ document
                         "Username is required."
                     );
 
-
                     return;
+
                 }
 
 
@@ -1431,9 +2264,7 @@ document
                 );
 
 
-                // =================================================
-                // PHONE
-                // =================================================
+                /* PHONE */
 
                 const phone =
                     document
@@ -1450,9 +2281,7 @@ document
                 );
 
 
-                // =================================================
-                // IMAGE
-                // =================================================
+                /* PROFILE IMAGE */
 
                 const imageInput =
                     document.getElementById(
@@ -1473,9 +2302,7 @@ document
                 }
 
 
-                // =================================================
-                // ROLE
-                // =================================================
+                /* ROLE */
 
                 const role =
                     document
@@ -1487,15 +2314,64 @@ document
                         .toLowerCase();
 
 
-                // =================================================
-                // LOCATIONS
-                //
-                // ONLY GUIDE
-                // =================================================
+                /* =================================================
+                   GUIDE FIELDS
+                ================================================= */
 
-                if (
-                    role === "guide"
-                ) {
+                if (role === "guide") {
+
+
+                    /* BIO */
+
+                    const bio =
+                        document
+                            .getElementById(
+                                "editBio"
+                            )
+                            .value
+                            .trim();
+
+
+                    formData.append(
+                        "bio",
+                        bio
+                    );
+
+
+                    /* EXPERIENCE */
+
+                    const experience =
+                        document
+                            .getElementById(
+                                "editExperience"
+                            )
+                            .value;
+
+
+                    formData.append(
+                        "experience_years",
+                        experience || "0"
+                    );
+
+
+                    /* LANGUAGES */
+
+                    const languages =
+                        document
+                            .getElementById(
+                                "editLanguages"
+                            )
+                            .value
+                            .trim();
+
+
+                    formData.append(
+                        "languages",
+                        languages
+                    );
+
+
+                    /* LOCATIONS */
 
                     const select =
                         document.getElementById(
@@ -1524,40 +2400,65 @@ document
                         }
                     );
 
-                }
 
+                    /* AADHAAR FRONT */
 
-                // =================================================
-                // DEBUG
-                // =================================================
-
-                console.log(
-                    "========== FORM DATA =========="
-                );
-
-
-                for (
-                    const [
-                        key,
-                        value
-                    ]
-                    of formData.entries()
-                ) {
-
-                    if (
-                        value instanceof File
-                    ) {
-
-                        console.log(
-                            key,
-                            value.name
+                    const aadhaarFront =
+                        document.getElementById(
+                            "editAadhaarFront"
                         );
 
-                    } else {
 
-                        console.log(
-                            key,
-                            value
+                    if (
+                        aadhaarFront.files &&
+                        aadhaarFront.files.length > 0
+                    ) {
+
+                        formData.append(
+                            "aadhaar_front",
+                            aadhaarFront.files[0]
+                        );
+
+                    }
+
+
+                    /* AADHAAR BACK */
+
+                    const aadhaarBack =
+                        document.getElementById(
+                            "editAadhaarBack"
+                        );
+
+
+                    if (
+                        aadhaarBack.files &&
+                        aadhaarBack.files.length > 0
+                    ) {
+
+                        formData.append(
+                            "aadhaar_back",
+                            aadhaarBack.files[0]
+                        );
+
+                    }
+
+
+                    /* CERTIFICATE */
+
+                    const certificates =
+                        document.getElementById(
+                            "editCertificates"
+                        );
+
+
+                    if (
+                        certificates.files &&
+                        certificates.files.length > 0
+                    ) {
+
+                        formData.append(
+                            "certificates",
+                            certificates.files[0]
                         );
 
                     }
@@ -1565,9 +2466,9 @@ document
                 }
 
 
-                // =================================================
-                // PUT REQUEST
-                // =================================================
+                /* =================================================
+                   PUT REQUEST
+                ================================================= */
 
                 const response =
                     await fetch(
@@ -1576,13 +2477,11 @@ document
                             method: "PUT",
 
                             headers: {
-
                                 "X-CSRFToken":
                                     csrfToken,
 
                                 "Accept":
                                     "application/json"
-
                             },
 
                             credentials:
@@ -1594,16 +2493,12 @@ document
                     );
 
 
-                // =================================================
-                // RESPONSE
-                // =================================================
-
                 const data =
                     await response.json();
 
 
                 console.log(
-                    "STATUS:",
+                    "UPDATE STATUS:",
                     response.status
                 );
 
@@ -1614,13 +2509,16 @@ document
                 );
 
 
-                // =================================================
-                // SUCCESS
-                // =================================================
+                /* =================================================
+                   SUCCESS
+                ================================================= */
 
                 if (
                     response.ok &&
-                    data.success
+                    (
+                        data.success === true ||
+                        data.status === "success"
+                    )
                 ) {
 
                     alert(
@@ -1628,17 +2526,32 @@ document
                     );
 
 
+                    /* Clear file inputs */
+
                     imageInput.value = "";
 
+
+                    document.getElementById(
+                        "editAadhaarFront"
+                    ).value = "";
+
+
+        
+                    document.getElementById(
+                        "editAadhaarBack"
+                    ).value = "";
+
+
+                    document.getElementById(
+                        "editCertificates"
+                    ).value = "";
+
+
+                    /* Reload profile */
 
                     await loadProfile();
 
                 }
-
-
-                // =================================================
-                // ERROR
-                // =================================================
 
                 else {
 
@@ -1648,9 +2561,7 @@ document
                     );
 
 
-                    if (
-                        data.detail
-                    ) {
+                    if (data.detail) {
 
                         alert(
                             data.detail
@@ -1658,9 +2569,7 @@ document
 
                     }
 
-                    else if (
-                        data.errors
-                    ) {
+                    else if (data.errors) {
 
                         alert(
                             JSON.stringify(
@@ -1703,10 +2612,9 @@ document
                 button.disabled = false;
 
 
-                button.innerHTML = `
-                    <i class="fa-solid fa-floppy-disk mr-2"></i>
-                    Save Changes
-                `;
+                button.innerHTML =
+                    '<i class="fa-solid fa-floppy-disk mr-2"></i>' +
+                    'Save Changes';
 
             }
 
@@ -1714,250 +2622,15 @@ document
     );
 
 
-// ============================================================
-// INITIAL LOAD
-// ============================================================
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
 
 loadProfile();
 
 </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-{% comment %} {% extends "base.html" %}
-
-{% block content %}
-<section class="bg-slate-50 min-h-screen py-12">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        
-        
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-10 relative overflow-hidden">
-            
-           
-            <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full filter blur-3xl opacity-60 -mr-20 -mt-20 pointer-events-none"></div>
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full filter blur-3xl opacity-60 -ml-20 -mb-20 pointer-events-none"></div>
-
-          
-            <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:justify-between lg:items-center pb-8 border-b border-slate-100">
-                <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
-                    <div class="relative group">
-                        <img
-                            id="profileImage"
-                            src=""
-                            alt="Profile Picture"
-                            class="w-32 h-32 rounded-full object-cover ring-4 ring-slate-50 shadow-md transition-all duration-300 group-hover:ring-cyan-100"
-                        >
-                    </div>
-
-                    <div>
-                        <h1 id="username" class="text-3xl font-bold text-slate-900 tracking-tight">
-                            Loading...
-                        </h1>
-                        <p id="email" class="text-slate-500 mt-1 font-medium"></p>
-                        <span id="role" class="inline-flex items-center mt-3 bg-cyan-50 text-cyan-700 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase">
-                            -
-                        </span>
-                    </div>
-                </div>
-
-                <button
-                    id="updateProfileBtn"
-                    class="w-full lg:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-xl font-semibold shadow-sm transition-all duration-200 hover:shadow active:scale-[0.98]"
-                >
-                    Save Changes
-                </button>
-            </div>
-
-           
-            <div class="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 transition-all duration-200 hover:bg-slate-50">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Account Type</p>
-                    <h3 id="accountRole" class="text-base font-bold text-slate-800 mt-1.5 break-words">-</h3>
-                </div>
-
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 transition-all duration-200 hover:bg-slate-50">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Country</p>
-                    <h3 id="countryText" class="text-base font-bold text-slate-800 mt-1.5 break-words">-</h3>
-                </div>
-
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 transition-all duration-200 hover:bg-slate-50">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">State</p>
-                    <h3 id="stateText" class="text-base font-bold text-slate-800 mt-1.5 break-words">-</h3>
-                </div>
-
-                <div class="bg-slate-50/70 border border-slate-100 rounded-2xl p-4 transition-all duration-200 hover:bg-slate-50">
-                    <p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Verification</p>
-                    <h3 id="verifyStatus" class="text-base font-bold text-slate-800 mt-1.5 break-words">-</h3>
-                </div>
-            </div>
-
-            
-            <div class="relative z-10 mt-10">
-                <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    Personal Information
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Username</label>
-                        <input
-                            id="editUsername"
-                            type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all duration-200 bg-slate-50/30"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Phone Number</label>
-                        <input
-                            id="editPhone"
-                            type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all duration-200 bg-slate-50/30"
-                        >
-                    </div>
-
-
-
-                <label class="block text-sm font-medium text-slate-600 mb-2">
-                    Locations
-                </label>
-
-                <select
-                    id="editLocations"
-                    multiple
-                    class="w-full border border-slate-200 rounded-xl px-4 py-3"
-                >
-                </select>
-
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">State</label>
-                        <input
-                            id="editState"
-                            type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all duration-200 bg-slate-50/30"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Country</label>
-                        <input
-                            id="editCountry"
-                            type="text"
-                            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all duration-200 bg-slate-50/30"
-                        >
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">Profile Image</label>
-                        <div class="relative w-full border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50/30 transition-all duration-200 focus-within:border-cyan-500 focus-within:ring-4 focus-within:ring-cyan-500/10">
-                            <input
-                                id="editProfileImage"
-                                type="file"
-                                accept="image/*"
-                                class="w-full text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 file:cursor-pointer cursor-pointer outline-none"
-                            >
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<script>
-async function loadProfile(){
-    try {
-        const response = await fetch("/user/api/profile/");
-        const result = await response.json();
-        console.log(result);
-        const user = result.data;
-
-        document.getElementById("profileImage").src = user.profile_image || "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.username);
-        document.getElementById("username").innerText = user.username || "User";
-        document.getElementById("email").innerText = user.email || "";
-        document.getElementById("role").innerText = user.role || "Member";
-        document.getElementById("accountRole").innerText = user.role || "-";
-        
-        document.getElementById("countryText").innerText =
-            user.locations.length
-                ? user.locations[0].country
-                : "-";
-
-        document.getElementById("stateText").innerText =
-            user.locations
-                .map(l => l.state)
-                .join(", ");
-        
-        // Dynamically style verification text status color if desired, basic text fallback for now
-        document.getElementById("verifyStatus").innerText = user.is_verified ? "Verified" : "Pending";
-
-        document.getElementById("editUsername").value = user.username || "";
-        document.getElementById("editPhone").value = user.phone_number || "";
-        
-        const select = document.getElementById("editLocations");
-
-        user.locations.forEach(location => {
-
-            const option = document.createElement("option");
-
-            option.value = location.id;
-
-            option.text =
-                `${location.city}, ${location.district}, ${location.state}`;
-
-            option.selected = true;
-
-            select.appendChild(option);
-            
-
-        });
-
-        document.getElementById("editState").value = user.state || "";
-        document.getElementById("editCountry").value = user.country || "";
-    } catch(error) {
-        console.error("Failed to load profile data:", error);
-    }
-}
-
-
-document.getElementById('editProfileImage').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById('profileImage').src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-loadProfile();
-</script>
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

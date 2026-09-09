@@ -61,23 +61,69 @@
 </section>
 
 <script>
+const CURRENT_USER_ROLE = "{{ request.user.role|default:''|escapejs }}".toLowerCase();
+const CURRENT_USER_ID = Number("{{ request.user.id|default:'0'|escapejs }}") || 0;
+let GUIDE_BOOKINGS_CACHE = [];
+
 async function loadBookings(){
     try{
-        const response = await fetch("/booking/api/booking-list/");
+        const bookingListURL =
+            CURRENT_USER_ROLE === "guide"
+                ? "/booking/api/guide/pending-bookings/"
+                : "/booking/api/booking-list/";
+
+        const response = await fetch(bookingListURL, {
+            method: "GET",
+            credentials: "same-origin"
+        });
         const result = await response.json();
         const container = document.getElementById("bookingContainer");
 
         container.innerHTML = "";
 
-        result.data.forEach(booking => {
+        if (CURRENT_USER_ROLE === "guide") {
+            const heading = document.querySelector("#bookingContainer")
+                ?.parentElement
+                ?.querySelector("h3");
+            if (heading) heading.textContent = "Guide Requests";
+        }
+
+        const bookings = Array.isArray(result.data)
+            ? result.data
+            : Array.isArray(result.bookings)
+                ? result.bookings
+                : [];
+
+        GUIDE_BOOKINGS_CACHE = bookings;
+
+        bookings.forEach(booking => {
             // Refined Tailwind native color mappings for clean UI styling strings
-            let statusClasses = "";
-            if(booking.status === "confirmed") {
-                statusClasses = "bg-emerald-50 text-emerald-700 border-emerald-100";
-            } else if(booking.status === "cancelled") {
-                statusClasses = "bg-rose-50 text-rose-700 border-rose-100";
+let statusClasses = "";
+
+            if (booking.status === "confirmed") {
+
+                statusClasses =
+                    "bg-emerald-50 text-emerald-700 border-emerald-100";
+
+            } else if (booking.status === "on_process") {
+
+                statusClasses =
+                    "bg-blue-50 text-blue-700 border-blue-100";
+
+            } else if (booking.status === "completed") {
+
+                statusClasses =
+                    "bg-indigo-50 text-indigo-700 border-indigo-100";
+
+            } else if (booking.status === "cancelled") {
+
+                statusClasses =
+                    "bg-rose-50 text-rose-700 border-rose-100";
+
             } else {
-                statusClasses = "bg-amber-50 text-amber-700 border-amber-100";
+
+                statusClasses =
+                    "bg-amber-50 text-amber-700 border-amber-100";
             }
 
             container.innerHTML += `
@@ -113,8 +159,20 @@ async function loadBookings(){
             `;
         });
 
-        if(result.data.length){
-            loadBookingDetail(result.data[0].id);
+        if (bookings.length) {
+            loadBookingDetail(bookings[0].id);
+        } else if (CURRENT_USER_ROLE === "guide") {
+            document.getElementById("bookingDetail").innerHTML = `
+                <div class="flex flex-col items-center justify-center py-32 text-center">
+                    <div class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mb-6 text-amber-500">
+                        <i class="fa-regular fa-calendar-xmark text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800">No Pending Guide Requests</h3>
+                    <p class="text-slate-400 text-sm mt-2 max-w-md">
+                        There are currently no pending bookings assigned to you.
+                    </p>
+                </div>
+            `;
         }
 
     }catch(error){
@@ -124,17 +182,91 @@ async function loadBookings(){
 
 async function loadBookingDetail(id){
     try{
-        const response = await fetch(`/booking/api/booking-detail/${id}/`);
+        const response = await fetch(`/booking/api/booking-detail/${id}/`, {
+            method: "GET",
+            credentials: "same-origin"
+        });
         const result = await response.json();
-        const booking = result.data;
 
-        let statusClasses = "";
+        const detailBooking = result.data || {};
+        const listBooking = GUIDE_BOOKINGS_CACHE.find(
+            item => Number(item.id) === Number(id)
+        ) || {};
+
+        // The guide pending-list API contains guide_id/status.
+        // Use those values as a fallback if the detail API does not return them.
+        const booking = {
+            ...listBooking,
+            ...detailBooking,
+
+            status:
+                detailBooking.status ??
+                detailBooking.booking_status ??
+                listBooking.status ??
+                listBooking.booking_status ??
+                "",
+
+            guide_status:
+                detailBooking.guide_status ??
+                listBooking.guide_status ??
+                "",
+
+            guide_id:
+                detailBooking.guide_id ??
+                detailBooking.selected_guide?.id ??
+                listBooking.guide_id ??
+                listBooking.selected_guide?.id ??
+                null
+        };
+
+        if (CURRENT_USER_ROLE === "guide") {
+            console.log("GUIDE BUTTON CHECK:", {
+                currentUserRole: CURRENT_USER_ROLE,
+                currentUserId: CURRENT_USER_ID,
+                bookingId: booking.id,
+                bookingStatus: booking.status,
+                guideStatus: booking.guide_status,
+                assignedGuideId: booking.guide_id,
+                isAssignedToCurrentGuide:
+                    CURRENT_USER_ID === Number(booking.guide_id)
+            });
+        }
+
+        {% comment %} let statusClasses = "";
         if(booking.status === "confirmed") {
             statusClasses = "bg-emerald-50 text-emerald-700 border-emerald-200";
         } else if(booking.status === "cancelled") {
             statusClasses = "bg-rose-50 text-rose-700 border-rose-200";
         } else {
             statusClasses = "bg-amber-50 text-amber-700 border-amber-200";
+        } {% endcomment %}
+
+        let statusClasses = "";
+
+        if (booking.status === "confirmed") {
+
+            statusClasses =
+                "bg-emerald-50 text-emerald-700 border-emerald-200";
+
+        } else if (booking.status === "on_process") {
+
+            statusClasses =
+                "bg-blue-50 text-blue-700 border-blue-200";
+
+        } else if (booking.status === "completed") {
+
+            statusClasses =
+                "bg-indigo-50 text-indigo-700 border-indigo-200";
+
+        } else if (booking.status === "cancelled") {
+
+            statusClasses =
+                "bg-rose-50 text-rose-700 border-rose-200";
+
+        } else {
+
+            statusClasses =
+                "bg-amber-50 text-amber-700 border-amber-200";
         }
 
         document.getElementById("bookingDetail").innerHTML = `
@@ -196,12 +328,92 @@ async function loadBookingDetail(id){
                             <span class="w-16 font-medium text-slate-400 shrink-0">Time</span>
                             <span class="text-slate-700 font-medium">${booking.tour_time}</span>
                         </div>
-                        <div class="flex items-center gap-2">
+                        {% comment %} <div class="flex items-center gap-2">
                             <span class="w-16 font-medium text-slate-400 shrink-0">Guide</span>
                             <span class="px-2 py-0.5 rounded text-xs font-semibold ${booking.selected_guide ? 'bg-cyan-50 text-cyan-700' : 'bg-slate-100 text-slate-600'}">
                                 ${booking.selected_guide ? booking.selected_guide.username : "Not Assigned"}
                             </span>
-                        </div>
+                        </div> {% endcomment %}
+
+
+
+
+
+
+<div class="flex items-center gap-2">
+    <span class="w-16 font-medium text-slate-400 shrink-0">
+        Guide
+    </span>
+
+    ${
+        booking.selected_guide
+        ? `
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold
+                bg-cyan-50 text-cyan-700 border border-cyan-100">
+                ${booking.selected_guide.username}
+            </span>
+        `
+        : `
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold
+                bg-slate-100 text-slate-500 border border-slate-200">
+                Waiting for guide
+            </span>
+        `
+    }
+</div>
+
+
+
+<div class="flex items-center gap-2">
+    <span class="w-16 font-medium text-slate-400 shrink-0">
+        Guide Status
+    </span>
+
+    ${
+        booking.guide_status === "accepted"
+        ? `
+            <span class="inline-flex items-center gap-1.5
+                px-2.5 py-1 rounded-lg text-xs font-bold
+                bg-emerald-50 text-emerald-700
+                border border-emerald-100">
+
+                <i class="fa-solid fa-circle-check text-[10px]"></i>
+                Accepted
+            </span>
+        `
+        : booking.guide_status === "declined"
+        ? `
+            <span class="inline-flex items-center gap-1.5
+                px-2.5 py-1 rounded-lg text-xs font-bold
+                bg-rose-50 text-rose-700
+                border border-rose-100">
+
+                <i class="fa-solid fa-circle-xmark text-[10px]"></i>
+                Declined
+            </span>
+        `
+        : `
+            <span class="inline-flex items-center gap-1.5
+                px-2.5 py-1 rounded-lg text-xs font-bold
+                bg-amber-50 text-amber-700
+                border border-amber-100">
+
+                <i class="fa-solid fa-clock text-[10px]"></i>
+                Waiting for Guide
+            </span>
+        `
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -211,6 +423,9 @@ async function loadBookingDetail(id){
                 <h3 class="font-bold text-slate-800 text-sm tracking-wider uppercase mb-4">
                     Assigned Guide Profile
                 </h3>
+              
+              
+              
                 ${booking.selected_guide ? `
                     <div class="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all duration-200 hover:shadow-md">
                         <img
@@ -242,6 +457,17 @@ async function loadBookingDetail(id){
                         <span>An expert local guide will be assigned to your booking shortly.</span>
                     </div>
                 `}
+
+
+
+
+
+
+
+
+
+
+
             </div>
 
             <!-- Ledger Breakdown Financial Processing Panel Component -->
@@ -273,6 +499,443 @@ async function loadBookingDetail(id){
                     </div>
                 </div>
             </div>
+
+
+
+
+
+ <!-- Booking Status Actions -->
+
+
+<!-- Booking Status Actions -->
+<div class="relative z-10 mt-8 pt-6 border-t border-slate-100">
+
+    <!-- ================= GUIDE ACCEPT / DECLINE ================= -->
+${CURRENT_USER_ROLE === "guide" &&
+        CURRENT_USER_ID > 0 &&
+        Number(booking.guide_id || 0) === CURRENT_USER_ID &&
+        String(booking.status || "").toLowerCase() === "pending" &&
+        String(booking.guide_status || "").toLowerCase() === "pending" ? `
+
+            <div class="mb-6 rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50/80 to-white p-5 shadow-sm">
+
+                <div class="flex items-start gap-3 mb-5">
+
+                    <div class="w-11 h-11 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">
+                            New Tour Booking
+                        </h3>
+
+                        <p class="text-sm text-slate-500 mt-1">
+                            This booking has been assigned to you. Please accept or decline the request.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Booking information -->
+                <div class="grid sm:grid-cols-2 gap-3 mb-5">
+
+                    <div class="rounded-xl bg-white border border-slate-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Tourist
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-800">
+                            ${booking.guest_name}
+                        </p>
+                    </div>
+
+
+                    <div class="rounded-xl bg-white border border-slate-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Tour Date
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-800">
+                            ${booking.tour_date}
+                        </p>
+                    </div>
+
+
+                    <div class="rounded-xl bg-white border border-slate-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Tour Time
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-800">
+                            ${booking.tour_time}
+                        </p>
+                    </div>
+
+
+                    <div class="rounded-xl bg-white border border-slate-100 p-4">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Booking ID
+                        </p>
+
+                        <p class="mt-1 font-mono font-semibold text-slate-800">
+                            ${booking.booking_id}
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Accept / Decline buttons -->
+                <div class="flex flex-col sm:flex-row gap-3">
+
+                    <button
+                        type="button"
+                        onclick="acceptBooking(${booking.id})"
+                        id="acceptBtn-${booking.id}"
+                        class="flex-1 inline-flex items-center justify-center gap-2
+                               px-6 py-3.5 rounded-xl
+                               bg-emerald-600 hover:bg-emerald-700
+                               active:scale-[0.98]
+                               text-white font-bold text-sm
+                               shadow-sm hover:shadow-md
+                               transition-all duration-200">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Accept Booking
+                    </button>
+
+
+                    <button
+                        type="button"
+                        onclick="declineBooking(${booking.id})"
+                        id="declineBtn-${booking.id}"
+                        class="flex-1 inline-flex items-center justify-center gap-2
+                               px-6 py-3.5 rounded-xl
+                               bg-rose-50 hover:bg-rose-100
+                               active:scale-[0.98]
+                               text-rose-700
+                               border border-rose-200
+                               font-bold text-sm
+                               transition-all duration-200">
+
+                        <i class="fa-solid fa-circle-xmark"></i>
+
+                        Decline Booking
+                    </button>
+
+                </div>
+
+            </div>
+
+        ` : ``}
+
+
+
+    <!-- ================= CONFIRMED ================= -->
+    ${booking.status === "confirmed" ? `
+
+        <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5">
+
+            <div class="flex items-start gap-3 mb-4">
+
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-emerald-800">
+                        Verify Tourist Booking
+                    </h3>
+
+                    <p class="text-sm text-emerald-700 mt-1">
+                        Ask the tourist for the 6-digit verification code sent in their confirmation email.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-3">
+
+                <input
+                    id="verificationCode-${booking.id}"
+                    type="text"
+                    maxlength="6"
+                    inputmode="numeric"
+                    placeholder="Enter 6-digit code"
+                    class="flex-1 px-4 py-3 rounded-xl border border-emerald-200 bg-white text-slate-800 font-mono tracking-[0.3em] text-center focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                >
+
+                <button
+                    onclick="verifyBooking(${booking.id})"
+                    class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all shadow-sm">
+
+                    <i class="fa-solid fa-check mr-2"></i>
+
+                    Verify Code
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    ` : booking.status === "on_process" ? `
+
+        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-bold text-blue-800">
+                            Tour In Progress
+                        </h3>
+
+                        <p class="text-sm text-blue-700 mt-1">
+                            Tourist verification completed. Complete the tour when finished.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    onclick="completeBooking(${booking.id})"
+                    class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-sm">
+
+                    <i class="fa-solid fa-circle-check mr-2"></i>
+
+                    Complete Tour
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+    ` : booking.status === "completed" ? `
+
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-indigo-800">
+                        Tour Completed
+                    </h3>
+
+                    <p class="text-sm text-indigo-700 mt-1">
+                        This tour has been successfully completed.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    ` : booking.status === "cancelled" ? `
+
+        <div class="bg-rose-50 border border-rose-100 rounded-2xl p-5">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-rose-800">
+                        Booking Cancelled
+                    </h3>
+
+                    <p class="text-sm text-rose-700 mt-1">
+                        This booking is no longer active.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    ` : `
+
+        {% comment %} <div class="flex justify-end">
+
+            <button
+                onclick="window.location.href='/booking/cancel_booking_page/${booking.booking_id}/'"
+                class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 font-semibold text-sm px-6 py-3 rounded-xl shadow-sm transition-all border border-rose-200/50">
+
+                Request Cancellation
+
+            </button>
+
+        </div> {% endcomment %}
+
+    `}
+
+</div>
+{% comment %} <div class="relative z-10 mt-8 pt-6 border-t border-slate-100">
+
+    ${booking.status === "confirmed" ? `
+        <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5">
+
+            <div class="flex items-start gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-emerald-800">
+                        Verify Tourist Booking
+                    </h3>
+
+                    <p class="text-sm text-emerald-700 mt-1">
+                        Ask the tourist for the 6-digit verification code sent in their confirmation email.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+
+                <input
+                    id="verificationCode-${booking.id}"
+                    type="text"
+                    maxlength="6"
+                    inputmode="numeric"
+                    placeholder="Enter 6-digit code"
+                    class="flex-1 px-4 py-3 rounded-xl border border-emerald-200 bg-white text-slate-800 font-mono tracking-[0.3em] text-center focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                >
+
+                <button
+                    onclick="verifyBooking(${booking.id})"
+                    class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all shadow-sm"
+                >
+                    <i class="fa-solid fa-check mr-2"></i>
+                    Verify Code
+                </button>
+
+            </div>
+        </div>
+
+    ` : booking.status === "on_process" ? `
+
+        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-blue-800">
+                            Tour In Progress
+                        </h3>
+
+                        <p class="text-sm text-blue-700 mt-1">
+                            Tourist verification completed. Complete the tour when finished.
+                        </p>
+                    </div>
+                </div>
+
+                <button
+                    onclick="completeBooking(${booking.id})"
+                    class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-sm"
+                >
+                    <i class="fa-solid fa-circle-check mr-2"></i>
+                    Complete Tour
+                </button>
+
+            </div>
+        </div>
+
+    ` : booking.status === "completed" ? `
+
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-indigo-800">
+                        Tour Completed
+                    </h3>
+
+                    <p class="text-sm text-indigo-700 mt-1">
+                        This tour has been successfully completed.
+                    </p>
+                </div>  
+            </div>
+        </div>
+
+    ` : booking.status === "cancelled" ? `
+        <div class="bg-rose-50 border border-rose-100 rounded-2xl p-5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
+                    <i class="fa-solid fa-ban"></i>
+
+                    
+                </div>
+                <div>
+                    <h3 class="font-bold text-rose-800">
+                        Booking Cancelled
+                    </h3>o
+                    <p class="text-sm text-rose-700 mt-1">
+                        This booking is no longer active.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    ` : `
+
+        <div class="flex justify-end">
+            <button
+                onclick="window.location.href='/booking/cancel_booking_page/${booking.booking_id}/'"
+                class="bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 font-semibold text-sm px-6 py-3 rounded-xl shadow-sm transition-all border border-rose-200/50"
+            >
+                Request Cancellation
+            </button>
+        </div>
+
+    `}
+</div>
+
+ {% endcomment %}
+
+
+
+
+
+
+
 
             <!-- Structural Functional State Actions Trigger Row Panel -->
             <div class="relative z-10 mt-8 pt-4 border-t border-slate-100 flex justify-end">
@@ -318,6 +981,140 @@ async function cancelBooking(id){
     }
 }
 
+
+
+
+
+async function verifyBooking(bookingId) {
+
+    const input = document.getElementById(
+        `verificationCode-${bookingId}`
+    );
+
+    const code = input.value.trim();
+
+    if (!code) {
+        alert("Please enter the verification code.");
+        input.focus();
+        return;
+    }
+
+    if (!/^\d{6}$/.test(code)) {
+        alert("Please enter a valid 6-digit verification code.");
+        input.focus();
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `/booking/api/guide/verify/${bookingId}/`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+
+                body: JSON.stringify({
+                    code: code
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+
+            alert("Booking verified successfully.");
+
+            // Reload list + detail
+            await loadBookings();
+
+            // Reload selected booking
+            await loadBookingDetail(bookingId);
+
+        } else {
+
+            alert(
+                result.message ||
+                "Invalid verification code."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Verification error:",
+            error
+        );
+
+        alert(
+            "Unable to verify booking. Please try again."
+        );
+    }
+}
+
+
+async function completeBooking(bookingId) {
+
+    const confirmed = confirm(
+        "Are you sure you want to mark this tour as completed?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `/booking/api/guide/complete/${bookingId}/`,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+
+            alert(
+                "Tour completed successfully."
+            );
+
+            // Refresh booking list
+            await loadBookings();
+
+            // Refresh booking details
+            await loadBookingDetail(bookingId);
+
+        } else {
+
+            alert(
+                result.message ||
+                "Unable to complete booking."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Completion error:",
+            error
+        );
+
+        alert(
+            "Unable to complete booking. Please try again."
+        );
+    }
+}
+
 function getCookie(name){
     let cookieValue = null;
     if(document.cookie){
@@ -335,632 +1132,283 @@ function getCookie(name){
 
 // Initial fire
 loadBookings();
+
+
+
+
+
+
+
+
+
+
+
+
+async function acceptBooking(bookingId) {
+
+    const confirmed = confirm(
+        "Are you sure you want to accept this tour booking?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const acceptBtn = document.getElementById(`acceptBtn-${bookingId}`);
+    const declineBtn = document.getElementById(`declineBtn-${bookingId}`);
+
+
+    if (acceptBtn) {
+        acceptBtn.disabled = true;
+
+        acceptBtn.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Accepting...
+        `;
+    }
+
+    if (declineBtn) {
+        declineBtn.disabled = true;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `/booking/api/guide/accept/${bookingId}/`,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (response.ok && result.success) {
+
+            alert(
+                result.message ||
+                "Booking accepted successfully."
+            );
+
+
+            // Refresh booking list
+            await loadBookings();
+
+
+            // Refresh current booking details
+            await loadBookingDetail(bookingId);
+
+
+        } else {
+
+            alert(
+                result.message ||
+                "Unable to accept this booking."
+            );
+
+
+            if (acceptBtn) {
+
+                acceptBtn.disabled = false;
+
+                acceptBtn.innerHTML = `
+                    <i class="fa-solid fa-circle-check"></i>
+                    Accept Booking
+                `;
+            }
+
+            if (declineBtn) {
+                declineBtn.disabled = false;
+            }
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Accept booking error:",
+            error
+        );
+
+
+        alert(
+            "Unable to accept booking. Please try again."
+        );
+
+
+        if (acceptBtn) {
+
+            acceptBtn.disabled = false;
+
+            acceptBtn.innerHTML = `
+                <i class="fa-solid fa-circle-check"></i>
+                Accept Booking
+            `;
+        }
+
+        if (declineBtn) {
+            declineBtn.disabled = false;
+        }
+
+    }
+
+}
+
+async function declineBooking(bookingId) {
+
+    const confirmed = confirm(
+        "Are you sure you want to decline this tour booking?\n\nThe booking will be offered to the next available guide."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const acceptBtn = document.getElementById(`acceptBtn-${bookingId}`);
+    const declineBtn = document.getElementById(`declineBtn-${bookingId}`);
+
+
+    if (declineBtn) {
+
+        declineBtn.disabled = true;
+
+        declineBtn.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Declining...
+        `;
+    }
+
+
+    if (acceptBtn) {
+        acceptBtn.disabled = true;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `/booking/api/guide/decline/${bookingId}/`,
+            {
+                method: "POST",
+
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (response.ok && result.success) {
+
+            alert(
+                result.message ||
+                "Booking declined successfully."
+            );
+
+
+            /*
+             * Important:
+             *
+             * Backend will assign the booking
+             * to the next guide.
+             *
+             * Therefore reload the booking list
+             * and details.
+             */
+
+            await loadBookings();
+
+
+            /*
+             * If backend assigned another guide,
+             * the current guide will no longer see
+             * the Accept / Decline buttons.
+             */
+
+            if (result.next_guide) {
+
+                console.log(
+                    "Booking assigned to next guide:",
+                    result.next_guide
+                );
+
+            }
+
+        } else {
+
+            alert(
+                result.message ||
+                "Unable to decline this booking."
+            );
+
+
+            if (declineBtn) {
+
+                declineBtn.disabled = false;
+
+                declineBtn.innerHTML = `
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    Decline Booking
+                `;
+            }
+
+
+            if (acceptBtn) {
+                acceptBtn.disabled = false;
+            }
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Decline booking error:",
+            error
+        );
+
+
+        alert(
+            "Unable to decline booking. Please try again."
+        );
+
+
+        if (declineBtn) {
+
+            declineBtn.disabled = false;
+
+            declineBtn.innerHTML = `
+                <i class="fa-solid fa-circle-xmark"></i>
+                Decline Booking
+            `;
+        }
+
+
+        if (acceptBtn) {
+            acceptBtn.disabled = false;
+        }
+
+    }
+
+}
 </script>
+
+
 {% endblock %}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} {% extends "base.html" %}
-
-{% block content %}
-
-<section class="bg-gray-50 min-h-screen py-10">
-
-
-<div class="md:max-w-7xl mx-auto px-4 pt-8">
-
-    
-
-    <div class="mb-8">
-
-        <h1 class="text-3xl font-bold text-gray-900">
-            My Bookings
-        </h1>
-
-        <p class="text-gray-500 mt-2">
-            View and manage all your tour bookings
-        </p>
-
-    </div>
-
- 
-
-    <div class="grid lg:grid-cols-3 gap-6">
-
-      
-
-        <div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
-
-            <div class="p-5 border-b">
-
-                <h3 class="font-bold text-lg">
-                    Booking List
-                </h3>
-
-            </div>
-
-            <div
-                id="bookingContainer"
-                class="max-h-[800px] overflow-y-auto"
-            >
-
-            </div>
-
-        </div>
-
-      
-
-        <div class="lg:col-span-2">
-
-            <div
-                id="bookingDetail"
-                class="bg-white rounded-3xl shadow-sm border p-8 min-h-[650px]"
-            >
-
-                <div class="text-center py-20">
-
-                    <i class="fa-regular fa-calendar-days text-6xl text-gray-300"></i>
-
-                    <h3 class="text-xl font-semibold mt-5">
-                        Select a Booking
-                    </h3>
-
-                    <p class="text-gray-500 mt-2">
-                        Click any booking from the left panel
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-```
-
-</section>
-
-<script>
-
-async function loadBookings(){
-
-    try{
-
-        const response =
-            await fetch(
-                "/booking/api/booking-list/"
-            );
-
-        const result =
-            await response.json();
-
-        const container =
-            document.getElementById(
-                "bookingContainer"
-            );
-
-        container.innerHTML = "";
-
-        result.data.forEach(
-            booking => {
-
-                let statusColor =
-                    booking.status === "confirmed"
-                    ? "green"
-                    : booking.status === "cancelled"
-                    ? "red"
-                    : "yellow";
-
-                container.innerHTML += `
-
-                <div
-                    onclick="loadBookingDetail(${booking.id})"
-                    class="
-                        p-5
-                        border-b
-                        cursor-pointer
-                        hover:bg-cyan-50
-                        transition
-                    "
-                >
-
-                    <div class="flex justify-between">
-
-                        <div>
-
-                            <h3 class="font-semibold">
-
-                                ${booking.tour_name}
-
-                            </h3>
-
-                            <p class="text-sm text-gray-500 mt-1">
-
-                                ${booking.booking_id}
-
-                            </p>
-
-                        </div>
-
-                        <span
-                            class="
-                                text-xs
-                                px-3 py-1
-                                rounded-full
-                                bg-${statusColor}-100
-                                text-${statusColor}-700
-                                h-fit
-                            "
-                        >
-
-                            ${booking.status}
-
-                        </span>
-
-                    </div>
-
-                    <div class="mt-3 text-sm text-gray-600">
-
-                        <p>
-
-                            ₹${booking.total_amount}
-
-                        </p>
-
-                        <p>
-
-                            ${booking.tour_date}
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                `;
-
-            }
-        );
-
-        if(result.data.length){
-
-            loadBookingDetail(
-                result.data[0].id
-            );
-
-        }
-
-    }catch(error){
-
-        console.log(error);
-
-    }
-
-}
-
-async function loadBookingDetail(id){
-
-    try{
-
-        const response =
-            await fetch(
-                `/booking/api/booking-detail/${id}/`
-            );
-
-        const result =
-            await response.json();
-
-        const booking =
-            result.data;
-
-        document.getElementById(
-            "bookingDetail"
-        ).innerHTML = `
-
-            <div class="flex justify-between items-start">
-
-                <div>
-
-                    <h2 class="text-3xl font-bold">
-
-                        ${booking.tour_details.title}
-
-                    </h2>
-
-                    <p class="text-gray-500 mt-2">
-
-                        Booking ID:
-                        ${booking.booking_id}
-
-                    </p>
-
-                </div>
-
-                <span
-                    class="
-                        px-4 py-2
-                        rounded-full
-                        bg-green-100
-                        text-green-700
-                    "
-                >
-
-                    ${booking.status}
-
-                </span>
-
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 mt-10">
-
-                <div>
-
-                    <h3 class="font-semibold text-lg mb-4">
-                        Guest Information
-                    </h3>
-
-                    <div class="space-y-2">
-
-                        <p>
-                            <strong>Name:</strong>
-                            ${booking.guest_name}
-                        </p>
-
-                        <p>
-                            <strong>Email:</strong>
-                            ${booking.guest_email}
-                        </p>
-
-                        <p>
-                            <strong>Phone:</strong>
-                            ${booking.guest_phone}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div>
-
-                    <h3 class="font-semibold text-lg mb-4">
-                        Tour Information
-                    </h3>
-
-                    <div class="space-y-2">
-
-                        <p>
-                            <strong>Date:</strong>
-                            ${booking.tour_date}
-                        </p>
-
-                        <p>
-                            <strong>Time:</strong>
-                            ${booking.tour_time}
-                        </p>
-
-                        <p>
-                            <strong>Guide:</strong>
-                            ${
-                                booking.selected_guide
-                                ?
-                                booking.selected_guide.username
-                                :
-                                "Not Assigned"
-                            }
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-
-
-
-            <!-- Guide Information -->
-
-<div class="mt-10">
-
-    <h3 class="font-semibold text-lg mb-4">
-        Guide Information
-    </h3>
-
-    ${
-        booking.selected_guide
-        ?
-        `
-        <div class="bg-gray-50 border rounded-2xl p-5">
-
-            <div class="flex items-center gap-5">
-
-                <img
-                    src="${
-                        booking.selected_guide.profile_image ||
-                        'https://ui-avatars.com/api/?name=' +
-                        booking.selected_guide.username
-                    }"
-                    class="
-                        w-24
-                        h-24
-                        rounded-2xl
-                        object-cover
-                        border
-                    "
-                >
-
-                <div>
-
-                    <h4 class="text-lg font-bold">
-
-                        ${booking.selected_guide.username}
-
-                    </h4>
-
-                    <p class="text-gray-500 mt-1">
-
-                        ${booking.selected_guide.email}
-
-                    </p>
-
-                    <p class="text-gray-600 mt-1">
-
-                        <strong>phone no : </strong> ${booking.selected_guide.phone_number}
-
-                    </p>
-
-                    <p class="text-gray-600 mt-1">
-
-                       <strong> location :  </strong>${booking.selected_guide.location},
-                        ${booking.selected_guide.state}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-        `
-        :
-        `
-        <div
-            class="
-                bg-yellow-50
-                text-yellow-700
-                rounded-xl
-                p-4
-            "
-        >
-            Guide not assigned yet
-        </div>
-        `
-    }
-
-</div>
-
-
-
-
-
-            <div class="mt-10">
-
-                <h3 class="font-semibold text-lg mb-4">
-                    Payment Summary
-                </h3>
-
-                <div class="bg-gray-50 rounded-2xl p-5 space-y-3">
-
-                    <div class="flex justify-between">
-
-                        <span>Sub Total</span>
-
-                        <span>
-                            ₹${booking.sub_total}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>Discount</span>
-
-                        <span>
-                            ₹${booking.discount_amount}
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>Total Amount</span>
-
-                        <span class="font-semibold">
-
-                            ₹${booking.total_amount}
-
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>Advance Paid</span>
-
-                        <span>
-
-                            ₹${booking.advance_amount}
-
-                        </span>
-
-                    </div>
-
-                    <div class="flex justify-between">
-
-                        <span>Remaining Amount</span>
-
-                        <span class="text-red-600 font-semibold">
-
-                            ₹${booking.remaining_amount}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="mt-10 flex gap-4">
-
-                ${
-                    booking.status !== "cancelled"
-                    ?
-                    `
-                    <button
-                        onclick="
-                            window.location.href=
-                            '/booking/cancel_booking_page/${booking.booking_id}/'
-                            "
-                        class="
-                            bg-red-600
-                            hover:bg-red-700
-                            text-white
-                            px-6 py-3
-                            rounded-xl
-                        "
-                    >
-                        Cancel Booking
-                    </button>
-                    `
-                    :
-                    `
-                    <span
-                        class="
-                            px-5 py-3
-                            bg-red-100
-                            text-red-700
-                            rounded-xl
-                        "
-                    >
-                        Booking Cancelled
-                    </span>
-                    `
-                }
-
-            </div>
-
-        `;
-
-    }catch(error){
-
-        console.log(error);
-
-    }
-
-}
-
-async function cancelBooking(id){
-
-    if(
-        !confirm(
-            "Are you sure you want to cancel this booking?"
-        )
-    ){
-        return;
-    }
-
-    const response =
-        await fetch(
-            `/booking/api/cancel/${id}/`,
-            {
-                method:"POST",
-                headers:{
-                    "X-CSRFToken":
-                        getCookie(
-                            "csrftoken"
-                        )
-                }
-            }
-        );
-
-    const result =
-        await response.json();
-
-    if(result.success){
-
-        alert(
-            "Booking cancelled successfully"
-        );
-
-        loadBookings();
-
-    }
-
-}
-
-function getCookie(name){
-
-    let cookieValue = null;
-
-    if(document.cookie){
-
-        const cookies =
-            document.cookie.split(";");
-
-        for(let cookie of cookies){
-
-            cookie =
-                cookie.trim();
-
-            if(
-                cookie.startsWith(
-                    name + "="
-                )
-            ){
-
-                cookieValue =
-                    decodeURIComponent(
-                        cookie.substring(
-                            name.length + 1
-                        )
-                    );
-
-                break;
-
-            }
-
-        }
-
-    }
-
-    return cookieValue;
-
-}
-
-loadBookings();
-
-</script>
-
-{% endblock %} {% endcomment %}

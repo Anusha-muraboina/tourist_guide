@@ -66,6 +66,7 @@ class BookingAdmin(admin.ModelAdmin):
                 "booking_id",
                 "tour",
                 "user",
+                "guide",
                 "status",
             )
         }),
@@ -75,6 +76,7 @@ class BookingAdmin(admin.ModelAdmin):
                 "guest_name",
                 "guest_email",
                 "guest_phone",
+                "guide_status",
             )
         }),
 

@@ -5,7 +5,9 @@ from .views import (
     LogoutAPIView,
     ForgotPasswordAPIView,
     ProfileAPIView,
-    LocationListAPIView
+    LocationListAPIView,
+        VerifyRegistrationOTPAPIView,
+    ResendRegistrationOTPAPIView,
 )
 from . import views
 
@@ -22,6 +24,18 @@ urlpatterns = [
         'api/register/',
         RegisterAPIView.as_view(),
         name='api-register'
+    ),
+    
+        path(
+        "api/register/verify-otp/",
+        VerifyRegistrationOTPAPIView.as_view(),
+        name="verify-registration-otp"
+    ),
+
+    path(
+        "api/register/resend-otp/",
+        ResendRegistrationOTPAPIView.as_view(),
+        name="resend-registration-otp"
     ),
 
     path(
@@ -49,5 +63,15 @@ urlpatterns = [
     ),
     
     path("api/locations/", LocationListAPIView.as_view(), name="location-list"),
+    
+    
+    path(
+        "guides/<int:guide_id>/",
+        views.guide_detail,
+        name="guide_detail",
+    ),
+    
+    
+    
 
 ]

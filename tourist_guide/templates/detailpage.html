@@ -312,6 +312,7 @@ Premium Tour Details
             <!-- Icon -->
             <div
                 class="relative
+                
                        w-8 h-8
                        rounded-full
                        bg-white
@@ -328,7 +329,7 @@ Premium Tour Details
     </a>
 
     <!-- Continue -->
-    <button
+    {% comment %} <button
         id="continueBtn"
         class="w-full
                bg-[#071B3B]
@@ -342,7 +343,19 @@ Premium Tour Details
                transition duration-300"
     >
         Continue
+    </button> {% endcomment %}
+
+
+    {% if user.is_authenticated %}
+    <button id="continueBtn" class="w-full bg-[#071B3B] hover:bg-[#f85606] text-white py-3 px-2 rounded-2xl text-md font-bold transition duration-300">
+        Continue
     </button>
+{% else %}
+    <a href="{% url 'login' %}?next={% url 'payment_details' %}"
+       class="w-full block text-center bg-[#071B3B] hover:bg-[#f85606] text-white py-3 px-2 rounded-2xl text-md font-bold transition duration-300">
+        Login to Continue
+    </a>
+{% endif %}
 
 </div>
 

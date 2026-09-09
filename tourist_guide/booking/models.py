@@ -31,6 +31,7 @@ class Booking(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
+        ("on_process", "On Process"),
         ('cancelled', 'Cancelled'),
         ('completed', 'Completed'),
     ]
@@ -46,6 +47,8 @@ class Booking(models.Model):
         ('paid', 'Paid'),
         ('failed', 'Failed'),
     ]
+    
+    
 
     booking_id = models.CharField(
         max_length=20,
@@ -63,6 +66,23 @@ class Booking(models.Model):
     user = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="bookings")
     guide = models.ForeignKey( settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="tour_guide_bookings", limit_choices_to={"role": "guide"})
 
+
+    guide_status = models.CharField(
+    max_length=20,
+    choices=[
+        ("pending", "Pending"),
+        ("accepted", "Accepted"),
+        ("declined", "Declined"),
+    ],
+    default="pending",
+)
+    
+    guide_attempt = models.PositiveIntegerField(default=0)
+    
+    declined_guides = models.JSONField(
+    default=list,
+    blank=True,
+    )
     # =========================
     # GUEST DETAILS
     # =========================
@@ -179,19 +199,207 @@ class Booking(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+    
+    
+    verification_code = models.CharField(
+    max_length=6,
+    blank=True,
+    null=True,
+    editable=False
+    )
+
+    verified_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
 
     class Meta:
         ordering = ['-created_at']
 
 
+    # def save(self, *args, **kwargs):
 
+    #     is_new = self.pk is None
 
+    #     old_status = None
+
+    #     if not is_new:
+    #         old_status = (
+    #             Booking.objects
+    #             .get(pk=self.pk)
+    #             .status
+    #         )
+
+    #     if not self.booking_id:
+
+    #         while True:
+
+    #             random_id = ''.join(
+    #                 random.choices(
+    #                     string.digits,
+    #                     k=8
+    #                 )
+    #             )
+
+    #             booking_id = f"TG{random_id}"
+
+    #             if not Booking.objects.filter(
+    #                 booking_id=booking_id
+    #             ).exists():
+    #                 break
+
+    #         self.booking_id = booking_id
+            
+    #         # Generate 6-digit verification code
+    #     if is_new and not self.verification_code:
+    #         self.verification_code = ''.join(
+    #             random.choices(string.digits, k=6)
+    #         )
+            
+    #     if is_new:
+
+    #         if self.payment_method == "pay_at_location":
+
+    #             self.payment_status = "pending"
+    #             self.status = "confirmed"
+
+    #         elif self.payment_method == "partial_payment":
+
+    #             self.payment_status = "partial"
+    #             self.status = "confirmed"
+
+    #         elif self.payment_method == "full_payment":
+
+    #             self.payment_status = "paid"
+    #             self.status = "confirmed"
+
+    #     super().save(*args, **kwargs)
+
+    #     if is_new:
+
+    #         transaction.on_commit(
+    #             lambda:
+    #             self.send_booking_email(
+    #                 "confirmed"
+    #             )
+    #         )
+
+    #     elif old_status != self.status:
+
+    #         transaction.on_commit(
+    #             lambda:
+    #             self.send_booking_email(
+    #                 self.status
+    #             )
+    #         )
+    
+    
+    
+    # def save(self, *args, **kwargs):
+
+    #     is_new = self.pk is None
+
+    #     old_status = None
+
+    #     if not is_new:
+    #         old_status = (
+    #             Booking.objects
+    #             .get(pk=self.pk)
+    #             .status
+    #         )
+
+    #     # Generate Booking ID
+    #     if not self.booking_id:
+
+    #         while True:
+
+    #             random_id = ''.join(
+    #                 random.choices(
+    #                     string.digits,
+    #                     k=8
+    #                 )
+    #             )
+
+    #             booking_id = f"TG{random_id}"
+
+    #             if not Booking.objects.filter(
+    #                 booking_id=booking_id
+    #             ).exists():
+    #                 break
+
+    #         self.booking_id = booking_id
+
+    #     # Generate 6-digit verification code
+    #     if is_new and not self.verification_code:
+
+    #         self.verification_code = ''.join(
+    #             random.choices(
+    #                 string.digits,
+    #                 k=6
+    #             )
+    #         )
+
+    #     # Set initial payment/status
+        
+    #     if is_new:
+
+    #         if self.payment_method == "pay_at_location":
+
+    #             self.payment_status = "pending"
+    #             self.status = "confirmed"
+
+    #         elif self.payment_method == "partial_payment":
+
+    #             self.payment_status = "partial"
+    #             self.status = "confirmed"
+
+    #         elif self.payment_method == "full_payment":
+
+    #             self.payment_status = "paid"
+    #             self.status = "confirmed"
+
+    #     # Save booking.                                     
+        
+        
+        
+           
+    #     super().save(*args, **kwargs)
+                  
+
+    #     # Send confirmation email for new booking
+    #     if is_new:
+
+    #         transaction.on_commit(
+    #             lambda: self.send_booking_email(
+    #                 "confirmed"
+    #             )
+    #         )
+
+    #     # Send email when status changes
+    #     elif old_status != self.status:
+
+    #         # Don't send an email for on_process
+    #         # unless you have an on_process email template
+    #         if self.status != "on_process":
+
+    #             transaction.on_commit(
+    #                 lambda: self.send_booking_email(
+    #                     self.status
+    #                 )
+    #             )
+    
+    
     def save(self, *args, **kwargs):
 
         is_new = self.pk is None
-
         old_status = None
 
+        # Get previous status before updating
         if not is_new:
             old_status = (
                 Booking.objects
@@ -199,6 +407,9 @@ class Booking(models.Model):
                 .status
             )
 
+        # =========================
+        # GENERATE BOOKING ID
+        # =========================
         if not self.booking_id:
 
             while True:
@@ -218,47 +429,108 @@ class Booking(models.Model):
                     break
 
             self.booking_id = booking_id
-            
+
+        # =========================
+        # GENERATE VERIFICATION CODE
+        # =========================
+        if is_new and not self.verification_code:
+
+            self.verification_code = ''.join(
+                random.choices(
+                    string.digits,
+                    k=6
+                )
+            )
+
+        # =========================
+        # NEW BOOKING
+        # =========================
         if is_new:
 
+            # IMPORTANT:
+            # New booking MUST remain pending
+            self.status = "pending"
+
+            # Payment status depends on payment method
             if self.payment_method == "pay_at_location":
 
                 self.payment_status = "pending"
-                self.status = "confirmed"
 
             elif self.payment_method == "partial_payment":
 
                 self.payment_status = "partial"
-                self.status = "confirmed"
 
             elif self.payment_method == "full_payment":
 
                 self.payment_status = "paid"
-                self.status = "confirmed"
 
+        # =========================
+        # SAVE
+        # =========================
         super().save(*args, **kwargs)
 
+        # =========================
+        # NEW BOOKING EMAIL
+        # =========================
         if is_new:
 
             transaction.on_commit(
-                lambda:
-                self.send_booking_email(
-                    "confirmed"
+                lambda: self.send_booking_email(
+                    "pending"
                 )
             )
 
+        # =========================
+        # STATUS CHANGE EMAIL
+        # =========================
         elif old_status != self.status:
 
-            transaction.on_commit(
-                lambda:
-                self.send_booking_email(
-                    self.status
+            # Don't send email for on_process
+            if self.status != "on_process":
+
+                transaction.on_commit(
+                    lambda: self.send_booking_email(
+                        self.status
+                    )
                 )
-            )
 
     # =========================
     # ADVANCE PAYMENT
     # =========================
+    
+    
+    # =========================
+    # FIND NEXT GUIDE
+    # =========================
+
+    def get_next_guide(self):
+        """
+        Return the next active guide who has not already
+        declined this booking.
+        """
+
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+
+        declined_ids = self.declined_guides or []
+
+        guides = (
+            User.objects
+            .filter(
+                role="guide",
+                is_active=True,
+            )
+            .exclude(
+                id__in=declined_ids
+            )
+            .exclude(
+                id=self.guide_id
+            )
+            .order_by("id")
+        )
+
+        return guides.first()
 
     @property
     def advance_amount(self):

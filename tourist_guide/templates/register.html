@@ -74,17 +74,75 @@
             </div>
 
             <!-- LOCATIONS (ONLY FOR GUIDE) -->
-            <div id="locationsWrapper" class="space-y-1.5 hidden">
-                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Locations <span class="text-rose-500">*</span>
-                </label>
-                <select id="locations" multiple
-                    class="w-full min-h-[140px] px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
-                </select>
-                <p class="text-xs text-slate-400 mt-1">
-                    Hold <b>Ctrl</b> (Windows) or <b>Cmd</b> (Mac) to select multiple locations
-                </p>
-            </div>
+
+<!-- GUIDE LOCATION -->
+<div id="locationsWrapper" class="space-y-4 hidden">
+
+    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+        Guide Location <span class="text-rose-500">*</span>
+    </label>
+
+    <!-- COUNTRY -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Country
+        </label>
+
+        <select
+            id="country"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all"
+        >
+            <option value="">Select Country</option>
+        </select>
+    </div>
+
+    <!-- STATE -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            State
+        </label>
+
+        <select
+            id="state"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select State</option>
+        </select>
+    </div>
+
+    <!-- DISTRICT -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            District
+        </label>
+
+        <select
+            id="district"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select District</option>
+        </select>
+    </div>
+
+    <!-- CITY -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Monument
+
+        </label>
+
+        <select
+            id="city"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select City</option>
+        </select>
+    </div>
+
+</div>
 
             <!-- PROFILE IMAGE -->
             <div class="space-y-1.5">
@@ -99,7 +157,491 @@
                             onchange="document.getElementById('fileNameText').textContent = this.files[0] ? this.files[0].name : 'Choose avatar image'">
                     </label>
                 </div>
+
             </div>
+
+
+            <!-- ================= GUIDE DETAILS ================= -->
+<!-- =========================================================
+     GUIDE DETAILS
+========================================================= -->
+<div
+    id="guideFields"
+  
+    class="mt-7"
+>
+
+    <!-- SECTION HEADER -->
+    <div class="flex items-center gap-3 mb-6">
+
+        <div class="w-10 h-10 rounded-xl
+                    bg-slate-100
+                    border border-slate-200
+                    flex items-center justify-center">
+
+            <i class="fa-solid fa-user-tie text-slate-500"></i>
+
+        </div>
+
+        <div>
+            <h3 class="text-lg font-bold text-slate-800">
+                Guide Details
+            </h3>
+
+            <p class="text-sm text-slate-400 mt-0.5">
+                Tell tourists a little about yourself
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ABOUT YOU
+    ====================================================== -->
+
+    <div class="mb-5">
+
+        <label
+            for="bio"
+            class="block text-xs font-semibold
+                   text-slate-600
+                   uppercase tracking-wider mb-2"
+        >
+            ABOUT YOU
+        </label>
+
+        <div class="relative">
+
+            <textarea
+                id="bio"
+                name="bio"
+                rows="5"
+                placeholder="Tell tourists about yourself..."
+                class="w-full
+                       px-4 py-3.5
+                       pr-11
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       text-slate-800
+                       placeholder-slate-400
+                       text-sm
+                       resize-y
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-1
+                       focus:ring-indigo-600
+                       transition-all"
+            ></textarea>
+
+            <i class="fa-solid fa-pen
+                      absolute
+                      right-4
+                      top-4
+                      text-slate-300
+                      text-sm">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXPERIENCE + LANGUAGES
+    ====================================================== -->
+
+    <div class="grid md:grid-cols-2 gap-4">
+
+
+        <!-- EXPERIENCE -->
+
+        <div class="mb-5">
+
+            <label
+                for="experience_years"
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                EXPERIENCE
+            </label>
+
+            <div class="relative">
+
+                <input
+                    type="number"
+                    id="experience_years"
+                    name="experience_years"
+                    min="0"
+                    max="100"
+                    placeholder="Years of experience"
+                    class="w-full
+                           h-12
+                           px-4
+                           pr-20
+                           rounded-xl
+                           border border-slate-200
+                           bg-white
+                           text-slate-800
+                           placeholder-slate-400
+                           text-sm
+                           focus:outline-none
+                           focus:border-indigo-600
+                           focus:ring-1
+                           focus:ring-indigo-600
+                           transition-all"
+                >
+
+                <span
+                    class="absolute
+                           right-4
+                           top-1/2
+                           -translate-y-1/2
+                           text-xs
+                           text-slate-400"
+                >
+                    Years
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- LANGUAGES -->
+
+        <div class="mb-5">
+
+            <label
+                for="languages"
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                LANGUAGES
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <input
+                type="text"
+                id="languages"
+                name="languages"
+                placeholder="Example: Telugu, Hindi, English"
+                class="w-full
+                       h-12
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       text-slate-800
+                       placeholder-slate-400
+                       text-sm
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-1
+                       focus:ring-indigo-600
+                       transition-all"
+            >
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Enter the languages you can speak with tourists.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VERIFICATION DOCUMENTS
+    ====================================================== -->
+
+    <div class="mt-4 mb-5">
+
+        <div class="flex items-center justify-between
+                    border-b border-slate-100
+                    pb-3">
+
+            <div>
+
+                <h4 class="text-sm font-bold
+                           text-slate-700
+                           uppercase tracking-wider">
+
+                    Verification Documents
+
+                </h4>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Required for guide verification
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-shield-halved
+                      text-slate-300">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AADHAAR FRONT + BACK
+    ====================================================== -->
+
+    <div class="grid md:grid-cols-2 gap-4">
+
+
+        <!-- AADHAAR FRONT -->
+
+        <div class="mb-5">
+
+            <label
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                AADHAAR FRONT
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <label
+                for="aadhaar_front"
+                class="flex items-center
+                       gap-3
+                       w-full
+                       min-h-[68px]
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       cursor-pointer
+                       hover:bg-slate-50
+                       hover:border-slate-300
+                       transition-all"
+            >
+
+                <div class="w-10 h-10
+                            rounded-lg
+                            bg-slate-100
+                            flex items-center
+                            justify-center
+                            flex-shrink-0">
+
+                    <i class="fa-solid fa-cloud-arrow-up
+                              text-slate-400">
+                    </i>
+
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div
+                        id="aadhaarFrontText"
+                        class="text-sm font-medium
+                               text-slate-600
+                               truncate"
+                    >
+                        Choose Aadhaar front
+                    </div>
+
+                    <div class="text-xs text-slate-400 mt-0.5">
+                        JPG, JPEG or PNG
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right
+                          text-xs text-slate-300">
+                </i>
+
+            </label>
+
+            <input
+                type="file"
+                id="aadhaar_front"
+                name="aadhaar_front"
+                accept="image/jpeg,image/png,image/webp"
+                class="hidden"
+            >
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Upload the front side of your Aadhaar card.
+            </p>
+
+        </div>
+
+
+        <!-- AADHAAR BACK -->
+
+        <div class="mb-5">
+
+            <label
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                AADHAAR BACK
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <label
+                for="aadhaar_back"
+                class="flex items-center
+                       gap-3
+                       w-full
+                       min-h-[68px]
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       cursor-pointer
+                       hover:bg-slate-50
+                       hover:border-slate-300
+                       transition-all"
+            >
+
+                <div class="w-10 h-10
+                            rounded-lg
+                            bg-slate-100
+                            flex items-center
+                            justify-center
+                            flex-shrink-0">
+
+                    <i class="fa-solid fa-cloud-arrow-up
+                              text-slate-400">
+                    </i>
+
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div
+                        id="aadhaarBackText"
+                        class="text-sm font-medium
+                               text-slate-600
+                               truncate"
+                    >
+                        Choose Aadhaar back
+                    </div>
+
+                    <div class="text-xs text-slate-400 mt-0.5">
+                        JPG, JPEG or PNG
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right
+                          text-xs text-slate-300">
+                </i>
+
+            </label>
+
+            <input
+                type="file"
+                id="aadhaar_back"
+                name="aadhaar_back"
+                accept="image/jpeg,image/png,image/webp"
+                class="hidden"
+            >
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Upload the back side of your Aadhaar card.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CERTIFICATE
+    ====================================================== -->
+
+    <div class="mb-5">
+
+        <label
+            class="block text-xs font-semibold
+                   text-slate-600
+                   uppercase tracking-wider mb-2"
+        >
+            CERTIFICATES
+            <span class="text-slate-400 normal-case tracking-normal">
+                (Optional)
+            </span>
+        </label>
+
+        <label
+            for="certificates"
+            class="flex items-center
+                   gap-3
+                   w-full
+                   min-h-[68px]
+                   px-4
+                   rounded-xl
+                   border border-slate-200
+                   bg-white
+                   cursor-pointer
+                   hover:bg-slate-50
+                   hover:border-slate-300
+                   transition-all"
+        >
+
+            <div class="w-10 h-10
+                        rounded-lg
+                        bg-slate-100
+                        flex items-center
+                        justify-center
+                        flex-shrink-0">
+
+                <i class="fa-solid fa-file-arrow-up
+                          text-slate-400">
+                </i>
+
+            </div>
+
+            <div class="min-w-0 flex-1">
+
+                <div
+                    id="certificateText"
+                    class="text-sm font-medium
+                           text-slate-600
+                           truncate"
+                >
+                    Choose certificate
+                </div>
+
+                <div class="text-xs text-slate-400 mt-0.5">
+                    PDF, JPG, JPEG or PNG
+                </div>
+
+            </div>
+
+            <i class="fa-solid fa-chevron-right
+                      text-xs text-slate-300">
+            </i>
+
+        </label>
+
+        <input
+            type="file"
+            id="certificates"
+            name="certificates"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            class="hidden"
+        >
+
+        <p class="text-xs text-slate-400 mt-1.5">
+            Upload experience, training, tourism or other relevant certificates.
+        </p>
+
+    </div>
+
+</div>
 
             <!-- PASSWORDS -->
             <div class="grid md:grid-cols-2 gap-4">
@@ -133,7 +675,7 @@
                 <button type="submit"
                     class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition shadow-sm active:scale-[0.99]">
                     Create Account
-                </button>
+                </button>.
             </div>
 
             <p class="text-center text-sm text-slate-500 pt-2">
@@ -145,7 +687,1904 @@
         </form>
     </div>
 </section>
+<!-- =========================================================
+     EMAIL OTP VERIFICATION MODAL
+========================================================= -->
 
+<div
+    id="otpModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm px-4"
+>
+
+    <div
+        class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-7 md:p-8 relative"
+    >
+
+        <!-- CLOSE BUTTON -->
+        <button
+            type="button"
+            id="closeOtpModal"
+            class="absolute top-5 right-5 w-9 h-9 rounded-full
+                   bg-slate-100 hover:bg-slate-200
+                   text-slate-500 hover:text-slate-800
+                   flex items-center justify-center
+                   transition"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <!-- ICON -->
+        <div class="flex justify-center mb-5">
+
+            <div
+                class="w-16 h-16 rounded-2xl
+                       bg-indigo-50 text-indigo-600
+                       flex items-center justify-center"
+            >
+                <i class="fa-solid fa-envelope-circle-check text-2xl"></i>
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+        <div class="text-center">
+
+            <h3 class="text-2xl font-extrabold text-slate-950">
+                Verify Your Email
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-2 leading-6">
+                We've sent a 6-digit verification code to
+            </p>
+
+            <p
+                id="otpEmail"
+                class="font-bold text-slate-900 mt-1 break-all"
+            >
+                your@email.com
+            </p>
+
+        </div>
+
+
+        <!-- OTP ERROR -->
+        <div
+            id="otpError"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-rose-50 text-rose-700
+                   border border-rose-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP SUCCESS -->
+        <div
+            id="otpSuccess"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-emerald-50 text-emerald-700
+                   border border-emerald-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-check"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP INPUTS -->
+        <div class="flex justify-center gap-2 sm:gap-3 mt-7">
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+        </div>
+
+
+        <!-- VERIFY BUTTON -->
+        <button
+            type="button"
+            id="verifyOtpBtn"
+            class="w-full h-12 mt-7 rounded-xl
+                   bg-slate-900 hover:bg-slate-800
+                   text-white font-bold
+                   tracking-wide
+                   transition
+                   disabled:opacity-50
+                   disabled:cursor-not-allowed"
+        >
+            <span id="verifyOtpText">
+                Verify Email
+            </span>
+
+            <span
+                id="verifyOtpLoader"
+                class="hidden"
+            >
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                Verifying...
+            </span>
+        </button>
+
+
+        <!-- RESEND -->
+        <div class="text-center mt-5">
+
+            <p class="text-sm text-slate-500">
+                Didn't receive the code?
+            </p>
+
+            <button
+                type="button"
+                id="resendOtpBtn"
+                class="mt-1 text-indigo-600 hover:text-indigo-700
+                       font-bold text-sm
+                       disabled:text-slate-400
+                       disabled:cursor-not-allowed"
+                disabled
+            >
+                Resend OTP
+            </button>
+
+            <p
+                id="otpTimer"
+                class="text-xs text-slate-400 mt-2"
+            >
+                Resend available in 30 seconds
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<script>
+/* =========================================================
+   REGISTER PAGE - GUIDE DETAILS + LOCATION + EMAIL OTP
+   ========================================================= */
+
+let allLocations = [];
+let registrationFormData = null;
+let registrationEmail = "";
+let resendTimer = null;
+let resendSeconds = 30;
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function showFormError(message) {
+    const box = $("errorMessage");
+    const span = box?.querySelector("span");
+    if (span) span.textContent = message;
+    box?.classList.remove("hidden");
+    $("successMessage")?.classList.add("hidden");
+}
+
+function showFormSuccess(message) {
+    const box = $("successMessage");
+    const span = box?.querySelector("span");
+    if (span) span.textContent = message;
+    box?.classList.remove("hidden");
+    $("errorMessage")?.classList.add("hidden");
+}
+
+function hideFormMessages() {
+    $("successMessage")?.classList.add("hidden");
+    $("errorMessage")?.classList.add("hidden");
+}
+
+/* ====================== PASSWORD ====================== */
+
+function togglePassword(inputId, iconId) {
+    const input = $(inputId);
+    const icon = $(iconId);
+    if (!input || !icon) return;
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
+/* ====================== GUIDE DETAILS ====================== */
+
+function toggleGuideFields() {
+
+    const selectedRole =
+        document.querySelector('input[name="role"]:checked');
+
+    const guideFields =
+        document.getElementById("guideFields");
+
+    const locationsWrapper =
+        document.getElementById("locationsWrapper");
+
+    if (!selectedRole) {
+        console.log("No role selected");
+        return;
+    }
+
+    const role = selectedRole.value;
+
+    console.log("ROLE SELECTED:", role);
+
+
+    /* =====================================================
+       GUIDE
+    ===================================================== */
+
+    if (role === "guide") {
+
+        console.log("SHOW GUIDE FIELDS");
+
+        /* Show Guide Details */
+        if (guideFields) {
+            guideFields.style.display = "block";
+        }
+
+        /* Show Location */
+        if (locationsWrapper) {
+            locationsWrapper.style.display = "block";
+        }
+
+        /* Required fields */
+
+        const languages =
+            document.getElementById("languages");
+
+        const aadhaarFront =
+            document.getElementById("aadhaar_front");
+
+        const aadhaarBack =
+            document.getElementById("aadhaar_back");
+
+        if (languages) {
+            languages.required = true;
+        }
+
+        if (aadhaarFront) {
+            aadhaarFront.required = true;
+        }
+
+        if (aadhaarBack) {
+            aadhaarBack.required = true;
+        }
+
+    }
+
+
+    /* =====================================================
+       TOURIST
+    ===================================================== */
+
+    else {
+
+        console.log("HIDE GUIDE FIELDS");
+
+        /* Hide Guide Details */
+        if (guideFields) {
+            guideFields.style.display = "none";
+        }
+
+        /* Hide Location */
+        if (locationsWrapper) {
+            locationsWrapper.style.display = "none";
+        }
+
+        /* Remove required */
+
+        const languages =
+            document.getElementById("languages");
+
+        const aadhaarFront =
+            document.getElementById("aadhaar_front");
+
+        const aadhaarBack =
+            document.getElementById("aadhaar_back");
+
+        if (languages) {
+            languages.required = false;
+        }
+
+        if (aadhaarFront) {
+            aadhaarFront.required = false;
+        }
+
+        if (aadhaarBack) {
+            aadhaarBack.required = false;
+        }
+    }
+}
+
+
+/* =========================================================
+   ROLE CHANGE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const roleInputs =
+        document.querySelectorAll('input[name="role"]');
+
+    roleInputs.forEach(function (radio) {
+
+        radio.addEventListener(
+            "change",
+            toggleGuideFields
+        );
+
+    });
+
+    /* Set correct initial state */
+    toggleGuideFields();
+
+});
+
+{% comment %} function toggleGuideFields() {
+    const role = document.querySelector('input[name="role"]:checked')?.value;
+    const guideFields = $("guideFields");
+    const locationsWrapper = $("locationsWrapper");
+
+    if (!guideFields || !locationsWrapper) return;
+
+    if (role === "guide") {
+        guideFields.classList.remove("hidden");
+        locationsWrapper.classList.remove("hidden");
+
+        $("languages")?.setAttribute("required", "required");
+        $("aadhaar_front")?.setAttribute("required", "required");
+        $("aadhaar_back")?.setAttribute("required", "required");
+    } else {
+        guideFields.classList.add("hidden");
+        locationsWrapper.classList.add("hidden");
+
+        $("languages")?.removeAttribute("required");
+        $("aadhaar_front")?.removeAttribute("required");
+        $("aadhaar_back")?.removeAttribute("required");
+
+        if ($("bio")) $("bio").value = "";
+        if ($("experience_years")) $("experience_years").value = "";
+        if ($("languages")) $("languages").value = "";
+        if ($("aadhaar_front")) $("aadhaar_front").value = "";
+        if ($("aadhaar_back")) $("aadhaar_back").value = "";
+        if ($("certificates")) $("certificates").value = "";
+
+        resetLocationSelects();
+    }
+} {% endcomment %}
+
+document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener("change", toggleGuideFields);
+});
+
+/* ====================== LOCATION ====================== */
+
+function resetLocationSelects() {
+    const country = $("country");
+    const state = $("state");
+    const district = $("district");
+    const city = $("city");
+
+    if (!country || !state || !district || !city) return;
+
+    country.value = "";
+    state.innerHTML = '<option value="">Select State</option>';
+    district.innerHTML = '<option value="">Select District</option>';
+    city.innerHTML = '<option value="">Select Monument / City</option>';
+
+    state.disabled = true;
+    district.disabled = true;
+    city.disabled = true;
+}
+
+function fillSelect(select, values, placeholder) {
+    if (!select) return;
+
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+
+    values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+    });
+}
+
+async function loadLocations() {
+    try {
+        const response = await fetch("/user/api/locations/");
+
+        if (!response.ok) {
+            throw new Error(`Location API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            console.error("Location API did not return an array:", data);
+            showFormError("Unable to load guide locations.");
+            return;
+        }
+
+        allLocations = data;
+        loadCountries();
+
+    } catch (error) {
+        console.error("Failed to load locations:", error);
+        showFormError("Unable to load guide locations. Please refresh the page.");
+    }
+}
+
+function loadCountries() {
+    const countrySelect = $("country");
+    if (!countrySelect) return;
+
+    const countries = [
+        ...new Set(
+            allLocations
+                .map(location => location.country)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(countrySelect, countries, "Select Country");
+}
+
+$("country")?.addEventListener("change", function () {
+    const country = this.value;
+    const stateSelect = $("state");
+    const districtSelect = $("district");
+    const citySelect = $("city");
+
+    stateSelect.innerHTML = '<option value="">Select State</option>';
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+    citySelect.innerHTML = '<option value="">Select Monument / City</option>';
+
+    districtSelect.disabled = true;
+    citySelect.disabled = true;
+
+    if (!country) {
+        stateSelect.disabled = true;
+        return;
+    }
+
+    const states = [
+        ...new Set(
+            allLocations
+                .filter(location => location.country === country)
+                .map(location => location.state)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(stateSelect, states, "Select State");
+    stateSelect.disabled = false;
+});
+
+$("state")?.addEventListener("change", function () {
+    const country = $("country").value;
+    const state = this.value;
+    const districtSelect = $("district");
+    const citySelect = $("city");
+
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+    citySelect.innerHTML = '<option value="">Select Monument / City</option>';
+    citySelect.disabled = true;
+
+    if (!country || !state) {
+        districtSelect.disabled = true;
+        return;
+    }
+
+    const districts = [
+        ...new Set(
+            allLocations
+                .filter(
+                    location =>
+                        location.country === country &&
+                        location.state === state
+                )
+                .map(location => location.district)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(districtSelect, districts, "Select District");
+    districtSelect.disabled = false;
+});
+
+$("district")?.addEventListener("change", function () {
+    const country = $("country").value;
+    const state = $("state").value;
+    const district = this.value;
+    const citySelect = $("city");
+
+    citySelect.innerHTML =
+        '<option value="">Select Monument / City</option>';
+    citySelect.disabled = true;
+
+    if (!country || !state || !district) return;
+
+    const cities = allLocations.filter(
+        location =>
+            location.country === country &&
+            location.state === state &&
+            location.district === district
+    );
+
+    cities.forEach(location => {
+        const option = document.createElement("option");
+
+        // IMPORTANT: Location database ID is submitted.
+        option.value = location.id;
+        option.textContent = location.city;
+
+        citySelect.appendChild(option);
+    });
+
+    citySelect.disabled = cities.length === 0;
+});
+
+/* ====================== OTP ELEMENTS ====================== */
+
+const registerForm = $("registerForm");
+const otpModal = $("otpModal");
+const otpEmail = $("otpEmail");
+const otpError = $("otpError");
+const otpSuccess = $("otpSuccess");
+const verifyOtpBtn = $("verifyOtpBtn");
+const verifyOtpText = $("verifyOtpText");
+const verifyOtpLoader = $("verifyOtpLoader");
+const resendOtpBtn = $("resendOtpBtn");
+const otpTimer = $("otpTimer");
+const closeOtpModal = $("closeOtpModal");
+const otpInputs = document.querySelectorAll(".otp-input");
+
+/* ====================== RESPONSE HELPER ====================== */
+
+async function readResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+        return await response.json();
+    }
+
+    const text = await response.text();
+
+    return {
+        detail: text || `Server returned status ${response.status}.`
+    };
+}
+
+/* ====================== OTP MODAL ====================== */
+
+function showOtpModal(email) {
+    registrationEmail = email;
+
+    if (otpEmail) otpEmail.textContent = email;
+
+    otpModal.classList.remove("hidden");
+    otpModal.classList.add("flex");
+
+    clearOtpInputs();
+    hideOtpMessages();
+    startResendTimer();
+
+    setTimeout(() => otpInputs[0]?.focus(), 200);
+}
+
+function closeOtp() {
+    otpModal.classList.add("hidden");
+    otpModal.classList.remove("flex");
+}
+
+closeOtpModal?.addEventListener("click", closeOtp);
+
+/* ====================== OTP INPUTS ====================== */
+
+otpInputs.forEach((input, index) => {
+
+    input.addEventListener("input", function (event) {
+        let value = event.target.value.replace(/\D/g, "");
+
+        if (value.length > 1) {
+            const digits = value.slice(0, 6);
+
+            digits.split("").forEach((digit, i) => {
+                if (otpInputs[i]) otpInputs[i].value = digit;
+            });
+
+            if (digits.length === 6) otpInputs[5].focus();
+
+            updateVerifyButton();
+            return;
+        }
+
+        event.target.value = value;
+
+        if (value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+
+        updateVerifyButton();
+    });
+
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Backspace" && !input.value && index > 0) {
+            otpInputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index > 0) {
+            otpInputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+    });
+
+    input.addEventListener("paste", function (event) {
+        event.preventDefault();
+
+        const pastedData = event.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        pastedData.split("").forEach((digit, i) => {
+            if (otpInputs[i]) otpInputs[i].value = digit;
+        });
+
+        updateVerifyButton();
+
+        if (pastedData.length === 6) otpInputs[5].focus();
+    });
+});
+
+function getOtpValue() {
+    return Array.from(otpInputs)
+        .map(input => input.value)
+        .join("");
+}
+
+function clearOtpInputs() {
+    otpInputs.forEach(input => {
+        input.value = "";
+        input.disabled = false;
+    });
+
+    updateVerifyButton();
+}
+
+function updateVerifyButton() {
+    if (verifyOtpBtn) {
+        verifyOtpBtn.disabled = getOtpValue().length !== 6;
+    }
+}
+
+function hideOtpMessages() {
+    otpError?.classList.add("hidden");
+    otpSuccess?.classList.add("hidden");
+}
+
+function showOtpError(message) {
+    otpSuccess?.classList.add("hidden");
+
+    if (otpError) {
+        otpError.querySelector("span").textContent = message;
+        otpError.classList.remove("hidden");
+    }
+}
+
+function showOtpSuccess(message) {
+    otpError?.classList.add("hidden");
+
+    if (otpSuccess) {
+        otpSuccess.querySelector("span").textContent = message;
+        otpSuccess.classList.remove("hidden");
+    }
+}
+
+/* =========================================================
+   BUILD COMPLETE REGISTRATION FORMDATA
+   ========================================================= */
+
+function buildRegistrationFormData() {
+    const role =
+        document.querySelector('input[name="role"]:checked')?.value || "tourist";
+
+    const username = $("username").value.trim();
+    const email = $("email").value.trim();
+    const phoneNumber = $("phone_number").value.trim();
+    const password = $("password").value;
+    const confirmPassword = $("confirmPassword").value;
+
+    if (!username) {
+        showFormError("Please enter your username.");
+        return null;
+    }
+
+    if (!email) {
+        showFormError("Please enter your email address.");
+        return null;
+    }
+
+    if (!phoneNumber) {
+        showFormError("Please enter your phone number.");
+        return null;
+    }
+
+    if (!password) {
+        showFormError("Please enter a password.");
+        return null;
+    }
+
+    if (password !== confirmPassword) {
+        showFormError("Passwords do not match.");
+        return null;
+    }
+
+    const formData = new FormData();
+
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("phone_number", phoneNumber);
+    formData.append("password", password);
+    formData.append("confirm_password", confirmPassword);
+    formData.append("role", role);
+
+    /* Profile image */
+    const profileImage = $("profile_image")?.files?.[0];
+
+    if (profileImage) {
+        formData.append("profile_image", profileImage);
+    }
+
+    /* =====================================================
+       GUIDE DETAILS
+       ===================================================== */
+
+    if (role === "guide") {
+        const bio = $("bio")?.value.trim() || "";
+        const experienceYears = $("experience_years")?.value || "0";
+        const languages = $("languages")?.value.trim() || "";
+
+        const selectedLocationId = $("city")?.value || "";
+
+        const aadhaarFront = $("aadhaar_front")?.files?.[0];
+        const aadhaarBack = $("aadhaar_back")?.files?.[0];
+        const certificates = $("certificates")?.files?.[0];
+
+        if (!selectedLocationId) {
+            showFormError(
+                "Please select Country, State, District and Monument / City."
+            );
+            return null;
+        }
+
+        if (!languages) {
+            showFormError("Please enter the languages you can speak.");
+            $("languages")?.focus();
+            return null;
+        }
+
+        if (!aadhaarFront) {
+            showFormError("Please upload the Aadhaar front image.");
+            return null;
+        }
+
+        if (!aadhaarBack) {
+            showFormError("Please upload the Aadhaar back image.");
+            return null;
+        }
+
+        /* GuideProfile data */
+        formData.append("bio", bio);
+        formData.append("experience_years", experienceYears);
+        formData.append("languages", languages);
+
+        /* User.locations ManyToMany field */
+        formData.append("locations", selectedLocationId);
+
+        /* Guide documents */
+        formData.append("aadhaar_front", aadhaarFront);
+        formData.append("aadhaar_back", aadhaarBack);
+
+        if (certificates) {
+            formData.append("certificates", certificates);
+        }
+    }
+
+    return formData;
+}
+
+/* =========================================================
+   REGISTER -> SEND OTP
+   ========================================================= */
+
+registerForm?.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    hideFormMessages();
+
+    const formData = buildRegistrationFormData();
+
+    if (!formData) return;
+
+    registrationEmail = formData.get("email");
+
+    const submitButton =
+        registerForm.querySelector('button[type="submit"]');
+
+    const originalButtonText = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending OTP...';
+
+    try {
+        const response = await fetch("/user/api/register/", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            /*
+             * Keep COMPLETE FormData until OTP verification.
+             * This preserves Guide Details + documents.
+             */
+            registrationFormData = formData;
+
+            showFormSuccess(
+                data.message || "OTP sent successfully to your email."
+            );
+
+            showOtpModal(registrationEmail);
+
+        } else {
+            let errorText = "Unable to start registration.";
+
+            if (data && typeof data === "object") {
+                if (data.detail) {
+                    errorText = String(data.detail);
+                } else {
+                    errorText = Object.entries(data)
+                        .map(([key, value]) => {
+                            if (Array.isArray(value)) {
+                                return `${key}: ${value.join(", ")}`;
+                            }
+
+                            if (typeof value === "object" && value !== null) {
+                                return `${key}: ${JSON.stringify(value)}`;
+                            }
+
+                            return `${key}: ${value}`;
+                        })
+                        .join("\n");
+                }
+            }
+
+            showFormError(errorText);
+            registrationFormData = null;
+        }
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        showFormError(
+            "Unable to connect to the server. Please try again."
+        );
+        registrationFormData = null;
+
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
+});
+
+/* =========================================================
+   VERIFY OTP
+   ========================================================= */
+
+verifyOtpBtn?.addEventListener("click", async function () {
+    const otp = getOtpValue();
+
+    if (otp.length !== 6) {
+        showOtpError("Please enter the complete 6-digit OTP.");
+        return;
+    }
+
+    if (!registrationFormData) {
+        showOtpError(
+            "Registration information is missing. Please register again."
+        );
+        return;
+    }
+
+    hideOtpMessages();
+
+    verifyOtpBtn.disabled = true;
+    verifyOtpText?.classList.add("hidden");
+    verifyOtpLoader?.classList.remove("hidden");
+
+    try {
+        const verifyData = new FormData();
+
+        /*
+         * Copy EVERY field from the original registration.
+         * Guide details and uploaded files are therefore retained.
+         */
+        for (const [key, value] of registrationFormData.entries()) {
+            verifyData.append(key, value);
+        }
+
+        verifyData.append("otp", otp);
+
+        const response = await fetch(
+            "/user/api/register/verify-otp/",
+            {
+                method: "POST",
+                body: verifyData
+            }
+        );
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            showOtpSuccess(
+                data.message ||
+                "Email verified successfully. Registration completed."
+            );
+
+            if (resendTimer) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+            }
+
+            otpInputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            verifyOtpBtn.disabled = true;
+            resendOtpBtn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = data.redirect_url || "/";
+            }, 1500);
+
+        } else {
+            let errorText = "Invalid OTP. Please try again.";
+
+            if (data?.error) {
+                errorText = data.error;
+            } else if (data?.detail) {
+                errorText = data.detail;
+            } else if (data && typeof data === "object") {
+                errorText = Object.entries(data)
+                    .map(([key, value]) => {
+                        if (Array.isArray(value)) {
+                            return `${key}: ${value.join(", ")}`;
+                        }
+                        return `${key}: ${String(value)}`;
+                    })
+                    .join(" ");
+            }
+
+            showOtpError(errorText);
+            clearOtpInputs();
+            otpInputs[0]?.focus();
+        }
+
+    } catch (error) {
+        console.error("OTP verification error:", error);
+        showOtpError("Unable to verify OTP. Please try again.");
+
+    } finally {
+        verifyOtpText?.classList.remove("hidden");
+        verifyOtpLoader?.classList.add("hidden");
+
+        if (getOtpValue().length !== 6) {
+            updateVerifyButton();
+        }
+    }
+});
+
+/* =========================================================
+   RESEND OTP
+   ========================================================= */
+
+resendOtpBtn?.addEventListener("click", async function () {
+    if (!registrationEmail) {
+        showOtpError("Email address is missing.");
+        return;
+    }
+
+    hideOtpMessages();
+
+    resendOtpBtn.disabled = true;
+    resendOtpBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Sending...';
+
+    try {
+        const response = await fetch(
+            "/user/api/register/resend-otp/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: registrationEmail
+                })
+            }
+        );
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            showOtpSuccess(
+                data.message ||
+                "A new OTP has been sent to your email."
+            );
+
+            clearOtpInputs();
+            otpInputs[0]?.focus();
+            startResendTimer();
+
+        } else {
+            showOtpError(
+                data?.error ||
+                data?.detail ||
+                "Unable to resend OTP."
+            );
+
+            resendOtpBtn.disabled = false;
+        }
+
+    } catch (error) {
+        console.error("Resend OTP error:", error);
+
+        showOtpError(
+            "Unable to resend OTP. Please try again."
+        );
+
+        resendOtpBtn.disabled = false;
+
+    } finally {
+        resendOtpBtn.innerHTML = "Resend OTP";
+    }
+});
+
+/* =========================================================
+   RESEND TIMER
+   ========================================================= */
+
+function startResendTimer() {
+    if (resendTimer) {
+        clearInterval(resendTimer);
+    }
+
+    resendSeconds = 30;
+    resendOtpBtn.disabled = true;
+
+    otpTimer.textContent =
+        `Resend available in ${resendSeconds} seconds`;
+
+    resendTimer = setInterval(() => {
+        resendSeconds--;
+
+        if (resendSeconds <= 0) {
+            clearInterval(resendTimer);
+            resendTimer = null;
+
+            resendOtpBtn.disabled = false;
+            otpTimer.textContent =
+                "You can request a new OTP now.";
+
+            return;
+        }
+
+        otpTimer.textContent =
+            `Resend available in ${resendSeconds} seconds`;
+
+    }, 1000);
+}
+
+/* =========================================================
+   ESCAPE KEY
+   ========================================================= */
+
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        otpModal &&
+        !otpModal.classList.contains("hidden")
+    ) {
+        closeOtp();
+    }
+});
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    toggleGuideFields();
+    loadLocations();
+});
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+<section class="min-h-screen pt-24 md:pt-24 pb-8 md:pb-18 bg-slate-50 flex items-center justify-center px-4 antialiased">
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 md:p-10">
+
+        <!-- HEADER -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-950">
+                Create Account
+            </h2>
+            <p class="text-slate-500 text-sm mt-2">
+                Join our community today. Please fill in your credentials below.
+            </p>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div id="successMessage" class="hidden mb-6 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium text-sm flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+            <span class="inline-block"></span>
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        <div id="errorMessage" class="hidden mb-6 px-4 py-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 font-medium text-sm flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
+            <span class="inline-block"></span>
+        </div>
+
+        <!-- FORM -->
+        <form id="registerForm" class="space-y-5">
+
+            <!-- ROLE SELECTOR -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                    I want to register as a:
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="role" value="tourist" class="peer hidden" checked>
+                        <div class="h-12 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-slate-600 peer-checked:bg-slate-900 peer-checked:border-slate-900 peer-checked:text-white hover:bg-slate-50 transition-all duration-200">
+                            <i class="fa-solid fa-passport mr-2 text-sm"></i> Tourist
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer">
+                        <input type="radio" name="role" value="guide" class="peer hidden">
+                        <div class="h-12 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-slate-600 peer-checked:bg-slate-900 peer-checked:border-slate-900 peer-checked:text-white hover:bg-slate-50 transition-all duration-200">
+                            <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i> Guide
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- USERNAME & EMAIL -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Username</label>
+                    <input type="text" id="username" placeholder="e.g. johndoe"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Email Address</label>
+                    <input type="email" id="email" placeholder="name@example.com"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                </div>
+            </div>
+
+            <!-- PHONE -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone Number</label>
+                <input type="text" id="phone_number" placeholder="Contact number"
+                    class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+            </div>
+
+            <!-- LOCATIONS (ONLY FOR GUIDE) -->
+          
+
+
+            
+<div id="locationsWrapper" class="space-y-4 hidden">
+
+    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+        Guide Location <span class="text-rose-500">*</span>
+    </label>
+
+  
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Country
+        </label>
+
+        <select
+            id="country"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all"
+        >
+            <option value="">Select Country</option>
+        </select>
+    </div>
+
+    <!-- STATE -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            State
+        </label>
+
+        <select
+            id="state"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select State</option>
+        </select>
+    </div>
+
+    <!-- DISTRICT -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            District
+        </label>
+
+        <select
+            id="district"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select District</option>
+        </select>
+    </div>
+
+    <!-- CITY -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Monument
+
+        </label>
+
+        <select
+            id="city"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select City</option>
+        </select>
+    </div>
+
+</div>
+
+            <!-- PROFILE IMAGE -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Profile Image</label>
+                <div class="flex items-center justify-center w-full">
+                    <label class="w-full flex flex-col items-center px-4 py-4 bg-white text-slate-500 rounded-xl border border-slate-200 tracking-wide cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition-all text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i>
+                            <span id="fileNameText" class="text-slate-600 font-medium">Choose avatar image</span>
+                        </div>
+                        <input type="file" id="profile_image" accept="image/*" class="hidden"
+                            onchange="document.getElementById('fileNameText').textContent = this.files[0] ? this.files[0].name : 'Choose avatar image'">
+                    </label>
+                </div>
+
+            </div>
+
+
+            <!-- ================= GUIDE DETAILS ================= -->
+<div id="guideFields" class="hidden">
+
+    <!-- Guide Bio -->
+    <div class="form-group">
+        <label for="bio">
+            About You
+        </label>
+
+        <textarea
+            name="bio"
+            id="bio"
+            rows="4"
+            placeholder="Tell tourists about yourself..."
+        ></textarea>
+    </div>
+
+
+    <!-- Experience -->
+    <div class="form-group">
+        <label for="experience_years">
+            Experience
+        </label>
+
+        <input
+            type="number"
+            name="experience_years"
+            id="experience_years"
+            min="0"
+            placeholder="Years of experience"
+        >
+    </div>
+
+
+    <!-- Languages -->
+    <div class="form-group">
+        <label for="languages">
+            Languages
+            <span class="text-red-500">*</span>
+        </label>
+
+        <input
+            type="text"
+            name="languages"
+            id="languages"
+            placeholder="Example: Telugu, Hindi, English"
+        >
+
+        <p class="text-sm text-gray-500">
+            Enter the languages you can speak with tourists.
+        </p>
+    </div>
+
+
+    <!-- ================= GUIDE LOCATION ================= -->
+
+    <div id="locationsWrapper" class="hidden">
+
+        <div class="form-group">
+            <label for="country">
+                Country
+                <span class="text-red-500">*</span>
+            </label>
+
+            <select
+                id="country"
+                name="country"
+            >
+                <option value="">
+                    Select Country
+                </option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="state">
+                State
+                <span class="text-red-500">*</span>
+            </label>
+
+            <select
+                id="state"
+                name="state"
+                disabled
+            >
+                <option value="">
+                    Select State
+                </option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="district">
+                District
+                <span class="text-red-500">*</span>
+            </label>
+
+            <select
+                id="district"
+                name="district"
+                disabled
+            >
+                <option value="">
+                    Select District
+                </option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="city">
+                Monument / City
+                <span class="text-red-500">*</span>
+            </label>
+
+            <select
+                id="city"
+                name="city"
+                disabled
+            >
+                <option value="">
+                    Select Monument / City
+                </option>
+            </select>
+        </div>
+
+    </div>
+
+
+    <!-- ================= AADHAAR ================= -->
+
+    <div class="form-group">
+
+        <label for="aadhaar_front">
+            Aadhaar Front
+            <span class="text-red-500">*</span>
+        </label>
+
+        <input
+            type="file"
+            name="aadhaar_front"
+            id="aadhaar_front"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+        <p class="text-sm text-gray-500">
+            Upload the front side of your Aadhaar card.
+        </p>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="aadhaar_back">
+            Aadhaar Back
+            <span class="text-red-500">*</span>
+        </label>
+
+        <input
+            type="file"
+            name="aadhaar_back"
+            id="aadhaar_back"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+        <p class="text-sm text-gray-500">
+            Upload the back side of your Aadhaar card.
+        </p>
+
+    </div>
+
+
+    <!-- ================= CERTIFICATES ================= -->
+
+    <div class="form-group">
+
+        <label for="certificates">
+            Certificates
+            <span class="text-gray-400">
+                (Optional)
+            </span>
+        </label>
+
+        <input
+            type="file"
+            name="certificates"
+            id="certificates"
+            accept=".pdf,.jpg,.jpeg,.png"
+        >
+
+        <p class="text-sm text-gray-500">
+            Upload experience, training, tourism or other
+            relevant certificates.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+
+
+            <!-- PASSWORDS -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('password', 'passwordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i id="passwordIcon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i id="confirmPasswordIcon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="pt-2">
+                <button type="submit"
+                    class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition shadow-sm active:scale-[0.99]">
+                    Create Account
+                </button>.
+            </div>
+
+            <p class="text-center text-sm text-slate-500 pt-2">
+                Already have an account?
+                <a href="/user/login/" class="text-indigo-600 hover:text-indigo-700 font-bold ml-0.5 underline underline-offset-4">
+                    Sign in
+                </a>
+            </p>
+        </form>
+    </div>
+</section>
+<!-- =========================================================
+     EMAIL OTP VERIFICATION MODAL
+========================================================= -->
+
+<div
+    id="otpModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm px-4"
+>
+
+    <div
+        class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-7 md:p-8 relative"
+    >
+
+        <!-- CLOSE BUTTON -->
+        <button
+            type="button"
+            id="closeOtpModal"
+            class="absolute top-5 right-5 w-9 h-9 rounded-full
+                   bg-slate-100 hover:bg-slate-200
+                   text-slate-500 hover:text-slate-800
+                   flex items-center justify-center
+                   transition"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <!-- ICON -->
+        <div class="flex justify-center mb-5">
+
+            <div
+                class="w-16 h-16 rounded-2xl
+                       bg-indigo-50 text-indigo-600
+                       flex items-center justify-center"
+            >
+                <i class="fa-solid fa-envelope-circle-check text-2xl"></i>
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+        <div class="text-center">
+
+            <h3 class="text-2xl font-extrabold text-slate-950">
+                Verify Your Email
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-2 leading-6">
+                We've sent a 6-digit verification code to
+            </p>
+
+            <p
+                id="otpEmail"
+                class="font-bold text-slate-900 mt-1 break-all"
+            >
+                your@email.com
+            </p>
+
+        </div>
+
+
+        <!-- OTP ERROR -->
+        <div
+            id="otpError"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-rose-50 text-rose-700
+                   border border-rose-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP SUCCESS -->
+        <div
+            id="otpSuccess"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-emerald-50 text-emerald-700
+                   border border-emerald-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-check"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP INPUTS -->
+        <div class="flex justify-center gap-2 sm:gap-3 mt-7">
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+        </div>
+
+
+        <!-- VERIFY BUTTON -->
+        <button
+            type="button"
+            id="verifyOtpBtn"
+            class="w-full h-12 mt-7 rounded-xl
+                   bg-slate-900 hover:bg-slate-800
+                   text-white font-bold
+                   tracking-wide
+                   transition
+                   disabled:opacity-50
+                   disabled:cursor-not-allowed"
+        >
+            <span id="verifyOtpText">
+                Verify Email
+            </span>
+
+            <span
+                id="verifyOtpLoader"
+                class="hidden"
+            >
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                Verifying...
+            </span>
+        </button>
+
+
+        <!-- RESEND -->
+        <div class="text-center mt-5">
+
+            <p class="text-sm text-slate-500">
+                Didn't receive the code?
+            </p>
+
+            <button
+                type="button"
+                id="resendOtpBtn"
+                class="mt-1 text-indigo-600 hover:text-indigo-700
+                       font-bold text-sm
+                       disabled:text-slate-400
+                       disabled:cursor-not-allowed"
+                disabled
+            >
+                Resend OTP
+            </button>
+
+            <p
+                id="otpTimer"
+                class="text-xs text-slate-400 mt-2"
+            >
+                Resend available in 30 seconds
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <script>
@@ -164,26 +2603,357 @@ function togglePassword(inputId, iconId) {
     }
 }
 
-// ====================== LOAD LOCATIONS ======================
+
+
+let allLocations = [];
+
+
+/* =========================================
+   LOAD LOCATIONS FROM DATABASE
+========================================= */
+
 async function loadLocations() {
+
     try {
-        const res = await fetch("/user/api/locations/");
-        if (!res.ok) throw new Error("Failed to load locations");
 
-        const locations = await res.json();
-        const select = document.getElementById("locations");
-        select.innerHTML = "";
+        const response = await fetch("/user/api/locations/");
 
-        locations.forEach(loc => {
-            const option = document.createElement("option");
-            option.value = loc.id;
-            option.textContent = `${loc.city}, ${loc.district}, ${loc.state}, ${loc.country}`;
-            select.appendChild(option);
-        });
-    } catch (err) {
-        console.error(err);
+        if (!response.ok) {
+            throw new Error(
+                `Location API error: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        console.log("Location API response:", data);
+
+        /*
+         * Make sure the response is an array.
+         */
+        if (!Array.isArray(data)) {
+
+            console.error(
+                "Location API did not return an array:",
+                data
+            );
+
+            return;
+        }
+
+        allLocations = data;
+
+        console.log(
+            "Total locations:",
+            allLocations.length
+        );
+
+        loadCountries();
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load locations:",
+            error
+        );
+
     }
+
 }
+
+
+/* =========================================
+   COUNTRY
+========================================= */
+
+function loadCountries() {
+
+    const countrySelect =
+        document.getElementById("country");
+
+    if (!countrySelect) {
+        console.error("Country select not found");
+        return;
+    }
+
+    countrySelect.innerHTML =
+        '<option value="">Select Country</option>';
+
+    const countries = [
+        ...new Set(
+            allLocations
+                .map(location => location.country)
+                .filter(Boolean)
+        )
+    ];
+
+    console.log("Countries:", countries);
+
+    countries.forEach(country => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = country;
+        option.textContent = country;
+
+        countrySelect.appendChild(option);
+
+    });
+
+}
+
+
+/* =========================================
+   COUNTRY CHANGE
+========================================= */
+
+document
+    .getElementById("country")
+    .addEventListener("change", function () {
+
+        const country = this.value;
+
+        const stateSelect =
+            document.getElementById("state");
+
+        const districtSelect =
+            document.getElementById("district");
+
+        const citySelect =
+            document.getElementById("city");
+
+
+        /* Reset State */
+        stateSelect.innerHTML =
+            '<option value="">Select State</option>';
+
+        /* Reset District */
+        districtSelect.innerHTML =
+            '<option value="">Select District</option>';
+
+        /* Reset City */
+        citySelect.innerHTML =
+            '<option value="">Select City</option>';
+
+
+        districtSelect.disabled = true;
+        citySelect.disabled = true;
+
+
+        if (!country) {
+
+            stateSelect.disabled = true;
+
+            return;
+        }
+
+
+        /* Find states for selected country */
+
+        const states = [
+            ...new Set(
+                allLocations
+                    .filter(location =>
+                        location.country === country
+                    )
+                    .map(location => location.state)
+                    .filter(Boolean)
+            )
+        ];
+
+
+        console.log(
+            "States for",
+            country,
+            states
+        );
+
+
+        states.forEach(state => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = state;
+            option.textContent = state;
+
+            stateSelect.appendChild(option);
+
+        });
+
+
+        stateSelect.disabled = false;
+
+    });
+
+
+/* =========================================
+   STATE CHANGE
+========================================= */
+
+document
+    .getElementById("state")
+    .addEventListener("change", function () {
+
+        const country =
+            document.getElementById("country").value;
+
+        const state = this.value;
+
+        const districtSelect =
+            document.getElementById("district");
+
+        const citySelect =
+            document.getElementById("city");
+
+
+        /* Reset District */
+        districtSelect.innerHTML =
+            '<option value="">Select District</option>';
+
+        /* Reset City */
+        citySelect.innerHTML =
+            '<option value="">Select City</option>';
+
+        citySelect.disabled = true;
+
+
+        if (!state) {
+
+            districtSelect.disabled = true;
+
+            return;
+        }
+
+
+        /* Find districts */
+
+        const districts = [
+            ...new Set(
+                allLocations
+                    .filter(location =>
+                        location.country === country &&
+                        location.state === state
+                    )
+                    .map(location => location.district)
+                    .filter(Boolean)
+            )
+        ];
+
+
+        console.log(
+            "Districts for",
+            state,
+            districts
+        );
+
+
+        districts.forEach(district => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = district;
+            option.textContent = district;
+
+            districtSelect.appendChild(option);
+
+        });
+
+
+        districtSelect.disabled = false;
+
+    });
+
+
+/* =========================================
+   DISTRICT CHANGE
+========================================= */
+
+document
+    .getElementById("district")
+    .addEventListener("change", function () {
+
+        const country =
+            document.getElementById("country").value;
+
+        const state =
+            document.getElementById("state").value;
+
+        const district = this.value;
+
+        const citySelect =
+            document.getElementById("city");
+
+
+        /* Reset City */
+
+        citySelect.innerHTML =
+            '<option value="">Select City</option>';
+
+
+        if (!district) {
+
+            citySelect.disabled = true;
+
+            return;
+        }
+
+
+        /* Find cities */
+
+        const cities =
+            allLocations.filter(location =>
+                location.country === country &&
+                location.state === state &&
+                location.district === district
+            );
+
+
+        console.log(
+            "Cities for",
+            district,
+            cities
+        );
+
+
+        cities.forEach(location => {
+
+            const option =
+                document.createElement("option");
+
+
+            /*
+             * IMPORTANT:
+             * City value = Location ID
+             */
+            option.value = location.id;
+
+            option.textContent =
+                location.city;
+
+
+            citySelect.appendChild(option);
+
+        });
+
+
+        citySelect.disabled = false;
+
+    });
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    loadLocations();
+
+});
+
 
 // ====================== SHOW / HIDE LOCATIONS BASED ON ROLE ======================
 function toggleLocationsField() {
@@ -203,7 +2973,6 @@ function toggleLocationsField() {
 document.querySelectorAll('input[name="role"]').forEach(radio => {
     radio.addEventListener("change", toggleLocationsField);
 });
-
 // ====================== REGISTER ======================
 document.getElementById('registerForm').addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -229,8 +2998,22 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 
     // Locations (only required for Guide)
-    const selectedLocations = Array.from(document.getElementById("locations").selectedOptions)
-                                   .map(opt => opt.value);
+    // ====================== GUIDE LOCATION ======================
+
+    const citySelect = document.getElementById("city");
+
+    const selectedLocationId = citySelect.value;
+
+
+    if (role === "guide" && !selectedLocationId) {
+
+        errorMessage.querySelector('span').innerHTML =
+            'Please select Country, State, District and City.';
+
+        errorMessage.classList.remove('hidden');
+
+        return;
+    }
 
     if (role === "guide" && selectedLocations.length === 0) {
         errorMessage.querySelector('span').innerHTML = 'Please select at least one location for Guide.';
@@ -297,6 +3080,1144 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 // Initial load
 loadLocations();
 toggleLocationsField();   // hide locations by default (Tourist is selected)
+
+
+
+// ====================== DISTRICT CHANGE ======================
+
+document.getElementById("district").addEventListener("change", function () {
+
+    const country = document.getElementById("country").value;
+    const state = document.getElementById("state").value;
+    const district = this.value;
+
+    const citySelect = document.getElementById("city");
+
+
+    citySelect.innerHTML =
+        '<option value="">Select City</option>';
+
+    citySelect.disabled = true;
+
+
+    if (!country || !state || !district) {
+        return;
+    }
+
+
+    const cities = allLocations.filter(location =>
+        location.country === country &&
+        location.state === state &&
+        location.district === district
+    );
+
+
+    cities.forEach(location => {
+
+        const option = document.createElement("option");
+
+        // IMPORTANT:
+        // City option value is the Location database ID
+        option.value = location.id;
+
+        option.textContent = location.city;
+
+        citySelect.appendChild(option);
+
+    });
+
+
+    citySelect.disabled = false;
+
+});
+</script>
+
+<script>
+
+/* =========================================================
+   REGISTRATION + EMAIL OTP
+========================================================= */
+
+
+let registrationFormData = null;
+let registrationEmail = "";
+
+let resendTimer = null;
+let resendSeconds = 30;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const registerForm =
+    document.getElementById("registerForm");
+
+const otpModal =
+    document.getElementById("otpModal");
+
+const otpEmail =
+    document.getElementById("otpEmail");
+
+const otpError =
+    document.getElementById("otpError");
+
+const otpSuccess =
+    document.getElementById("otpSuccess");
+
+const verifyOtpBtn =
+    document.getElementById("verifyOtpBtn");
+
+const verifyOtpText =
+    document.getElementById("verifyOtpText");
+
+const verifyOtpLoader =
+    document.getElementById("verifyOtpLoader");
+
+const resendOtpBtn =
+    document.getElementById("resendOtpBtn");
+
+const otpTimer =
+    document.getElementById("otpTimer");
+
+const closeOtpModal =
+    document.getElementById("closeOtpModal");
+
+const otpInputs =
+    document.querySelectorAll(".otp-input");
+
+
+/* =========================================================
+   SHOW OTP MODAL
+========================================================= */
+
+function showOtpModal(email) {
+
+    registrationEmail = email;
+
+    otpEmail.textContent = email;
+
+    otpModal.classList.remove("hidden");
+
+    otpModal.classList.add("flex");
+
+    clearOtpInputs();
+
+    hideOtpMessages();
+
+    startResendTimer();
+
+    setTimeout(() => {
+
+        if (otpInputs.length > 0) {
+            otpInputs[0].focus();
+        }
+
+    }, 200);
+
+}
+
+
+/* =========================================================
+   CLOSE OTP MODAL
+========================================================= */
+
+closeOtpModal.addEventListener("click", function () {
+
+    otpModal.classList.add("hidden");
+
+    otpModal.classList.remove("flex");
+
+});
+
+
+/* =========================================================
+   OTP INPUT HANDLING
+========================================================= */
+
+otpInputs.forEach((input, index) => {
+
+    input.addEventListener("input", function (event) {
+
+        let value = event.target.value;
+
+        /*
+         * Only numbers
+         */
+        value = value.replace(/\D/g, "");
+
+        event.target.value = value;
+
+        /*
+         * Move to next input
+         */
+        if (value && index < otpInputs.length - 1) {
+
+            otpInputs[index + 1].focus();
+
+        }
+
+        updateVerifyButton();
+
+    });
+
+
+    input.addEventListener("keydown", function (event) {
+
+        /*
+         * Backspace
+         */
+        if (
+            event.key === "Backspace" &&
+            !input.value &&
+            index > 0
+        ) {
+
+            otpInputs[index - 1].focus();
+
+        }
+
+        /*
+         * Arrow left
+         */
+        if (
+            event.key === "ArrowLeft" &&
+            index > 0
+        ) {
+
+            otpInputs[index - 1].focus();
+
+        }
+
+        /*
+         * Arrow right
+         */
+        if (
+            event.key === "ArrowRight" &&
+            index < otpInputs.length - 1
+        ) {
+
+            otpInputs[index + 1].focus();
+
+        }
+
+    });
+
+
+    /*
+     * Paste OTP
+     */
+    input.addEventListener("paste", function (event) {
+
+        event.preventDefault();
+
+        const pastedData =
+            event.clipboardData
+                .getData("text")
+                .replace(/\D/g, "")
+                .slice(0, 6);
+
+        pastedData.split("").forEach((digit, i) => {
+
+            if (otpInputs[i]) {
+                otpInputs[i].value = digit;
+            }
+
+        });
+
+        updateVerifyButton();
+
+        if (pastedData.length === 6) {
+            otpInputs[5].focus();
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   GET OTP VALUE
+========================================================= */
+
+function getOtpValue() {
+
+    return Array.from(otpInputs)
+        .map(input => input.value)
+        .join("");
+
+}
+
+
+/* =========================================================
+   CLEAR OTP
+========================================================= */
+
+function clearOtpInputs() {
+
+    otpInputs.forEach(input => {
+
+        input.value = "";
+
+    });
+
+    updateVerifyButton();
+
+}
+
+
+/* =========================================================
+   ENABLE / DISABLE VERIFY BUTTON
+========================================================= */
+
+function updateVerifyButton() {
+
+    const otp = getOtpValue();
+
+    verifyOtpBtn.disabled =
+        otp.length !== 6;
+
+}
+
+
+/* =========================================================
+   OTP MESSAGES
+========================================================= */
+
+function hideOtpMessages() {
+
+    otpError.classList.add("hidden");
+
+    otpSuccess.classList.add("hidden");
+
+}
+
+
+function showOtpError(message) {
+
+    otpSuccess.classList.add("hidden");
+
+    otpError.querySelector("span").textContent =
+        message;
+
+    otpError.classList.remove("hidden");
+
+}
+
+
+function showOtpSuccess(message) {
+
+    otpError.classList.add("hidden");
+
+    otpSuccess.querySelector("span").textContent =
+        message;
+
+    otpSuccess.classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   REGISTER FORM
+========================================================= */
+
+registerForm.addEventListener(
+    "submit",
+    async function (e) {
+
+        e.preventDefault();
+
+
+        const username =
+            document.getElementById("username")
+                .value.trim();
+
+        const email =
+            document.getElementById("email")
+                .value.trim();
+
+        const phone_number =
+            document.getElementById("phone_number")
+                .value.trim();
+
+        const password =
+            document.getElementById("password")
+                .value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword")
+                .value;
+
+        const role =
+            document.querySelector(
+                'input[name="role"]:checked'
+            ).value;
+
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+
+        successMessage.classList.add("hidden");
+
+        errorMessage.classList.add("hidden");
+
+
+        /* =================================================
+           PASSWORD CHECK
+        ================================================= */
+
+        if (password !== confirmPassword) {
+
+            errorMessage.querySelector("span").textContent =
+                "Passwords do not match.";
+
+            errorMessage.classList.remove("hidden");
+
+            return;
+
+        }
+
+
+        /* =================================================
+           GUIDE LOCATION
+        ================================================= */
+
+        const citySelect =
+            document.getElementById("city");
+
+        const selectedLocationId =
+            citySelect.value;
+
+
+        if (
+            role === "guide" &&
+            !selectedLocationId
+        ) {
+
+            errorMessage.querySelector("span").textContent =
+                "Please select Country, State, District and City.";
+
+            errorMessage.classList.remove("hidden");
+
+            return;
+
+        }
+
+
+        /* =================================================
+           CREATE FORM DATA
+        ================================================= */
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "username",
+            username
+        );
+
+        formData.append(
+            "email",
+            email
+        );
+
+        formData.append(
+            "phone_number",
+            phone_number
+        );
+
+        formData.append(
+            "password",
+            password
+        );
+
+        formData.append(
+            "confirm_password",
+            confirmPassword
+        );
+
+        formData.append(
+            "role",
+            role
+        );
+
+
+        /* =================================================
+           LOCATION
+        ================================================= */
+
+        if (
+            role === "guide" &&
+            selectedLocationId
+        ) {
+
+            formData.append(
+                "locations",
+                selectedLocationId
+            );
+
+        }
+
+
+        /* =================================================
+           PROFILE IMAGE
+        ================================================= */
+
+        const profileImageInput =
+            document.getElementById(
+                "profile_image"
+            );
+
+        const profileImage =
+            profileImageInput.files[0];
+
+
+        if (profileImage) {
+
+            formData.append(
+                "profile_image",
+                profileImage
+            );
+
+        }
+
+
+        /* =================================================
+           SAVE FORM DATA
+           
+           We keep it in memory because the OTP
+           verification happens on the same page.
+        ================================================= */
+
+        registrationFormData =
+            formData;
+
+
+        /* =================================================
+           DISABLE SUBMIT BUTTON
+        ================================================= */
+
+        const submitButton =
+            registerForm.querySelector(
+                'button[type="submit"]'
+            );
+
+        const originalButtonText =
+            submitButton.innerHTML;
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending OTP...';
+
+
+        try {
+
+            /* =============================================
+               SEND REGISTRATION DATA
+            ============================================= */
+
+            const response =
+                await fetch(
+                    "/user/api/register/",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            /* =============================================
+               SUCCESS
+            ============================================= */
+
+            if (response.ok) {
+
+                showOtpModal(email);
+
+                successMessage.querySelector("span").textContent =
+                    data.message ||
+                    "OTP sent successfully to your email.";
+
+                successMessage.classList.remove("hidden");
+
+            }
+
+            /* =============================================
+               ERROR
+            ============================================= */
+
+            else {
+
+                let errorText = "";
+
+
+                if (
+                    typeof data === "object"
+                ) {
+
+                    errorText =
+                        Object.entries(data)
+                            .map(
+                                ([key, value]) => {
+
+                                    let message;
+
+                                    if (
+                                        Array.isArray(value)
+                                    ) {
+
+                                        message =
+                                            value.join(", ");
+
+                                    } else if (
+                                        typeof value === "object"
+                                    ) {
+
+                                        message =
+                                            JSON.stringify(value);
+
+                                    } else {
+
+                                        message =
+                                            value;
+
+                                    }
+
+                                    return `${key}: ${message}`;
+
+                                }
+                            )
+                            .join("<br>");
+
+                }
+
+                else {
+
+                    errorText =
+                        data;
+
+                }
+
+
+                errorMessage.querySelector("span")
+                    .innerHTML = errorText;
+
+                errorMessage.classList.remove("hidden");
+
+
+                /*
+                 * Don't keep registration data
+                 * when the registration itself failed.
+                 */
+
+                registrationFormData = null;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
+
+
+            errorMessage.querySelector("span")
+                .textContent =
+                "Something went wrong. Please try again.";
+
+            errorMessage.classList.remove("hidden");
+
+            registrationFormData = null;
+
+        }
+
+        finally {
+
+            submitButton.disabled = false;
+
+            submitButton.innerHTML =
+                originalButtonText;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   VERIFY OTP
+========================================================= */
+
+verifyOtpBtn.addEventListener(
+    "click",
+    async function () {
+
+        const otp =
+            getOtpValue();
+
+
+        if (otp.length !== 6) {
+
+            showOtpError(
+                "Please enter the complete 6-digit OTP."
+            );
+
+            return;
+
+        }
+
+
+        if (!registrationFormData) {
+
+            showOtpError(
+                "Registration information is missing. Please register again."
+            );
+
+            return;
+
+        }
+
+
+        hideOtpMessages();
+
+
+        /* =================================================
+           BUTTON LOADING
+        ================================================= */
+
+        verifyOtpBtn.disabled = true;
+
+        verifyOtpText.classList.add("hidden");
+
+        verifyOtpLoader.classList.remove("hidden");
+
+
+        try {
+
+            /*
+             * Copy the original registration data.
+             *
+             * FormData can be reused, but we create a new
+             * FormData to keep things clean.
+             */
+
+            const verifyData =
+                new FormData();
+
+
+            for (
+                const [key, value]
+                of registrationFormData.entries()
+            ) {
+
+                verifyData.append(
+                    key,
+                    value
+                );
+
+            }
+
+
+            /*
+             * Add OTP
+             */
+
+            verifyData.append(
+                "otp",
+                otp
+            );
+
+
+            /* =============================================
+               VERIFY API
+            ============================================= */
+
+            const response =
+                await fetch(
+                    "/user/api/register/verify-otp/",
+                    {
+                        method: "POST",
+                        body: verifyData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            /* =============================================
+               SUCCESS
+            ============================================= */
+
+            if (response.ok) {
+
+                showOtpSuccess(
+                    data.message ||
+                    "Email verified successfully!"
+                );
+
+
+                /*
+                 * Stop resend timer
+                 */
+
+                if (resendTimer) {
+
+                    clearInterval(
+                        resendTimer
+                    );
+
+                }
+
+
+                /*
+                 * Disable all OTP inputs
+                 */
+
+                otpInputs.forEach(
+                    input => {
+                        input.disabled = true;
+                    }
+                );
+
+
+                /*
+                 * Hide buttons
+                 */
+
+                verifyOtpBtn.disabled = true;
+
+                resendOtpBtn.disabled = true;
+
+                /*
+                 * Show success message
+                 */
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "/";
+
+                    },
+                    1500
+
+                );
+
+            }
+
+            /* =============================================
+               OTP ERROR
+            ============================================= */
+
+            else {
+
+                let errorText =
+                    "Invalid OTP. Please try again.";
+
+
+                if (
+                    data &&
+                    typeof data === "object"
+                ) {
+
+                    if (data.error) {
+
+                        errorText =
+                            data.error;
+
+                    }
+
+                    else if (data.detail) {
+
+                        errorText =
+                            data.detail;
+
+                    }
+
+                    else {
+
+                        errorText =
+                            Object.entries(data)
+                                .map(
+                                    ([key, value]) => {
+
+                                        if (
+                                            Array.isArray(value)
+                                        ) {
+                                            return value.join(", ");
+                                        }
+
+                                        return String(value);
+
+                                    }
+                                )
+                                .join(" ");
+
+                    }
+
+                }
+
+
+                showOtpError(
+                    errorText
+                );
+
+                clearOtpInputs();
+
+                otpInputs[0].focus();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "OTP verification error:",
+                error
+            );
+
+
+            showOtpError(
+                "Unable to verify OTP. Please try again."
+            );
+
+        }
+
+        finally {
+
+            verifyOtpText.classList.remove(
+                "hidden"
+            );
+
+            verifyOtpLoader.classList.add(
+                "hidden"
+            );
+
+
+            /*
+             * Only enable when 6 digits are entered
+             */
+
+            updateVerifyButton();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESEND OTP
+========================================================= */
+
+resendOtpBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!registrationEmail) {
+
+            showOtpError(
+                "Email address is missing."
+            );
+
+            return;
+
+        }
+
+
+        hideOtpMessages();
+
+
+        resendOtpBtn.disabled = true;
+
+        resendOtpBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Sending...';
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/user/api/register/resend-otp/",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email:
+                                registrationEmail
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (response.ok) {
+
+                showOtpSuccess(
+                    data.message ||
+                    "A new OTP has been sent to your email."
+                );
+
+
+                clearOtpInputs();
+
+                otpInputs[0].focus();
+
+
+                /*
+                 * Start timer again
+                 */
+
+                startResendTimer();
+
+            }
+
+            else {
+
+                showOtpError(
+                    data.error ||
+                    data.detail ||
+                    "Unable to resend OTP."
+                );
+
+
+                resendOtpBtn.disabled = false;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Resend OTP error:",
+                error
+            );
+
+
+            showOtpError(
+                "Unable to resend OTP. Please try again."
+            );
+
+
+            resendOtpBtn.disabled = false;
+
+        }
+
+        finally {
+
+            resendOtpBtn.innerHTML =
+                "Resend OTP";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESEND TIMER
+========================================================= */
+
+function startResendTimer() {
+
+    if (resendTimer) {
+
+        clearInterval(
+            resendTimer
+        );
+
+    }
+
+
+    resendSeconds = 30;
+
+    resendOtpBtn.disabled = true;
+
+    otpTimer.textContent =
+        `Resend available in ${resendSeconds} seconds`;
+
+
+    resendTimer =
+        setInterval(
+            function () {
+
+                resendSeconds--;
+
+
+                if (resendSeconds <= 0) {
+
+                    clearInterval(
+                        resendTimer
+                    );
+
+                    resendTimer = null;
+
+                    resendOtpBtn.disabled = false;
+
+                    otpTimer.textContent =
+                        "You can request a new OTP now.";
+
+                    return;
+
+                }
+
+
+                otpTimer.textContent =
+                    `Resend available in ${resendSeconds} seconds`;
+
+            },
+            1000
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY CLOSE MODAL
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Escape" &&
+            !otpModal.classList.contains("hidden")
+        ) {
+
+            otpModal.classList.add("hidden");
+
+            otpModal.classList.remove("flex");
+
+        }
+
+    }
+);
+
 </script>
 {% endblock %}
 
@@ -314,656 +4235,4 @@ toggleLocationsField();   // hide locations by default (Tourist is selected)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} {% extends 'base.html' %}
-
-{% block content %}
-
-<section class="min-h-screen md:pt-24 bg-gray-100 flex items-center justify-center px-4">
-
-    <div class="w-full max-w-4xl bg-white rounded-[30px] shadow-2xl p-8">
-
-
-    
-        <div class="text-center mb-8">
-
-            <h2 class="text-4xl font-black text-gray-900">
-
-                Register
-
-            </h2>
-
-            <p class="text-gray-500 mt-2">
-
-                Create your account
-
-            </p>
-
-        </div>
-
-
-        <div
-            id="successMessage"
-            class="hidden mb-4 px-4 py-3 rounded-xl bg-green-100 text-green-700 font-medium text-sm">
-
-        </div>
-
-
-        <div
-            id="errorMessage"
-            class="hidden mb-4 px-4 py-3 rounded-xl bg-red-100 text-red-700 font-medium text-sm">
-
-        </div>
-
-
-
-        <form id="registerForm" class="space-y-4">
-
-
-            <div class="grid grid-cols-2 gap-3">
-
-                <label class="cursor-pointer">
-
-                    <input
-                        type="radio"
-                        name="role"
-                        value="tourist"
-                        class="peer hidden"
-                        checked>
-
-                    <div class="h-12 rounded-xl border border-blue-500 bg-blue-50 flex items-center justify-center font-bold text-blue-500 peer-checked:bg-blue-900 peer-checked:text-white transition">
-
-                        Tourist
-
-                    </div>
-
-                </label>
-
-
-
-                <label class="cursor-pointer">
-
-                    <input
-                        type="radio"
-                        name="role"
-                        value="guide"
-                        class="peer hidden">
-
-                    <div class="h-12 rounded-xl border border-gray-200 flex items-center justify-center font-bold text-gray-600 peer-checked:bg-blue-900 peer-checked:text-white transition">
-
-                        Guide
-
-                    </div>
-
-                </label>
-
-            </div>
-
-
- <div class="grid grid-cols-2 gap-3">
-  
-            <input
-                type="text"
-                id="username"
-                placeholder="Username"
-                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Email Address"
-                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
- </div>
-
-     
- <div class="grid grid-cols-2 gap-3">
-            <input
-                type="text"
-                id="phone_number"
-                placeholder="Phone Number"
-                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-
-
-            
-            <input
-                type="text"
-                id="location"
-                placeholder="Location"
-                class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-
- </div>
-
-
-
-
-
-  <div class="grid grid-cols-2 gap-3">
-            <div>
-
-    <label class="block mb-2">
-        Country
-    </label>
-
-    <select
-        id="country"
-        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50"
-    >
-        <option value="">
-            Select Country
-        </option>
-    </select>
-
-</div>
-
-<div>
-
-    <label class="block mb-2">
-        State
-    </label>
-
-    <select
-        id="state"
-        class="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50"
-    >
-        <option value="">
-            Select State
-        </option>
-    </select>
-
-</div>
-
-
-</div>
-
-
-
-
-
-        <div>
-
-    <label class="block mb-2 text-sm font-medium">
-        Profile Image
-    </label>
-
-    <input
-        type="file"
-        id="profile_image"
-        accept="image/*"
-        class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50"
-    >
-
-</div>
-
-          
-<div class="grid grid-cols-2 gap-3">
-            <div class="relative">
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-                <button
-                    type="button"
-                    onclick="togglePassword('password', 'passwordIcon')"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-
-                    <i id="passwordIcon" class="fa-solid fa-eye"></i>
-
-                </button>
-
-            </div>
-
-
-
-           
-            <div class="relative">
-
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm Password"
-                    class="w-full h-12 px-4 pr-12 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400">
-
-                <button
-                    type="button"
-                    onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-
-                    <i id="confirmPasswordIcon" class="fa-solid fa-eye"></i>
-
-                </button>
-
-            </div>
-
-        </div>
-
-       
-<div class="flex justify-center mt-6">
-            <button
-                type="submit"
-                class="mx-auto px-4  h-12 rounded-xl bg-blue-900 hover:bg-blue-600 text-white font-bold transition duration-300">
-
-                Create Account
-
-            </button>
-
-        </div>
-
-          
-            <p class="text-center text-sm text-gray-500">
-
-                Already have an account?
-
-                <a href="/user/login/"
-                   class="text-blue-500 font-bold">
-
-                    Login
-
-                </a>
-
-            </p>
-
-        </form>
-
-    </div>
-
-</section>
-
-
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
-<script>
-
-const countrySelect =
-    document.getElementById("country");
-
-const stateSelect =
-    document.getElementById("state");
-
-let countriesData = [];
-
-
-async function loadCountries() {
-
-    try {
-
-        const response = await fetch(
-            "https://countriesnow.space/api/v0.1/countries/states"
-        );
-
-        const result = await response.json();
-
-        countriesData = result.data;
-
-        countrySelect.innerHTML =
-            '<option value="">Select Country</option>';
-
-        countriesData.forEach(country => {
-
-            countrySelect.innerHTML += `
-                <option value="${country.name}">
-                    ${country.name}
-                </option>
-            `;
-
-        });
-
-        countrySelect.value = "India";
-
-        loadStates();
-
-    }
-
-    catch(error){
-
-        console.log(error);
-
-    }
-
-}
-
-
-function loadStates() {
-
-    const selectedCountry =
-        countrySelect.value;
-
-    stateSelect.innerHTML =
-        '<option value="">Select State</option>';
-
-    const country =
-        countriesData.find(
-            item =>
-                item.name === selectedCountry
-        );
-
-    if(!country){
-        return;
-    }
-
-    country.states.forEach(state => {
-
-        stateSelect.innerHTML += `
-            <option value="${state.name}">
-                ${state.name}
-            </option>
-        `;
-
-    });
-
-}
-
-
-countrySelect.addEventListener(
-    "change",
-    loadStates
-);
-
-loadCountries();
-
-</script>
-<script>
-
- 
-    function togglePassword(inputId, iconId) {
-
-        const input = document.getElementById(inputId);
-
-        const icon = document.getElementById(iconId);
-
-        if (input.type === "password") {
-
-            input.type = "text";
-
-            icon.classList.remove("fa-eye");
-
-            icon.classList.add("fa-eye-slash");
-
-        }
-
-        else {
-
-            input.type = "password";
-
-            icon.classList.remove("fa-eye-slash");
-
-            icon.classList.add("fa-eye");
-
-        }
-
-    }
-
-
-
-    document
-        .getElementById('registerForm')
-        .addEventListener('submit', async function(e) {
-
-        e.preventDefault();
-
-        let username = document.getElementById('username').value;
-
-        let email = document.getElementById('email').value;
-
-        let phone_number = document.getElementById('phone_number').value;
-
-      
-        let location =
-            document.getElementById(
-                'location'
-            ).value;
-
-        let state =
-            document.getElementById(
-                'state'
-            ).value;
-
-        let country =
-            document.getElementById(
-                'country'
-            ).value;
-
-        let password = document.getElementById('password').value;
-
-        let confirmPassword = document.getElementById('confirmPassword').value;
-
-        let role = document.querySelector(
-            'input[name="role"]:checked'
-        ).value;
-
-
-
-        let successMessage = document.getElementById('successMessage');
-
-        let errorMessage = document.getElementById('errorMessage');
-
-
-
-        successMessage.classList.add('hidden');
-
-        errorMessage.classList.add('hidden');
-
-
-
-       
-        if (password !== confirmPassword) {
-
-            errorMessage.innerHTML = 'Passwords do not match';
-
-            errorMessage.classList.remove('hidden');
-
-            return;
-
-        }
-
-
-
-        try {
-
-        
-
-           const formData = new FormData();
-
-            formData.append(
-                "username",
-                username
-            );
-
-            formData.append(
-                "email",
-                email
-            );
-
-            formData.append(
-                "phone_number",
-                phone_number
-            );
-
-            formData.append(
-                "location",
-                location
-            );
-
-            formData.append(
-                "state",
-                stateSelect.value
-            );
-
-            formData.append(
-                "country",
-                countrySelect.value
-            );
-
-            formData.append(
-                "password",
-                password
-            );
-
-            formData.append(
-                "confirm_password",
-                confirmPassword
-            );
-
-            formData.append(
-                "role",
-                role
-            );
-
-            const profileImage =
-                document.getElementById(
-                    "profile_image"
-                ).files[0];
-
-            if(profileImage){
-
-                formData.append(
-                    "profile_image",
-                    profileImage
-                );
-
-            }
-
-            let response = await fetch(
-                "/user/api/register/",
-                {
-                    method: "POST",
-                    body: formData
-                }
-            );
-
-
-            let data = await response.json();
-
-
-
-            if (response.ok) {
-
-                successMessage.innerHTML =
-                    data.message;
-
-                successMessage.classList.remove('hidden');
-
-                document.getElementById(
-                    'registerForm'
-                ).reset();
-
-
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        '/user/login/';
-
-                }, 1500);
-
-            }
-
-            else {
-
-                errorMessage.innerHTML =
-                    JSON.stringify(data);
-
-                errorMessage.classList.remove('hidden');
-
-            }
-
-        }
-
-        catch (error) {
-
-            errorMessage.innerHTML =
-                'Something went wrong';
-
-            errorMessage.classList.remove('hidden');
-
-        }
-
-    });
-
-</script>
-
-{% endblock %} {% endcomment %}
+ {% endcomment %}

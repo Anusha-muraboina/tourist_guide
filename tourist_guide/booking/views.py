@@ -17,6 +17,7 @@ razorpay_client = razorpay.Client(
 )
 
 
+
 # booking/razorpay_views.py
 
 import razorpay
@@ -115,6 +116,22 @@ class VerifyAndCreateBookingAPIView(APIView):
 
         # ========== 3. Create Booking ==========
         booking = serializer.save()
+        
+        booking.payment_id = data.get(
+            "razorpay_payment_id"
+        )
+
+        booking.transaction_id = data.get(
+            "razorpay_order_id"
+        )
+
+        booking.razorpay_order_id = data.get(
+            "razorpay_order_id"
+        )
+
+        booking.razorpay_signature = data.get(
+            "razorpay_signature"
+        )
 
         # ========== 4. Save Razorpay IDs ==========
         booking.payment_id = data.get("razorpay_payment_id")
@@ -130,7 +147,12 @@ class VerifyAndCreateBookingAPIView(APIView):
         else:
             booking.payment_status = "pending"
 
-        booking.status = "confirmed"
+        # booking.status = "confirmed"
+        booking.status = "pending"
+
+        booking.guide_status = "pending"
+
+        booking.guide_attempt = 1
         booking.save()
 
         return Response({
@@ -683,6 +705,51 @@ from booking.serializers import (
     BookingCreateSerializer ,BookingListSerializer
 )
 
+# class BookingListAPIView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+
+#         if request.user.role == "guide":
+#             bookings = (
+#                 Booking.objects
+#                 .filter(guide=request.user)
+#                 .select_related("tour", "guide")
+#                 .order_by("-created_at")
+#             )
+#         else:
+#             bookings = (
+#                 Booking.objects
+#                 .filter(user=request.user)
+#                 .select_related("tour", "guide")
+#                 .order_by("-created_at")
+#             )
+
+#         serializer = BookingListSerializer(
+#             bookings,
+#             many=True,
+#             context={"request": request}
+#         )
+
+#         return Response({
+#             "data": serializer.data
+#         })
+
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.utils import timezone
+
+from .models import Booking
+from .serializers import BookingListSerializer
+
+
+# ============================================================
+# BOOKING LIST API
+# ============================================================
+
 class BookingListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -712,6 +779,933 @@ class BookingListAPIView(APIView):
         return Response({
             "data": serializer.data
         })
+
+
+# ============================================================
+# GUIDE VERIFY BOOKING CODE
+# confirmed → on_process
+# ============================================================
+
+class VerifyBookingCodeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id):
+
+        # Only guide can verify
+        if request.user.role != "guide":
+            return Response(
+                {
+                    "success": False,
+                    "message": "Only guides can verify bookings."
+                },
+                status=403
+            )
+
+        # Get only this guide's booking
+        try:
+            booking = Booking.objects.get(
+                id=booking_id,
+                guide=request.user
+            )
+        except Booking.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Booking not found."
+                },
+                status=404
+            )
+
+        # Verification is allowed ONLY for confirmed booking
+        if booking.status != "confirmed":
+            return Response(
+                {
+                    "success": False,
+                    "message": "This booking cannot be verified now."
+                },
+                status=400
+            )
+
+        # Get entered code
+        code = str(
+            request.data.get("code", "")
+        ).strip()
+
+        if not code:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Verification code is required."
+                },
+                status=400
+            )
+
+        # Check verification code
+        if code != str(booking.verification_code):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid verification code."
+                },
+                status=400
+            )
+
+        # Correct code → ON PROCESS
+        booking.status = "on_process"
+
+        # Optional timestamp if your model has verified_at
+        if hasattr(booking, "verified_at"):
+            booking.verified_at = timezone.now()
+
+            booking.save(
+                update_fields=[
+                    "status",
+                    "verified_at"
+                ]
+            )
+        else:
+            booking.save(
+                update_fields=["status"]
+            )
+
+        return Response({
+            "success": True,
+            "message": "Booking verified successfully. Tour is now on process.",
+            "status": booking.status
+        })
+
+
+# ============================================================
+# GUIDE COMPLETE BOOKING
+# on_process → completed
+# ============================================================
+
+# class CompleteBookingAPIView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request, booking_id):
+
+#         # Only guide can complete
+#         if request.user.role != "guide":
+#             return Response(
+#                 {
+#                     "success": False,
+#                     "message": "Only guides can complete bookings."
+#                 },
+#                 status=403
+#             )
+
+#         # Get only this guide's booking
+#         try:
+#             booking = Booking.objects.get(
+#                 id=booking_id,
+#                 guide=request.user
+#             )
+#         except Booking.DoesNotExist:
+#             return Response(
+#                 {
+#                     "success": False,
+#                     "message": "Booking not found."
+#                 },
+#                 status=404
+#             )
+
+#         # Complete ONLY on-process booking
+#         if booking.status != "on_process":
+#             return Response(
+#                 {
+#                     "success": False,
+#                     "message": "Only an on-process booking can be completed."
+#                 },
+#                 status=400
+#             )
+
+#         # ON PROCESS → COMPLETED
+#         booking.status = "completed"
+#         booking.payment_status ="paid"
+
+#         # Optional timestamp if your model has completed_at
+#         if hasattr(booking, "completed_at"):
+#             booking.completed_at = timezone.now()
+            
+
+#             booking.save(
+#                 update_fields=[
+#                     "status",
+#                     "completed_at"
+#                 ]
+#             )
+            
+#         else:
+#             booking.save(
+                
+#                 update_fields=["status"]
+#             )
+
+#         return Response({
+#             "success": True,
+#             "message": "Booking completed successfully.",
+#             "status": booking.status
+#         })
+        
+        
+        
+class CompleteBookingAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, booking_id):
+
+        # ==========================================
+        # ONLY GUIDE CAN COMPLETE
+        # ==========================================
+        if getattr(request.user, "role", None) != "guide":
+            return Response(
+                {
+                    "success": False,
+                    "message": "Only guides can complete bookings."
+                },
+                status=403
+            )
+
+        # ==========================================
+        # GET THIS GUIDE'S BOOKING
+        # ==========================================
+        try:
+            booking = Booking.objects.get(
+                id=booking_id,
+                guide=request.user
+            )
+        except Booking.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Booking not found."
+                },
+                status=404
+            )
+
+        # ==========================================
+        # ONLY ON_PROCESS CAN BE COMPLETED
+        # ==========================================
+        if booking.status != "on_process":
+            return Response(
+                {
+                    "success": False,
+                    "message": "Only an on-process booking can be completed."
+                },
+                status=400
+            )
+
+        # ==========================================
+        # ON_PROCESS → COMPLETED
+        # ==========================================
+        booking.status = "completed"
+
+        # Payment becomes fully paid
+        booking.payment_status = "paid"
+
+        # ==========================================
+        # OPTIONAL COMPLETION TIMESTAMP
+        # ==========================================
+        update_fields = [
+            "status",
+            "payment_status",
+        ]
+
+        if hasattr(booking, "completed_at"):
+            booking.completed_at = timezone.now()
+            update_fields.append("completed_at")
+
+        # ==========================================
+        # SAVE
+        # ==========================================
+        booking.save(
+            update_fields=update_fields
+        )
+
+        # ==========================================
+        # RESPONSE
+        # ==========================================
+        return Response(
+            {
+                "success": True,
+                "message": "Booking completed successfully.",
+                "status": booking.status,
+                "payment_status": booking.payment_status
+            },
+            status=200
+        )
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.db import transaction
+
+from .models import Booking
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.db import transaction
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+import random
+
+from .models import Booking
+
+
+@login_required
+@require_POST
+def guide_accept_booking(request, booking_id):
+
+    # ============================================================
+    # ONLY GUIDE CAN ACCEPT
+    # ============================================================
+
+    if getattr(request.user, "role", None) != "guide":
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Only guides can accept bookings."
+            },
+            status=403
+        )
+
+    # ============================================================
+    # TRANSACTION
+    # IMPORTANT:
+    # select_for_update() MUST be inside atomic()
+    # ============================================================
+
+    try:
+
+        with transaction.atomic():
+
+            booking = (
+                Booking.objects
+                .select_for_update()
+                .select_related(
+                    "tour",
+                    "user",
+                    "guide"
+                )
+                .get(id=booking_id)
+            )
+
+            # ====================================================
+            # SECURITY CHECK
+            # Make sure this booking belongs to this guide
+            # ====================================================
+
+            if booking.guide_id != request.user.id:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "This booking is not assigned to you."
+                    },
+                    status=403
+                )
+
+            # ====================================================
+            # BOOKING MUST BE PENDING
+            # ====================================================
+
+            if booking.status != "pending":
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "This booking is no longer pending."
+                    },
+                    status=400
+                )
+
+            # ====================================================
+            # GUIDE MUST STILL BE PENDING
+            # ====================================================
+
+            if booking.guide_status != "pending":
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": (
+                            "You have already responded to this booking."
+                        )
+                    },
+                    status=400
+                )
+
+            # ====================================================
+            # GENERATE 6-DIGIT VERIFICATION CODE
+            # ====================================================
+
+            verification_code = str(
+                random.randint(100000, 999999)
+            )
+
+            # ====================================================
+            # ACCEPT BOOKING
+            # ====================================================
+
+            booking.verification_code = verification_code
+
+            booking.guide_status = "accepted"
+
+            booking.status = "confirmed"
+
+            # ====================================================
+            # SAVE
+            # ====================================================
+
+            booking.save(
+                update_fields=[
+                    "verification_code",
+                    "guide_status",
+                    "status"
+                ]
+            )
+
+    except Booking.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Booking not found."
+            },
+            status=404
+        )
+
+    # ============================================================
+    # SEND CONFIRMATION EMAIL TO TOURIST
+    # ============================================================
+
+    email_sent = False
+
+    try:
+
+        subject = (
+            f"Booking Confirmed - "
+            f"{booking.booking_id}"
+        )
+
+        message = f"""
+Hello {booking.guest_name},
+
+Great news!
+
+Your tour booking has been confirmed.
+
+----------------------------------------
+BOOKING DETAILS
+----------------------------------------
+
+Booking ID:
+{booking.booking_id}
+
+Tour:
+{booking.tour.title if booking.tour else "Tour"}
+
+Tour Date:
+{booking.tour_date}
+
+Tour Time:
+{booking.tour_time}
+
+Guide:
+{booking.guide.username if booking.guide else "Assigned Guide"}
+
+----------------------------------------
+VERIFICATION CODE
+----------------------------------------
+
+Your 6-digit verification code is:
+
+{booking.verification_code}
+
+Please keep this code safe.
+
+You will need to provide this code to
+your guide when you are ready to start
+your tour.
+
+----------------------------------------
+
+Thank you for booking with us.
+
+Regards,
+{getattr(settings, "SITE_NAME", "Tourist Guide")}
+"""
+
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[booking.guest_email],
+        )
+
+        email.send(
+            fail_silently=False
+        )
+
+        email_sent = True
+
+    except Exception as e:
+
+        print(
+            "Guide accepted email error:",
+            e
+        )
+
+    # ============================================================
+    # RESPONSE
+    # ============================================================
+
+    return JsonResponse(
+        {
+            "success": True,
+
+            "message": (
+                "Booking accepted successfully. "
+                "Verification code has been generated "
+                "and sent to the tourist."
+            ),
+
+            "booking_id": booking.booking_id,
+
+            "booking_database_id": booking.id,
+
+            "guide_id": booking.guide_id,
+
+            "guide_status": booking.guide_status,
+
+            "booking_status": booking.status,
+
+            "verification_code_generated": True,
+
+            "email_sent": email_sent,
+        }
+        
+    )
+  
+  
+  
+  
+  
+  
+  
+@login_required
+@require_POST
+def guide_decline_booking(request, booking_id):
+
+    if getattr(request.user, "role", None) != "guide":
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Only guides can decline bookings."
+            },
+            status=403
+        )
+
+    try:
+
+        with transaction.atomic():
+
+            booking = (
+                Booking.objects
+                .select_for_update()
+                .select_related(
+                    "tour",
+                    "user",
+                    "guide"
+                )
+                .get(id=booking_id)
+            )
+
+            # SECURITY CHECK
+
+            if booking.guide_id != request.user.id:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "This booking is not assigned to you."
+                    },
+                    status=403
+                )
+
+            # BOOKING MUST BE PENDING
+
+            if booking.status != "pending":
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": "This booking is no longer pending."
+                    },
+                    status=400
+                )
+
+            # GUIDE MUST BE PENDING
+
+            if booking.guide_status != "pending":
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": (
+                            "You have already responded to this booking."
+                        )
+                    },
+                    status=400
+                )
+
+            # ====================================================
+            # SAVE DECLINED GUIDE
+            # ====================================================
+
+            declined_ids = list(
+                booking.declined_guides or []
+            )
+
+            if request.user.id not in declined_ids:
+                declined_ids.append(
+                    request.user.id
+                )
+
+            booking.declined_guides = declined_ids
+
+            booking.guide_status = "declined"
+
+            booking.status = "pending"
+
+            booking.save(
+                update_fields=[
+                    "declined_guides",
+                    "guide_status",
+                    "status"
+                ]
+            )
+
+            # ====================================================
+            # FIND NEXT GUIDE
+            # ====================================================
+
+            next_guide = booking.get_next_guide()
+
+            if next_guide:
+
+                booking.guide = next_guide
+
+                booking.guide_status = "pending"
+
+                booking.guide_attempt += 1
+
+                booking.status = "pending"
+
+                booking.save(
+                    update_fields=[
+                        "guide",
+                        "guide_status",
+                        "guide_attempt",
+                        "status"
+                    ]
+                )
+
+                next_guide_id = next_guide.id
+
+                next_guide_name = (
+                    getattr(
+                        next_guide,
+                        "username",
+                        None
+                    )
+                    or getattr(
+                        next_guide,
+                        "email",
+                        None
+                    )
+                    or str(next_guide.id)
+                )
+
+            else:
+
+                next_guide_id = None
+                next_guide_name = None
+
+    except Booking.DoesNotExist:
+
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Booking not found."
+            },
+            status=404
+        )
+
+    # ============================================================
+    # ADMIN EMAIL
+    # ============================================================
+
+    try:
+
+        subject = (
+            f"Guide Declined Booking - "
+            f"{booking.booking_id}"
+        )
+
+        message = f"""
+Booking ID: {booking.booking_id}
+
+Tour:
+{booking.tour.title if booking.tour else "Tour"}
+
+Declined Guide:
+{getattr(request.user, "username", request.user.email)}
+
+Guide ID:
+{request.user.id}
+
+Booking Status:
+{booking.status}
+
+Guide Status:
+declined
+
+Next Guide:
+{next_guide_name or "No available guide"}
+
+The booking remains pending.
+"""
+
+        admin_email = EmailMultiAlternatives(
+            subject=subject,
+            body=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[settings.ADMIN_EMAIL],
+        )
+
+        admin_email.send(
+            fail_silently=False
+        )
+
+    except Exception as e:
+
+        print(
+            "Guide decline admin email error:",
+            e
+        )
+
+    # ============================================================
+    # RESPONSE
+    # ============================================================
+
+    if next_guide_id:
+
+        return JsonResponse(
+            {
+                "success": True,
+                "message": (
+                    "Booking declined. "
+                    "The booking has been sent "
+                    "to the next guide."
+                ),
+                "booking_id": booking.booking_id,
+                "guide_status": "pending",
+                "booking_status": "pending",
+                "next_guide_id": next_guide_id,
+                "next_guide_name": next_guide_name,
+            }
+        )
+
+    return JsonResponse(
+        {
+            "success": True,
+            "message": (
+                "Booking declined. "
+                "No other guide is currently available. "
+                "Booking remains pending."
+            ),
+            "booking_id": booking.booking_id,
+            "guide_status": "declined",
+            "booking_status": "pending",
+            "next_guide_id": None,
+            "next_guide_name": None,
+        }
+    )
+    
+    
+    
+    
+@login_required
+def guide_pending_bookings(request):
+
+    if getattr(request.user, "role", None) != "guide":
+        return JsonResponse(
+            {
+                "success": False,
+                "message": "Only guides can view guide bookings."
+            },
+            status=403
+        )
+
+    # ==========================================
+    # ALL BOOKINGS ASSIGNED TO THIS GUIDE
+    # ==========================================
+    bookings = (
+        Booking.objects
+        .filter(guide=request.user)
+        .select_related("tour", "user", "guide")
+        .order_by("-id")
+    )
+
+    data = []
+
+    for booking in bookings:
+
+        # --------------------------------------
+        # TOUR NAME
+        # --------------------------------------
+        tour_name = ""
+
+        if booking.tour:
+            tour_name = getattr(
+                booking.tour,
+                "title",
+                getattr(booking.tour, "name", "")
+            )
+
+        # --------------------------------------
+        # DATE
+        # --------------------------------------
+        tour_date = getattr(
+            booking,
+            "tour_date",
+            None
+        )
+
+        if tour_date:
+            tour_date = str(tour_date)
+
+        # --------------------------------------
+        # TIME
+        # --------------------------------------
+        tour_time = getattr(
+            booking,
+            "tour_time",
+            None
+        )
+
+        if tour_time:
+            tour_time = str(tour_time)
+
+        # --------------------------------------
+        # GUIDE PROFILE
+        # --------------------------------------
+        selected_guide = None
+
+        if booking.guide:
+
+            profile_image = ""
+
+            try:
+                if booking.guide.profile_image:
+                    profile_image = booking.guide.profile_image.url
+            except (ValueError, AttributeError):
+                profile_image = ""
+
+            selected_guide = {
+                "id": booking.guide.id,
+
+                "username": str(
+                    booking.guide.username or ""
+                ),
+
+                "email": str(
+                    getattr(
+                        booking.guide,
+                        "email",
+                        ""
+                    ) or ""
+                ),
+
+                "phone_number": str(
+                    getattr(
+                        booking.guide,
+                        "phone_number",
+                        ""
+                    ) or ""
+                ),
+
+                "profile_image": profile_image,
+
+                "location": str(
+                    getattr(
+                        booking.guide,
+                        "location",
+                        ""
+                    ) or ""
+                ),
+
+                "state": str(
+                    getattr(
+                        booking.guide,
+                        "state",
+                        ""
+                    ) or ""
+                ),
+            }
+
+        # --------------------------------------
+        # BOOKING
+        # --------------------------------------
+        data.append({
+
+            "id": booking.id,
+
+            "booking_id": booking.booking_id,
+
+            # ALL STATUS VALUES
+            "status": booking.status,
+
+            "booking_status": booking.status,
+
+            # GUIDE STATUS
+            "guide_id": booking.guide_id,
+
+            "guide_status": booking.guide_status,
+
+            "guide_attempt": booking.guide_attempt,
+
+            # TOUR
+            "tour_name": tour_name,
+
+            "tour_date": tour_date,
+
+            "tour_time": tour_time,
+
+            # GUEST
+            "guest_name": str(
+                booking.guest_name or ""
+            ),
+
+            "guest_email": str(
+                booking.guest_email or ""
+            ),
+
+            "guest_phone": str(
+                booking.guest_phone or ""
+            ),
+
+            # PAYMENT
+            "total_amount": float(
+                booking.total_amount or 0
+            ),
+
+            # GUIDE
+            "selected_guide": selected_guide,
+        })
+
+    return JsonResponse({
+        "success": True,
+        "count": len(data),
+        "data": data,
+    })
+    
 # class BookingListAPIView(APIView):
 
 #     def get(self, request):

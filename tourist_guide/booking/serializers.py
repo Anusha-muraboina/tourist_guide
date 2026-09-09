@@ -443,6 +443,8 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         if obj.guide:
             return GuideSerializer(obj.guide, context=self.context).data
         return None
+    
+    
 
     def get_matching_guides(self, obj):
         if not obj.tour.location:
@@ -524,6 +526,7 @@ class BookingListSerializer(serializers.ModelSerializer):
             "payment_status",
             "created_at",
             "user_role",
+            
         ]
 
     def get_guide_name(self, obj):

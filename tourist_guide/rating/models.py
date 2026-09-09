@@ -11,7 +11,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from user.models import User
 from tourist.models import Tour
 
-
 class Rating(models.Model):
 
     user = models.ForeignKey(
@@ -19,11 +18,28 @@ class Rating(models.Model):
         on_delete=models.CASCADE,
         related_name="ratings"
     )
+    
+    
+    # Guide who received the review
+    guide = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="guide_ratings",
+        limit_choices_to={"role": "guide"}
+    )
 
     tour = models.ForeignKey(
         Tour,
         on_delete=models.CASCADE,
         related_name="ratings"
+    )
+    
+    booking = models.OneToOneField(
+        "booking.Booking",
+        on_delete=models.CASCADE,
+        related_name="rating",
+        null=True,
+        blank=True
     )
 
     rating = models.DecimalField(

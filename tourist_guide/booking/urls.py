@@ -10,7 +10,13 @@ from booking.views import (
     VerifyAndCreateBookingAPIView,
     RazorpayWebhookAPIView
 )
-
+from booking.views import (
+    BookingListAPIView,
+    VerifyBookingCodeAPIView,
+    CompleteBookingAPIView,
+        guide_accept_booking,
+    guide_decline_booking,
+)
 urlpatterns = [
     path('booking/', views.booking, name='booking'),
     path( "create-booking/", BookingCreateAPIView.as_view(), name="create_booking" ),
@@ -33,12 +39,7 @@ urlpatterns = [
     name="update_booking"
 ),
 
-    path(
-    "apply-coupon/",
-    ApplyCouponAPIView.as_view(),
-    name="apply_coupon"
-),
-    
+
     
     path(
         "api/booking-list/",
@@ -83,4 +84,41 @@ urlpatterns = [
     path("create-razorpay-order/", CreateRazorpayOrderAPIView.as_view()),
     path("verify-and-create-booking/", VerifyAndCreateBookingAPIView.as_view()),
     path("payments/webhook/", RazorpayWebhookAPIView.as_view()),
+    
+    
+        # Guide enters tourist verification code
+    path(
+        "api/guide/verify/<int:booking_id>/",
+        VerifyBookingCodeAPIView.as_view(),
+        name="verify_booking_code"
+    ),
+
+    # Guide completes tour
+    path(
+        "api/guide/complete/<int:booking_id>/",
+        CompleteBookingAPIView.as_view(),
+        name="complete_booking"
+    ),
+    
+    
+    
+    path(
+        "api/guide/accept/<int:booking_id>/",
+        guide_accept_booking,
+        name="guide_accept_booking",
+    ),
+
+    path(
+        "api/guide/decline/<int:booking_id>/",
+        guide_decline_booking,
+        name="guide_decline_booking",
+    ),
+    
+    path(
+    "api/guide/pending-bookings/",
+    views.guide_pending_bookings,
+    name="guide_pending_bookings"
+),
+
 ]
+
