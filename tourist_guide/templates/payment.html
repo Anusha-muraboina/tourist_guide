@@ -1161,8 +1161,15 @@ document
 let selectedGuideId = null;
 
 
+
+// ==========================================
+// RENDER GUIDES
+// ==========================================
+
 function renderGuides(guides) {
+
     const container = document.getElementById("guideContainer");
+
     if (!container) {
         console.error("guideContainer not found");
         return;
@@ -1170,248 +1177,512 @@ function renderGuides(guides) {
 
     container.innerHTML = "";
 
+
     if (!Array.isArray(guides) || guides.length === 0) {
+
         container.innerHTML = `
-            <div class="col-span-full text-center text-gray-500 py-10">
-                No guides available for this tour
-            </div>`;
+            <div class="col-span-full text-center py-12">
+
+                <div class="w-16 h-16 mx-auto mb-4
+                            rounded-full bg-gray-100
+                            flex items-center justify-center">
+
+                    <i class="fa-solid fa-user-group
+                              text-gray-400 text-xl"></i>
+
+                </div>
+
+                <p class="text-gray-500 font-medium">
+                    No guides available for this tour
+                </p>
+
+            </div>
+        `;
+
         return;
     }
 
-guides.forEach(guide => {
-    const loc = (guide.locations && guide.locations.length)
-        ? `${guide.locations[0].city || ""}, ${guide.locations[0].state || ""}`
-        : "Location not available";
 
-    const img = guide.profile_image || "/static/images/default-user.png";
+    guides.forEach(guide => {
 
-    container.innerHTML += `
-        <div class="guide-card bg-white border border-gray-200 rounded-2xl 
-                    overflow-hidden cursor-pointer transition-all duration-300
-                    hover:-translate-y-1 hover:border-blue-500 hover:shadow-xl"
-             data-id="${guide.id}">
-
-            <!-- BIG PROFILE IMAGE -->
-            <div class="relative w-full h-40 bg-gray-100 overflow-hidden">
-
-                <img src="${img}"
-                     alt="${guide.name || "Guide"}"
-                     class="w-full h-full object-cover transition-transform duration-500
-                            hover:scale-105"
-                     onerror="this.src='/static/images/default-user.png'">
-
-                <!-- Guide Badge -->
-                <div class="absolute top-4 left-4">
-                    <span class="bg-blue-800 text-white text-xs font-semibold
-                                 px-3 py-1.5 rounded-full shadow">
-                        Tour Guide
-                    </span>
-                </div>
-
-                {% comment %} <!-- Location -->
-                <div class="absolute bottom-4 left-4 right-4">
-                    <div class="inline-flex items-center gap-2
-                                bg-black/60 backdrop-blur-sm
-                                text-white text-sm px-3 py-2 rounded-lg">
-                        <span>📍</span>
-                        <span>${loc}</span>
-                    </div>
-                </div> {% endcomment %}
-
-            </div>
-
-            <!-- GUIDE DETAILS -->
-            <div class="p-2">
-
-                <div class="flex items-center justify-between gap-3">
-
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">
-                            ${guide.name || "Guide"}
-                        </h3>
-
-                        <p class="text-sm text-gray-500 mt-1">
-                            Professional Tour Guide
-                        </p>
-                    </div>
-
-             
-
-                </div>
-
-            </div>
+        const img =
+            guide.profile_image ||
+            "/static/images/default-user.png";
 
 
-                <div class="grid grid-cols-2 gap-3 mt-5">
+        const loc =
+            (guide.locations && guide.locations.length)
+                ? `${guide.locations[0].city || ""}, ${guide.locations[0].state || ""}`
+                : "Location not available";
 
-                    <!-- VIEW GUIDE -->
-                    <button
-                        type="button"
-                        class="view-guide-btn
-                               flex items-center justify-center gap-2
-                               rounded-xl border border-blue-900
-                               px-4 py-3
-                               text-sm font-semibold text-blue-900
-                               transition-all duration-200
-                               hover:bg-blue-900 hover:text-white"
-                        data-guide-id="${guide.id}"
-                    >
-                        <i class="fa-regular fa-eye"></i>
-                        View 
-                    </button>
-
-
-                    <!-- SELECT GUIDE -->
-                    <button
-                        type="button"
-                        class="select-guide-btn
-                               flex items-center justify-center gap-2
-                               rounded-xl bg-blue-900
-                               px-4 py-3
-                               text-sm font-semibold text-white
-                               transition-all duration-200
-                               hover:bg-blue-800
-                               active:scale-[0.98]"
-                        data-guide-id="${guide.id}"
-                    >
-                        <i class="fa-solid fa-check"></i>
-                        Select
-                    </button>
-
-                </div>
-
-
-
-
-        </div>`;
-});
-
-    {% comment %} guides.forEach(guide => {
-        const loc = (guide.locations && guide.locations.length)
-            ? `${guide.locations[0].city || ""}, ${guide.locations[0].state || ""}`
-            : "Location not available";
-
-        const img = guide.profile_image || "/static/images/default-user.png";
 
         container.innerHTML += `
-            <div class="guide-card bg-white border-2 border-gray-200 rounded-2xl p-5 cursor-pointer
-                        transition hover:border-blue-500 hover:shadow-lg"
-                 data-id="${guide.id}">
 
-                <div class="flex items-center gap-4">
-                    <img src="${img}" alt="${guide.name || "Guide"}"
-                         class="w-16 h-16 rounded-full object-cover border-2 border-blue-800"
-                         onerror="this.src='/static/images/default-user.png'">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">${guide.name || "Guide"}</h3>
-                        <p class="text-sm text-blue-800 mt-1">Tour Guide</p>
-                    </div>
+        <!-- ===================================== -->
+        <!-- GUIDE CARD -->
+        <!-- ===================================== -->
+
+        <div
+            class="guide-card group relative
+                   bg-white
+                   border-2 border-gray-200
+                   rounded-3xl
+                   overflow-hidden
+                   cursor-pointer
+                   transition-all duration-300
+                   hover:-translate-y-1
+                   hover:shadow-xl
+                   hover:border-blue-300"
+
+            data-id="${guide.id}"
+        >
+
+
+            <!-- ================================= -->
+            <!-- SELECT CIRCLE -->
+            <!-- ================================= -->
+
+            <button
+                type="button"
+                class="guide-select-circle absolute
+                       top-4 right-4 z-20
+                       w-4 h-4
+                       rounded-full
+                       bg-transparent
+                       backdrop-blur-sm
+                       border-2 border-gray-300
+                       shadow-lg
+                       flex items-center justify-center
+                       transition-all duration-300
+                       {% comment %} hover:border-blue-700 {% endcomment %}
+                       hover:scale-105"
+
+                data-guide-id="${guide.id}"
+                aria-label="Select ${guide.name || "guide"}"
+            >
+
+                <i
+                    class="fa-solid fa-check
+                           text-white text-sm
+                           opacity-0 scale-50
+                           transition-all duration-200">
+                </i>
+
+            </button>
+
+
+
+            <!-- ================================= -->
+            <!-- GUIDE IMAGE -->
+            <!-- ================================= -->
+
+            <div
+                class="relative w-full h-44
+                       bg-gray-100
+                       overflow-hidden"
+            >
+
+                <img
+                    src="${img}"
+                    alt="${guide.name || "Guide"}"
+
+                    class="w-full h-full
+                           object-cover
+                           transition-transform
+                           duration-500
+                           group-hover:scale-105"
+
+                    onerror="this.src='/static/images/default-user.png'"
+                >
+
+
+                <!-- Image overlay -->
+
+                <div
+                    class="absolute inset-0
+                           bg-gradient-to-t
+                           from-black/40
+                           via-transparent
+                           to-transparent
+                           pointer-events-none">
                 </div>
 
-                <div class="mt-4 space-y-2 text-sm text-gray-600">
-                    <p>📍 ${loc}</p>
-                    <p>📞 ${guide.phone || "Not available"}</p>
-                    <p class="break-all">✉️ ${guide.email || "Not available"}</p>
-                </div> 
-            </div>`;
-    }); {% endcomment %}
 
-    // Click to select
-    {% comment %} document.querySelectorAll(".guide-card").forEach(card => {
-        card.addEventListener("click", function () {
-            document.querySelectorAll(".guide-card").forEach(c => {
-                c.classList.remove("border-blue-600", "shadow-lg");
-                c.classList.add("border-gray-200");
-            });
-            this.classList.remove("border-gray-200");
-            this.classList.add("border-blue-600", "shadow-lg");
-            selectedGuideId = this.dataset.id;
-            console.log("Selected guide id:", selectedGuideId);
-        });
-    }); {% endcomment %}
+                <!-- Guide Badge -->
+
+                <div class="absolute top-4 left-4">
+
+                    <span
+                        class="inline-flex items-center gap-2
+                               bg-blue-900
+                               text-white
+                               text-xs
+                               font-bold
+                               px-4 py-2
+                               rounded-full
+                               shadow-lg">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        Tour Guide
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================= -->
+            <!-- GUIDE INFORMATION -->
+            <!-- ================================= -->
+
+            <div class="p-5">
+
+
+                <!-- Name -->
+
+                <h3
+                    class="text-xl
+                           font-bold
+                           text-gray-900
+                           truncate"
+                >
+
+                    ${guide.name || "Guide"}
+
+                </h3>
+
+
+                <!-- Professional -->
+
+                <p
+                    class="text-sm
+                           text-gray-500
+                           mt-1"
+                >
+
+                    Professional Tour Guide
+
+                </p>
+
+
+                <!-- Location -->
+
+                {% comment %} <div
+                    class="flex items-center
+                           gap-2
+                           mt-3
+                           text-sm
+                           text-gray-500"
+                >
+
+                    <i
+                        class="fa-solid fa-location-dot
+                               text-blue-700">
+                    </i>
+
+                    <span class="truncate">
+                        ${loc}
+                    </span>
+
+                </div> {% endcomment %}
+
+
+
+                <!-- ================================= -->
+                <!-- BOTTOM ACTION -->
+                <!-- ================================= -->
+
+                <div class="mt-5">
+
+                    <button
+                        type="button"
+
+                        class="view-guide-btn
+                               w-full
+                               flex items-center
+                               justify-center
+                               gap-2
+                               rounded-xl
+                               border-2
+                               border-blue-900
+                               px-4 py-3
+                               text-sm
+                               font-bold
+                               text-blue-900
+                               transition-all
+                               duration-200
+                               hover:bg-blue-900
+                               hover:text-white"
+
+                        data-guide-id="${guide.id}"
+                    >
+
+                        <i class="fa-regular fa-eye"></i>
+
+                        View Guide
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+
 
 
     // ==========================================
-// SELECT GUIDE
-// ==========================================
+    // SELECT GUIDE
+    // ==========================================
 
-document.querySelectorAll(".select-guide-btn").forEach(button => {
+    document
+        .querySelectorAll(".guide-select-circle")
+        .forEach(button => {
 
-    button.addEventListener("click", function (event) {
+            button.addEventListener("click", function(event) {
 
-        event.stopPropagation();
+                event.stopPropagation();
 
-        selectedGuideId = this.dataset.guideId;
+                selectGuide(this.dataset.guideId);
 
-        // Remove previous selection
-        document.querySelectorAll(".guide-card").forEach(card => {
-
-            card.classList.remove(
-                "border-blue-600",
-                "ring-2",
-                "ring-blue-600/20",
-                "shadow-lg"
-            );
-
-            card.classList.add("border-gray-200");
+            });
 
         });
 
 
-        // Highlight selected card
-        const selectedCard =
-            this.closest(".guide-card");
 
-        selectedCard.classList.remove(
-            "border-gray-200"
-        );
+    // ==========================================
+    // CLICK CARD TO SELECT
+    // ==========================================
 
-        selectedCard.classList.add(
-            "border-blue-600",
-            "ring-2",
-            "ring-blue-600/20",
-            "shadow-lg"
-        );
+    document
+        .querySelectorAll(".guide-card")
+        .forEach(card => {
 
+            card.addEventListener("click", function(event) {
 
-        console.log(
-            "Selected guide id:",
-            selectedGuideId
-        );
+                /*
+                 * Don't select when clicking
+                 * the View Guide button.
+                 */
 
-    });
-
-});
+                if (
+                    event.target.closest(".view-guide-btn")
+                ) {
+                    return;
+                }
 
 
-// ==========================================
-// VIEW GUIDE DETAILS
-// ==========================================
+                selectGuide(this.dataset.id);
 
-document.querySelectorAll(".view-guide-btn").forEach(button => {
+            });
 
-    button.addEventListener("click", function (event) {
+        });
 
-        event.stopPropagation();
 
-        const guideId = this.dataset.guideId;
 
-        if (!guideId) {
-            console.error("Guide ID missing");
-            return;
-        }
+    // ==========================================
+    // VIEW GUIDE
+    // ==========================================
 
-        // Open guide detail page
-        window.location.href =
-            `/user/guides/${guideId}/`;
+    document
+        .querySelectorAll(".view-guide-btn")
+        .forEach(button => {
 
-    });
+            button.addEventListener("click", function(event) {
 
-});
+                event.stopPropagation();
 
+                const guideId =
+                    this.dataset.guideId;
+
+
+                if (!guideId) {
+
+                    console.error(
+                        "Guide ID missing"
+                    );
+
+                    return;
+                }
+
+
+                window.location.href =
+                    `/user/guides/${guideId}/`;
+
+            });
+
+        });
 
 }
 
+
+
+// ==========================================
+// SELECT GUIDE FUNCTION
+// ==========================================
+
+function selectGuide(guideId) {
+
+    selectedGuideId = guideId;
+
+
+    // Remove selection from every card
+
+    document
+        .querySelectorAll(".guide-card")
+        .forEach(card => {
+
+            const circle =
+                card.querySelector(
+                    ".guide-select-circle"
+                );
+
+            const check =
+                circle?.querySelector("i");
+
+
+            // Reset card
+
+            card.classList.remove(
+                "border-blue-700",
+                "ring-4",
+                "ring-blue-700/10",
+                "shadow-xl"
+            );
+
+            card.classList.add(
+                "border-gray-200"
+            );
+
+
+            // Reset circle
+
+            if (circle) {
+
+                circle.classList.remove(
+                    "bg-blue-900",
+                    "border-blue-900",
+                    "scale-110"
+                );
+
+                circle.classList.add(
+                    "bg-white",
+                    "border-gray-300"
+                );
+
+            }
+
+
+            // Hide check
+
+            if (check) {
+
+                check.classList.remove(
+                    "opacity-100",
+                    "scale-100"
+                );
+
+                check.classList.add(
+                    "opacity-0",
+                    "scale-50"
+                );
+
+            }
+
+        });
+
+
+
+    // ==========================================
+    // APPLY SELECTION
+    // ==========================================
+
+    const selectedCard =
+        document.querySelector(
+            `.guide-card[data-id="${guideId}"]`
+        );
+
+
+    if (!selectedCard) {
+        return;
+    }
+
+
+    const selectedCircle =
+        selectedCard.querySelector(
+            ".guide-select-circle"
+        );
+
+
+    const selectedCheck =
+        selectedCircle?.querySelector("i");
+
+
+
+    // Highlight card
+
+    selectedCard.classList.remove(
+        "border-gray-200"
+    );
+
+    selectedCard.classList.add(
+        "border-blue-700",
+        "ring-4",
+        "ring-blue-700/10",
+        "shadow-xl"
+    );
+
+
+
+    // Highlight circle
+
+    if (selectedCircle) {
+
+        selectedCircle.classList.remove(
+            "bg-white",
+            "border-gray-300"
+        );
+
+        selectedCircle.classList.add(
+            "bg-blue-900",
+            "border-blue-900",
+            "scale-110"
+        );
+
+    }
+
+
+
+    // Show check
+
+    if (selectedCheck) {
+
+        selectedCheck.classList.remove(
+            "opacity-0",
+            "scale-50"
+        );
+
+        selectedCheck.classList.add(
+            "opacity-100",
+            "scale-100"
+        );
+
+    }
+
+
+    console.log(
+        "Selected guide id:",
+        selectedGuideId
+    );
+
+}
 
 
 

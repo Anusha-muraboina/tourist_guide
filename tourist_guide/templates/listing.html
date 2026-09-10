@@ -205,6 +205,7 @@ Tours | Explore Tours & Experiences
         </h1>
 
 
+
         <p
             class="
                 text-slate-300
@@ -808,6 +809,351 @@ Tours | Explore Tours & Experiences
 
 
 
+
+
+<!-- ==========================================================
+     TOUR SHARE MODAL
+========================================================== -->
+
+<div
+    id="tourShareModal"
+    class="hidden fixed inset-0 z-[9999]"
+    aria-hidden="true"
+>
+
+    <!-- BACKDROP -->
+    <div
+        id="tourShareBackdrop"
+        class="
+            absolute
+            inset-0
+            bg-black/40
+            backdrop-blur-[2px]
+        "
+        onclick="closeTourShare()"
+    ></div>
+
+
+    <!-- MODAL -->
+    <div
+        class="
+            absolute
+            left-1/2
+            top-1/2
+            -translate-x-1/2
+            -translate-y-1/2
+            w-full
+            max-w-[560px]
+            bg-white
+            rounded-2xl
+            shadow-2xl
+            overflow-hidden
+            mx-4
+        "
+    >
+
+        <!-- HEADER -->
+        <div
+            class="
+                relative
+                h-[86px]
+                flex
+                items-center
+                justify-center
+                border-b
+                border-slate-200
+            "
+        >
+
+            <h2
+                class="
+                    text-[25px]
+                    font-extrabold
+                    text-slate-900
+                "
+            >
+                Share
+            </h2>
+
+
+            <!-- CLOSE -->
+            <button
+                type="button"
+                onclick="closeTourShare()"
+                class="
+                    absolute
+                    left-5
+                    top-1/2
+                    -translate-y-1/2
+                    w-10
+                    h-10
+                    flex
+                    items-center
+                    justify-center
+                    rounded-full
+                    text-slate-800
+                    hover:bg-slate-100
+                    transition
+                "
+                aria-label="Close share"
+            >
+                <i class="fa-solid fa-xmark text-[26px]"></i>
+            </button>
+
+        </div>
+
+
+        <!-- SHARE OPTIONS -->
+        <div class="px-6">
+
+            <!-- COPY LINK -->
+            <button
+                type="button"
+                onclick="shareCopyLink()"
+                class="
+                    w-full
+                    h-[74px]
+                    flex
+                    items-center
+                    gap-6
+                    text-left
+                    border-b
+                    border-slate-200
+                    hover:bg-slate-50
+                    transition
+                    group
+                "
+            >
+
+                <span
+                    class="
+                        w-8
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-800
+                    "
+                >
+                    <i
+                        class="
+                            fa-solid
+                            fa-link
+                            text-[24px]
+                        "
+                    ></i>
+                </span>
+
+                <span
+                    class="
+                        text-[18px]
+                        font-semibold
+                        text-slate-800
+                    "
+                >
+                    Copy link
+                </span>
+
+            </button>
+
+
+            <!-- EMAIL -->
+            <button
+                type="button"
+                onclick="shareByEmail()"
+                class="
+                    w-full
+                    h-[74px]
+                    flex
+                    items-center
+                    gap-6
+                    text-left
+                    border-b
+                    border-slate-200
+                    hover:bg-slate-50
+                    transition
+                "
+            >
+
+                <span
+                    class="
+                        w-8
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-800
+                    "
+                >
+                    <i
+                        class="
+                            fa-regular
+                            fa-envelope
+                            text-[24px]
+                        "
+                    ></i>
+                </span>
+
+                <span
+                    class="
+                        text-[18px]
+                        font-semibold
+                        text-slate-800
+                    "
+                >
+                    Email
+                </span>
+
+            </button>
+
+
+            <!-- FACEBOOK -->
+            <button
+                type="button"
+                onclick="shareFacebook()"
+                class="
+                    w-full
+                    h-[74px]
+                    flex
+                    items-center
+                    gap-6
+                    text-left
+                    border-b
+                    border-slate-200
+                    hover:bg-slate-50
+                    transition
+                "
+            >
+
+                <span
+                    class="
+                        w-8
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-800
+                    "
+                >
+                    <i
+                        class="
+                            fa-brands
+                            fa-facebook
+                            text-[24px]
+                        "
+                    ></i>
+                </span>
+
+                <span
+                    class="
+                        text-[18px]
+                        font-semibold
+                        text-slate-800
+                    "
+                >
+                    Facebook
+                </span>
+
+            </button>
+
+
+            <!-- WHATSAPP -->
+            <button
+                type="button"
+                onclick="shareWhatsApp()"
+                class="
+                    w-full
+                    h-[74px]
+                    flex
+                    items-center
+                    gap-6
+                    text-left
+                    border-b
+                    border-slate-200
+                    hover:bg-slate-50
+                    transition
+                "
+            >
+
+                <span
+                    class="
+                        w-8
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-800
+                    "
+                >
+                    <i
+                        class="
+                            fa-brands
+                            fa-whatsapp
+                            text-[24px]
+                        "
+                    ></i>
+                </span>
+
+                <span
+                    class="
+                        text-[18px]
+                        font-semibold
+                        text-slate-800
+                    "
+                >
+                    WhatsApp
+                </span>
+
+            </button>
+
+
+            <!-- TWITTER / X -->
+            <button
+                type="button"
+                onclick="shareTwitter()"
+                class="
+                    w-full
+                    h-[74px]
+                    flex
+                    items-center
+                    gap-6
+                    text-left
+                    hover:bg-slate-50
+                    transition
+                "
+            >
+
+                <span
+                    class="
+                        w-8
+                        flex
+                        items-center
+                        justify-center
+                        text-slate-800
+                    "
+                >
+                    <i
+                        class="
+                            fa-brands
+                            fa-x-twitter
+                            text-[24px]
+                        "
+                    ></i>
+                </span>
+
+                <span
+                    class="
+                        text-[18px]
+                        font-semibold
+                        text-slate-800
+                    "
+                >
+                    Twitter
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
@@ -1458,7 +1804,7 @@ Tours | Explore Tours & Experiences
 
         const price =
             Number(
-                tour.adult_price || 0
+                tour.upto_9_price || 0
             ).toLocaleString(
                 "en-IN"
             );
@@ -1568,7 +1914,8 @@ Tours | Explore Tours & Experiences
                                 class="
                                     absolute
                                     top-3
-                                    right-3
+                                    right-16
+                                    z-10
                                 "
                             >
 
@@ -1601,6 +1948,41 @@ Tours | Explore Tours & Experiences
                         `
                         : ""
                     }
+
+
+
+                    <!-- SHARE BUTTON -->
+<button
+    type="button"
+    onclick="event.preventDefault(); event.stopPropagation(); openTourShare(
+        '${escapeHTML(tour.slug)}',
+        '${escapeHTML(title)}'
+    )"
+    class="
+        absolute
+        top-3
+        right-3
+        z-20
+        w-10
+        h-10
+        rounded-full
+        bg-white
+        text-slate-800
+        flex
+        items-center
+        justify-center
+        shadow-md
+        hover:bg-slate-50
+        hover:scale-105
+        active:scale-95
+        transition-all
+        duration-200
+    "
+    title="Share this tour"
+    aria-label="Share this tour"
+>
+    <i class="fa-solid fa-share-nodes"></i>
+</button>
 
                 </a>
 
@@ -1665,7 +2047,7 @@ Tours | Explore Tours & Experiences
                                 mt-2
                                 leading-snug
                                 line-clamp-2
-                                group-hover:text-indigo-600
+                                group-hover:text-indigo-900
                                 transition-colors
                             "
                         >
@@ -1783,7 +2165,7 @@ Tours | Explore Tours & Experiences
                                     block
                                     text-xl
                                     font-black
-                                    text-indigo-600
+                                    text-indigo-900
                                     mt-0.5
                                 "
                             >
@@ -2066,6 +2448,315 @@ Tours | Explore Tours & Experiences
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ==========================================================
+// TOUR SHARE
+// ==========================================================
+
+let currentShareTour = {
+    slug: "",
+    title: "",
+    url: ""
+};
+
+
+// ==========================================================
+// OPEN SHARE MODAL
+// ==========================================================
+
+function openTourShare(slug, title) {
+
+    currentShareTour.slug = slug;
+    currentShareTour.title = title;
+
+    currentShareTour.url =
+        `${window.location.origin}/tour-details/${encodeURIComponent(slug)}/`;
+
+    const modal =
+        document.getElementById("tourShareModal");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove("hidden");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    // Prevent background scrolling
+    document.body.classList.add("overflow-hidden");
+}
+
+
+// ==========================================================
+// CLOSE SHARE MODAL
+// ==========================================================
+
+function closeTourShare() {
+
+    const modal =
+        document.getElementById("tourShareModal");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.add("hidden");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "overflow-hidden"
+    );
+}
+
+
+// ==========================================================
+// COPY LINK
+// ==========================================================
+
+async function shareCopyLink() {
+
+    const url =
+        currentShareTour.url;
+
+    try {
+
+        await navigator.clipboard.writeText(url);
+
+        closeTourShare();
+
+        showShareMessage(
+            "Tour link copied!"
+        );
+
+    } catch (error) {
+
+        // Fallback
+        const input =
+            document.createElement("input");
+
+        input.value = url;
+
+        document.body.appendChild(input);
+
+        input.select();
+
+        document.execCommand("copy");
+
+        input.remove();
+
+        closeTourShare();
+
+        showShareMessage(
+            "Tour link copied!"
+        );
+    }
+}
+
+
+// ==========================================================
+// EMAIL
+// ==========================================================
+
+function shareByEmail() {
+
+    const title =
+        currentShareTour.title;
+
+    const url =
+        currentShareTour.url;
+
+    const subject =
+        encodeURIComponent(
+            `Check out this tour: ${title}`
+        );
+
+    const body =
+        encodeURIComponent(
+            `Hi,\n\nI found this tour and thought you might like it:\n\n${title}\n\nView the tour:\n${url}`
+        );
+
+    window.location.href =
+        `mailto:?subject=${subject}&body=${body}`;
+}
+
+
+// ==========================================================
+// FACEBOOK
+// ==========================================================
+
+function shareFacebook() {
+
+    const url =
+        encodeURIComponent(
+            currentShareTour.url
+        );
+
+    window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        "_blank",
+        "width=600,height=500"
+    );
+}
+
+
+// ==========================================================
+// WHATSAPP
+// ==========================================================
+
+function shareWhatsApp() {
+
+    const title =
+        currentShareTour.title;
+
+    const url =
+        currentShareTour.url;
+
+    const message =
+        encodeURIComponent(
+            `🌍 Check out this amazing tour!\n\n` +
+            `✨ ${title}\n\n` +
+            `View the tour:\n${url}`
+        );
+
+    window.open(
+        `https://wa.me/?text=${message}`,
+        "_blank"
+    );
+}
+
+
+// ==========================================================
+// TWITTER / X
+// ==========================================================
+
+function shareTwitter() {
+
+    const title =
+        currentShareTour.title;
+
+    const url =
+        currentShareTour.url;
+
+    const text =
+        encodeURIComponent(
+            `Check out this amazing tour: ${title}`
+        );
+
+    const encodedUrl =
+        encodeURIComponent(url);
+
+    window.open(
+        `https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}`,
+        "_blank",
+        "width=600,height=500"
+    );
+}
+
+
+// ==========================================================
+// SHARE MESSAGE
+// ==========================================================
+
+function showShareMessage(message) {
+
+    const old =
+        document.getElementById(
+            "shareMessage"
+        );
+
+    if (old) {
+        old.remove();
+    }
+
+    const messageBox =
+        document.createElement("div");
+
+    messageBox.id =
+        "shareMessage";
+
+    messageBox.innerHTML = `
+        <div
+            class="
+                fixed
+                bottom-6
+                left-1/2
+                -translate-x-1/2
+                z-[10000]
+                flex
+                items-center
+                gap-2
+                px-5
+                py-3
+                rounded-xl
+                bg-slate-900
+                text-white
+                shadow-2xl
+                text-sm
+                font-semibold
+            "
+        >
+            <i
+                class="
+                    fa-solid
+                    fa-circle-check
+                    text-green-400
+                "
+            ></i>
+
+            ${escapeHTML(message)}
+        </div>
+    `;
+
+    document.body.appendChild(
+        messageBox
+    );
+
+    setTimeout(() => {
+
+        messageBox.remove();
+
+    }, 2500);
+}
+
+
+// ==========================================================
+// ESC KEY
+// ==========================================================
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            closeTourShare();
+
+        }
+
+    }
+);
 </script>
+
 
 {% endblock %}

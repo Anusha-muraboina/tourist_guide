@@ -2,293 +2,358 @@
 {% load static %}
 
 {% block title %}
-{% if object %}
-Update User
-{% else %}
-Create User
-{% endif %}
+    {% if object %}
+        Update User
+    {% else %}
+        Create User
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+<div class="min-h-screen bg-slate-50/50 py-8 px-4 sm:px-6 lg:px-8">
 
-<div class="min-h-screen bg-slate-50 p-6">
-
-    <!-- Header -->
-
-    <div class="flex items-center justify-between mb-8">
-
-        <div>
-
-            <h1 class="text-3xl font-bold text-slate-800">
-
-                {% if object %}
-                Update User
-                {% else %}
-                Create User
-                {% endif %}
-
-            </h1>
-
-            <p class="text-slate-500 mt-1">
-
-                Manage user information and permissions.
-
-            </p>
-
+    <!-- Top Navigation / Header -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div class="flex items-center gap-3">
+            <a href="{% url 'user_list' %}"
+               class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-slate-200/80 text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 transition active:scale-95">
+                <i class="fa-solid fa-arrow-left text-sm"></i>
+            </a>
+            <div>
+                <nav class="flex items-center gap-1.5 text-xs font-medium text-slate-400 mb-0.5">
+                    <a href="{% url 'user_list' %}" class="hover:text-slate-600 transition">Users</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <span class="text-slate-600">{% if object %}Edit User{% else %}New Registration{% endif %}</span>
+                </nav>
+                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+                    {% if object %}
+                        Update User: <span class="text-indigo-600">{{ object.username }}</span>
+                    {% else %}
+                        Create New User
+                    {% endif %}
+                </h1>
+            </div>
         </div>
-
-        <a href="{% url 'user_list' %}"
-           class="px-5 py-3 rounded-xl border bg-white hover:bg-slate-100">
-
-            Back
-
-        </a>
-
     </div>
 
-
-    <form method="post"
-          enctype="multipart/form-data">
-
+    <!-- Form Container -->
+    <form method="post" enctype="multipart/form-data" class="max-w-7xl mx-auto">
         {% csrf_token %}
 
-        <div class="grid xl:grid-cols-3 gap-6">
+        {% if form.non_field_errors %}
+            <div class="mb-6 rounded-2xl bg-rose-50 border border-rose-200 p-4 text-sm text-rose-700">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
 
-            <!-- Left -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
 
-            <div class="bg-white rounded-3xl shadow-sm p-8">
+            <!-- LEFT COLUMN: Avatar & System Flags -->
+            <div class="xl:col-span-1 space-y-6">
 
-                <h2 class="text-lg font-semibold mb-6">
+                <!-- Profile Photo Card -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-900 mb-6">Profile Photo</h3>
 
-                    Profile Photo
-
-                </h2>
-
-                <div class="flex flex-col items-center">
-
-                    {% if object.profile_image %}
-
-                        <img
-                            src="{{ object.profile_image.url }}"
-                            class="w-40 h-40 rounded-full object-cover border shadow">
-
-                    {% else %}
-
-                        <div class="w-40 h-40 rounded-full bg-indigo-100 flex items-center justify-center text-5xl font-bold text-indigo-700">
-
-                            {{ object.username|default:"U"|first|upper }}
-
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-36 h-36 rounded-full ring-4 ring-slate-100 overflow-hidden shadow-md bg-slate-50 flex items-center justify-center flex-shrink-0">
+                            {% if object.profile_image %}
+                                <img src="{{ object.profile_image.url }}"
+                                     alt="{{ object.username }}"
+                                     class="w-full h-full object-cover">
+                            {% else %}
+                                <span class="text-4xl font-bold text-slate-400">
+                                    {{ object.username|default:"U"|first|upper }}
+                                </span>
+                            {% endif %}
                         </div>
 
-                    {% endif %}
+                        <div class="mt-6 w-full">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                                Change Image
+                            </label>
+                            <div class="relative">
+                                {{ form.profile_image }}
+                            </div>
+                            {% if form.profile_image.errors %}
+                                <p class="text-xs text-rose-600 mt-1.5">{{ form.profile_image.errors.0 }}</p>
+                            {% endif %}
+                            <p class="text-[11px] text-slate-400 mt-2">Recommended: Square JPG or PNG, max 2MB.</p>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="mt-6 w-full">
-
-                        <label class="block text-sm font-medium text-slate-700 mb-2">
-
-                            Upload Image
-
-                        </label>
-
-                        {{ form.profile_image }}
-
-                        {{ form.profile_image.errors }}
-
+                <!-- Account Status Flags -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-5">
+                    <div>
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-900">Access & Status</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Control global platform permissions</p>
                     </div>
 
+                    <div class="space-y-4 pt-1">
+                        <!-- Verified Toggle Card -->
+                        <label class="flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/50 transition cursor-pointer">
+                            <div class="pt-0.5">
+                                {{ form.is_verified }}
+                            </div>
+                            <div class="text-xs">
+                                <span class="font-semibold text-slate-800 block">Verified Status</span>
+                                <span class="text-slate-400 leading-relaxed">Confirms identity badges across listing views.</span>
+                            </div>
+                        </label>
+
+                        <!-- Active Toggle Card -->
+                        <label class="flex items-start gap-3.5 p-3.5 rounded-2xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/50 transition cursor-pointer">
+                            <div class="pt-0.5">
+                                {{ form.is_active }}
+                            </div>
+                            <div class="text-xs">
+                                <span class="font-semibold text-slate-800 block">Active Status</span>
+                                <span class="text-slate-400 leading-relaxed">Permit authentication and API interactions.</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
 
             </div>
 
+            <!-- RIGHT COLUMN: Account Data, Role Config & Guides -->
+            <div class="xl:col-span-2 space-y-6">
 
-            <!-- Right -->
-
-            <div class="xl:col-span-2">
-
-                <div class="bg-white rounded-3xl shadow-sm">
-
-                    <div class="border-b px-8 py-5">
-
-                        <h2 class="text-lg font-semibold">
-
-                            User Information
-
-                        </h2>
-
+                <!-- Account Essentials -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-900">Account Credentials</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Core identity attributes and role classification</p>
                     </div>
 
-                    <div class="p-8">
-
-                        {{ form.non_field_errors }}
-
-                        <div class="grid md:grid-cols-2 gap-6">
-
-                            <div>
-
-                                <label class="block text-sm font-medium mb-2">
-
-                                    Username
-
-                                </label>
-
-                                {{ form.username }}
-
-                                {{ form.username.errors }}
-
-                            </div>
-
-                            <div>
-
-                                <label class="block text-sm font-medium mb-2">
-
-                                    Email
-
-                                </label>
-
-                                {{ form.email }}
-
-                                {{ form.email.errors }}
-
-                            </div>
-
-                            <div>
-
-                                <label class="block text-sm font-medium mb-2">
-
-                                    Phone Number
-
-                                </label>
-
-                                {{ form.phone_number }}
-
-                                {{ form.phone_number.errors }}
-
-                            </div>
-
-                            <div>
-
-                                <label class="block text-sm font-medium mb-2">
-
-                                    Role
-
-                                </label>
-
-                                {{ form.role }}
-
-                                {{ form.role.errors }}
-
-                            </div>
-
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                        <!-- Username -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <p class="text-xs text-rose-600 mt-1.5">{{ form.username.errors.0 }}</p>
+                            {% endif %}
                         </div>
 
-                    </div>
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Email Address</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <p class="text-xs text-rose-600 mt-1.5">{{ form.email.errors.0 }}</p>
+                            {% endif %}
+                        </div>
 
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Phone Number</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <p class="text-xs text-rose-600 mt-1.5">{{ form.phone_number.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Role -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">User Role</label>
+                            {{ form.role }}
+                            {% if form.role.errors %}
+                                <p class="text-xs text-rose-600 mt-1.5">{{ form.role.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
 
-
-
-                <!-- Locations -->
-
-                <div class="bg-white rounded-3xl shadow-sm mt-6">
-
-                    <div class="border-b px-8 py-5">
-
-                        <h2 class="text-lg font-semibold">
-
-                            Assigned Locations
-
-                        </h2>
-
+                <!-- Locations Section (Conditional) -->
+                <div id="locationsSection" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
+                    <div class="border-b border-slate-100 pb-4 mb-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-sky-600 text-sm"></i>
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-900">Service Locations</h2>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Designate operating regions managed by this guide</p>
                     </div>
 
-                    <div class="p-8">
-
-                        {{ form.locations.errors }}
-
+                    <div>
                         {{ form.locations }}
-
+                        {% if form.locations.errors %}
+                            <p class="text-xs text-rose-600 mt-1.5">{{ form.locations.errors.0 }}</p>
+                        {% endif %}
+                        <p class="text-xs text-slate-400 mt-2">Hold Ctrl / Cmd to select multiple service zones.</p>
                     </div>
-
                 </div>
 
-
-
-                <!-- Status -->
-
-                <div class="bg-white rounded-3xl shadow-sm mt-6">
-
-                    <div class="border-b px-8 py-5">
-
-                        <h2 class="text-lg font-semibold">
-
-                            Account Status
-
-                        </h2>
-
+                <!-- Guide Profile Verification & Professional Info (Conditional) -->
+                <div id="guideProfileSection" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    
+                    <div class="px-6 py-4 bg-slate-50/75 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-id-badge text-indigo-600 text-sm"></i>
+                            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-900">Guide Professional Profile</h2>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400">KYC Verification</span>
                     </div>
 
-                    <div class="p-8">
+                    <div class="p-6 sm:p-8 space-y-6 text-sm">
 
-                        <div class="space-y-5">
+                        <!-- Bio -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Professional Bio</label>
+                            <textarea name="bio" rows="4" placeholder="Summarize background, local tour expertise, and tour specialties..."
+                                      class="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">{{ guide_profile.bio|default:"" }}</textarea>
+                        </div>
 
-                            <label class="flex items-center gap-3">
+                        <!-- Experience and Languages -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Experience (Years)</label>
+                                <input type="number" name="experience_years" min="0" value="{{ guide_profile.experience_years|default:0 }}"
+                                       class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">
+                            </div>
 
-                                {{ form.is_verified }}
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Spoken Languages</label>
+                                <input type="text" name="languages" value="{{ guide_profile.languages|default:"" }}" placeholder="e.g. English, Hindi, Telugu"
+                                       class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">
+                            </div>
+                        </div>
 
-                                <span>
+                        <!-- Verification Status -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Verification Decision</label>
+                            <select name="verification_status" id="verificationStatus"
+                                    class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">
+                                <option value="pending" {% if guide_profile.verification_status == "pending" %}selected{% endif %}>Pending Review</option>
+                                <option value="approved" {% if guide_profile.verification_status == "approved" %}selected{% endif %}>Approved</option>
+                                <option value="rejected" {% if guide_profile.verification_status == "rejected" %}selected{% endif %}>Rejected</option>
+                            </select>
+                        </div>
 
-                                    Verified User
+                        <!-- Rejection Reason Wrapper -->
+                        <div id="rejectionReasonWrapper">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-rose-600 mb-2">Rejection Reason</label>
+                            <textarea name="rejection_reason" rows="3" placeholder="Provide operational feedback describing why documentation was rejected..."
+                                      class="w-full rounded-xl border border-rose-200 bg-rose-50/30 p-3.5 text-sm text-slate-800 placeholder-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500 transition">{{ guide_profile.rejection_reason|default:"" }}</textarea>
+                        </div>
 
-                                </span>
+                        <!-- KYC Document Uploads -->
+                        <div class="pt-4 border-t border-slate-100">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">Identity & Accreditation Proofs</h3>
 
-                            </label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <!-- ID Front Document -->
+                                <div class="rounded-2xl border border-slate-200/80 p-4 bg-slate-50/40 space-y-3">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="font-semibold text-slate-700">Identity Document (Front)</span>
+                                        <i class="fa-solid fa-id-card text-slate-400"></i>
+                                    </div>
 
-                            <label class="flex items-center gap-3">
+                                    {% if guide_profile.aadhaar_front %}
+                                        <a href="{{ guide_profile.aadhaar_front.url }}" target="_blank" class="block group relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                                            <img src="{{ guide_profile.aadhaar_front.url }}" alt="Front ID" class="w-full h-full object-cover transition duration-150 group-hover:scale-105">
+                                            <div class="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-medium gap-1">
+                                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Inspect
+                                            </div>
+                                        </a>
+                                    {% endif %}
 
-                                {{ form.is_active }}
+                                    <input type="file" name="aadhaar_front" accept="image/*"
+                                           class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-slate-900 file:text-white hover:file:bg-slate-800 file:transition">
+                                </div>
 
-                                <span>
+                                <!-- ID Back Document -->
+                                <div class="rounded-2xl border border-slate-200/80 p-4 bg-slate-50/40 space-y-3">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="font-semibold text-slate-700">Identity Document (Back)</span>
+                                        <i class="fa-solid fa-id-card text-slate-400"></i>
+                                    </div>
 
-                                    Active User
+                                    {% if guide_profile.aadhaar_back %}
+                                        <a href="{{ guide_profile.aadhaar_back.url }}" target="_blank" class="block group relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                                            <img src="{{ guide_profile.aadhaar_back.url }}" alt="Back ID" class="w-full h-full object-cover transition duration-150 group-hover:scale-105">
+                                            <div class="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs font-medium gap-1">
+                                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Inspect
+                                            </div>
+                                        </a>
+                                    {% endif %}
 
-                                </span>
+                                    <input type="file" name="aadhaar_back" accept="image/*"
+                                           class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-slate-900 file:text-white hover:file:bg-slate-800 file:transition">
+                                </div>
 
-                            </label>
+                                <!-- Certificate Attachment -->
+                                <div class="md:col-span-2 rounded-2xl border border-slate-200/80 p-4 bg-slate-50/40 space-y-3">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="font-semibold text-slate-700">Accreditation Certificate</span>
+                                        <i class="fa-solid fa-file-shield text-slate-400"></i>
+                                    </div>
 
+                                    {% if guide_profile.certificates %}
+                                        <a href="{{ guide_profile.certificates.url }}" target="_blank"
+                                           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200/60 hover:bg-emerald-100 transition">
+                                            <i class="fa-solid fa-file-circle-check"></i>
+                                            Review Current Certificate
+                                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    <input type="file" name="certificates"
+                                           class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-slate-900 file:text-white hover:file:bg-slate-800 file:transition">
+                                </div>
+                            </div>
                         </div>
 
                     </div>
-
                 </div>
 
-
-
-                <!-- Buttons -->
-
-                <div class="flex justify-end gap-4 mt-8">
-
+                <!-- Footer Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4">
                     <a href="{% url 'user_list' %}"
-                       class="px-8 py-3 rounded-xl bg-white border hover:bg-slate-100">
-
+                       class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:bg-slate-50 transition">
                         Cancel
-
                     </a>
-
-                    <button
-                        class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">
-
-                        Save User
-
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition active:scale-[0.98] shadow-sm">
+                        <i class="fa-solid fa-check text-xs"></i>
+                        Save Changes
                     </button>
-
                 </div>
 
             </div>
 
         </div>
-
     </form>
-
 </div>
 
+<!-- Dynamic Role Logic -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const roleField = document.querySelector('[name="role"]');
+    const guideProfileSection = document.getElementById("guideProfileSection");
+    const locationsSection = document.getElementById("locationsSection");
+    const verificationStatus = document.getElementById("verificationStatus");
+    const rejectionReasonWrapper = document.getElementById("rejectionReasonWrapper");
+
+    function updateRoleVisibility() {
+        if (!roleField) return;
+        const isGuide = roleField.value === "guide";
+        guideProfileSection.classList.toggle("hidden", !isGuide);
+        locationsSection.classList.toggle("hidden", !isGuide);
+    }
+
+    function updateRejectionReason() {
+        if (!verificationStatus || !rejectionReasonWrapper) return;
+        const isRejected = verificationStatus.value === "rejected";
+        rejectionReasonWrapper.classList.toggle("hidden", !isRejected);
+    }
+
+    updateRoleVisibility();
+    updateRejectionReason();
+
+    if (roleField) roleField.addEventListener("change", updateRoleVisibility);
+    if (verificationStatus) verificationStatus.addEventListener("change", updateRejectionReason);
+});
+</script>
 {% endblock %}

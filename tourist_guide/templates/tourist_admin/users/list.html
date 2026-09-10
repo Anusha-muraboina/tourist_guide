@@ -1,409 +1,248 @@
 {% extends "tourist_admin/base.html" %}
-{% load static %}
-
-{% block title %}Users{% endblock %}
 
 {% block content %}
+<section class="min-h-screen bg-slate-50/60 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-<div class="p-6 bg-slate-50 min-h-screen">
-
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
-
-        <div>
-
-            <h1 class="text-3xl font-bold text-slate-800">
-                User Management
-            </h1>
-
-            <p class="text-slate-500 mt-1">
-                Manage tourists, guides and administrators
-            </p>
-
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">User Management</h1>
+                <p class="mt-1 text-sm text-slate-500">Monitor and manage access across tourists, tour guides, and administrators.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Directory Active
+                </span>
+            </div>
         </div>
 
-    </div>
+        <!-- Role KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- All Users -->
+            <a href="?role="
+               class="group relative bg-white p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/50 {% if not selected_role %}border-slate-900 ring-2 ring-slate-900/5 shadow-sm{% else %}border-slate-200/80 hover:border-slate-300{% endif %}">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Users</p>
+                        <p class="text-2xl font-bold text-slate-900 mt-2">{{ total_users|default:"0" }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 transition-colors group-hover:bg-slate-900 group-hover:text-white">
+                        <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                </div>
+            </a>
 
+            <!-- Tourists -->
+            <a href="?role=tourist"
+               class="group relative bg-white p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-500/10 {% if selected_role == 'tourist' %}border-emerald-500 ring-2 ring-emerald-500/10 shadow-sm{% else %}border-slate-200/80 hover:border-emerald-200{% endif %}">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Tourists</p>
+                        <p class="text-2xl font-bold text-slate-900 mt-2">{{ tourist_count|default:"0" }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
+                        <i class="fa-solid fa-person-walking-luggage text-lg"></i>
+                    </div>
+                </div>
+            </a>
 
-    <!-- Statistics -->
+            <!-- Guides -->
+            <a href="?role=guide"
+               class="group relative bg-white p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-sky-500/10 {% if selected_role == 'guide' %}border-sky-500 ring-2 ring-sky-500/10 shadow-sm{% else %}border-slate-200/80 hover:border-sky-200{% endif %}">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Guides</p>
+                        <p class="text-2xl font-bold text-slate-900 mt-2">{{ guide_count|default:"0" }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 transition-colors group-hover:bg-sky-600 group-hover:text-white">
+                        <i class="fa-solid fa-compass text-lg"></i>
+                    </div>
+                </div>
+            </a>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-
-            <p class="text-slate-500 text-sm">
-                Total Users
-            </p>
-
-            <h2 class="text-3xl font-bold mt-2">
-                {{ page_obj.paginator.count }}
-            </h2>
-
+            <!-- Admins -->
+            <a href="?role=admin"
+               class="group relative bg-white p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/10 {% if selected_role == 'admin' %}border-indigo-500 ring-2 ring-indigo-500/10 shadow-sm{% else %}border-slate-200/80 hover:border-indigo-200{% endif %}">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Staff & Admins</p>
+                        <p class="text-2xl font-bold text-slate-900 mt-2">{{ admin_count|default:"0" }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                        <i class="fa-solid fa-shield-halved text-lg"></i>
+                    </div>
+                </div>
+            </a>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-6">
+        <!-- Filter Bar -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+            <form method="GET" class="flex flex-col lg:flex-row items-center gap-3">
+                <div class="relative w-full lg:flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text"
+                           name="search"
+                           value="{{ search }}"
+                           placeholder="Filter by name, email, or telephone..."
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition" />
+                </div>
 
-            <p class="text-slate-500 text-sm">
-                Guides
-            </p>
+                <div class="w-full lg:w-64">
+                    <select name="role"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">
+                        <option value="">All Roles</option>
+                        {% for value, label in roles %}
+                            <option value="{{ value }}" {% if selected_role == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <h2 class="text-3xl font-bold text-blue-600 mt-2">
-                {{ guide_count }}
-            </h2>
-
+                <div class="flex items-center gap-2 w-full lg:w-auto">
+                    <button type="submit"
+                            class="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium transition active:scale-[0.98]">
+                        <i class="fa-solid fa-sliders text-xs"></i>
+                        Filter
+                    </button>
+                    <a href="{% url 'user_list' %}"
+                       class="flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-medium transition">
+                        Reset
+                    </a>
+                </div>
+            </form>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm p-6">
+        <!-- Table Card -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-100 bg-slate-50/75 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <th scope="col" class="px-6 py-3.5">User</th>
+                            <th scope="col" class="px-6 py-3.5">Email</th>
+                            <th scope="col" class="px-6 py-3.5">Contact</th>
+                            <th scope="col" class="px-6 py-3.5">Role</th>
+                            <th scope="col" class="px-6 py-3.5">Status</th>
+                            <th scope="col" class="px-6 py-3.5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        {% for user in items %}
+                        <tr class="hover:bg-slate-50/60 transition-colors">
+                            <!-- User & Avatar -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-3">
+                                    {% if user.profile_image %}
+                                        <img src="{{ user.profile_image.url }}"
+                                             alt="{{ user.username }}"
+                                             class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100 flex-shrink-0" />
+                                    {% else %}
+                                        <div class="w-10 h-10 rounded-full bg-slate-100 ring-2 ring-slate-200/60 flex items-center justify-center text-slate-500 font-semibold uppercase text-xs flex-shrink-0">
+                                            {{ user.username|slice:":2" }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="min-w-0">
+                                        <div class="font-medium text-slate-900 truncate">{{ user.username }}</div>
+                                        <div class="text-xs text-slate-400 font-mono">ID #{{ user.id }}</div>
+                                    </div>
+                                </div>
+                            </td>
 
-            <p class="text-slate-500 text-sm">
-                Tourists
-            </p>
+                            <!-- Email -->
+                            <td class="px-6 py-4 whitespace-nowrap text-slate-600">
+                                {{ user.email }}
+                            </td>
 
-            <h2 class="text-3xl font-bold text-green-600 mt-2">
-                {{ tourist_count }}
-            </h2>
+                            <!-- Phone -->
+                            <td class="px-6 py-4 whitespace-nowrap text-slate-500 font-mono text-xs">
+                                {{ user.phone_number|default:"—" }}
+                            </td>
 
-        </div>
+                            <!-- Role -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if user.role == "tourist" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                                        <i class="fa-solid fa-person-walking text-[11px]"></i> Tourist
+                                    </span>
+                                {% elif user.role == "guide" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200/60">
+                                        <i class="fa-solid fa-compass text-[11px]"></i> Guide
+                                    </span>
+                                {% elif user.role == "admin" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200/60">
+                                        <i class="fa-solid fa-shield-halved text-[11px]"></i> Admin
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs text-slate-500 bg-slate-100">
+                                        {{ user.role|title|default:"Standard" }}
+                                    </span>
+                                {% endif %}
+                            </td>
 
-        <div class="bg-white rounded-2xl shadow-sm p-6">
+                            <!-- Verified Status -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if user.is_verified %}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+                                        <i class="fa-solid fa-circle-check text-xs"></i> Verified
+                                    </span>
+                                {% else %}
+                                
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600">
+                                        <i class="fa-regular fa-clock text-xs"></i> Pending
+                                    </span>
+                                {% endif %}
+                            </td>
 
-            <p class="text-slate-500 text-sm">
-                Admins
-            </p>
-
-            <h2 class="text-3xl font-bold text-red-600 mt-2">
-                {{ admin_count }}
-            </h2>
-
-        </div>
-
-    </div>
-
-
-    <!-- Filter -->
-
-    <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
-
-        <form method="get">
-
-            <div class="grid lg:grid-cols-4 gap-4">
-
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ search }}"
-                    placeholder="Search by name, email or phone"
-                    class="rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-slate-500 focus:outline-none">
-
-                <select
-                    name="role"
-                    class="rounded-xl border border-slate-300 px-4 py-3">
-
-                    <option value="">
-                        All Roles
-                    </option>
-
-                    {% for value,label in roles %}
-
-                    <option value="{{ value }}"
-                        {% if role == value %}selected{% endif %}>
-
-                        {{ label }}
-
-                    </option>
-
-                    {% endfor %}
-
-                </select>
-
-                <button
-                    class="bg-slate-600 hover:bg-slate-700 text-white rounded-xl">
-
-                    Search
-
-                </button>
-
-                <a href="{% url 'user_list' %}"
-                   class="bg-slate-100 hover:bg-slate-200 rounded-xl flex items-center justify-center">
-
-                    Reset
-
-                </a>
-
+                            <!-- Action -->
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <a href="{% url 'user_detail' user.pk %}"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition">
+                                    <i class="fa-regular fa-eye text-xs"></i>
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-16 text-center">
+                                <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+                                    <i class="fa-solid fa-user-slash text-xl"></i>
+                                </div>
+                                <h3 class="text-sm font-semibold text-slate-800">No users found</h3>
+                                <p class="text-xs text-slate-400 mt-1">Try altering search parameters or resetting role filters.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
-        </form>
-
-    </div>
-
-
-
-    <!-- Table -->
-
-    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full">
-
-                <thead class="bg-slate-100">
-
-                    <tr class="text-left text-slate-600 text-sm">
-
-                        <th class="p-5">
-                            User
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            Role
-                        </th>
-
-                        <th>
-                            Locations
-                        </th>
-
-                        <th>
-                            Verified
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Joined
-                        </th>
-
-                        <th class="text-right pr-6">
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                {% for user in items %}
-
-                <tr class="border-t hover:bg-slate-50 transition">
-
-                    <td class="p-5">
-
-                        <div class="flex items-center space-x-4">
-
-                            {% if user.profile_image %}
-
-                            <img
-                                src="{{ user.profile_image.url }}"
-                                class="w-12 h-12 rounded-full object-cover">
-
-                            {% else %}
-
-                            <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-700">
-
-                                {{ user.username|first|upper }}
-
-                            </div>
-
-                            {% endif %}
-
-                            <div>
-
-                                <div class="font-semibold">
-
-                                    {{ user.username }}
-
-                                </div>
-
-                                <div class="text-sm text-slate-500">
-
-                                    {{ user.email }}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                    <td>
-
-                        {{ user.phone_number }}
-
-                    </td>
-
-                    <td>
-
-                        {% if user.role == "guide" %}
-
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-                            Guide
-                        </span>
-
-                        {% elif user.role == "admin" %}
-
-                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
-                            Admin
-                        </span>
-
-                        {% else %}
-
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
-                            Tourist
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>
-
-                        <div class="flex flex-wrap gap-1">
-
-                            {% for location in user.locations.all %}
-
-                            <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs">
-
-                                {{ location.city }}
-
-                            </span>
-
-                            {% empty %}
-
-                            <span class="text-slate-400 text-sm">
-
-                                --
-
-                            </span>
-
-                            {% endfor %}
-
-                        </div>
-
-                    </td>
-
-                    <td>
-
-                        {% if user.is_verified %}
-
-                        <span class="text-green-600 font-medium">
-
-                            ✓ Verified
-
-                        </span>
-
-                        {% else %}
-
-                        <span class="text-red-500">
-
-                            Not Verified
-
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>
-
-                        {% if user.is_active %}
-
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
-
-                            Active
-
-                        </span>
-
-                        {% else %}
-
-                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs">
-
-                            Inactive
-
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>
-
-                        {{ user.created_at|date:"d M Y" }}
-
-                    </td>
-
-                    <td>
-
-                        <div class="flex justify-end gap-2">
-
-                            <a href="{% url 'user_detail' user.pk %}"
-                               class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-slate-600 hover:text-white flex items-center justify-center transition">
-
-                                👁
-
-                            </a>
-
-                            <a href="{% url 'user_update' user.pk %}"
-                               class="w-10 h-10 rounded-lg bg-slate-100 hover:bg-blue-600 hover:text-white flex items-center justify-center transition">
-
-                                ✏
-
-                            </a>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                {% empty %}
-
-                <tr>
-
-                    <td colspan="8">
-
-                        <div class="text-center py-20">
-
-                            <div class="text-6xl">
-
-                                👤
-
-                            </div>
-
-                            <h2 class="text-2xl font-bold mt-4">
-
-                                No Users Found
-
-                            </h2>
-
-                            <p class="text-slate-500 mt-2">
-
-                                There are no users available.
-
-                            </p>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                <span class="text-xs text-slate-500">
+                    Page <span class="font-semibold text-slate-700">{{ page_obj.number }}</span> of <span class="font-semibold text-slate-700">{{ page_obj.paginator.num_pages }}</span>
+                </span>
+
+                <div class="flex items-center gap-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&search={{ search }}&role={{ selected_role }}"
+                           class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                            <i class="fa-solid fa-chevron-left text-[10px]"></i> Previous
+                        </a>
+                    {% endif %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&search={{ search }}&role={{ selected_role }}"
+                           class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                            Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </div>
-
     </div>
-
-</div>
-
+</section>
 {% endblock %}

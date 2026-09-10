@@ -277,6 +277,9 @@ class TourListSerializer(
     )
     
     location = LocationSerializer(read_only=True)
+    
+        # IMPORTANT
+    upto_9_price = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -304,11 +307,34 @@ class TourListSerializer(
             "featured",
 
             "thumbnail",
+            
+            "upto_9_price",
         ]
 
     # ==========================
     # THUMBNAIL
     # ==========================
+    
+    
+        # =====================================================
+    # UP TO 9 PRICE
+    # =====================================================
+
+    def get_upto_9_price(self, obj):
+
+        pricing = (
+            obj.pricing
+            .filter(
+                group_type="upto_9",
+                is_active=True
+            )
+            .first()
+        )
+
+        if pricing:
+            return pricing.group_price
+
+        return 0
 
     def get_thumbnail(self, obj):
 

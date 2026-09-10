@@ -1795,41 +1795,48 @@ from .forms import UserForm
 
 User = get_user_model()
 
+from django.contrib.auth import get_user_model
+from django.views.generic import ListView
+from django.db.models import Q
+
+User = get_user_model()
+
 
 class UserListView(ListView):
-
     model = User
-
     template_name = "tourist_admin/users/list.html"
-
     context_object_name = "items"
-
     paginate_by = 10
 
     def get_queryset(self):
+        queryset = (
+            User.objects
+            .prefetch_related("locations")
+            .order_by("-created_at")
+        )
 
-        queryset = User.objects.prefetch_related(
-            "locations"
-        ).order_by("-created_at")
+        search = self.request.GET.get("search", "").strip()
+        role = self.request.GET.get("role", "").strip()
 
-        search = self.request.GET.get("search")
-
-        role = self.request.GET.get("role")
-
+        # ==========================
+        # SEARCH
+        # ==========================
         if search:
             queryset = queryset.filter(
-                Q(username__icontains=search) |
-                Q(email__icontains=search) |
-                Q(phone_number__icontains=search)
+                Q(username__icontains=search)
+                | Q(email__icontains=search)
+                | Q(phone_number__icontains=search)
             )
 
-        if role:
+        # ==========================
+        # ROLE FILTER
+        # ==========================
+        if role in ["tourist", "guide", "admin"]:
             queryset = queryset.filter(role=role)
 
         return queryset
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
 
         context["search"] = self.request.GET.get(
@@ -1837,35 +1844,170 @@ class UserListView(ListView):
             ""
         )
 
-        context["role"] = self.request.GET.get(
+        context["selected_role"] = self.request.GET.get(
             "role",
             ""
         )
 
+        # Role dropdown
         context["roles"] = User.ROLE_CHOICES
+
+        # ==========================
+        # ROLE COUNTS
+        # ==========================
+        context["total_users"] = User.objects.count()
+
+        context["tourist_count"] = User.objects.filter(
+            role="tourist"
+        ).count()
+
+        context["guide_count"] = User.objects.filter(
+            role="guide"
+        ).count()
+
+        context["admin_count"] = User.objects.filter(
+            role="admin"
+        ).count()
+
+        return context
+    
+from django.contrib.auth import get_user_model
+from django.views.generic import DetailView
+
+User = get_user_model()
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = "tourist_admin/users/detail.html"
+    context_object_name = "user_obj"
+
+    def get_queryset(self):
+        return (
+            User.objects
+            .prefetch_related("locations")
+            .select_related("guide_profile")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_obj = self.object
+
+        # GuideProfile exists only for guide users
+        if user_obj.role == "guide":
+            try:
+                context["guide_profile"] = user_obj.guide_profile
+            except user_obj.guide_profile.RelatedObjectDoesNotExist:
+                context["guide_profile"] = None
+        else:
+            context["guide_profile"] = None
 
         return context
 
 
-class UserDetailView(DetailView):
+# class UserDetailView(DetailView):
 
-    model = User
+#     model = User
 
-    template_name = "tourist_admin/users/detail.html"
+#     template_name = "tourist_admin/users/detail.html"
 
-    context_object_name = "user_obj"
+#     context_object_name = "user_obj"
+
+from django.contrib.auth import get_user_model
+from django.views.generic import UpdateView
+from django.urls import reverse_lazy
+from django.db import transaction
+
+from .forms import UserForm
+from user.models import GuideProfile
+
+User = get_user_model()
 
 
 class UserUpdateView(UpdateView):
-
     model = User
-
     form_class = UserForm
-
     template_name = "tourist_admin/users/form.html"
-
     success_url = reverse_lazy("user_list")
-    
+
+    def get_queryset(self):
+        return (
+            User.objects
+            .prefetch_related("locations")
+            .select_related("guide_profile")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.object.role == "guide":
+            try:
+                context["guide_profile"] = self.object.guide_profile
+            except GuideProfile.DoesNotExist:
+                context["guide_profile"] = None
+        else:
+            context["guide_profile"] = None
+
+        return context
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        form = self.get_form()
+
+        if form.is_valid():
+            user = form.save()
+
+            if user.role == "guide":
+
+                try:
+                    guide_profile = user.guide_profile
+                except GuideProfile.DoesNotExist:
+                    guide_profile = GuideProfile(user=user)
+
+                guide_profile.bio = request.POST.get("bio", "").strip()
+
+                experience = request.POST.get("experience_years", "0")
+
+                try:
+                    guide_profile.experience_years = int(experience or 0)
+                except (ValueError, TypeError):
+                    guide_profile.experience_years = 0
+
+                guide_profile.languages = request.POST.get(
+                    "languages", ""
+                ).strip()
+
+                if "aadhaar_front" in request.FILES:
+                    guide_profile.aadhaar_front = request.FILES["aadhaar_front"]
+
+                if "aadhaar_back" in request.FILES:
+                    guide_profile.aadhaar_back = request.FILES["aadhaar_back"]
+
+                if "certificates" in request.FILES:
+                    guide_profile.certificates = request.FILES["certificates"]
+
+                guide_profile.verification_status = request.POST.get(
+                    "verification_status",
+                    guide_profile.verification_status or "pending"
+                )
+
+                guide_profile.rejection_reason = request.POST.get(
+                    "rejection_reason", ""
+                ).strip()
+
+                guide_profile.save()
+
+            else:
+                # If role is changed from guide to another role,
+                # keep the GuideProfile in database but don't edit it.
+                pass
+
+            return self.form_valid(form)
+
+        return self.form_invalid(form)
     
     
     
