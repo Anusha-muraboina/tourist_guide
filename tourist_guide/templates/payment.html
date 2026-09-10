@@ -1310,7 +1310,7 @@ function renderGuides(guides) {
 
                 <!-- Guide Badge -->
 
-                <div class="absolute top-4 left-4">
+                {% comment %} <div class="absolute top-4 left-4">
 
                     <span
                         class="inline-flex items-center gap-2
@@ -1328,7 +1328,7 @@ function renderGuides(guides) {
 
                     </span>
 
-                </div>
+                </div> {% endcomment %}
 
             </div>
 
@@ -1338,7 +1338,7 @@ function renderGuides(guides) {
             <!-- GUIDE INFORMATION -->
             <!-- ================================= -->
 
-            <div class="p-5">
+            <div class="p-2 text-center">
 
 
                 <!-- Name -->
@@ -1395,22 +1395,23 @@ function renderGuides(guides) {
                 <!-- BOTTOM ACTION -->
                 <!-- ================================= -->
 
-                <div class="mt-5">
+                <div class="mt-2">
 
                     <button
                         type="button"
 
                         class="view-guide-btn
-                               w-full
+                               
                                flex items-center
                                justify-center
                                gap-2
                                rounded-xl
                                border-2
                                border-blue-900
-                               px-4 py-3
+                               px-1 py-1
+                               mx-auto
                                text-sm
-                               font-bold
+                               font-medium
                                text-blue-900
                                transition-all
                                duration-200
@@ -1422,7 +1423,7 @@ function renderGuides(guides) {
 
                         <i class="fa-regular fa-eye"></i>
 
-                        View Guide
+                         View Guide 
 
                     </button>
 
