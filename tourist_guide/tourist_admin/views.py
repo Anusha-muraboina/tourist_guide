@@ -2036,133 +2036,442 @@ from .forms import BookingForm
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+
+from django.urls import reverse_lazy
+from django.db.models import Q
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.utils import timezone
 
 
-# ===================== LIST =====================
-class BookingListView(StaffRequiredMixin, ListView):
+
+
+# =========================================================
+# STAFF MIXIN
+# =========================================================
+
+class StaffRequiredMixin(
+    LoginRequiredMixin,
+    UserPassesTestMixin
+):
+
+    def test_func(self):
+
+        return (
+            self.request.user.is_staff
+            or self.request.user.is_superuser
+        )
+
+
+# =========================================================
+# BOOKING LIST
+# =========================================================
+
+class BookingListView(
+    StaffRequiredMixin,
+    ListView
+):
+
     model = Booking
-    template_name = "tourist_admin/bookings/list.html"
+
+    template_name = (
+        "tourist_admin/bookings/list.html"
+    )
+
     context_object_name = "items"
+
     paginate_by = 15
 
-    def get_queryset(self):
-        queryset = Booking.objects.select_related(
-            "tour", "tour__location", "guide", "user", "coupon_applied"
-        ).order_by("-created_at")
 
-        search = self.request.GET.get("search")
-        status = self.request.GET.get("status")
-        payment_status = self.request.GET.get("payment_status")
-        payment_method = self.request.GET.get("payment_method")
+    def get_queryset(self):
+
+        queryset = (
+            Booking.objects
+            .select_related(
+                "tour",
+                "tour__location",
+                "guide",
+                "user",
+                "coupon_applied",
+                "pricing",
+            )
+            .order_by("-created_at")
+        )
+
+
+        search = self.request.GET.get(
+            "search",
+            ""
+        ).strip()
+
+        status = self.request.GET.get(
+            "status",
+            ""
+        ).strip()
+
+        payment_status = self.request.GET.get(
+            "payment_status",
+            ""
+        ).strip()
+
+        payment_method = self.request.GET.get(
+            "payment_method",
+            ""
+        ).strip()
+
+
+        # SEARCH
 
         if search:
+
             queryset = queryset.filter(
-                Q(booking_id__icontains=search) |
-                Q(guest_name__icontains=search) |
-                Q(guest_email__icontains=search) |
-                Q(guest_phone__icontains=search) |
+
+                Q(booking_id__icontains=search)
+
+                |
+
+                Q(guest_name__icontains=search)
+
+                |
+
+                Q(guest_email__icontains=search)
+
+                |
+
+                Q(guest_phone__icontains=search)
+
+                |
+
                 Q(tour__title__icontains=search)
+
             )
 
+
+        # STATUS
+
         if status:
-            queryset = queryset.filter(status=status)
+
+            queryset = queryset.filter(
+                status=status
+            )
+
+
+        # PAYMENT STATUS
 
         if payment_status:
-            queryset = queryset.filter(payment_status=payment_status)
+
+            queryset = queryset.filter(
+                payment_status=payment_status
+            )
+
+
+        # PAYMENT METHOD
 
         if payment_method:
-            queryset = queryset.filter(payment_method=payment_method)
+
+            queryset = queryset.filter(
+                payment_method=payment_method
+            )
+
 
         return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["search"] = self.request.GET.get("search", "")
-        context["status"] = self.request.GET.get("status", "")
-        context["payment_status"] = self.request.GET.get("payment_status", "")
-        context["payment_method"] = self.request.GET.get("payment_method", "")
 
-        context["status_choices"] = Booking.STATUS_CHOICES
-        context["payment_status_choices"] = Booking.PAYMENT_STATUS_CHOICES
-        context["payment_method_choices"] = Booking.PAYMENT_METHOD_CHOICES
+    def get_context_data(
+        self,
+        **kwargs
+    ):
+
+        context = super().get_context_data(
+            **kwargs
+        )
+
+
+        context["search"] = self.request.GET.get(
+            "search",
+            ""
+        )
+
+        context["status"] = self.request.GET.get(
+            "status",
+            ""
+        )
+
+        context["payment_status"] = (
+            self.request.GET.get(
+                "payment_status",
+                ""
+            )
+        )
+
+        context["payment_method"] = (
+            self.request.GET.get(
+                "payment_method",
+                ""
+            )
+        )
+
+
+        context["status_choices"] = (
+            Booking.STATUS_CHOICES
+        )
+
+        context["payment_status_choices"] = (
+            Booking.PAYMENT_STATUS_CHOICES
+        )
+
+        context["payment_method_choices"] = (
+            Booking.PAYMENT_METHOD_CHOICES
+        )
+
+
         return context
 
 
-# ===================== DETAIL =====================
-class BookingDetailView(StaffRequiredMixin, DetailView):
+# =========================================================
+# BOOKING DETAIL
+# =========================================================
+
+class BookingDetailView(
+    StaffRequiredMixin,
+    DetailView
+):
+
     model = Booking
-    template_name = "tourist_admin/bookings/detail.html"
+
+    template_name = (
+        "tourist_admin/bookings/detail.html"
+    )
+
     context_object_name = "booking"
+
     pk_url_kwarg = "pk"
 
 
-# ===================== CREATE =====================
-class BookingCreateView(StaffRequiredMixin, CreateView):
+# =========================================================
+# BOOKING CREATE
+# =========================================================
+
+class BookingCreateView(
+    StaffRequiredMixin,
+    CreateView
+):
+
     model = Booking
+
     form_class = BookingForm
-    template_name = "tourist_admin/bookings/form.html"
-    success_url = reverse_lazy("booking_list")
+
+    template_name = (
+        "tourist_admin/bookings/form.html"
+    )
+
+    success_url = reverse_lazy(
+        "booking_list"
+    )
+
 
     def form_valid(self, form):
-        messages.success(self.request, "Booking created successfully")
+
+        messages.success(
+            self.request,
+            "Booking created successfully."
+        )
+
         return super().form_valid(form)
 
 
-# ===================== UPDATE =====================
-class BookingUpdateView(StaffRequiredMixin, UpdateView):
+# =========================================================
+# BOOKING UPDATE
+# =========================================================
+
+class BookingUpdateView(
+    StaffRequiredMixin,
+    UpdateView
+):
+
     model = Booking
+
     form_class = BookingForm
-    template_name = "tourist_admin/bookings/form.html"
-    success_url = reverse_lazy("booking_list")
+
+    template_name = (
+        "tourist_admin/bookings/form.html"
+    )
+
+    success_url = reverse_lazy(
+        "booking_list"
+    )
+
     pk_url_kwarg = "pk"
 
+
     def form_valid(self, form):
-        messages.success(self.request, "Booking updated successfully")
+
+        messages.success(
+            self.request,
+            "Booking updated successfully."
+        )
+
         return super().form_valid(form)
 
 
-# ===================== DELETE =====================
-class BookingDeleteView(StaffRequiredMixin, DeleteView):
+# =========================================================
+# BOOKING DELETE
+# =========================================================
+
+class BookingDeleteView(
+    StaffRequiredMixin,
+    DeleteView
+):
+
     model = Booking
-    template_name = "tourist_admin/bookings/confirm_delete.html"
-    success_url = reverse_lazy("booking_list")
+
+    template_name = (
+        "tourist_admin/bookings/confirm_delete.html"
+    )
+
+    success_url = reverse_lazy(
+        "booking_list"
+    )
+
     pk_url_kwarg = "pk"
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "Booking deleted successfully")
-        return super().delete(request, *args, **kwargs)
+
+    def delete(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        messages.success(
+            request,
+            "Booking deleted successfully."
+        )
+
+        return super().delete(
+            request,
+            *args,
+            **kwargs
+        )
 
 
-# ===================== QUICK STATUS CHANGE =====================
-class BookingStatusUpdateView(StaffRequiredMixin, UpdateView):
+# =========================================================
+# QUICK STATUS UPDATE
+# =========================================================
+
+class BookingStatusUpdateView(
+    StaffRequiredMixin,
+    UpdateView
+):
+
     model = Booking
+
     fields = ["status"]
+
     pk_url_kwarg = "pk"
 
-    def post(self, request, *args, **kwargs):
+
+    def post(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
         booking = self.get_object()
-        new_status = request.POST.get("status")
 
-        if new_status in dict(Booking.STATUS_CHOICES):
-            old_status = booking.status
-            booking.status = new_status
+        new_status = request.POST.get(
+            "status"
+        )
 
-            if new_status == "cancelled":
-                booking.cancelled_at = timezone.now()
-                booking.cancelled_by = "admin"
-                if booking.payment_status in ["paid", "partial"]:
-                    booking.payment_status = "failed"
 
-            booking.save()
+        valid_statuses = dict(
+            Booking.STATUS_CHOICES
+        )
 
-            if old_status != new_status:
-                try:
-                    booking.send_booking_email(new_status)
-                except Exception:
-                    pass
 
-            messages.success(request, f"Status updated to {new_status}")
-        else:
-            messages.error(request, "Invalid status")
+        if new_status not in valid_statuses:
 
-        return redirect("booking_detail", pk=booking.pk)
+            messages.error(
+                request,
+                "Invalid booking status."
+            )
+
+            return redirect(
+                "booking_detail",
+                pk=booking.pk
+            )
+
+
+        old_status = booking.status
+
+
+        booking.status = new_status
+
+
+        # =========================================
+        # ADMIN CANCELLATION
+        # =========================================
+
+        if new_status == "cancelled":
+
+            booking.cancelled_at = (
+                timezone.now()
+            )
+
+            booking.cancelled_by = "admin"
+
+
+            if booking.payment_status in [
+                "paid",
+                "partial",
+            ]:
+
+                booking.payment_status = "failed"
+
+
+        # =========================================
+        # SAVE
+        # =========================================
+
+        booking.save()
+
+
+        # =========================================
+        # SEND EMAIL
+        # =========================================
+
+        if old_status != new_status:
+
+            try:
+
+                booking.send_booking_email(
+                    new_status
+                )
+
+            except Exception:
+
+                pass
+
+
+        messages.success(
+            request,
+            f"Booking status updated to {booking.get_status_display()}."
+        )
+
+
+        return redirect(
+            "booking_detail",
+            pk=booking.pk
+        )
