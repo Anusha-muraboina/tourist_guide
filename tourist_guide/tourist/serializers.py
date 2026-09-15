@@ -11,6 +11,7 @@ from tourist.models import (
     ImportantInformation,
     TourSchedule,
     Amenity,
+    FAQ
 )
 
 from user.serializers import LocationSerializer
@@ -378,7 +379,16 @@ class TourListSerializer(
 # =========================================
 # TOUR DETAIL SERIALIZER
 # =========================================
-
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
+        fields = [
+            "id",
+            "question",
+            "answer",
+            "order",
+        ]
+        
 class TourDetailSerializer(serializers.ModelSerializer):
 
     images = TourImageSerializer(
@@ -431,6 +441,8 @@ class TourDetailSerializer(serializers.ModelSerializer):
 
     reviews = serializers.SerializerMethodField()
     
+    # faqs = serializers.SerializerMethodField()
+    
     location = LocationSerializer(read_only=True)
 
     class Meta:
@@ -480,6 +492,8 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "average_rating",
             "total_ratings",
             "reviews",
+
+            # "faqs",
 
             "created_at",
             "updated_at",
@@ -632,7 +646,19 @@ class TourDetailSerializer(serializers.ModelSerializer):
                 ratings,
                 many=True
             ).data
-        
+    # def get_faqs(self, obj):
+    #     return FAQ.objects.filter(
+    #         is_active=True
+    #     ).order_by(
+    #         "order",
+    #         "-created_at"
+    #     ).values(
+    #         "id",
+    #         "question",
+    #         "answer",
+    #         "order"
+    #     )
+    
     # def get_guides(self, obj):
 
     #     guides = User.objects.filter(

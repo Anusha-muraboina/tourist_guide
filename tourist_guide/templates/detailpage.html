@@ -12,54 +12,39 @@ Premium Tour Details
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <section class="bg-[#f6f8fc] min-h-screen pt-28 pb-4">
-    <div class=" mx-auto px-4 lg:px-40">
+    <div class=" mx-auto px-3 lg:px-40">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <!-- ================= LEFT ================= -->
-
             <div class="lg:col-span-8">
-
-
-                <!-- BREADCRUMB -->
-
-                <div class="flex items-center gap-2 text-sm text-gray-500 mb-5">
-
-
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-2 md:mb-5">
                     <a href="#" class="hover:text-cyan-600">
                         India
                     </a>
-
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
-
                     <a href="#" class="hover:text-cyan-600 text-sm">
                         Hyderabad
                     </a>
-
                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
-
                     <span class="text-gray-700 font-medium text-sm">
                         Tour Details
                     </span>
-
                 </div>
-
-                <!-- TITLE -->
-
                 <h1
                     id="tourTitle"
-                    class="text-xl lg:text-3xl font-black leading-tight text-[#0B1F44]"
+                    class="text-md lg:text-3xl font-black leading-tight text-[#0B1F44]"
                 >
                 </h1>
 
                 <!-- RATING -->
 
-                <div class="flex flex-wrap items-center gap-6 mt-5">
+                <div class="flex flex-wrap items-center gap-6 mt-2">
 
                     <div class="flex items-center gap-2">
 
     <!-- Dynamic Stars -->
     <div
         id="topRatingStars"
-        class="text-yellow-400 text-lg tracking-tight">
+        class="text-yellow-400 text-md tracking-tight">
         ☆☆☆☆☆
     </div>
 
@@ -73,13 +58,11 @@ Premium Tour Details
     <!-- Dynamic Reviews -->
     <span
         id="topTotalRatings"
-        class="text-gray-500">
+        class="text-gray-500 text-sm md:text-md">
         (0 reviews)
     </span>
 
-</div>
-
-<div class="flex items-center gap-2 text-gray-600">
+    <div class="flex items-center gap-2 md:text-md text-sm font-bold text-gray-900">
 
     <i class="fa-solid fa-clock text-cyan-500"></i>
 
@@ -87,13 +70,20 @@ Premium Tour Details
 
 </div>
 
-                    <div class="flex items-center gap-2 text-gray-600">
 
-                        <i class="fa-solid fa-user-group text-cyan-500"></i>
 
-                        <span id="tourType"></span>
+</div>
 
-                    </div>
+{% comment %} <div class="flex items-center gap-2 text-gray-600">
+
+    <i class="fa-solid fa-clock text-cyan-500"></i>
+
+    <span id="tourDuration"></span>
+
+</div> {% endcomment %}
+
+
+               
 
                 </div>
 
@@ -108,7 +98,7 @@ Premium Tour Details
 
 <div
     id="selectedTourCard"
-    class="hidden mt-8 bg-white border-2 border-[#1677e6] rounded-[28px] p-6 shadow-sm"
+    class="hidden mt-4 md:mt-8 bg-white border-2 border-[#1677e6] rounded-[28px] p-3 md:p-6 shadow-sm"
 >
 
 
@@ -122,7 +112,7 @@ Premium Tour Details
 
             </h2>
 
-            <p class="text-gray-500 mt-3 leading-7 max-w-3xl">
+            <p class="text-gray-500 mt-3 text-sm leading-7 max-w-3xl">
 
                 Shared tour where guests from other bookings may join.
                 Guests are requested to reach the meeting point directly.
@@ -235,7 +225,7 @@ Premium Tour Details
     <div class="flex flex-wrap gap-4 mt-5">
 
         <button
-            class="bg-[#071B3B] text-white font-bold px-3 py-2 rounded-2xl"
+            class="bg-[#071B3B] text-white font-bold px-1 md:px-3 py-1 md:py-2 rounded-2xl"
         >
 
             9:00 AM
@@ -245,7 +235,7 @@ Premium Tour Details
 
     </div>
 
-    <div class="border-t border-gray-200 my-7"></div>
+    <div class="border-t border-gray-200 md:my-7 my-4"></div>
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
         <div>
@@ -372,49 +362,59 @@ Premium Tour Details
 
                 <!-- ================= TABS + CONTENT SECTION ================= -->
 
-<div class="mt-10">
+<div class="md:mt-10 mt-4">
 
     <!-- ================= STICKY TABS ================= -->
 
 
 
-    <div class="sticky top-[72px] z-40">
+<div class="sticky top-[72px] z-40">
 
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-x-auto">
+    <div class="tour-tabs-wrapper">
 
-            <div class="flex min-w-max text-sm font-bold">
+        <div class="tour-tabs-inner">
 
-                {% comment %} <button onclick="showTab('overview')" id="tab-overview"
-                    class="tourTab activeTab">
-                    Overview
-                </button> {% endcomment %}
+            <button
+                onclick="showTab('highlights')"
+                id="tab-highlights"
+                class="tourTab activeTab"
+            >
+                <i class="fa-solid fa-star mr-2 text-[11px]"></i>
+                Highlights
+            </button>
 
-                <button onclick="showTab('highlights')" id="tab-highlights"
-                    class="tourTab activeTab">
-                    Highlights
-                </button>
+            <button
+                onclick="showTab('included')"
+                id="tab-included"
+                class="tourTab"
+            >
+                <i class="fa-solid fa-circle-check mr-2 text-[11px]"></i>
+                Included
+            </button>
 
-                <button onclick="showTab('included')" id="tab-included"
-                    class="tourTab">
-                    Included
-                </button>
+            <button
+                onclick="showTab('itinerary')"
+                id="tab-itinerary"
+                class="tourTab"
+            >
+                <i class="fa-solid fa-route mr-2 text-[11px]"></i>
+                Itinerary
+            </button>
 
-                <button onclick="showTab('itinerary')" id="tab-itinerary"
-                    class="tourTab">
-                    Itinerary
-                </button>
-
-                <button onclick="showTab('reviews')" id="tab-reviews"
-                    class="tourTab">
-                    Reviews
-                </button>
-
-            </div>
+            <button
+                onclick="showTab('reviews')"
+                id="tab-reviews"
+                class="tourTab"
+            >
+                <i class="fa-solid fa-star-half-stroke mr-2 text-[11px]"></i>
+                Reviews
+            </button>
 
         </div>
 
     </div>
 
+</div>
 
 
 
@@ -436,15 +436,15 @@ Premium Tour Details
 
     <!-- ================= HIGHLIGHTS ================= -->
 
-    <div id="highlights" class="tabContent  mt-8">
+    <div id="highlights" class="tabContent mt-2  md:mt-8">
 
 <!-- ================= HIGHLIGHTS ================= -->
 
-<div class="mt-8 bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
+<div class="md:mt-8 mt-2 bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
 
     <!-- TITLE -->
 
-    <h2 class="text-md md:text-xl font-bold text-[#111827] mb-5">
+    <h2 class="text-md md:text-xl font-bold text-[#111827] mb-2 md:mb-5">
 
         Highlights
 
@@ -453,7 +453,7 @@ Premium Tour Details
     <!-- LIST -->
 
 
-    <ul id="highlightsList" class="space-y-4 text-sm"></ul>
+    <ul id="highlightsList" class="md:space-y-4 space-y-2 text-sm"></ul>
 
 
 
@@ -464,9 +464,9 @@ Premium Tour Details
         transition: max-height 0.3s ease;
     }
 </style>
-<div class="bg-white  mt-10">
+<div class="bg-white mt-4 md:mt-10">
 
-    <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-6">
+    <h2 class="text-md md:text-xl font-bold font-black text-[#0B1F44] mb-2 md:mb-6">
         Full Description
     </h2>
 
@@ -492,18 +492,18 @@ Premium Tour Details
 
     <!-- ================= INCLUDED ================= -->
 
-    <div id="included" class="tabContent hidden mt-8">
+    <div id="included" class="tabContent hidden mt-2 md:mt-8">
 
-        <div class="bg-white rounded-[30px] border border-gray-200 shadow-sm p-8">
+        <div class="bg-white rounded-[20px] border border-gray-200 shadow-sm p-3 md:p-8">
 
-            <h2 class="text-md md:text-xl font-bold text-[#111827] mb-8">
+            <h2 class="text-md md:text-xl font-bold text-[#111827] mb-2 md:mb-8">
 
                 Included
 
             </h2>
 
 
-            <div id="includedList" class="grid md:grid-cols-1 gap-6"></div>
+            <div id="includedList" class="grid md:grid-cols-1 gap-2 md:gap-6"></div>
 
 
         </div>
@@ -512,10 +512,10 @@ Premium Tour Details
 
     <!-- ================= ITINERARY ================= -->
 
-    <div id="itinerary" class="tabContent hidden mt-8">
+    <div id="itinerary" class="tabContent hidden mt-2 md:mt-8">
 
 
-<div class="mt-8 grid md:grid-cols-1 gap-6">
+<div class="md:mt-8 mt-2 grid md:grid-cols-1 gap-2 md:gap-6">
 
     <div class="bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
 
@@ -633,9 +633,9 @@ Premium Tour Details
 
 <!-- ================= REVIEWS ================= -->
 
-<div id="reviews" class="tabContent hidden mt-8">
+<div id="reviews" class="tabContent hidden mt-2 md:mt-8">
 
-    <div class="mt-10 bg-white rounded-2xl border border-gray-200 p-6">
+    <div class="md:mt-10 mt-2 bg-white rounded-2xl border border-gray-200 p-2 md:p-6">
 
         <!-- HEADER -->
 
@@ -645,7 +645,7 @@ Premium Tour Details
 
             <div>
 
-                <h2 class="text-2xl font- text-gray-900">
+                <h2 class="md:text-2xl text-md font- text-gray-900">
                     Customer Reviews
                 </h2>
 
@@ -666,7 +666,7 @@ Premium Tour Details
                     {% if user.is_authenticated %}
     <button
         onclick="toggleReviewForm()"
-        class="bg-blue-400 text-white px-5 py-2 rounded-xl"
+        class="bg-blue-400 text-white px-2 md:px-5 py-2 rounded-xl"
     >
         Add Review
     </button>
@@ -789,13 +789,13 @@ Premium Tour Details
 
 
 
-<div  id="bookingCardColumn" class="lg:col-span-4">
+<div  id="bookingCardColumn" class="lg:col-span-4  mt-4">
     <!-- Sticky Card Container -->
     <div class="sticky top-24 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] overflow-visible transition-all">
 
 
         <!-- CARD BODY -->
-        <div class="p-6 space-y-6">
+        <div class="p-3 md:p-6 md:space-y-6 space-y-2">
 
             <!-- DATE PICKER FIELD -->
 <!-- DATE PICKER FIELD -->
@@ -889,7 +889,7 @@ Premium Tour Details
             type="button"
             id="groupDropdownBtn"
             class="w-full flex items-center justify-between bg-white border border-slate-200 
-                   rounded-2xl px-4 py-3.5 text-left transition-all duration-200
+                   rounded-2xl px-2 md:px-4 py-2 md:py-3.5 text-left transition-all duration-200
                    hover:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 shadow-sm"
         >
             <div class="flex items-center gap-3">
@@ -965,10 +965,12 @@ Premium Tour Details
             >
                 BOOK NOW
             </button> -->
-
         </div>
     </div>
 </div>
+
+
+
 
 
 
@@ -983,6 +985,64 @@ Premium Tour Details
     </div>
 
 </section>
+
+
+<!-- ================= FAQ SECTION ================= -->
+<!-- ================= FAQ SECTION ================= -->
+<section class="relative overflow-hidden bg-[#f7f9fc] py-4 sm:py-20 lg:py-16">
+
+    <!-- Soft background decoration -->
+    <div class="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-blue-100/40 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-cyan-100/40 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+
+        <!-- ================= HEADING ================= -->
+        <div class="md:mb-10 mb-2 text-center sm:mb-12">
+
+            <span class="mb-2 inline-flex items-center gap-2 rounded-full
+                         bg-blue-50 px-4 py-2 text-[10px] font-extrabold
+                         uppercase tracking-[0.18em] text-blue-600 sm:text-xs">
+
+                <span class="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+
+                Frequently Asked Questions
+            </span>
+
+
+            {% comment %} <h2 class="text-xl font-black tracking-tight text-[#0B1F44]
+                       sm:text-md lg:text-3xl">
+
+                Have Questions?
+
+            </h2> {% endcomment %}
+
+
+            <p class="mx-auto mt-2 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
+
+                Find answers to the most common questions about this tour.
+
+            </p>
+
+        </div>
+
+
+        <!-- ================= FAQ LIST ================= -->
+        <div
+            id="faqContainer"
+            class="space-y-3"
+        >
+            <!-- FAQs will be rendered here -->
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
 
 <!-- ================= GALLERY MODAL ================= -->
 
@@ -1050,90 +1110,6 @@ Premium Tour Details
 
 <!-- ================= FLATPICKR CUSTOM CSS ================= -->
 
-<!-- 
-<style>
-
-.flatpickr-calendar {
-
-    border: none !important;
-    border-radius: 24px !important;
-    overflow: visible !important;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
-    padding: 12px;
-    width: 340px !important;
-    max-width: 95vw !important;
-}
-
-.flatpickr-months {
-
-    padding: 12px 8px;
-}
-
-.flatpickr-current-month {
-
-    font-size: 18px;
-    font-weight: 700;
-    color: #212121;
-}
-
-.flatpickr-weekdays {
-
-    margin-top: 8px;
-}
-
-.flatpickr-weekday {
-
-    color: #878787 !important;
-    font-weight: 700;
-    font-size: 13px;
-}
-
-.flatpickr-days {
-
-    width: 100% !important;
-}
-
-.dayContainer {
-
-    min-width: 100% !important;
-    max-width: 100% !important;
-    width: 100% !important;
-}
-
-.flatpickr-day {
-
-    border-radius: 14px !important;
-    height: 42px !important;
-    line-height: 42px !important;
-    width: 42px !important;
-    max-width: 42px !important;
-    font-weight: 600;
-}
-
-.flatpickr-day:hover {
-
-    background: #e8f0fe !important;
-    color: #2874f0 !important;
-}
-
-.flatpickr-day.selected {
-
-    background: #2874f0 !important;
-    border-color: #2874f0 !important;
-    color: white !important;
-}
-
-.flatpickr-day.today {
-
-    border-color: #2874f0 !important;
-}
-
-.flatpickr-input {
-
-    cursor: pointer !important;
-}
-
-</style> -->
 
 <style>
 
@@ -1322,32 +1298,149 @@ Premium Tour Details
 <!-- ================= CSS ================= -->
 
 <style>
+    /* ================================
+       PREMIUM TOUR TABS
+    ================================= */
 
-    .tourTab{
+    .tour-tabs-wrapper {
+        background: linear-gradient(
+            135deg,
+            #eef8ff 0%,
+            #f5fbff 50%,
+            #effcff 100%
+        );
 
-        padding: 18px 28px;
+        border: 1px solid #d9eefb;
+        border-radius: 20px;
+        padding: 6px;
+
+        box-shadow:
+            0 8px 25px rgba(14, 116, 144, 0.08);
+    }
+
+    .tour-tabs-inner {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .tour-tabs-inner::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tourTab {
+        position: relative;
+
+        padding: 12px 22px;
+
+        border-radius: 14px;
+
+        font-size: 14px;
         font-weight: 700;
-        color: #4b5563;
-        border-bottom: 3px solid transparent;
-        transition: .3s;
+
+        color: #64748b;
+
+        background: transparent;
+
         white-space: nowrap;
+
+        transition:
+            color .25s ease,
+            background .25s ease,
+            box-shadow .25s ease,
+            transform .2s ease;
     }
 
-    .tourTab:hover{
+    /* Hover */
 
-        color: #2874f0;
-        background: #f8fbff;
+    .tourTab:hover {
+        color: #0284c7;
+
+        background: rgba(255,255,255,.75);
+
+        transform: translateY(-1px);
     }
 
-    .activeTab{
+    /* Active tab */
 
-        color: #2874f0;
-        border-color: #2874f0;
-        background: #f8fbff;
+    .tourTab.activeTab {
+        color: #ffffff;
+
+        background: linear-gradient(
+            135deg,
+            #0284c7,
+            #06b6d4
+        );
+
+        box-shadow:
+            0 6px 18px rgba(6, 182, 212, .25);
     }
 
+    .tourTab.activeTab:hover {
+        color: #ffffff;
+
+        background: linear-gradient(
+            135deg,
+            #0369a1,
+            #0891b2
+        );
+    }
+
+    /* Small active indicator */
+
+    .tourTab.activeTab::after {
+        content: "";
+
+        position: absolute;
+
+        left: 50%;
+        bottom: 4px;
+
+        width: 18px;
+        height: 3px;
+
+        border-radius: 999px;
+
+        background: rgba(255,255,255,.8);
+
+        transform: translateX(-50%);
+    }
+
+    /* ================================
+       MOBILE
+    ================================= */
+
+    @media (max-width: 640px) {
+
+        .tour-tabs-wrapper {
+            border-radius: 16px;
+            padding: 5px;
+
+            box-shadow:
+                0 5px 18px rgba(14,116,144,.07);
+        }
+
+        .tour-tabs-inner {
+            gap: 4px;
+        }
+
+        .tourTab {
+            padding: 10px 15px;
+
+            font-size: 12px;
+
+            border-radius: 12px;
+        }
+
+        .tourTab.activeTab::after {
+            bottom: 3px;
+
+            width: 14px;
+            height: 2px;
+        }
+    }
 </style>
-
 <!-- ================= SCRIPT ================= -->
 
 <script>
@@ -1792,6 +1885,7 @@ async function submitReview(){
             );
 
             fetchTourDetails();
+            
         }
         else{
 
@@ -1909,35 +2003,27 @@ function renderReviews(tourData){
             ? review.user_name[0]
                 .toUpperCase()
             : "U";
-
         container.innerHTML += `
-
             <div
                 class="border border-gray-200 rounded-xl p-5"
             >
-
                 <div
                     class="flex items-center justify-between"
                 >
-
                     <div
                         class="text-yellow-400 text-sm"
                     >
                         ${stars}
                     </div>
-
                     <div
                         class="text-sm font-medium text-gray-700"
                     >
                         ${review.rating}/5
                     </div>
-
                 </div>
-
                 <div
                     class="flex items-center gap-3 mt-4"
                 >
-
                     <div
                         class="
                             w-10 h-10
@@ -1952,9 +2038,7 @@ function renderReviews(tourData){
                     >
                         ${initial}
                     </div>
-
                     <div>
-
                         <h3
                             class="
                                 font-semibold
@@ -1963,7 +2047,6 @@ function renderReviews(tourData){
                         >
                             ${review.user_name}
                         </h3>
-
                         <p
                             class="
                                 text-xs
@@ -1974,11 +2057,8 @@ function renderReviews(tourData){
                                 review.created_at
                             ).toLocaleDateString()}
                         </p>
-
                     </div>
-
                 </div>
-
                 <p
                     class="
                         text-gray-600
@@ -1988,18 +2068,11 @@ function renderReviews(tourData){
                 >
                     ${review.review || ""}
                 </p>
-
             </div>
-
         `;
-
     });
-
 }
 
-
-
-    
 </script>
 
 
@@ -2379,27 +2452,11 @@ let infantPrice = 0;
 // =========================
 // GLOBAL (declare only once)
 // =========================
-{% comment %} let selectedPricing = null;
-let allPricing = [];
-let selectedTourTime = null;
-let tourData = null; {% endcomment %}
 
 // =========================
 // FORMAT LABEL
 // =========================
-{% comment %} function formatGroupLabel(item) {
-    if (item.group_label) return item.group_label;
 
-    if (item.group_type) {
-        return item.group_type
-            .replace(/_/g, " ")
-            .replace(/upto/i, "Up to")
-            .replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    if (item.group_members) return `Up to ${item.group_members} people`;
-    return "Group Package";
-} {% endcomment %}
 function formatGroupLabel(item) {
 
     // If group_label already contains a proper custom label, use it
@@ -2458,36 +2515,6 @@ function formatGroupLabel(item) {
 
     return "Group Package";
 }
-// =========================
-// SELECT GROUP
-// =========================
-{% comment %} function selectGroup(p, label, price) {
-    selectedPricing = p;
-
-    const labelEl = document.getElementById("groupSelectedLabel");
-    const priceEl = document.getElementById("groupSelectedPrice");
-
-    if (labelEl) labelEl.innerText = label;
-
-    
-    if (priceEl) {
-        priceEl.innerText = `₹${price}`;
-        priceEl.classList.remove("hidden");
-    }
-
-    // Update price on card
-    const totalEl = document.getElementById("tourCardTotal") || document.getElementById("totalDisplay");
-    if (totalEl) totalEl.innerText = `₹${price}`;
-
-    const calcEl = document.getElementById("tourCardCalculation");
-    if (calcEl) calcEl.innerText = label;
-
-    // Close dropdown
-    const menu = document.getElementById("groupDropdownMenu");
-    const arrow = document.getElementById("groupArrow");
-    if (menu) menu.classList.add("hidden");
-    if (arrow) arrow.classList.remove("rotate-180");
-} {% endcomment %}
 
 
 // =========================
@@ -2603,148 +2630,6 @@ function renderGroupPricing(pricingList) {
         }
     });
 }
-{% comment %} function renderGroupPricing(pricingList) {
-    const optionsList = document.getElementById("groupOptionsList");
-    const dropdownBtn = document.getElementById("groupDropdownBtn");
-    const dropdownMenu = document.getElementById("groupDropdownMenu");
-    const arrow = document.getElementById("groupArrow");
-
-    if (!optionsList || !dropdownBtn || !dropdownMenu) {
-        console.warn("Group dropdown elements not found");
-        return;
-    }
-
-    optionsList.innerHTML = "";
-
-    allPricing = (pricingList || [])
-        .filter(p => p.is_active !== false)
-        .sort((a, b) => parseFloat(a.group_price) - parseFloat(b.group_price));
-
-    if (allPricing.length === 0) {
-        optionsList.innerHTML = `
-            <div class="px-4 py-4 text-sm text-slate-500 text-center">
-                No pricing available
-            </div>`;
-        return;
-    }
-
-    allPricing.forEach((p, index) => {
-        const label = formatGroupLabel(p);
-        const price = parseFloat(p.group_price).toLocaleString("en-IN");
-
-        const option = document.createElement("div");
-        option.className = `
-            flex items-center justify-between px-4 py-3.5 cursor-pointer
-            hover:bg-blue-50 transition-colors group
-        `;
-
-        option.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 
-                            flex items-center justify-center text-sm 
-                            group-hover:bg-blue-100 group-hover:text-blue-600">
-                    <i class="fa-solid fa-user-group"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-800">${label}</p>
-                    <p class="text-xs text-slate-400">Group package</p>
-                </div>
-            </div>
-            <p class="text-sm font-bold text-blue-700">₹${price}</p>
-        `;
-
-        option.addEventListener("click", () => {
-            selectGroup(p, label, price);
-        });
-
-        optionsList.appendChild(option);
-
-        // Auto-select first option
-        if (index === 0) {
-            selectGroup(p, label, price);
-        }
-    });
-
-    // Toggle open/close
-    dropdownBtn.onclick = function (e) {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle("hidden");
-        if (arrow) arrow.classList.toggle("rotate-180");
-    };
-
-    // Close when clicking outside
-    document.addEventListener("click", function (e) {
-        const dropdown = document.getElementById("groupDropdown");
-        if (dropdown && !dropdown.contains(e.target)) {
-            dropdownMenu.classList.add("hidden");
-            if (arrow) arrow.classList.remove("rotate-180");
-        }
-    });
-} {% endcomment %}
-{% comment %} function renderGroupPricing(pricingList) {
-    const select = document.getElementById("groupSizeSelect");
-    if (!select) return;
-
-    select.innerHTML = "";
-
-    if (!pricingList || pricingList.length === 0) {
-        select.innerHTML = `<option value="">No pricing available</option>`;
-        return;
-    }
-
-    // Only active + sorted by price
-    allPricing = pricingList
-        .filter(p => p.is_active !== false)
-        .sort((a, b) => parseFloat(a.group_price) - parseFloat(b.group_price));
-
-    // Default option
-    const defaultOpt = document.createElement("option");
-    defaultOpt.value = "";
-    defaultOpt.textContent = "Choose group size";
-    select.appendChild(defaultOpt);
-
-    allPricing.forEach((item, index) => {
-        const label = item.group_label 
-                   || item.group_members 
-                   || item.group_type 
-                   || "Group";
-
-        const priceText = `₹${parseFloat(item.group_price).toLocaleString("en-IN")}`;
-
-        const option = document.createElement("option");
-        option.value = item.id;
-        option.textContent = `${label} — ${priceText}`;
-        option.dataset.price = item.group_price;
-
-        select.appendChild(option);
-
-        // Auto-select first option
-        if (index === 0) {
-            option.selected = true;
-            selectedPricing = item;
-        }
-    });
-
-    // Change event
-    select.addEventListener("change", function () {
-        const selectedId = this.value;
-
-        if (!selectedId) {
-            selectedPricing = null;
-            calculateTotal();
-            return;
-        }
-
-        selectedPricing = allPricing.find(p => String(p.id) === String(selectedId));
-        calculateTotal();
-    });
-
-    calculateTotal();
-} {% endcomment %}
-
-// =========================
-// CALCULATE TOTAL
-// =========================
 
 // =========================
 // CALCULATE TOTAL
@@ -2833,6 +2718,8 @@ async function fetchTourDetails(){
         console.log(tour);
         
         renderTopRating(tour);
+
+        {% comment %} renderFAQs(tourData); {% endcomment %}
         
         
         renderReviews(
@@ -2977,10 +2864,10 @@ async function fetchTourDetails(){
         // =====================================================
         // TOUR TYPE
         // =====================================================
-
+{% comment %} 
         document.getElementById("tourType").innerText =
             tour.tour_type;
-
+ {% endcomment %}
 
 
         // =====================================================
@@ -3387,7 +3274,7 @@ if (imageContainer && tour.images.length > 0) {
                             :
                             'border border-gray-300'
                         }
-                        font-semibold px-7 py-4 rounded-2xl
+                        font-semibold md:px-7 px-2 py-2 md:py-4 rounded-2xl
                     "
                 >
 
@@ -4383,7 +4270,439 @@ function hidePaymentOverlay() {
         document.body.style.overflow = "";
     }
 }
+
+
+
+// =====================================================
+// FAQ RENDER
+// =====================================================
+// =====================================================
+// FAQ RENDER
+// =====================================================
+{% comment %} 
+function renderFAQs(faqs) {
+
+    const container = document.getElementById("faqContainer");
+
+    if (!container) {
+        console.error("FAQ container not found!");
+        return;
+    }
+
+    console.log("Rendering FAQs:", faqs);
+
+    // Make sure response is actually an array
+    if (!Array.isArray(faqs)) {
+        console.error("FAQ response is not an array:", faqs);
+
+        container.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+                FAQ data format is incorrect.
+            </div>
+        `;
+
+        return;
+    }
+
+    if (faqs.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+                No FAQs available.
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = "";
+
+    faqs.forEach((faq, index) => {
+
+        const item = document.createElement("div");
+
+        item.className = "faq-item";
+
+        item.innerHTML = `
+            <button
+                type="button"
+                class="faq-question"
+                onclick="toggleFAQ(this)"
+            >
+                <span>${faq.question}</span>
+
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="faq-answer">
+                ${faq.answer}
+            </div>
+        `;
+
+        container.appendChild(item);
+    });
+} {% endcomment %}
+function renderFAQs(faqs) {
+
+    const container = document.getElementById("faqContainer");
+
+    if (!container) return;
+
+    if (!Array.isArray(faqs) || faqs.length === 0) {
+
+        container.innerHTML = `
+            <div class="rounded-2xl border border-slate-200 bg-white
+                        px-6 py-10 text-center shadow-sm">
+
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center
+                            justify-center rounded-full bg-slate-100
+                            text-slate-400">
+
+                    <i class="fa-regular fa-circle-question text-lg"></i>
+
+                </div>
+
+                <p class="text-sm text-slate-500">
+                    No FAQs available at the moment.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    faqs.forEach((faq) => {
+
+        const item = document.createElement("div");
+
+        item.className = `
+            faq-item
+            group
+            overflow-hidden
+            rounded-2xl
+            border
+            border-slate-200
+            bg-white
+            shadow-sm
+            transition-all
+            duration-300
+            hover:border-blue-200
+            hover:shadow-md
+        `;
+
+
+        item.innerHTML = `
+
+            <!-- QUESTION -->
+            <button
+                type="button"
+                onclick="toggleFAQ(this)"
+                aria-expanded="false"
+                class="
+                    faq-question
+                    flex
+                    w-full
+                    items-center
+                    justify-between
+                    md:gap-4
+                    md:px-5
+                    md:py-5
+                    gap-2
+                    px-2
+                    py-2
+
+                    text-left
+                    outline-none
+                    transition-all
+                    duration-300
+                    hover:bg-slate-50
+                    sm:px-6
+                "
+            >
+
+                <span class="
+                    flex-1
+                    text-sm
+                    font-bold
+                    leading-6
+                    text-slate-800
+                    transition-colors
+                    duration-300
+                    sm:text-[15px]
+                ">
+                    ${faq.question}
+                </span>
+
+
+                <!-- ARROW -->
+                <span class="
+                    faq-icon
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-slate-100
+                    text-slate-500
+                    transition-all
+                    duration-300
+                ">
+
+                    <i class="
+                        fa-solid
+                        fa-chevron-down
+                        text-[10px]
+                        transition-transform
+                        duration-300
+                    "></i>
+
+                </span>
+
+            </button>
+
+
+            <!-- ANSWER -->
+            <div class="
+                faq-answer
+                grid
+                grid-rows-[0fr]
+                opacity-0
+                transition-all
+                duration-300
+            ">
+
+                <div class="overflow-hidden">
+
+                    <div class="
+                        border-t
+                        border-slate-100
+                        px-5
+                        pb-5
+                        pt-0
+                        text-sm
+                        leading-7
+                        text-slate-500
+                        sm:px-6
+                    ">
+
+                        <div class="pt-4">
+                            ${faq.answer}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(item);
+
+    });
+
+}
+
+// =====================================================
+// FAQ ACCORDION
+// =====================================================
+{% comment %} 
+function toggleFAQ(button) {
+
+    const currentItem = button.closest(".faq-item");
+
+    if (!currentItem) {
+        return;
+    }
+
+    document.querySelectorAll(".faq-item").forEach(item => {
+
+        if (item !== currentItem) {
+            item.classList.remove("active");
+        }
+
+    });
+
+    currentItem.classList.toggle("active");
+} {% endcomment %}
+function toggleFAQ(button) {
+
+    const currentItem = button.closest(".faq-item");
+
+    if (!currentItem) return;
+
+
+    const isOpen =
+        currentItem.classList.contains("faq-open");
+
+
+    /* Close all */
+    document.querySelectorAll(".faq-item").forEach(item => {
+
+        item.classList.remove("faq-open");
+
+        const answer =
+            item.querySelector(".faq-answer");
+
+        const icon =
+            item.querySelector(".faq-icon");
+
+        const arrow =
+            item.querySelector(".faq-icon i");
+
+        const question =
+            item.querySelector(".faq-question > span");
+
+
+        answer.classList.remove(
+            "grid-rows-[1fr]",
+            "opacity-100"
+        );
+
+        answer.classList.add(
+            "grid-rows-[0fr]",
+            "opacity-0"
+        );
+
+
+        icon.classList.remove(
+            "bg-blue-600",
+            "text-white"
+        );
+
+        icon.classList.add(
+            "bg-slate-100",
+            "text-slate-500"
+        );
+
+
+        arrow.classList.remove(
+            "rotate-180"
+        );
+
+
+        question.classList.remove(
+            "text-blue-600"
+        );
+
+    });
+document.addEventListener("DOMContentLoaded", function () {
+    fetchFAQs();
+});
+
+    /* Open clicked FAQ */
+    if (!isOpen) {
+
+        currentItem.classList.add("faq-open");
+
+
+        const answer =
+            currentItem.querySelector(".faq-answer");
+
+        const icon =
+            currentItem.querySelector(".faq-icon");
+
+        const arrow =
+            currentItem.querySelector(".faq-icon i");
+
+        const question =
+            currentItem.querySelector(".faq-question > span");
+
+
+        answer.classList.remove(
+            "grid-rows-[0fr]",
+            "opacity-0"
+        );
+
+        answer.classList.add(
+            "grid-rows-[1fr]",
+            "opacity-100"
+        );
+
+
+        icon.classList.remove(
+            "bg-slate-100",
+            "text-slate-500"
+        );
+
+        icon.classList.add(
+            "bg-blue-600",
+            "text-white"
+        );
+
+
+        arrow.classList.add(
+            "rotate-180"
+        );
+
+
+        question.classList.add(
+            "text-blue-600"
+        );
+
+    }
+
+}
+
+// =====================================================
+// FETCH FAQs
+// =====================================================
+
+async function fetchFAQs() {
+
+    try {
+
+        console.log("Fetching FAQs...");
+
+        const response = await fetch("/faqs/");
+
+        console.log("FAQ response status:", response.status);
+
+        if (!response.ok) {
+            throw new Error(
+                `FAQ request failed: ${response.status}`
+            );
+        }
+
+        const faqs = await response.json();
+
+        console.log("FAQ API DATA:", faqs);
+
+        renderFAQs(faqs);
+
+    } catch (error) {
+
+        console.error("FAQ ERROR:", error);
+
+        const container =
+            document.getElementById("faqContainer");
+
+        if (container) {
+
+            container.innerHTML = `
+                <div class="text-center py-10 text-gray-500">
+                    Unable to load FAQs.
+                </div>
+            `;
+        }
+    }
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+fetchTourDetails();
+fetchFAQs();
 </script>
+
+
 
 
 

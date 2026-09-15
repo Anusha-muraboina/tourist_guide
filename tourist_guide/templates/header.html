@@ -1,67 +1,95 @@
-<!-- ================= NAVBAR & MOBILE NAVIGATION ================= -->
 {% load static %}
 
 <style>
-  * {
-    font-family: 'Inter', sans-serif;
+  * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+  /* Subtle glass effect for navbar */
+  .navbar-glass {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
-  body {
-    background: #F5F7FB;
+
+  /* Smooth underline animation for desktop links */
+  .nav-link {
+    position: relative;
   }
-  .hero-bg {
-    background: linear-gradient(rgba(6,18,38,0.72), rgba(6,18,38,0.72)),
-      url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
-    background-size: cover;
-    background-position: center;
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #0891b2; /* cyan-600 */
+    transition: width 0.25s ease;
   }
-  .card-hover {
-    transition: 0.3s ease;
+  .nav-link:hover::after {
+    width: 100%;
   }
-  .card-hover:hover {
-    transform: translateY(-6px);
+
+  /* Mobile menu slide-in */
+  #mobileMenu .drawer {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #mobileMenu:not(.hidden) .drawer {
+    transform: translateX(0);
   }
 </style>
 
-<!-- DESKTOP NAVBAR -->
-<nav class="w-full bg-white shadow-sm fixed top-0 left-0 z-50">
-  <div class="w-full px-2 sm:px-4 lg:px-32">
-    <div class="h-[78px] flex items-center justify-between">
-      
-      <!-- LEFT SECTION -->
-      <div class="flex items-center gap-14">
-        <!-- LOGO -->
-        <div class="flex items-center justify-center overflow-hidden">
-          <a href="{% url 'home' %}">
-            <img 
-              src="{% static 'images/GET OUR GUIDE LOGO (revised) 200x70.png' %}" 
-              alt="Get Our Guide" 
-              class="w-40 h-13 object-contain"
-            >
+<!-- ===================== NAVBAR ===================== -->
+<nav class="w-full navbar-glass shadow-sm fixed top-0 left-0 z-50 border-b border-gray-100/80">
+  <div class="w-full px-4 sm:px-6 lg:px-10 xl:px-32">
+    <div class="h-16 md:h-[72px] flex items-center justify-between relative">
+
+      <!-- LEFT: Hamburger (mobile) + Logo + Desktop links -->
+      <div class="flex items-center gap-3 lg:gap-10 z-10">
+
+        <!-- Mobile Hamburger -->
+        <button id="mobileMenuBtn"
+                class="lg:hidden w-10 h-10 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200/80 
+                       flex items-center justify-center text-gray-700 transition active:scale-95">
+          <i class="fa-solid fa-bars text-[17px]"></i>
+        </button>
+
+        <!-- Desktop Logo -->
+        <a href="{% url 'home' %}" class="hidden lg:block">
+          <img src="{% static 'images/GET OUR GUIDE LOGO (revised) 200x70.png' %}"
+               alt="Get Our Guide"
+               class="h-11 w-auto object-contain">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex items-center gap-8">
+          <a href="{% url 'about_us' %}" class="nav-link text-sm font-medium text-gray-700 hover:text-cyan-600 transition">
+            About Us
           </a>
-        </div>
+          <a href="{% url 'contact' %}" class="nav-link text-sm font-medium text-gray-700 hover:text-cyan-600 transition">
+            Contact Us
+          </a>
+          <a href="{% url 'bloglisting' %}" class="nav-link text-sm font-medium text-gray-700 hover:text-cyan-600 transition">
+            Blog
+          </a>
 
-        <!-- MAIN DESKTOP MENU -->
-        <div class="hidden lg:flex items-center gap-10 relative">
-          <a href="{% url 'about_us' %}" class="hover:text-cyan-400 text-sm font-medium transition-colors">About Us</a>
-          <a href="{% url 'contact' %}" class="hover:text-cyan-400 text-sm font-medium transition-colors">Contact Us</a>
-          <a href="{% url 'bloglisting' %}" class="hover:text-cyan-400 text-sm font-medium transition-colors">Blog</a>
-
-          <!-- PLACES DROPDOWN TRIGGER -->
+          <!-- Places Dropdown -->
           <div class="relative">
-            <button id="placesBtn" type="button" class="flex items-center gap-2 text-sm font-medium text-gray-800 hover:text-cyan-600">
+            <button id="placesBtn" type="button"
+                    class="nav-link flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-cyan-600 transition">
               Places to see
-              <i class="fa-solid fa-chevron-down text-[11px]"></i>
+              <i class="fa-solid fa-chevron-down text-[10px] mt-0.5"></i>
             </button>
 
-            <!-- MEGA MENU DROPDOWN -->
-            <div id="placesDropdown" class="hidden fixed left-0 top-[78px] w-full bg-white shadow-2xl border-t border-gray-200 z-50">
-              <div class="w-full md:px-40 py-12">
+            <!-- Mega Menu -->
+            <div id="placesDropdown"
+                 class="hidden fixed left-0 top-[72px] w-full bg-white shadow-xl border-t border-gray-100 z-50">
+              <div class="max-w-7xl mx-auto px-8 xl:px-16 py-10">
                 <div class="grid grid-cols-12 gap-10">
-                  <div class="col-span-3 border-r border-gray-200 pr-10">
-                    <div id="categoryList" class="space-y-6"></div>
+                  <div class="col-span-3 border-r border-gray-100 pr-8">
+                    <div id="categoryList" class="space-y-4"></div>
                   </div>
                   <div class="col-span-9">
-                    <div id="tourList" class="grid grid-cols-3 gap-8"></div>
+                    <div id="tourList" class="grid grid-cols-3 gap-6"></div>
                   </div>
                 </div>
               </div>
@@ -70,367 +98,395 @@
         </div>
       </div>
 
-      <!-- RIGHT SECTION -->
-      <div class="flex items-center gap-7">
+      <!-- CENTER LOGO (mobile only) -->
+      <div class="absolute left-1/2 -translate-x-1/2 lg:hidden">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/GET OUR GUIDE LOGO (revised) 200x70.png' %}"
+               alt="Get Our Guide"
+               class="h-9 w-auto object-contain">
+        </a>
+      </div>
+
+      <!-- RIGHT: Profile / Login -->
+      <div class="flex items-center gap-2 sm:gap-3 z-10">
+
         {% if request.user.is_authenticated %}
-          <!-- USER DROPDOWN -->
+          <!-- User Avatar + Dropdown -->
           <div class="relative group">
-            <button type="button" class="flex items-center gap-3">
+            <button type="button"
+                    class="flex items-center gap-2.5 p-1 pr-2 rounded-full hover:bg-gray-50 transition">
               {% if request.user.profile_image %}
-                <img src="{{ request.user.profile_image.url }}" alt="{{ request.user.username }}" class="w-11 h-11 rounded-full object-cover border-2 border-cyan-500">
+                <img src="{{ request.user.profile_image.url }}"
+                     alt="{{ request.user.username }}"
+                     class="w-9 h-9 rounded-full object-cover ring-2 ring-cyan-500/30">
               {% else %}
-                <div class="w-11 h-11 rounded-full border-2 border-cyan-500 bg-cyan-50 flex items-center justify-center text-cyan-700 font-bold text-lg">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 
+                            flex items-center justify-center text-white font-semibold text-sm shadow-sm">
                   {{ request.user.username|first|upper }}
                 </div>
               {% endif %}
 
-              <div class="hidden md:block text-left">
-                <h3 class="text-[14px] font-semibold text-gray-800">{{ request.user.username }}</h3>
-                <p class="text-[12px] text-gray-500 capitalize">{{ request.user.role }}</p>
+              <div class="hidden sm:block text-left">
+                <p class="text-[13px] font-semibold text-gray-800 leading-tight">{{ request.user.username }}</p>
+                <p class="text-[11px] text-gray-500 capitalize">{{ request.user.role }}</p>
               </div>
-              <i class="fa-solid fa-chevron-down text-[12px] text-gray-500"></i>
+              <i class="fa-solid fa-chevron-down text-[11px] text-gray-400 hidden sm:block"></i>
             </button>
 
-            <!-- DROPDOWN MENU -->
-            <div class="absolute right-0 top-[45px] w-[240px] bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 overflow-hidden z-[999]">
-              <div class="p-5 border-b border-gray-100">
+            <!-- Dropdown -->
+            <div class="absolute right-0 top-12 w-60 bg-white rounded-2xl shadow-xl border border-gray-100 
+                        opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                        transition-all duration-200 origin-top-right scale-95 group-hover:scale-100 overflow-hidden z-[100]">
+              <div class="p-4 border-b border-gray-100 bg-gradient-to-r from-cyan-50 to-white">
                 <div class="flex items-center gap-3">
                   {% if request.user.profile_image %}
-                    <img src="{{ request.user.profile_image.url }}" alt="{{ request.user.username }}" class="w-12 h-12 rounded-full object-cover border-2 border-cyan-100">
+                    <img src="{{ request.user.profile_image.url }}" class="w-11 h-11 rounded-full object-cover ring-2 ring-white">
                   {% else %}
-                    <div class="w-12 h-12 rounded-full bg-cyan-50 text-cyan-700 flex items-center justify-center font-bold text-lg">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 
+                                flex items-center justify-center text-white font-bold">
                       {{ request.user.username|first|upper }}
                     </div>
                   {% endif %}
                   <div class="min-w-0">
-                    <h3 class="text-[15px] font-bold text-gray-900 truncate">{{ request.user.username }}</h3>
-                    <p class="text-[13px] text-gray-500 mt-1 truncate">{{ request.user.email }}</p>
+                    <p class="text-sm font-bold text-gray-900 truncate">{{ request.user.username }}</p>
+                    <p class="text-xs text-gray-500 truncate">{{ request.user.email }}</p>
                   </div>
                 </div>
               </div>
 
               <div class="p-2">
-                <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
-                  <i class="fa-regular fa-user text-cyan-600"></i>
-                  <span class="text-[14px] font-medium text-gray-700">My Profile</span>
+                <a href="{% url 'profile' %}"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyan-50 transition group/item">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center">
+                    <i class="fa-regular fa-user text-sm"></i>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 group-hover/item:text-cyan-700">My Profile</span>
                 </a>
-                <a href="{% url 'my-bookings' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-cyan-50 transition">
-                  <i class="fa-regular fa-bookmark text-cyan-600"></i>
-                  <span class="text-[14px] font-medium text-gray-700">My Bookings</span>
+                <a href="{% url 'my-bookings' %}"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-cyan-50 transition group/item">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center">
+                    <i class="fa-regular fa-bookmark text-sm"></i>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 group-hover/item:text-cyan-700">My Bookings</span>
                 </a>
-                <button type="button" onclick="logoutUser()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 transition text-left">
-                  <i class="fa-solid fa-right-from-bracket text-red-500"></i>
-                  <span class="text-[14px] font-medium text-red-500">Logout</span>
+                <button onclick="logoutUser()"
+                        class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-50 transition group/item text-left">
+                  <div class="w-8 h-8 rounded-lg bg-red-100 text-red-500 flex items-center justify-center">
+                    <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                  </div>
+                  <span class="text-sm font-medium text-red-500">Logout</span>
                 </button>
               </div>
             </div>
           </div>
+
         {% else %}
-          <a href="{% url 'login' %}" class="h-11 px-6 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white flex items-center justify-center font-semibold transition">
+          <!-- Login Button -->
+          <a href="{% url 'login' %}"
+             class="h-9 sm:h-10 px-4 sm:px-5 rounded-xl bg-cyan-600 hover:bg-cyan-700 
+                    text-white text-sm font-semibold flex items-center justify-center 
+                    shadow-sm shadow-cyan-600/20 transition active:scale-95">
             Login
           </a>
         {% endif %}
-
-        <!-- MOBILE MENU BUTTON -->
-        <button id="mobileMenuBtn" class="lg:hidden w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center text-gray-700">
-          <i class="fa-solid fa-bars text-[18px]"></i>
-        </button>
       </div>
-
     </div>
   </div>
 </nav>
 
-<!-- ================= MOBILE MENU DRAWER ================= -->
-<div id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-black/50 z-[999] hidden">
-  <div class="w-[300px] md:w-[340px] h-full bg-white shadow-2xl overflow-y-auto flex flex-col justify-between">
-    
-    <div>
-      <!-- HEADER -->
-      <div class="p-4 md:p-6 border-b border-gray-200 flex items-center justify-between">
+<!-- ===================== MOBILE DRAWER ===================== -->
+<div id="mobileMenu" class="fixed inset-0 z-[999] hidden">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="mobileMenuBackdrop"></div>
+
+  <!-- Drawer -->
+  <div class="drawer absolute top-0 left-0 h-full w-[300px] sm:w-[320px] bg-white shadow-2xl flex flex-col">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-5 border-b border-gray-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-cyan-100 flex items-center justify-center text-cyan-600">
+          <i class="fa-solid fa-compass text-lg"></i>
+        </div>
         <div>
-          <h2 class="md:text-[22px] text-[16px] font-bold text-gray-900">Tourist Guide</h2>
-        </div>
-        <button id="closeMobileMenu" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- SEARCH BAR -->
-      <div class="p-6 pb-2">
-        <div class="flex items-center bg-gray-100 rounded-2xl px-4">
-          <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-          <input type="text" placeholder="Search places" class="w-full bg-transparent px-3 py-4 outline-none text-[14px]">
+          <h2 class="text-base font-bold text-gray-900">Tourist Guide</h2>
+          <p class="text-[11px] text-gray-500">Explore the best places</p>
         </div>
       </div>
+      <button id="closeMobileMenu"
+              class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark text-gray-600"></i>
+      </button>
+    </div>
 
-      <!-- MOBILE NAVIGATION LINKS -->
-      <div class="p-6 pt-4 space-y-3">
-
-        <!-- DROPDOWN: PLACES TO SEE -->
-        <div class="border border-gray-200 rounded-2xl overflow-hidden">
-          <button id="mobilePlacesBtn" class="w-full flex items-center justify-between p-4 hover:bg-cyan-50 transition">
-            <div class="flex items-center gap-4">
-              <div class="w-11 h-11 rounded-xl bg-cyan-100 flex items-center justify-center text-cyan-600">
-                <i class="fa-solid fa-location-dot"></i>
-              </div>
-              <div class="text-left">
-                <h3 class="text-[15px] font-semibold text-gray-900">Places to see</h3>
-                <p class="text-[12px] text-gray-500">Explore attractions</p>
-              </div>
-            </div>
-            <i id="mobilePlacesIcon" class="fa-solid fa-chevron-down text-gray-400 transition"></i>
-          </button>
-
-          <div id="mobileCategoryList" class="hidden bg-gray-50 border-t border-gray-100"></div>
-          <div id="mobileTourList" class="hidden bg-white border-t border-gray-100"></div>
-        </div>
-
-        <!-- ABOUT US -->
-        <a href="{% url 'about_us' %}" class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-cyan-50 transition">
-          <div class="flex items-center gap-4">
-            <div class="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-              <i class="fa-solid fa-circle-info"></i>
-            </div>
-            <div class="text-left">
-              <h3 class="text-[15px] font-semibold text-gray-900">About Us</h3>
-              <p class="text-[12px] text-gray-500">Our story & mission</p>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-gray-400"></i>
-        </a>
-
-        <!-- CONTACT US -->
-        <a href="{% url 'contact' %}" class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-cyan-50 transition">
-          <div class="flex items-center gap-4">
-            <div class="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-              <i class="fa-solid fa-headset"></i>
-            </div>
-            <div class="text-left">
-              <h3 class="text-[15px] font-semibold text-gray-900">Contact Us</h3>
-              <p class="text-[12px] text-gray-500">Get in touch with us</p>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-gray-400"></i>
-        </a>
-
-        <!-- BLOG -->
-        <a href="{% url 'bloglisting' %}" class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-cyan-50 transition">
-          <div class="flex items-center gap-4">
-            <div class="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600">
-              <i class="fa-solid fa-newspaper"></i>
-            </div>
-            <div class="text-left">
-              <h3 class="text-[15px] font-semibold text-gray-900">Blog</h3>
-              <p class="text-[12px] text-gray-500">Travel guides & tips</p>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-gray-400"></i>
-        </a>
-
+    <!-- Search -->
+    <div class="px-5 pt-5">
+      <div class="flex items-center bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 focus-within:ring-2 focus-within:ring-cyan-500/30 focus-within:border-cyan-400 transition">
+        <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+        <input type="text" placeholder="Search places..."
+               class="w-full bg-transparent px-3 outline-none text-sm placeholder:text-gray-400">
       </div>
     </div>
 
-    <!-- MOBILE FOOTER PROFILE / AUTH SECTION -->
-    <div class="p-6 border-t border-gray-100 bg-gray-50">
-      {% if request.user.is_authenticated %}
-        <a href="{% url 'profile' %}" class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-200 transition">
-          <div class="w-10 h-10 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold text-sm">
-            {{ request.user.username|first|upper }}
+    <!-- Navigation Links -->
+    <div class="flex-1 overflow-y-auto px-5 py-5 space-y-2">
+
+      <!-- Places Accordion -->
+      <div class="rounded-2xl border border-gray-200 overflow-hidden">
+        <button id="mobilePlacesBtn"
+                class="w-full flex items-center justify-between p-4 hover:bg-cyan-50/50 transition">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div class="text-left">
+              <p class="text-sm font-semibold text-gray-900">Places to see</p>
+              <p class="text-xs text-gray-500">Explore attractions</p>
+            </div>
+          </div>
+          <i id="mobilePlacesIcon" class="fa-solid fa-chevron-down text-gray-400 text-xs transition-transform duration-200"></i>
+        </button>
+        <div id="mobileCategoryList" class="hidden bg-gray-50/80 border-t border-gray-100"></div>
+      </div>
+
+      <!-- About -->
+      <a href="{% url 'about_us' %}"
+         class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-indigo-50/50 hover:border-indigo-200 transition group">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition">
+            <i class="fa-solid fa-circle-info"></i>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-800">{{ request.user.username }}</p>
+            <p class="text-sm font-semibold text-gray-900">About Us</p>
+            <p class="text-xs text-gray-500">Our story & mission</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+      </a>
+
+      <!-- Contact -->
+      <a href="{% url 'contact' %}"
+         class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-emerald-50/50 hover:border-emerald-200 transition group">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Contact Us</p>
+            <p class="text-xs text-gray-500">Get in touch</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+      </a>
+
+      <!-- Blog -->
+      <a href="{% url 'bloglisting' %}"
+         class="flex items-center justify-between p-4 rounded-2xl border border-gray-200 hover:bg-amber-50/50 hover:border-amber-200 transition group">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center group-hover:scale-105 transition">
+            <i class="fa-solid fa-newspaper"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Blog</p>
+            <p class="text-xs text-gray-500">Travel guides & tips</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
+      </a>
+    </div>
+
+    <!-- Bottom Auth Section -->
+    <div class="p-5 border-t border-gray-100 bg-gray-50/80">
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'profile' %}"
+           class="flex items-center gap-3 p-3 rounded-2xl bg-white border border-gray-200 hover:border-cyan-300 hover:shadow-sm transition">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 text-white 
+                      flex items-center justify-center font-bold text-sm">
+            {{ request.user.username|first|upper }}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">{{ request.user.username }}</p>
             <p class="text-xs text-gray-500">View Profile</p>
           </div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-xs"></i>
         </a>
       {% else %}
-        <a href="{% url 'login' %}" class="w-full py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white text-center font-semibold text-sm flex items-center justify-center gap-2 transition">
-          <i class="fa-solid fa-right-to-bracket text-xs"></i>
+        <a href="{% url 'login' %}"
+           class="w-full h-12 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white 
+                  font-semibold text-sm flex items-center justify-center gap-2 shadow-md shadow-cyan-600/20 transition active:scale-[0.98]">
+          <i class="fa-solid fa-right-to-bracket text-sm"></i>
           Login / Register
         </a>
       {% endif %}
     </div>
-
   </div>
 </div>
 
-<!-- ================= JAVASCRIPT ================= -->
+<!-- ===================== JAVASCRIPT ===================== -->
 <script>
-let categoriesData = [];
+  let categoriesData = [];
 
-document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.getElementById("placesBtn");
-  const dropdown = document.getElementById("placesDropdown");
-
-  if (btn && dropdown) {
-    btn.addEventListener("click", function(e) {
-      e.preventDefault();
-      dropdown.classList.toggle("hidden");
-    });
-
-    document.addEventListener("click", function(e) {
-      if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-        dropdown.classList.add("hidden");
-      }
-    });
-  }
-
-  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-  const mobileMenu = document.getElementById("mobileMenu");
-  const closeMobileMenu = document.getElementById("closeMobileMenu");
-
-  if (mobileMenuBtn && mobileMenu && closeMobileMenu) {
-    mobileMenuBtn.addEventListener("click", () => mobileMenu.classList.remove("hidden"));
-    closeMobileMenu.addEventListener("click", () => mobileMenu.classList.add("hidden"));
-  }
-
-  const mobilePlacesBtn = document.getElementById("mobilePlacesBtn");
-  if (mobilePlacesBtn) {
-    mobilePlacesBtn.addEventListener("click", function() {
-      document.getElementById("mobileCategoryList").classList.toggle("hidden");
-      document.getElementById("mobilePlacesIcon").classList.toggle("rotate-180");
-    });
-  }
-
-  loadCategories();
-});
-
-async function loadCategories() {
-  try {
-    const response = await fetch("/api/categories/");
-    categoriesData = await response.json();
-    
-    const categoryList = document.getElementById("categoryList");
-    if (categoryList) {
-      categoryList.innerHTML = "";
-
-      categoriesData.forEach(category => {
-        categoryList.innerHTML += `
-          <a href="javascript:void(0)" onclick="showTours(${category.id})" class="block text-[18px] font-semibold text-gray-500 hover:text-cyan-600 transition">
-            ${category.name}
-          </a>
-        `;
+  document.addEventListener("DOMContentLoaded", function () {
+    // Desktop Places dropdown
+    const btn = document.getElementById("placesBtn");
+    const dropdown = document.getElementById("placesDropdown");
+    if (btn && dropdown) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle("hidden");
+      });
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+          dropdown.classList.add("hidden");
+        }
       });
     }
 
-    if (categoriesData.length) {
-      showTours(categoriesData[0].id);
-      loadMobileCategories();
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeMobileMenu = document.getElementById("closeMobileMenu");
+    const backdrop = document.getElementById("mobileMenuBackdrop");
+
+    function openMobileMenu() {
+      mobileMenu.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
     }
-  } catch (error) {
-    console.error("Failed to load categories:", error);
+    function closeMobile() {
+      mobileMenu.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMobileMenu);
+    if (closeMobileMenu) closeMobileMenu.addEventListener("click", closeMobile);
+    if (backdrop) backdrop.addEventListener("click", closeMobile);
+
+    // Mobile Places accordion
+    const mobilePlacesBtn = document.getElementById("mobilePlacesBtn");
+    if (mobilePlacesBtn) {
+      mobilePlacesBtn.addEventListener("click", () => {
+        document.getElementById("mobileCategoryList").classList.toggle("hidden");
+        document.getElementById("mobilePlacesIcon").classList.toggle("rotate-180");
+      });
+    }
+
+    loadCategories();
+  });
+
+  async function loadCategories() {
+    try {
+      const response = await fetch("/api/categories/");
+      categoriesData = await response.json();
+
+      const categoryList = document.getElementById("categoryList");
+      if (categoryList) {
+        categoryList.innerHTML = "";
+        categoriesData.forEach(category => {
+          categoryList.innerHTML += `
+            <a href="javascript:void(0)" onclick="showTours(${category.id})"
+               class="block text-base font-semibold text-gray-500 hover:text-cyan-600 transition py-1">
+              ${category.name}
+            </a>`;
+        });
+      }
+
+      if (categoriesData.length) {
+        showTours(categoriesData[0].id);
+        loadMobileCategories();
+      }
+    } catch (error) {
+      console.error("Failed to load categories:", error);
+    }
   }
-}
 
-function showTours(categoryId) {
-  const category = categoriesData.find(item => item.id == categoryId);
-  if (!category) return;
+  function showTours(categoryId) {
+    const category = categoriesData.find(item => item.id == categoryId);
+    if (!category) return;
 
-  const tourList = document.getElementById("tourList");
-  if (!tourList) return;
+    const tourList = document.getElementById("tourList");
+    if (!tourList) return;
 
-  tourList.innerHTML = "";
-
-  category.tours.forEach(tour => {
-    tourList.innerHTML += `
-      <a href="/tour-details/${tour.slug}/" class="flex items-start gap-4 group/item mb-6">
-        <div class="flex items-center justify-center gap-4 w-full">
-          <img src="${tour.image}" class="w-14 h-14 rounded-full object-cover">
-          <h3 class="text-[16px] font-semibold text-gray-900 group-hover/item:text-cyan-600">
+    tourList.innerHTML = "";
+    category.tours.forEach(tour => {
+      tourList.innerHTML += `
+        <a href="/tour-details/${tour.slug}/" class="flex items-center gap-4 group p-2 rounded-xl hover:bg-gray-50 transition">
+          <img src="${tour.image}" class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 group-hover:ring-cyan-200 transition">
+          <h3 class="text-[15px] font-semibold text-gray-800 group-hover:text-cyan-600 transition">
             ${tour.title}
           </h3>
-        </div>
-      </a>
-    `;
-  });
-}
-
-function loadMobileCategories() {
-  const container = document.getElementById("mobileCategoryList");
-  if (!container) return;
-  
-  container.innerHTML = "";
-
-  categoriesData.forEach(category => {
-    let toursHtml = "";
-    category.tours.forEach(tour => {
-      toursHtml += `
-        <a href="/tour-details/${tour.slug}/" class="flex items-center gap-3 py-3 px-5 border-t border-gray-100 hover:bg-cyan-50">
-          <img src="${tour.image}" class="w-12 h-12 rounded-lg object-cover">
-          <div>
-            <h4 class="text-sm font-semibold text-gray-800">${tour.title}</h4>
-            <p class="text-xs text-gray-500 mt-1">₹${tour.adult_price}</p>
-          </div>
-        </a>
-      `;
+        </a>`;
     });
+  }
 
-    container.innerHTML += `
-      <div class="border-b border-gray-200">
-        <button onclick="document.getElementById('tour-${category.id}').classList.toggle('hidden')" class="w-full flex justify-between items-center px-5 py-4 bg-white">
-          <div>
-            <h3 class="text-left font-semibold text-gray-800">${category.name}</h3>
-            <p class="text-xs text-gray-500 mt-1">${category.tours.length} Tours</p>
+  function loadMobileCategories() {
+    const container = document.getElementById("mobileCategoryList");
+    if (!container) return;
+
+    container.innerHTML = "";
+    categoriesData.forEach(category => {
+      let toursHtml = "";
+      category.tours.forEach(tour => {
+        toursHtml += `
+          <a href="/tour-details/${tour.slug}/"
+             class="flex items-center gap-3 py-3 px-5 border-t border-gray-100 hover:bg-cyan-50/60 transition">
+            <img src="${tour.image}" class="w-11 h-11 rounded-xl object-cover">
+            <div>
+              <h4 class="text-sm font-semibold text-gray-800">${tour.title}</h4>
+              <p class="text-xs text-cyan-600 font-medium mt-0.5">₹${tour.adult_price}</p>
+            </div>
+          </a>`;
+      });
+
+      container.innerHTML += `
+        <div class="border-b border-gray-100 last:border-0">
+          <button onclick="document.getElementById('tour-${category.id}').classList.toggle('hidden')"
+                  class="w-full flex justify-between items-center px-5 py-3.5 bg-white hover:bg-gray-50 transition">
+            <div>
+              <h3 class="text-left text-sm font-semibold text-gray-800">${category.name}</h3>
+              <p class="text-xs text-gray-500 mt-0.5">${category.tours.length} Tours</p>
+            </div>
+            <i class="fa-solid fa-chevron-down text-gray-400 text-xs"></i>
+          </button>
+          <div id="tour-${category.id}" class="hidden bg-white">
+            ${toursHtml}
           </div>
-          <i class="fa-solid fa-chevron-down text-gray-400"></i>
-        </button>
-        <div id="tour-${category.id}" class="hidden bg-gray-50">
-          ${toursHtml}
-        </div>
-      </div>
-    `;
-  });
-}
+        </div>`;
+    });
+  }
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
     }
+    return cookieValue;
   }
-  return cookieValue;
-}
 
-async function logoutUser() {
-  const csrftoken = getCookie('csrftoken');
-  try {
-    let response = await fetch('/user/api/logout/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken
-        
+  async function logoutUser() {
+    const csrftoken = getCookie('csrftoken');
+    try {
+      const response = await fetch('/user/api/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        window.location.href = '/';
+      } else {
+        alert(data.message || 'Logout failed');
       }
-    });
-
-    let data = await response.json();
-    if (response.ok) {
-      window.location.href = '/';
-    } else {
-      alert(data.message || 'Logout failed');
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert('Something went wrong');
     }
-  } catch (error) {
-    console.error("Logout error:", error);
-    alert('Something went wrong');
   }
-}
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-

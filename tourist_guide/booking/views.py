@@ -67,8 +67,9 @@ class CreateRazorpayOrderAPIView(APIView):
             return Response({"success": False, "message": str(e)}, status=400)
 
 class VerifyAndCreateBookingAPIView(APIView):
+    
+    
     permission_classes = [AllowAny]
-
     def post(self, request):
         data = request.data
 

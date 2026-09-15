@@ -2475,3 +2475,149 @@ class BookingStatusUpdateView(
             "booking_detail",
             pk=booking.pk
         )
+        
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+
+from tourist.models import Tour, TourSchedule, TourPricing
+from user.models import User
+
+
+@require_GET
+def booking_tour_options(request):
+
+    tour_id = request.GET.get("tour_id")
+
+    if not tour_id:
+        return JsonResponse({
+            "success": False,
+            "message": "Tour is required.",
+            "times": [],
+            "guides": [],
+            "pricing": [],
+        })
+
+
+    try:
+        tour = Tour.objects.get(
+            id=tour_id,
+            is_active=True
+        )
+
+    except Tour.DoesNotExist:
+        return JsonResponse({
+            "success": False,
+            "message": "Tour not found.",
+            "times": [],
+            "guides": [],
+            "pricing": [],
+        })
+
+
+    # =========================================================
+    # SCHEDULED TIMES
+    # =========================================================
+
+    schedules = (
+        TourSchedule.objects
+        .filter(
+            tour=tour,
+            is_active=True
+        )
+        .order_by("start_time")
+    )
+
+
+    times = []
+
+    for schedule in schedules:
+
+        times.append({
+            # IMPORTANT:
+            # This is the actual value submitted to Django.
+            "value": schedule.start_time.strftime("%H:%M:%S"),
+
+            # This is only what the user sees.
+            "display": schedule.start_time.strftime("%I:%M %p"),
+
+            "available_slots": schedule.available_slots,
+        })
+
+
+    # =========================================================
+    # GUIDES
+    # ONLY GUIDES FOR SELECTED TOUR LOCATION
+    # =========================================================
+
+    guides = []
+
+    if tour.location_id:
+
+        guide_queryset = (
+            User.objects
+            .filter(
+                role="guide",
+                is_active=True,
+                locations=tour.location
+            )
+            .order_by("username")
+            .distinct()
+        )
+
+        for guide in guide_queryset:
+
+            guides.append({
+                "id": guide.id,
+                "name": (
+                    guide.get_full_name()
+                    or guide.username
+                ),
+            })
+
+
+    # =========================================================
+    # PRICING
+    # =========================================================
+
+    pricing_queryset = (
+        TourPricing.objects
+        .filter(
+            tour=tour,
+            is_active=True
+        )
+        .order_by("group_price")
+    )
+
+
+    pricing = []
+
+    for price in pricing_queryset:
+
+        pricing.append({
+            "id": price.id,
+            "label": price.get_group_type_display(),
+            "price": str(price.group_price),
+        })
+
+
+    # =========================================================
+    # LOCATION
+    # =========================================================
+
+    location = None
+
+    if tour.location_id:
+        location = str(tour.location)
+
+
+    # =========================================================
+    # RESPONSE
+    # =========================================================
+
+    return JsonResponse({
+        "success": True,
+        "times": times,
+        "guides": guides,
+        "pricing": pricing,
+        "location": location,
+    })

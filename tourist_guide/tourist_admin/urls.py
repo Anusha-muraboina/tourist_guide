@@ -167,6 +167,11 @@ urlpatterns = [
     path("blog/create/",BlogCreateView.as_view(),name="blog_create",),
     path( "blog/<int:pk>/update/", BlogUpdateView.as_view(), name="blog_update",),
     path( "blog/<int:pk>/delete/", BlogDeleteView.as_view(), name="blog_delete",),
+    path(
+        "bookings/tour-options/",
+        views.booking_tour_options,
+        name="booking_tour_options"
+    ),
 
     path( "cancel-reason/", CancelReasonListView.as_view(), name="cancel_reason_list",),
     path( "cancel-reason/create/", CancelReasonCreateView.as_view(), name="cancel_reason_create",),

@@ -12,6 +12,7 @@ from tourist.views import (
     TourListAPIView,
     terms,
     policy,
+    FAQListAPIView,
     tour_list
 )
 urlpatterns = [
@@ -56,6 +57,8 @@ urlpatterns = [
     views.tour_details,
     name='tour_details'
 ),
+    
+    path("faqs/", FAQListAPIView.as_view(), name="faq-list"),
     
     path(
         "api/categories/",

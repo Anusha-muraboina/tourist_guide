@@ -1162,93 +1162,145 @@ from user.models import User
 
 
 from tourist.models import Tour, TourPricing
+from django import forms
+from django.utils import timezone
+
+from booking.models import Booking
+from tourist.models import Tour, TourSchedule, TourPricing
+from user.models import User
+from django import forms
+from django.utils import timezone
+
+from booking.models import Booking
+from tourist.models import Tour, TourSchedule, TourPricing
+from user.models import User
+
+from decimal import Decimal
+
+from django import forms
+from django.utils import timezone
+
+from booking.models import Booking
+from tourist.models import Tour, TourSchedule, TourPricing
+from user.models import User
 
 
 class BookingForm(forms.ModelForm):
 
+    # =========================================================
+    # TOUR TIME
+    # Booking.tour_time is a TimeField
+    # =========================================================
+
+    tour_time = forms.ChoiceField(
+        required=True,
+        choices=[
+            ("", "Select scheduled time")
+        ],
+        widget=forms.Select(
+            attrs={
+                "class": "form-control",
+                "id": "id_tour_time",
+            }
+        ),
+    )
+
+
     class Meta:
+
         model = Booking
 
         fields = [
             "tour",
+            "tour_date",
+            "tour_time",
             "pricing",
             "group_members",
             "guide",
-
             "guest_name",
             "guest_email",
             "guest_phone",
-
-            "tour_date",
-            "tour_time",
-
-            "special_requests",
-
             "payment_method",
             "payment_status",
             "status",
+            "special_requests",
         ]
 
         widgets = {
 
             "tour": forms.Select(
                 attrs={
-                    "class": "form-control"
-                }
-            ),
-
-            "pricing": forms.Select(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
-
-            "group_members": forms.NumberInput(
-                attrs={
                     "class": "form-control",
-                    "min": "1",
-                    "placeholder": "Number of members"
-                }
-            ),
-
-            "guide": forms.Select(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
-
-            "guest_name": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Guest name"
-                }
-            ),
-
-            "guest_email": forms.EmailInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Guest email"
-                }
-            ),
-
-            "guest_phone": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Guest phone number"
+                    "id": "id_tour",
                 }
             ),
 
             "tour_date": forms.DateInput(
                 attrs={
                     "class": "form-control",
-                    "type": "date"
+                    "id": "id_tour_date",
+                    "type": "date",
                 }
             ),
 
-            "tour_time": forms.TimeInput(
+            "pricing": forms.Select(
                 attrs={
                     "class": "form-control",
-                    "type": "time"
+                    "id": "id_pricing",
+                }
+            ),
+
+            "group_members": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "id_group_members",
+                    "min": "1",
+                }
+            ),
+
+            "guide": forms.Select(
+                attrs={
+                    "class": "form-control",
+                    "id": "id_guide",
+                }
+            ),
+
+            "guest_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Guest name",
+                }
+            ),
+
+            "guest_email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Guest email",
+                }
+            ),
+
+            "guest_phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Guest phone number",
+                }
+            ),
+
+            "payment_method": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+
+            "payment_status": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+
+            "status": forms.Select(
+                attrs={
+                    "class": "form-control",
                 }
             ),
 
@@ -1256,38 +1308,24 @@ class BookingForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 4,
-                    "placeholder": "Any special requests..."
-                }
-            ),
-
-            "payment_method": forms.Select(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
-
-            "payment_status": forms.Select(
-                attrs={
-                    "class": "form-control"
-                }
-            ),
-
-            "status": forms.Select(
-                attrs={
-                    "class": "form-control"
+                    "placeholder": "Any special requests...",
                 }
             ),
         }
 
+
+    # =========================================================
+    # INIT
+    # =========================================================
 
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
 
 
-        # =========================================
-        # ACTIVE TOURS
-        # =========================================
+        # =====================================================
+        # TOUR
+        # =====================================================
 
         self.fields["tour"].queryset = (
             Tour.objects
@@ -1296,93 +1334,218 @@ class BookingForm(forms.ModelForm):
         )
 
 
-        # =========================================
-        # ACTIVE GUIDES
-        # =========================================
+        # =====================================================
+        # EMPTY DEPENDENT FIELDS
+        # =====================================================
+
+        self.fields["tour_time"].choices = [
+            ("", "Select scheduled time")
+        ]
 
         self.fields["guide"].queryset = (
-            User.objects
-            .filter(
-                role="guide",
-                is_active=True
-            )
-            .order_by("username")
+            User.objects.none()
         )
-
-        self.fields["guide"].required = False
-
-
-        # =========================================
-        # ACTIVE PRICING
-        # =========================================
 
         self.fields["pricing"].queryset = (
-            TourPricing.objects
-            .filter(is_active=True)
-            .select_related("tour")
-            .order_by("tour__title", "group_price")
+            TourPricing.objects.none()
         )
 
 
-        # =========================================
-        # REQUIRED FIELDS
-        # =========================================
+        # =====================================================
+        # GET SELECTED TOUR
+        # =====================================================
 
-        self.fields["pricing"].required = True
-        self.fields["group_members"].required = True
+        selected_tour_id = None
 
 
-    # =========================================
+        # -----------------------------------------------------
+        # EDIT
+        # -----------------------------------------------------
+
+        if (
+            self.instance
+            and self.instance.pk
+        ):
+
+            selected_tour_id = (
+                self.instance.tour_id
+            )
+
+
+        # -----------------------------------------------------
+        # CREATE / POST
+        # -----------------------------------------------------
+
+        if self.is_bound:
+
+            selected_tour_id = (
+                self.data.get("tour")
+                or selected_tour_id
+            )
+
+
+        # =====================================================
+        # LOAD TOUR DATA
+        # =====================================================
+
+        if selected_tour_id:
+
+            try:
+
+                tour = Tour.objects.get(
+                    id=selected_tour_id,
+                    is_active=True
+                )
+
+            except Tour.DoesNotExist:
+
+                tour = None
+
+
+            if tour:
+
+                # =============================================
+                # SCHEDULES
+                # =============================================
+
+                schedules = (
+                    TourSchedule.objects
+                    .filter(
+                        tour=tour,
+                        is_active=True
+                    )
+                    .order_by("start_time")
+                )
+
+
+                self.fields["tour_time"].choices = [
+
+                    (
+                        "",
+                        "Select scheduled time"
+                    )
+
+                ] + [
+
+                    (
+                        schedule.start_time.strftime(
+                            "%H:%M:%S"
+                        ),
+
+                        schedule.start_time.strftime(
+                            "%I:%M %p"
+                        )
+
+                    )
+
+                    for schedule in schedules
+
+                ]
+
+
+                # =============================================
+                # PRICING
+                # =============================================
+
+                self.fields["pricing"].queryset = (
+                    TourPricing.objects
+                    .filter(
+                        tour=tour,
+                        is_active=True
+                    )
+                    .order_by("group_price")
+                )
+
+
+                # =============================================
+                # GUIDES
+                # =============================================
+
+                if tour.location_id:
+
+                    self.fields["guide"].queryset = (
+                        User.objects
+                        .filter(
+                            role="guide",
+                            is_active=True,
+                            locations=tour.location
+                        )
+                        .order_by("username")
+                        .distinct()
+                    )
+
+
+    # =========================================================
     # VALIDATION
-    # =========================================
+    # =========================================================
 
     def clean(self):
 
         cleaned_data = super().clean()
 
         tour = cleaned_data.get("tour")
+        tour_time = cleaned_data.get("tour_time")
         pricing = cleaned_data.get("pricing")
         guide = cleaned_data.get("guide")
+        tour_date = cleaned_data.get("tour_date")
         group_members = cleaned_data.get("group_members")
 
 
-        # -----------------------------------------
-        # GROUP MEMBERS
-        # -----------------------------------------
+        if not tour:
 
-        if group_members is not None and group_members < 1:
+            return cleaned_data
 
-            self.add_error(
-                "group_members",
-                "Group members must be at least 1."
+
+        # =====================================================
+        # TIME VALIDATION
+        # =====================================================
+
+        if tour_time:
+
+            valid_time = (
+                TourSchedule.objects
+                .filter(
+                    tour=tour,
+                    start_time=tour_time,
+                    is_active=True
+                )
+                .exists()
             )
 
 
-        # -----------------------------------------
-        # PRICING BELONGS TO TOUR
-        # -----------------------------------------
+            if not valid_time:
 
-        if tour and pricing:
+                self.add_error(
+                    "tour_time",
+                    "Selected time is not available for this tour."
+                )
+
+
+        # =====================================================
+        # PRICING VALIDATION
+        # =====================================================
+
+        if pricing:
 
             if pricing.tour_id != tour.id:
 
                 self.add_error(
                     "pricing",
-                    "Selected pricing does not belong to the selected tour."
+                    "Selected pricing does not belong to this tour."
                 )
 
 
-        # -----------------------------------------
-        # GUIDE BELONGS TO TOUR LOCATION
-        # -----------------------------------------
+        # =====================================================
+        # GUIDE VALIDATION
+        # =====================================================
 
-        if tour and guide:
+        if guide:
 
-            if not tour.location:
+            if not tour.location_id:
 
                 self.add_error(
                     "guide",
-                    "This tour does not have a location assigned."
+                    "This tour does not have a location."
                 )
 
             elif not guide.locations.filter(
@@ -1391,37 +1554,143 @@ class BookingForm(forms.ModelForm):
 
                 self.add_error(
                     "guide",
-                    "Selected guide is not available for this tour location."
+                    "This guide is not available for the selected tour location."
+                )
+
+
+        # =====================================================
+        # GROUP MEMBERS
+        # =====================================================
+
+        if group_members is not None:
+
+            if group_members < 1:
+
+                self.add_error(
+                    "group_members",
+                    "Group members must be at least 1."
+                )
+
+
+        # =====================================================
+        # DATE
+        # =====================================================
+
+        if tour_date:
+
+            if tour_date < timezone.localdate():
+
+                self.add_error(
+                    "tour_date",
+                    "Tour date cannot be in the past."
                 )
 
 
         return cleaned_data
 
 
-    # =========================================
-    # SAVE
-    # =========================================
+    # =========================================================
+    # SAVE BOOKING
+    # =========================================================
 
     def save(self, commit=True):
 
         booking = super().save(commit=False)
 
-        pricing = self.cleaned_data.get("pricing")
+
+        # =====================================================
+        # SELECTED PRICING
+        # =====================================================
+
+        pricing = self.cleaned_data.get(
+            "pricing"
+        )
 
 
-        # -----------------------------------------
-        # CALCULATE PRICE
-        # -----------------------------------------
+        # =====================================================
+        # CALCULATE SUBTOTAL
+        # =====================================================
 
         if pricing:
 
-            booking.sub_total = pricing.group_price
+            sub_total = Decimal(
+                str(pricing.group_price)
+            )
 
-            booking.discount_amount = 0
-            booking.tax_amount = 0
+        else:
 
-            booking.total_amount = pricing.group_price
+            sub_total = Decimal(
+                "0.00"
+            )
 
+
+        # =====================================================
+        # DISCOUNT
+        # =====================================================
+        # Admin form currently has no coupon field,
+        # so discount is zero.
+        # =====================================================
+
+        discount_amount = Decimal(
+            "0.00"
+        )
+
+
+        # =====================================================
+        # TAX
+        # =====================================================
+        # Current booking flow uses zero tax.
+        # =====================================================
+
+        tax_amount = Decimal(
+            "0.00"
+        )
+
+
+        # =====================================================
+        # TOTAL
+        # =====================================================
+
+        total_amount = (
+            sub_total
+            - discount_amount
+            + tax_amount
+        )
+
+
+        # =====================================================
+        # SAVE CALCULATED VALUES
+        # =====================================================
+
+        booking.sub_total = sub_total
+
+        booking.discount_amount = (
+            discount_amount
+        )
+
+        booking.tax_amount = (
+            tax_amount
+        )
+
+        booking.total_amount = (
+            total_amount
+        )
+
+
+        # =====================================================
+        # PAYMENT DEFAULT
+        # =====================================================
+
+        if not booking.payment_status:
+
+            booking.payment_status = (
+                "pending"
+            )
+
+
+        # =====================================================
+        # SAVE
+        # =====================================================
 
         if commit:
 

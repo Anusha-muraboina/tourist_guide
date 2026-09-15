@@ -68,14 +68,14 @@ select:focus {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <section class="bg-white min-h-screen py-8 px-2 md:px-32"> 
-    <div class=" mx-auto px-4 md:px-14  mt-16 ">
+    <div class=" mx-auto px-3 md:px-14  mt-16 ">
 {% comment %} <div class="text-2xl font-bold text-orange-600">GET YOUR GUIDE</div> {% endcomment %}
         <!-- Header -->
-        <div class="flex items-center justify-between mt-8 mb-8">
+        {% comment %} <div class="flex items-center justify-between mt-8 mb-8"> {% endcomment %}
             
             
             <!-- Stepper -->
-            <div class="flex items-center gap-8">
+            {% comment %} <div class="flex items-center gap-8">
                 <div class="flex items-center gap-3">
                     <div class="w-7 h-7 rounded-full bg-blue-800 text-white flex items-center justify-center text-sm font-bold">1</div>
                     <p class="text-sm font-semibold text-gray-900">Contact</p>
@@ -85,10 +85,10 @@ select:focus {
                     <div class="w-7 h-7 rounded-full border-2 border-gray-400 text-gray-400 flex items-center justify-center text-sm font-bold">2</div>
                     <p class="text-sm font-medium text-gray-500">Payment</p>
                 </div>
-            </div>
-        </div>
+            </div> {% endcomment %}
+        {% comment %} </div> {% endcomment %}
 
-        <div class="grid lg:grid-cols-12 gap-10">
+        <div class="grid lg:grid-cols-12 gap-4 md:gap-10">
 
             <!-- LEFT SIDE - Form -->
             <div class="lg:col-span-7">
@@ -101,7 +101,7 @@ select:focus {
 
 
                 <div
-                    class="bg-[#fff5f5] text-[#e11d48] px-5 py-3 rounded-2xl flex items-center gap-3 mb-8 text-sm"
+                    class="bg-[#fff5f5] text-[#e11d48] px-2 md:px-5 py-3 rounded-2xl flex items-center gap-3 mb-2 md:mb-8 text-sm"
                 >
                     <i class="fa-solid fa-clock"></i>
 
@@ -122,7 +122,7 @@ select:focus {
                     <span>Checkout is fast and secure</span>
                 </div> {% endcomment %}
 
-                <div class="mt-8 space-y-5" id="contactStep">
+                <div class="md:mt-8 mt-4 space-y-5" id="contactStep">
 
                 
                         <h1 class=" text-md  md:text-2xl font-bold text-gray-900">Check your personal details</h1>
@@ -329,7 +329,7 @@ select:focus {
     <button
         id="goToPaymentBtn"
         type="button"
-        class="px-6 py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-2xl text-base transition"
+        class="px-2 md:px-6 py-2 md:py-3 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-2xl text-base transition"
     >
         Continue
     </button>
@@ -341,18 +341,18 @@ select:focus {
 
 <div
     id="guideStep"
-    class="hidden mt-10"
+    class="hidden mt-3 md:mt-10"
 >
 
     <h2
-        class="md:text-xl text-md text-xl font-bold mb-6"
+        class="md:text-xl  text-md font-bold mb-3 md:mb-6"
     >
         Select Your Guide
     </h2>
 
     <div
         id="guideContainer"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4"
     >
     </div>
 
@@ -363,7 +363,7 @@ select:focus {
         <button
             type="button"
             id="guideBackBtn"
-            class="px-4 md:px-8 bg-blue-800 text-white py-3 rounded-xl"
+            class="px-2 md:px-8 bg-blue-800 text-white py-1 md:py-3 rounded-xl"
         >
             Previous
         </button>
@@ -371,7 +371,7 @@ select:focus {
         <button
             type="button"
             id="guideNextBtn"
-            class="px-4 md:px-8 bg-blue-800 text-white py-3 rounded-xl"
+            class="px-2 md:px-8 bg-blue-800 text-white py-1 md:py-3 rounded-xl"
         >
             Continue
         </button>
@@ -384,12 +384,12 @@ select:focus {
 
 <div
     id="paymentStep"
-    class="hidden mt-10"
+    class="hidden mt-3 md:mt-10"
 >
 
 
     <h2
-        class=" text-md md:text-2xl font-bold text-gray-900 mb-6"
+        class=" text-md md:text-2xl font-bold text-gray-900 mb-2 md:mb-6"
     >
         Select Payment Method
     </h2>
@@ -397,7 +397,7 @@ select:focus {
     <div class="space-y-4">
 
         <label
-            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+            class="flex items-center justify-between border rounded-2xl p-3 md:p-5 cursor-pointer"
         >
 
             <div>
@@ -427,7 +427,7 @@ select:focus {
         </label>
 
         <label
-            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+            class="flex items-center justify-between border rounded-2xl p-3 md:p-5 cursor-pointer"
         >
 
             <div>
@@ -455,7 +455,7 @@ select:focus {
         </label>
 
         <label
-            class="flex items-center justify-between border rounded-2xl p-5 cursor-pointer"
+            class="flex items-center justify-between border rounded-2xl p-3 md"p-5 cursor-pointer"
         >
 
             <div>
@@ -486,7 +486,7 @@ select:focus {
 
     
 
-<div class="bg-gray-50 rounded-2xl p-6 mt-6">
+<div class="bg-gray-50 rounded-2xl p-3 md:p-6 mt-3 md:mt-6">
 
     <div class="flex justify-between mb-3">
 
@@ -584,9 +584,9 @@ select:focus {
 
             <!-- RIGHT SIDE - Order Summary -->
             <div class="lg:col-span-5">
-                <div class="bg-white border border-gray-200 rounded-2xl p-6 sticky top-8">
+                <div class="bg-white border border-gray-200 rounded-2xl md:p-6 p-3 sticky top-3 md:top-8">
 
-                    <h2 class="text-xl font-bold mb-5">Booking summary</h2>
+                    <h2 class=" text-md md:text-xl font-bold mb-5">Booking summary</h2>
 
                  <div class="flex gap-4">
 
@@ -787,7 +787,7 @@ select:focus {
                     <div class="border-t my-6"></div>
 
                     <!-- Total -->
-                    <div class="bg-gray-50 -mx-6 -mb-6 mt-8 p-6 rounded-b-2xl flex justify-between items-center">
+                    <div class="bg-gray-50 -mx-6 -mb-6 mt-3 md:mt-8 p-3 md:p-6 rounded-b-2xl flex justify-between items-center">
 
                         <div>
                             <p class="font-semibold">Total</p>
@@ -1277,7 +1277,7 @@ function renderGuides(guides) {
             <!-- ================================= -->
 
             <div
-                class="relative w-full h-44
+                class="relative w-full md:h-44 h-20
                        bg-gray-100
                        overflow-hidden"
             >
@@ -1338,7 +1338,7 @@ function renderGuides(guides) {
             <!-- GUIDE INFORMATION -->
             <!-- ================================= -->
 
-            <div class="p-2 text-center">
+            <div class="md:p-2 p-1 text-center">
 
 
                 <!-- Name -->
@@ -1347,8 +1347,11 @@ function renderGuides(guides) {
                 <h3
 
                 
-                    class="text-xl
-                           font-bold
+                    class="md:text-xl
+                            text-sm
+                           md:font-bold
+                           font-md
+
                            text-gray-900
                            truncate"
                 >
@@ -1366,7 +1369,7 @@ function renderGuides(guides) {
                            mt-1"
                 >
 
-                    Professional Tour Guide
+                     Tour Guide
 
                 </p>
 
@@ -1426,7 +1429,7 @@ function renderGuides(guides) {
 
                         <i class="fa-regular fa-eye"></i>
 
-                         View Guide 
+                         
 
                     </button>
 

@@ -1,208 +1,2022 @@
 {% extends "tourist_admin/base.html" %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div>
-            <div class="flex items-center gap-3">
-                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Booking #{{ booking.booking_id }}</h2>
-                
-                <!-- Status Badge -->
-                {% if booking.status == "confirmed" %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Confirmed</span>
-                {% elif booking.status == "pending" %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">Pending</span>
-                {% elif booking.status == "cancelled" %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700">Cancelled</span>
-                {% else %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">{{ booking.get_status_display }}</span>
-                {% endif %}
+
+<div class="min-h-screen bg-slate-50">
+
+    <!-- =====================================================
+         PAGE WRAPPER
+    ====================================================== -->
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white shadow-xl mb-8">
+
+            <!-- Decorative circles -->
+            <div class="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-28 -left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+            <div class="relative p-6 sm:p-8">
+
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+                    <!-- Left -->
+                    <div>
+
+                        <div class="flex items-center gap-4 mb-4">
+
+                            <a href="{% url 'booking_list' %}"
+                               class="w-11 h-11 rounded-xl bg-white/10 border border-white/10
+                                      flex items-center justify-center
+                                      hover:bg-white/20 transition-all duration-300">
+
+                                <i class="bi bi-arrow-left text-lg"></i>
+
+                            </a>
+
+                            <div>
+
+                                <p class="text-xs uppercase tracking-[0.2em] text-indigo-200 font-semibold">
+                                    Booking Details
+                                </p>
+
+                                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mt-1">
+                                    Booking #{{ booking.booking_id }}
+                                </h1>
+
+                            </div>
+
+                        </div>
+
+
+                        <p class="text-sm sm:text-base text-slate-300 max-w-2xl">
+                            Complete overview of the guest, tour schedule,
+                            assigned guide and payment information.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Right Actions -->
+                    <div class="flex flex-wrap items-center gap-3">
+
+                        <!-- Status -->
+
+                        {% if booking.status == "confirmed" %}
+
+                            <span class="status-pill status-confirmed">
+                                <span class="status-dot"></span>
+                                Confirmed
+                            </span>
+
+                        {% elif booking.status == "pending" %}
+
+                            <span class="status-pill status-pending">
+                                <span class="status-dot"></span>
+                                Pending
+                            </span>
+
+                        {% elif booking.status == "cancelled" %}
+
+                            <span class="status-pill status-cancelled">
+                                <span class="status-dot"></span>
+                                Cancelled
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-pill status-default">
+                                <span class="status-dot"></span>
+                                {{ booking.get_status_display }}
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- Edit -->
+
+                        <a href="{% url 'booking_update' booking.pk %}"
+                           class="action-button primary-action">
+
+                            <i class="bi bi-pencil"></i>
+
+                            <span>Edit</span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
-            <p class="text-sm text-gray-500 mt-1">Detailed overview and financials for this reservation.</p>
+
         </div>
 
-        <div class="flex items-center gap-2">
-            <a href="{% url 'booking_update' booking.pk %}" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
-                <i class="bi bi-pencil"></i> Edit
-            </a>
-            <a href="{% url 'booking_list' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-colors">
-                <i class="bi bi-arrow-left"></i> Back to List
-            </a>
-        </div>
-    </div>
 
-    <!-- Main Content Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Left Column: Guest & Tour Information -->
-        <div class="lg:col-span-8 space-y-6">
-            
-            <!-- Guest Details Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium">
-                        <i class="bi bi-person text-base"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-gray-900">Guest Details</h3>
-                </div>
+        <!-- =================================================
+             MAIN GRID
+        ================================================== -->
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div>
-                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Full Name</span>
-                        <span class="text-sm font-semibold text-gray-900">{{ booking.guest_name }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Email Address</span>
-                        <a href="mailto:{{ booking.guest_email }}" class="text-sm font-medium text-indigo-600 hover:underline truncate block">{{ booking.guest_email }}</a>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Phone Number</span>
-                        <a href="tel:{{ booking.guest_phone }}" class="text-sm font-medium text-gray-900 hover:text-indigo-600 block">{{ booking.guest_phone }}</a>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-            <!-- Tour Details Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-medium">
-                        <i class="bi bi-map text-base"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-gray-900">Tour Details</h3>
-                </div>
 
-                <div class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-gray-50/70 p-3.5 rounded-lg border border-gray-100">
-                            <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Tour Title</span>
-                            <span class="text-sm font-bold text-gray-900">{{ booking.tour.title }}</span>
+            <!-- =================================================
+                 LEFT SIDE
+            ================================================== -->
+
+            <div class="lg:col-span-8 space-y-6">
+                <!-- =============================================
+                     GUEST CARD
+                ============================================== -->
+
+                <div class="premium-card">
+
+                    <div class="card-header">
+
+                        <div class="icon-box indigo-icon">
+
+                            <i class="bi bi-person"></i>
+
                         </div>
-                        <div class="bg-gray-50/70 p-3.5 rounded-lg border border-gray-100">
-                            <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Date & Time</span>
-                            <span class="text-sm font-semibold text-gray-900">{{ booking.tour_date }}</span>
-                            <span class="text-xs text-gray-500 block mt-0.5"><i class="bi bi-clock"></i> {{ booking.tour_time|time:"g:i A" }}</span>
+
+                        <div>
+
+                            <h2 class="card-title">
+                                Guest Information
+                            </h2>
+
+                            <p class="card-subtitle">
+                                Contact details for this reservation
+                            </p>
+
                         </div>
+
                     </div>
+
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
-                            <span class="block text-xs text-gray-400 uppercase font-medium">Adults</span>
-                            <span class="text-base font-bold text-gray-800">{{ booking.adults }}</span>
+
+
+                        <!-- Name -->
+
+                        <div class="info-tile">
+
+                            {% comment %} <div class="info-icon">
+                                <i class="bi bi-person"></i>
+                            </div> {% endcomment %}
+
+                            <div>
+
+                                <span class="info-label">
+                                    Guest Name
+                                </span>
+
+                                <p class="info-value">
+                                    {{ booking.guest_name|default:"—" }}
+                                </p>
+
+                            </div>
+
                         </div>
-                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
-                            <span class="block text-xs text-gray-400 uppercase font-medium">Children</span>
-                            <span class="text-base font-bold text-gray-800">{{ booking.children }}</span>
+
+
+                        <!-- Email -->
+
+                        <div class="info-tile">
+
+                            {% comment %} <div class="info-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div> {% endcomment %}
+
+                            <div class="min-w-0">
+
+                                <span class="info-label">
+                                    Email Address
+                                </span>
+
+                                {% if booking.guest_email %}
+
+                                    <a href="mailto:{{ booking.guest_email }}"
+                                       class="info-link truncate">
+
+                                        {{ booking.guest_email }}
+
+                                    </a>
+
+                                {% else %}
+
+                                    <p class="info-value">—</p>
+
+                                {% endif %}
+
+                            </div>
+
                         </div>
-                        <div class="p-3 bg-gray-50/50 rounded-lg border border-gray-100">
-                            <span class="block text-xs text-gray-400 uppercase font-medium">Infants</span>
-                            <span class="text-base font-bold text-gray-800">{{ booking.infants }}</span>
+
+
+                        <!-- Phone -->
+
+                        <div class="info-tile">
+
+                            {% comment %} <div class="info-icon">
+                                <i class="bi bi-telephone"></i>
+                            </div> {% endcomment %}
+
+                            <div>
+
+                                <span class="info-label">
+                                    Phone Number
+                                </span>
+
+                                {% if booking.guest_phone %}
+
+                                    <a href="tel:{{ booking.guest_phone }}"
+                                       class="info-link">
+
+                                        {{ booking.guest_phone }}
+
+                                    </a>
+
+                                {% else %}
+
+                                    <p class="info-value">—</p>
+
+                                {% endif %}
+
+                            </div>
+
                         </div>
+
                     </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     TOUR CARD
+                ============================================== -->
+
+                <div class="premium-card">
+
+                    <div class="card-header">
+
+                        <div class="icon-box blue-icon">
+
+                            <i class="bi bi-map"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2 class="card-title">
+                                Tour Information
+                            </h2>
+
+                            <p class="card-subtitle">
+                                Selected tour and schedule details
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Tour Hero -->
+
+                    <div class="tour-highlight">
+
+                        {% comment %} <div class="tour-map-icon">
+
+                            <i class="bi bi-compass"></i>
+
+                        </div> {% endcomment %}
+
+                        <div class="min-w-0">
+
+                            <span class="small-label">
+                                SELECTED TOUR
+                            </span>
+
+                            <h3 class="tour-title">
+                                {{ booking.tour.title }}
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================================
+                         TOUR LOCATION
+                    ====================================================== -->
+
+                    <div class="location-highlight mt-5">
+
+                        {% comment %} <div class="location-icon">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div> {% endcomment %}
+
+                        <div class="min-w-0 flex-1">
+
+                            <span class="location-label">
+                                TOUR LOCATION
+                            </span>
+
+                            {% if booking.tour.location %}
+
+                                <h3 class="location-title">
+                                    {{ booking.tour.location.city }}
+
+                                    {% if booking.tour.location.district %}
+                                        , {{ booking.tour.location.district }}
+                                    {% endif %}
+                                </h3>
+
+                                <p class="location-state">
+                                    <i class="bi bi-pin-map"></i>
+                                    {{ booking.tour.location.state }}
+
+                                    {% if booking.tour.location.country %}
+                                        , {{ booking.tour.location.country }}
+                                    {% endif %}
+                                </p>
+
+                            {% else %}
+
+                                <h3 class="location-title">
+                                    Location not assigned
+                                </h3>
+
+                                <p class="location-state">
+                                    No location has been assigned to this tour.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Date / Time -->
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+
+
+                        <!-- Date -->
+
+                        <div class="schedule-card">
+
+                            {% comment %} <div class="schedule-icon date-icon">
+
+                                <i class="bi bi-calendar3"></i>
+
+                            </div> {% endcomment %}
+
+                            <div>
+
+                                <span class="info-label">
+                                    Tour Date
+                                </span>
+
+                                <p class="schedule-value">
+                                    {{ booking.tour_date|date:"d M Y" }}
+                                </p>
+
+                                <p class="schedule-muted">
+                                    <i class="bi bi-calendar-check"></i>
+                                    Scheduled date
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Time -->
+
+                        <div class="schedule-card">
+
+                            {% comment %} <div class="schedule-icon time-icon">
+
+                                <i class="bi bi-clock"></i>
+
+                            </div> {% endcomment %}
+
+                            <div>
+
+                                <span class="info-label">
+                                    Scheduled Time
+                                </span>
+
+                                <p class="schedule-value">
+
+                                    {% if booking.tour_time %}
+
+                                        {{ booking.tour_time|time:"g:i A" }}
+
+                                    {% else %}
+
+                                        —
+
+                                    {% endif %}
+
+                                </p>
+
+                                <p class="schedule-muted">
+                                    <i class="bi bi-alarm"></i>
+                                    Tour start time
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Group Details -->
+
+                    <div class="mt-5">
+
+                        <span class="section-mini-title">
+                            GROUP DETAILS
+                        </span>
+
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+
+
+                            <div class="count-card">
+
+                                {% comment %} <div class="count-icon">
+                                    <i class="bi bi-people"></i>
+                                </div> {% endcomment %}
+
+                                <div>
+
+                                    <span>
+                                        Group Members
+                                    </span>
+
+                                    <strong>
+                                        {{ booking.group_members|default:"0" }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+{% comment %} 
+                            <div class="count-card">
+
+                                <div>
+
+                                    <span>
+                                        Adults
+                                    </span>
+
+                                    <strong>
+                                        {{ booking.adults|default:"0" }}
+                                    </strong>
+
+                                </div>
+
+                            </div> {% endcomment %}
+
+
+                            {% comment %} <div class="count-card">
+
+                                <div class="count-icon">
+                                    <i class="bi bi-emoji-smile"></i>
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        Children
+                                    </span>
+
+                                    <strong>
+                                        {{ booking.children|default:"0" }}
+                                    </strong>
+
+                                </div>
+
+                            </div> {% endcomment %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Guide -->
 
                     {% if booking.guide %}
-                    <div class="flex items-center gap-3 p-3.5 rounded-lg bg-indigo-50/40 border border-indigo-100/60">
-                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
-                            <i class="bi bi-person-badge"></i>
+
+                    <div class="guide-card mt-5">
+
+                        <div class="guide-avatar">
+
+                            {% if booking.guide.profile_image %}
+
+                                <img src="{{ booking.guide.profile_image.url }}"
+                                     alt="Guide">
+
+                            {% else %}
+
+                                <i class="bi bi-person-badge"></i>
+
+                            {% endif %}
+
                         </div>
-                        <div>
-                            <span class="block text-xs font-semibold text-indigo-900 uppercase tracking-wider">Assigned Guide</span>
-                            <span class="text-sm font-medium text-gray-800">{{ booking.guide.username }} <span class="text-xs text-gray-500">({{ booking.guide.email }})</span></span>
+
+
+                        <div class="flex-1 min-w-0">
+
+                            <span class="guide-label">
+                                ASSIGNED GUIDE
+                            </span>
+
+                            <h4 class="guide-name">
+                                {{ booking.guide.username }}
+                            </h4>
+
+                            <p class="guide-email">
+                                {{ booking.guide.email }}
+                            </p>
+
                         </div>
+
+
+                        <div class="guide-check">
+
+                            <i class="bi bi-check-lg"></i>
+
+                        </div>
+
                     </div>
+
+                    {% else %}
+
+                    <div class="no-guide-card mt-5">
+
+                        <div class="no-guide-icon">
+                            <i class="bi bi-person-x"></i>
+                        </div>
+
+                        <div>
+
+                            <p class="font-semibold text-gray-800">
+                                No guide assigned
+                            </p>
+
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                A guide has not been assigned to this booking.
+                            </p>
+
+                        </div>
+
+                    </div>
+
                     {% endif %}
+
+
+                    <!-- Special Request -->
 
                     {% if booking.special_requests %}
-                    <div class="p-4 rounded-lg bg-amber-50/50 border border-amber-200/60">
-                        <span class="block text-xs font-semibold text-amber-800 uppercase tracking-wider mb-1"><i class="bi bi-exclamation-circle"></i> Special Requests</span>
-                        <p class="text-sm text-gray-700 leading-relaxed">{{ booking.special_requests }}</p>
+
+                    <div class="request-card mt-5">
+
+                        <div class="request-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="request-label">
+                                SPECIAL REQUEST
+                            </span>
+
+                            <p class="request-text">
+                                {{ booking.special_requests }}
+                            </p>
+
+                        </div>
+
                     </div>
+
                     {% endif %}
+
                 </div>
+
             </div>
+
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+            ================================================== -->
+
+            <div class="lg:col-span-4 space-y-6">
+
+
+                <!-- =============================================
+                     PAYMENT CARD
+                ============================================== -->
+
+                <div class="payment-card">
+
+                    <div class="payment-header">
+
+                        <div>
+
+                            <span class="payment-small">
+                                PAYMENT SUMMARY
+                            </span>
+
+                            <h2 class="payment-title">
+                                Booking Total
+                            </h2>
+
+                        </div>
+
+                        <div class="payment-icon">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Total -->
+
+                    <div class="total-box">
+
+                        <span>
+                            Total Amount
+                        </span>
+
+                        <strong>
+                            ₹{{ booking.total_amount|default:"0.00" }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- Breakdown -->
+
+                    <div class="payment-breakdown">
+
+                        <div class="money-row">
+
+                            <span>
+                                Sub Total
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.sub_total|default:"0.00" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="money-row">
+
+                            <span>
+                                Discount
+                            </span>
+
+                            <strong class="discount-value">
+                                -₹{{ booking.discount_amount|default:"0.00" }}
+                            </strong>
+
+                        </div>
+
+
+                        {% if booking.tax_amount %}
+
+                        <div class="money-row">
+
+                            <span>
+                                Tax
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.tax_amount }}
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Advance -->
+
+                    <div class="balance-section">
+
+                        <div class="balance-row">
+
+                            <span>
+                                <i class="bi bi-check-circle"></i>
+                                Advance Paid
+                            </span>
+
+                            <strong>
+                                ₹{{ booking.advance_amount|default:"0.00" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="balance-row">
+
+                            <span>
+                                <i class="bi bi-hourglass-split"></i>
+                                Remaining Balance
+                            </span>
+
+                            <strong class="remaining-value">
+                                ₹{{ booking.remaining_amount|default:"0.00" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Payment Method -->
+
+                    <div class="payment-meta">
+
+                        <div class="meta-row">
+
+                            <span>
+                                Payment Method
+                            </span>
+
+                            <strong>
+                                {{ booking.get_payment_method_display|default:"—" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="meta-row">
+
+                            <span>
+                                Payment Status
+                            </span>
+
+                            {% if booking.payment_status == "paid" %}
+
+                                <span class="payment-status paid">
+                                    Paid
+                                </span>
+
+                            {% elif booking.payment_status == "pending" %}
+
+                                <span class="payment-status pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span class="payment-status">
+                                    {{ booking.get_payment_status_display }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if booking.payment_id %}
+
+                        <div class="meta-row payment-id-row">
+
+                            <span>
+                                Payment ID
+                            </span>
+
+                            <code>
+                                {{ booking.payment_id }}
+                            </code>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     STATUS CARD
+                ============================================== -->
+
+                <div class="premium-card">
+
+                    <div class="card-header">
+
+                        <div class="icon-box purple-icon">
+
+                            <i class="bi bi-sliders"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2 class="card-title">
+                                Booking Status
+                            </h2>
+
+                            <p class="card-subtitle">
+                                Update reservation status
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form method="post"
+                          action="{% url 'booking_status' booking.pk %}"
+                          class="space-y-4">
+
+                        {% csrf_token %}
+
+
+                        <div>
+
+                            <label class="field-label">
+                                Current Status
+                            </label>
+
+                            <div class="relative">
+
+                                <select name="status"
+                                        class="status-select">
+
+                                    {% for value, label in booking.STATUS_CHOICES %}
+
+                                        <option value="{{ value }}"
+                                            {% if booking.status == value %}
+                                                selected
+                                            {% endif %}>
+                                            {{ label }}
+                                        </option>
+
+                                    {% endfor %}
+
+                                </select>
+
+                                <i class="bi bi-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="update-button">
+
+                            <i class="bi bi-check2-circle"></i>
+
+                            Update Booking Status
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     QUICK INFO
+                ============================================== -->
+
+                <div class="quick-card">
+
+                    <div class="quick-header">
+
+                        <div class="quick-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Booking Reference
+                            </h3>
+
+                            <p>
+                                Keep this information for support.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="reference-number">
+
+                        <span>
+                            {{ booking.booking_id }}
+                        </span>
+
+                        <button type="button"
+                                onclick="copyBookingId()"
+                                title="Copy booking ID">
+
+                            <i class="bi bi-copy"></i>
+
+                        </button>
+
+                    </div>
+
+                    <p id="copyMessage"
+                       class="copy-message">
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Right Column: Financials & Quick Status Actions -->
-        <div class="lg:col-span-4 space-y-6">
-            
-            <!-- Payment & Financials Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-2.5 mb-5 pb-3 border-b border-gray-100">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-medium">
-                        <i class="bi bi-wallet2 text-base"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-gray-900">Payment Breakdown</h3>
-                </div>
-
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between text-gray-600">
-                        <span>Sub Total</span>
-                        <span class="font-medium text-gray-900">₹{{ booking.sub_total }}</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600">
-                        <span>Discount</span>
-                        <span class="font-medium text-rose-600">-₹{{ booking.discount_amount }}</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600 pt-2 border-t border-gray-100">
-                        <span class="font-bold text-gray-900">Total Amount</span>
-                        <span class="font-bold text-emerald-600 text-base">₹{{ booking.total_amount }}</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600 pt-1">
-                        <span>Advance Paid</span>
-                        <span class="font-medium text-gray-900">₹{{ booking.advance_amount }}</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600">
-                        <span>Remaining Balance</span>
-                        <span class="font-semibold text-amber-600">₹{{ booking.remaining_amount }}</span>
-                    </div>
-                </div>
-
-                <div class="mt-6 pt-5 border-t border-gray-100 space-y-3 text-sm">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-xs uppercase font-medium">Payment Method</span>
-                        <span class="font-semibold text-gray-800">{{ booking.get_payment_method_display }}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-xs uppercase font-medium">Payment Status</span>
-                        <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ booking.get_payment_status_display }}</span>
-                    </div>
-                    {% if booking.payment_id %}
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-400 text-xs uppercase font-medium">Payment ID</span>
-                        <span class="font-mono text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-200">{{ booking.payment_id }}</span>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Quick Status Change Card -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-gray-100">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-medium">
-                        <i class="bi bi-sliders text-base"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-gray-900">Update Status</h3>
-                </div>
-
-                <form method="post" action="{% url 'booking_status' booking.pk %}" class="space-y-3">
-                    {% csrf_token %}
-                    <div>
-                        <select name="status" class="w-full py-2 px-3 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
-                            {% for value, label in booking.STATUS_CHOICES %}
-                                <option value="{{ value }}" {% if booking.status == value %}selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <button type="submit" class="w-full py-2 px-4 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
-                        Update Status
-                    </button>
-                </form>
-            </div>
-
-        </div>
     </div>
+
 </div>
 
-<!-- Bootstrap Icons CDN link -->
-{% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> {% endcomment %}
+
+
+<!-- =========================================================
+     STYLES
+========================================================= -->
+
+<style>
+
+    /* =====================================================
+       BASE
+    ====================================================== */
+
+    .premium-card {
+        background: rgba(255,255,255,.94);
+        border: 1px solid rgba(226,232,240,.9);
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow:
+            0 4px 20px rgba(15,23,42,.045),
+            0 1px 3px rgba(15,23,42,.03);
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease,
+            border-color .25s ease;
+    }
+
+    .premium-card:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            0 16px 35px rgba(15,23,42,.08),
+            0 3px 8px rgba(15,23,42,.04);
+        border-color: rgba(99,102,241,.15);
+    }
+
+
+    /* =====================================================
+       CARD HEADER
+    ====================================================== */
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding-bottom: 18px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .card-title {
+        color: #0f172a;
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .card-subtitle {
+        color: #94a3b8;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+
+    /* =====================================================
+       ICON BOXES
+    ====================================================== */
+
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .indigo-icon {
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+    .blue-icon {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .purple-icon {
+        background: #faf5ff;
+        color: #9333ea;
+    }
+
+
+    /* =====================================================
+       HEADER ACTIONS
+    ====================================================== */
+
+    .action-button {
+        height: 42px;
+        padding: 0 17px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all .25s ease;
+    }
+
+    .primary-action {
+        background: white;
+        color: #312e81;
+        border: 1px solid rgba(255,255,255,.35);
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    }
+
+    .primary-action:hover {
+        transform: translateY(-1px);
+        background: #f8fafc;
+    }
+
+
+    /* =====================================================
+       STATUS PILLS
+    ====================================================== */
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        backdrop-filter: blur(10px);
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-confirmed {
+        color: #bbf7d0;
+        background: rgba(16,185,129,.15);
+        border: 1px solid rgba(134,239,172,.2);
+    }
+
+    .status-pending {
+        color: #fde68a;
+        background: rgba(245,158,11,.15);
+        border: 1px solid rgba(253,230,138,.2);
+    }
+
+    .status-cancelled {
+        color: #fecaca;
+        background: rgba(244,63,94,.15);
+        border: 1px solid rgba(254,202,202,.2);
+    }
+
+    .status-default {
+        color: #cbd5e1;
+        background: rgba(148,163,184,.15);
+        border: 1px solid rgba(203,213,225,.15);
+    }
+
+
+    /* =====================================================
+       INFO TILES
+    ====================================================== */
+
+    .info-tile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        padding: 15px;
+        border-radius: 15px;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        transition: all .2s ease;
+    }
+
+    .info-tile:hover {
+        background: #f5f7ff;
+        border-color: #e0e7ff;
+    }
+
+    .info-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: white;
+        color: #6366f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(15,23,42,.05);
+        flex-shrink: 0;
+    }
+
+    .info-label {
+        display: block;
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        margin-bottom: 3px;
+    }
+
+    .info-value {
+        color: #1e293b;
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .info-link {
+        color: #4f46e5;
+        font-size: 13px;
+        font-weight: 600;
+        display: block;
+        text-decoration: none;
+    }
+
+    .info-link:hover {
+        text-decoration: underline;
+    }
+
+
+    /* =====================================================
+       TOUR HIGHLIGHT
+    ====================================================== */
+
+    .tour-highlight {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+        border-radius: 17px;
+        background:
+            linear-gradient(
+                135deg,
+                #eef2ff,
+                #f8fafc
+            );
+        border: 1px solid #e0e7ff;
+    }
+
+    .tour-map-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 21px;
+        background: linear-gradient(
+            135deg,
+            #4f46e5,
+            #2563eb
+        );
+        box-shadow: 0 8px 18px rgba(79,70,229,.2);
+        flex-shrink: 0;
+    }
+
+    .small-label {
+        display: block;
+        color: #6366f1;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .14em;
+        margin-bottom: 3px;
+    }
+
+    .tour-title {
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+
+    /* =====================================================
+       TOUR LOCATION
+    ====================================================== */
+
+    .location-highlight {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+        border-radius: 17px;
+        background: linear-gradient(135deg, #f0fdf4, #f8fafc);
+        border: 1px solid #bbf7d0;
+        transition: all .25s ease;
+    }
+
+    .location-highlight:hover {
+        transform: translateY(-2px);
+        border-color: #86efac;
+        box-shadow: 0 10px 24px rgba(22,163,74,.08);
+    }
+
+    .location-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: white;
+        font-size: 21px;
+        background: linear-gradient(135deg, #16a34a, #059669);
+        box-shadow: 0 8px 18px rgba(22,163,74,.20);
+    }
+
+    .location-label {
+        display: block;
+        color: #15803d;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .14em;
+        margin-bottom: 3px;
+    }
+
+    .location-title {
+        color: #0f172a;
+        font-size: 16px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .location-state {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 600;
+        margin: 4px 0 0;
+    }
+
+    .location-state i {
+        color: #16a34a;
+    }
+
+
+    /* =====================================================
+       SCHEDULE
+    ====================================================== */
+
+    .schedule-card {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 16px;
+        border: 1px solid #eef2f7;
+        border-radius: 15px;
+        background: #fff;
+    }
+
+    .schedule-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .date-icon {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .time-icon {
+        background: #f5f3ff;
+        color: #7c3aed;
+    }
+
+    .schedule-value {
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .schedule-muted {
+        color: #94a3b8;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+    .schedule-muted i {
+        margin-right: 3px;
+    }
+
+
+    /* =====================================================
+       GROUP
+    ====================================================== */
+
+    .section-mini-title {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .12em;
+    }
+
+    .count-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px;
+        background: #f8fafc;
+        border: 1px solid #eef2f7;
+        border-radius: 14px;
+    }
+
+    .count-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        color: #64748b;
+        box-shadow: 0 2px 6px rgba(15,23,42,.04);
+    }
+
+    .count-card span {
+        display: block;
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    .count-card strong {
+        display: block;
+        color: #1e293b;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+
+    /* =====================================================
+       GUIDE
+    ====================================================== */
+
+    .guide-card {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 15px;
+        border-radius: 16px;
+        background: linear-gradient(
+            135deg,
+            #eef2ff,
+            #f8fafc
+        );
+        border: 1px solid #dfe4ff;
+    }
+
+    .guide-avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+        color: white;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .guide-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .guide-label {
+        display: block;
+        color: #6366f1;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .12em;
+    }
+
+    .guide-name {
+        color: #1e293b;
+        font-size: 14px;
+        font-weight: 800;
+        margin: 2px 0;
+    }
+
+    .guide-email {
+        color: #64748b;
+        font-size: 11px;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .guide-check {
+        width: 29px;
+        height: 29px;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #16a34a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+
+    /* =====================================================
+       NO GUIDE
+    ====================================================== */
+
+    .no-guide-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        border-radius: 15px;
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+    }
+
+    .no-guide-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        background: #f1f5f9;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+    }
+
+
+    /* =====================================================
+       SPECIAL REQUEST
+    ====================================================== */
+
+    .request-card {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 15px;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+    }
+
+    .request-icon {
+        width: 37px;
+        height: 37px;
+        border-radius: 10px;
+        background: #fef3c7;
+        color: #d97706;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .request-label {
+        display: block;
+        color: #92400e;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        margin-bottom: 3px;
+    }
+
+    .request-text {
+        color: #78350f;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+
+    /* =====================================================
+       PAYMENT CARD
+    ====================================================== */
+
+    .payment-card {
+        overflow: hidden;
+        border-radius: 22px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        box-shadow:
+            0 8px 30px rgba(15,23,42,.07);
+    }
+
+    .payment-header {
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(
+            135deg,
+            #0f172a,
+            #1e1b4b
+        );
+        color: white;
+    }
+
+    .payment-small {
+        display: block;
+        color: #a5b4fc;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .15em;
+    }
+
+    .payment-title {
+        font-size: 18px;
+        font-weight: 800;
+        margin: 3px 0 0;
+    }
+
+    .payment-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,.1);
+        border: 1px solid rgba(255,255,255,.1);
+        font-size: 18px;
+    }
+
+
+    /* =====================================================
+       TOTAL
+    ====================================================== */
+
+    .total-box {
+        margin: 18px;
+        padding: 19px;
+        border-radius: 16px;
+        background: linear-gradient(
+            135deg,
+            #ecfdf5,
+            #f0fdf4
+        );
+        border: 1px solid #bbf7d0;
+    }
+
+    .total-box span {
+        display: block;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .total-box strong {
+        display: block;
+        color: #059669;
+        font-size: 27px;
+        font-weight: 900;
+        margin-top: 2px;
+    }
+
+
+    /* =====================================================
+       PAYMENT BREAKDOWN
+    ====================================================== */
+
+    .payment-breakdown {
+        padding: 0 22px 18px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .money-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .money-row strong {
+        color: #334155;
+        font-weight: 700;
+    }
+
+    .discount-value {
+        color: #e11d48 !important;
+    }
+
+
+    /* =====================================================
+       BALANCE
+    ====================================================== */
+
+    .balance-section {
+        padding: 16px 22px;
+        background: #fafafa;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .balance-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 6px 0;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .balance-row span i {
+        margin-right: 5px;
+    }
+
+    .balance-row strong {
+        color: #1e293b;
+        font-size: 13px;
+    }
+
+    .remaining-value {
+        color: #d97706 !important;
+    }
+
+
+    /* =====================================================
+       PAYMENT META
+    ====================================================== */
+
+    .payment-meta {
+        padding: 17px 22px 20px;
+    }
+
+    .meta-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 0;
+    }
+
+    .meta-row > span:first-child {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .meta-row strong {
+        color: #334155;
+        font-size: 12px;
+        text-align: right;
+    }
+
+    .payment-status {
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .payment-status.paid {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .payment-status.pending {
+        background: #fef3c7;
+        color: #a16207;
+    }
+
+    .payment-id-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .payment-id-row code {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: #f8fafc;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+        padding: 7px 9px;
+        border-radius: 8px;
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       STATUS SELECT
+    ====================================================== */
+
+    .field-label {
+        display: block;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .status-select {
+        width: 100%;
+        height: 46px;
+        appearance: none;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 0 40px 0 13px;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 600;
+        outline: none;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .status-select:focus {
+        border-color: #818cf8;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(99,102,241,.1);
+    }
+
+    .select-arrow {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        pointer-events: none;
+    }
+
+
+    /* =====================================================
+       UPDATE BUTTON
+    ====================================================== */
+
+    .update-button {
+        width: 100%;
+        height: 46px;
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(79,70,229,.2);
+        transition: all .25s ease;
+    }
+
+    .update-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(79,70,229,.28);
+    }
+
+
+    /* =====================================================
+       QUICK CARD
+    ====================================================== */
+
+    .quick-card {
+        padding: 20px;
+        border-radius: 20px;
+        background:
+            linear-gradient(
+                135deg,
+                #eef2ff,
+                #f8fafc
+            );
+        border: 1px solid #e0e7ff;
+    }
+
+    .quick-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+    .quick-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: white;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 8px rgba(79,70,229,.08);
+    }
+
+    .quick-header h3 {
+        color: #1e293b;
+        font-size: 13px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .quick-header p {
+        color: #94a3b8;
+        font-size: 10px;
+        margin: 2px 0 0;
+    }
+
+    .reference-number {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 16px;
+        padding: 11px 12px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+    }
+
+    .reference-number span {
+        color: #334155;
+        font-family: monospace;
+        font-size: 12px;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .reference-number button {
+        width: 30px;
+        height: 30px;
+        border: 0;
+        border-radius: 8px;
+        background: #eef2ff;
+        color: #4f46e5;
+        cursor: pointer;
+        transition: all .2s ease;
+        flex-shrink: 0;
+    }
+
+    .reference-number button:hover {
+        background: #e0e7ff;
+    }
+
+    .copy-message {
+        color: #16a34a;
+        font-size: 10px;
+        font-weight: 600;
+        margin: 6px 2px 0;
+        min-height: 14px;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 640px) {
+
+        .premium-card {
+            padding: 18px;
+            border-radius: 18px;
+        }
+
+        .payment-card {
+            border-radius: 18px;
+        }
+
+        .tour-title {
+            font-size: 16px;
+        }
+
+        .total-box strong {
+            font-size: 24px;
+        }
+
+        .status-pill {
+            padding: 8px 11px;
+        }
+
+        .action-button {
+            flex: 1;
+        }
+
+    }
+
+</style>
+
+
+
+<!-- =========================================================
+     COPY BOOKING ID
+========================================================= -->
+
+<script>
+
+function copyBookingId() {
+
+    const bookingId =
+        "{{ booking.booking_id|escapejs }}";
+
+    const message =
+        document.getElementById("copyMessage");
+
+
+    navigator.clipboard.writeText(bookingId)
+        .then(function () {
+
+            message.textContent =
+                "Booking ID copied successfully.";
+
+            setTimeout(function () {
+                message.textContent = "";
+
+            }, 2000);
+
+        })
+        .catch(function () {
+
+            message.textContent =
+                "Unable to copy booking ID.";
+
+        });
+
+}
+
+</script>
+
 {% endblock %}

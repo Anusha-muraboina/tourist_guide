@@ -11,13 +11,15 @@ from tourist.models import Tour
 from .serializers import (
     TourListSerializer,
     TourDetailSerializer,
+    FAQSerializer
 )
 
 
 
 from tourist.serializers import CategorySerializer
 from tourist.models import (
-    TourCategory
+    TourCategory,
+    FAQ
 )
 
 
@@ -440,7 +442,16 @@ def tour_list(request):
 # TOUR DETAIL API
 # =========================================
 
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
+class FAQListAPIView(generics.ListAPIView):
+    serializer_class = FAQSerializer
+    permission_classes = [AllowAny]
+
+    queryset = FAQ.objects.filter(
+        is_active=True
+    ).order_by("order", "-created_at")
 
 class TourDetailAPIView(generics.RetrieveAPIView):
 

@@ -6,7 +6,6 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-
         <!-- ================================================= -->
         <!-- HEADER -->
         <!-- ================================================= -->
@@ -16,7 +15,6 @@
                     gap-4 mb-8">
 
             <div>
-
                 <div class="flex items-center gap-3">
 
                     <a
@@ -58,18 +56,16 @@
                     </div>
 
                 </div>
-
             </div>
 
         </div>
-
 
 
         <!-- ================================================= -->
         <!-- FORM -->
         <!-- ================================================= -->
 
-        <form method="post">
+        <form method="post" id="bookingForm">
 
             {% csrf_token %}
 
@@ -87,15 +83,13 @@
             {% endif %}
 
 
-
             <!-- ================================================= -->
-            <!-- TOUR & GUIDE -->
+            <!-- TOUR SELECTION -->
             <!-- ================================================= -->
 
             <div class="bg-white rounded-2xl
                         border border-gray-200
                         shadow-sm mb-6">
-
 
                 <div class="px-6 py-5
                             border-b border-gray-100">
@@ -114,15 +108,11 @@
                         <div>
 
                             <h2 class="font-bold text-gray-900">
-
-                                Tour & Guide
-
+                                Tour & Schedule
                             </h2>
 
                             <p class="text-xs text-gray-500">
-
-                                Select the tour, pricing and guide.
-
+                                Select a tour, date and available scheduled time.
                             </p>
 
                         </div>
@@ -132,10 +122,9 @@
                 </div>
 
 
-
                 <div class="p-6">
 
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-3 gap-6">
 
 
                         <!-- TOUR -->
@@ -153,6 +142,10 @@
 
                             {{ form.tour }}
 
+                            <p class="help-text">
+                                Select the tour first.
+                            </p>
+
                             {% if form.tour.errors %}
 
                                 <div class="form-error">
@@ -163,6 +156,202 @@
 
                         </div>
 
+
+                        <!-- DATE -->
+
+                        <div>
+
+                            <label
+                                for="{{ form.tour_date.id_for_label }}"
+                                class="form-label">
+
+                                Tour Date
+                                <span class="text-red-500">*</span>
+
+                            </label>
+
+                            {{ form.tour_date }}
+
+                            <p class="help-text">
+                                Select the booking date from the calendar.
+                            </p>
+
+                            {% if form.tour_date.errors %}
+
+                                <div class="form-error">
+                                    {{ form.tour_date.errors }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- TIME -->
+
+                        <div>
+
+                            <label
+                                for="{{ form.tour_time.id_for_label }}"
+                                class="form-label">
+
+                                Scheduled Time
+                                <span class="text-red-500">*</span>
+
+                            </label>
+
+                            {{ form.tour_time }}
+
+                            <p
+                                id="timeHelp"
+                                class="help-text">
+
+                                Select a tour first to see available times.
+
+                            </p>
+
+                            {% if form.tour_time.errors %}
+
+                                <div class="form-error">
+                                    {{ form.tour_time.errors }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOADING -->
+
+                    <div
+                        id="tourLoading"
+                        class="hidden mt-5 p-4 rounded-xl
+                               bg-blue-50 border border-blue-100
+                               text-blue-700 text-sm">
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            <span>
+                                Loading tour schedules, guides and pricing...
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOCATION INFO -->
+
+                    <div
+                        id="locationInfo"
+                        class="hidden mt-5 p-4 rounded-xl
+                               bg-green-50 border border-green-100
+                               text-green-700 text-sm">
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <span id="locationText"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ERROR -->
+
+                    <div
+                        id="tourOptionsError"
+                        class="hidden mt-5 p-4 rounded-xl
+                               bg-red-50 border border-red-200
+                               text-red-700 text-sm">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- GUIDE & PRICING -->
+            <!-- ================================================= -->
+
+            <div class="bg-white rounded-2xl
+                        border border-gray-200
+                        shadow-sm mb-6">
+
+                <div class="px-6 py-5
+                            border-b border-gray-100">
+
+                    <div class="flex items-center gap-3">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-purple-50
+                                    flex items-center justify-center">
+
+                            <i class="fa-solid fa-user-tie
+                                      text-purple-600"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2 class="font-bold text-gray-900">
+                                Guide & Pricing
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+                                Guides are filtered according to the selected tour location.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="p-6">
+
+                    <div class="grid md:grid-cols-3 gap-6">
+
+
+                        <!-- GUIDE -->
+
+                        <div>
+
+                            <label
+                                for="{{ form.guide.id_for_label }}"
+                                class="form-label">
+
+                                Available Guide
+
+                            </label>
+
+                            {{ form.guide }}
+
+                            <p
+                                id="guideHelp"
+                                class="help-text">
+
+                                Select a tour first. Only guides for that tour's location will appear.
+
+                            </p>
+
+                            {% if form.guide.errors %}
+
+                                <div class="form-error">
+                                    {{ form.guide.errors }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
 
 
                         <!-- PRICING -->
@@ -180,6 +369,14 @@
 
                             {{ form.pricing }}
 
+                            <p
+                                id="pricingHelp"
+                                class="help-text">
+
+                                Pricing will be loaded for the selected tour.
+
+                            </p>
+
                             {% if form.pricing.errors %}
 
                                 <div class="form-error">
@@ -189,7 +386,6 @@
                             {% endif %}
 
                         </div>
-
 
 
                         <!-- GROUP MEMBERS -->
@@ -221,43 +417,11 @@
 
                         </div>
 
-
-
-                        <!-- GUIDE -->
-
-                        <div>
-
-                            <label
-                                for="{{ form.guide.id_for_label }}"
-                                class="form-label">
-
-                                Guide
-
-                            </label>
-
-                            {{ form.guide }}
-
-                            <p class="help-text">
-                                Only active guides are shown.
-                            </p>
-
-                            {% if form.guide.errors %}
-
-                                <div class="form-error">
-                                    {{ form.guide.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-
                     </div>
 
                 </div>
 
             </div>
-
 
 
             <!-- ================================================= -->
@@ -267,7 +431,6 @@
             <div class="bg-white rounded-2xl
                         border border-gray-200
                         shadow-sm mb-6">
-
 
                 <div class="px-6 py-5
                             border-b border-gray-100">
@@ -286,15 +449,11 @@
                         <div>
 
                             <h2 class="font-bold text-gray-900">
-
                                 Guest Information
-
                             </h2>
 
                             <p class="text-xs text-gray-500">
-
                                 Customer contact details.
-
                             </p>
 
                         </div>
@@ -304,10 +463,9 @@
                 </div>
 
 
-
                 <div class="p-6">
 
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-3 gap-6">
 
 
                         <!-- NAME -->
@@ -326,13 +484,14 @@
                             {{ form.guest_name }}
 
                             {% if form.guest_name.errors %}
+
                                 <div class="form-error">
                                     {{ form.guest_name.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
-
 
 
                         <!-- EMAIL -->
@@ -351,13 +510,14 @@
                             {{ form.guest_email }}
 
                             {% if form.guest_email.errors %}
+
                                 <div class="form-error">
                                     {{ form.guest_email.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
-
 
 
                         <!-- PHONE -->
@@ -376,96 +536,21 @@
                             {{ form.guest_phone }}
 
                             {% if form.guest_phone.errors %}
+
                                 <div class="form-error">
                                     {{ form.guest_phone.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
+
 
                     </div>
 
                 </div>
 
             </div>
-
-
-
-            <!-- ================================================= -->
-            <!-- DATE & TIME -->
-            <!-- ================================================= -->
-
-            <div class="bg-white rounded-2xl
-                        border border-gray-200
-                        shadow-sm mb-6">
-
-
-                <div class="px-6 py-5
-                            border-b border-gray-100">
-
-                    <h2 class="font-bold text-gray-900">
-
-                        Tour Schedule
-
-                    </h2>
-
-                </div>
-
-
-                <div class="p-6">
-
-                    <div class="grid md:grid-cols-2 gap-6">
-
-
-                        <div>
-
-                            <label
-                                for="{{ form.tour_date.id_for_label }}"
-                                class="form-label">
-
-                                Tour Date
-                                <span class="text-red-500">*</span>
-
-                            </label>
-
-                            {{ form.tour_date }}
-
-                            {% if form.tour_date.errors %}
-                                <div class="form-error">
-                                    {{ form.tour_date.errors }}
-                                </div>
-                            {% endif %}
-
-                        </div>
-
-
-
-                        <div>
-
-                            <label
-                                for="{{ form.tour_time.id_for_label }}"
-                                class="form-label">
-
-                                Tour Time
-
-                            </label>
-
-                            {{ form.tour_time }}
-
-                            {% if form.tour_time.errors %}
-                                <div class="form-error">
-                                    {{ form.tour_time.errors }}
-                                </div>
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
 
 
             <!-- ================================================= -->
@@ -476,14 +561,11 @@
                         border border-gray-200
                         shadow-sm mb-6">
 
-
                 <div class="px-6 py-5
                             border-b border-gray-100">
 
                     <h2 class="font-bold text-gray-900">
-
                         Payment & Status
-
                     </h2>
 
                 </div>
@@ -494,60 +576,64 @@
                     <div class="grid md:grid-cols-3 gap-6">
 
 
+                        <!-- PAYMENT METHOD -->
+
                         <div>
 
                             <label class="form-label">
-
                                 Payment Method
-
                             </label>
 
                             {{ form.payment_method }}
 
                             {% if form.payment_method.errors %}
+
                                 <div class="form-error">
                                     {{ form.payment_method.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
 
 
+                        <!-- PAYMENT STATUS -->
 
                         <div>
 
                             <label class="form-label">
-
                                 Payment Status
-
                             </label>
 
                             {{ form.payment_status }}
 
                             {% if form.payment_status.errors %}
+
                                 <div class="form-error">
                                     {{ form.payment_status.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
 
 
+                        <!-- BOOKING STATUS -->
 
                         <div>
 
                             <label class="form-label">
-
                                 Booking Status
-
                             </label>
 
                             {{ form.status }}
 
                             {% if form.status.errors %}
+
                                 <div class="form-error">
                                     {{ form.status.errors }}
                                 </div>
+
                             {% endif %}
 
                         </div>
@@ -557,7 +643,6 @@
                 </div>
 
             </div>
-
 
 
             <!-- ================================================= -->
@@ -572,9 +657,7 @@
                             border-b border-gray-100">
 
                     <h2 class="font-bold text-gray-900">
-
                         Special Requests
-
                     </h2>
 
                 </div>
@@ -595,7 +678,6 @@
                 </div>
 
             </div>
-
 
 
             <!-- ================================================= -->
@@ -624,6 +706,7 @@
 
                 <button
                     type="submit"
+                    id="submitButton"
                     class="px-7 py-3 rounded-xl
                            bg-blue-600
                            hover:bg-blue-700
@@ -650,7 +733,6 @@
     </div>
 
 </div>
-
 
 
 <!-- ========================================================= -->
@@ -683,6 +765,12 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
+.form-control:disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
 .help-text {
     margin-top: 0.4rem;
     font-size: 0.75rem;
@@ -700,6 +788,663 @@ textarea.form-control {
     resize: vertical;
 }
 
+.loading-select {
+    opacity: 0.6;
+}
+
 </style>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tourField = document.getElementById("id_tour");
+    const dateField = document.getElementById("id_tour_date");
+    const timeField = document.getElementById("id_tour_time");
+    const guideField = document.getElementById("id_guide");
+    const pricingField = document.getElementById("id_pricing");
+
+    const loadingBox = document.getElementById("tourLoading");
+    const errorBox = document.getElementById("tourOptionsError");
+
+    const locationInfo = document.getElementById("locationInfo");
+    const locationText = document.getElementById("locationText");
+
+    const timeHelp = document.getElementById("timeHelp");
+    const guideHelp = document.getElementById("guideHelp");
+    const pricingHelp = document.getElementById("pricingHelp");
+
+
+    /*
+    ============================================================
+    TODAY'S DATE
+    ============================================================
+    */
+
+    if (dateField) {
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+
+        const month = String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+        const day = String(
+            today.getDate()
+        ).padStart(2, "0");
+
+        const todayString =
+            `${year}-${month}-${day}`;
+
+        dateField.setAttribute(
+            "min",
+            todayString
+        );
+    }
+
+
+    /*
+    ============================================================
+    INITIAL VALUES FOR EDIT PAGE
+    ============================================================
+    */
+
+    const initialTime =
+        "{{ form.tour_time.value|default:''|escapejs }}";
+
+    const initialGuide =
+        "{{ form.guide.value|default:''|escapejs }}";
+
+    const initialPricing =
+        "{{ form.pricing.value|default:''|escapejs }}";
+
+
+    /*
+    ============================================================
+    DISABLE DEPENDENT FIELDS
+    ============================================================
+    */
+
+    function disableDependentFields() {
+
+        if (timeField) {
+
+            timeField.disabled = true;
+
+            timeField.innerHTML =
+                '<option value="">Select tour first</option>';
+        }
+
+
+        if (guideField) {
+
+            guideField.disabled = true;
+
+            guideField.innerHTML =
+                '<option value="">Select tour first</option>';
+        }
+
+
+        if (pricingField) {
+
+            pricingField.disabled = true;
+
+            pricingField.innerHTML =
+                '<option value="">Select tour first</option>';
+        }
+
+        if (timeHelp) {
+
+            timeHelp.textContent =
+                "Select a tour first to see available times.";
+
+        }
+
+        if (guideHelp) {
+
+            guideHelp.textContent =
+                "Select a tour first. Only guides for that tour's location will appear.";
+
+        }
+
+        if (pricingHelp) {
+
+            pricingHelp.textContent =
+                "Pricing will be loaded for the selected tour.";
+
+        }
+
+        locationInfo.classList.add("hidden");
+    }
+
+
+    /*
+    ============================================================
+    CLEAR ERROR
+    ============================================================
+    */
+
+    function clearError() {
+
+        errorBox.textContent = "";
+
+        errorBox.classList.add("hidden");
+
+    }
+
+
+    /*
+    ============================================================
+    SHOW ERROR
+    ============================================================
+    */
+
+    function showError(message) {
+
+        errorBox.textContent = message;
+
+        errorBox.classList.remove("hidden");
+
+    }
+
+
+    /*
+    ============================================================
+    ADD OPTION
+    ============================================================
+    */
+
+    function addOption(
+        select,
+        value,
+        text,
+        selected = false
+    ) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = value;
+
+        option.textContent = text;
+
+        option.selected = selected;
+
+        select.appendChild(option);
+
+    }
+
+
+    /*
+    ============================================================
+    LOAD TOUR OPTIONS
+    ============================================================
+    */
+
+    async function loadTourOptions(
+        restoreValues = false
+    ) {
+
+        const tourId = tourField.value;
+
+        clearError();
+
+        locationInfo.classList.add("hidden");
+
+
+        if (!tourId) {
+
+            disableDependentFields();
+
+            return;
+        }
+
+
+        /*
+        Reset fields
+        */
+
+        timeField.disabled = true;
+
+        guideField.disabled = true;
+
+        pricingField.disabled = true;
+
+
+        timeField.innerHTML =
+            '<option value="">Loading scheduled times...</option>';
+
+        guideField.innerHTML =
+            '<option value="">Loading guides...</option>';
+
+        pricingField.innerHTML =
+            '<option value="">Loading pricing...</option>';
+
+
+        loadingBox.classList.remove("hidden");
+
+
+        try {
+
+            const url =
+                "{% url 'booking_tour_options' %}" +
+                "?tour_id=" +
+                encodeURIComponent(tourId);
+
+
+            const response =
+                await fetch(url, {
+
+                    method: "GET",
+
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Accept": "application/json"
+                    }
+
+                });
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load tour information."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load tour information."
+                );
+
+            }
+
+
+            /*
+            ====================================================
+            SCHEDULED TIMES
+            ====================================================
+            */
+
+            /*
+            ============================================================
+            SCHEDULED TIMES
+            ============================================================
+            */
+
+            timeField.innerHTML =
+                '<option value="">Select scheduled time</option>';
+
+
+            if (
+                Array.isArray(data.times) &&
+                data.times.length > 0
+            ) {
+
+                data.times.forEach(function (item) {
+
+                    /*
+                    IMPORTANT:
+                    Never allow undefined to become the option value.
+                    */
+
+                    const timeValue =
+                        item.value ||
+                        item.start_time ||
+                        item.time ||
+                        "";
+
+                    const timeDisplay =
+                        item.display ||
+                        item.label ||
+                        item.start_time ||
+                        item.time ||
+                        "";
+
+
+                    if (!timeValue) {
+
+                        console.warn(
+                            "Invalid schedule returned from server:",
+                            item
+                        );
+
+                        return;
+                    }
+
+
+                    let label = timeDisplay;
+
+
+                    if (
+                        item.available_slots !== undefined &&
+                        item.available_slots !== null
+                    ) {
+
+                        label +=
+                            " — " +
+                            item.available_slots +
+                            " slots";
+                    }
+
+
+                    const option =
+                        document.createElement("option");
+
+
+                    /*
+                    THIS IS THE IMPORTANT PART
+                    */
+
+                    option.value = timeValue;
+
+                    option.textContent = label;
+
+
+                    /*
+                    Restore selected value when editing
+                    */
+
+                    if (
+                        restoreValues &&
+                        String(timeValue) ===
+                        String(initialTime)
+                    ) {
+
+                        option.selected = true;
+                    }
+
+
+                    timeField.appendChild(option);
+
+                });
+
+
+                /*
+                Check whether valid options were actually added
+                */
+
+                if (timeField.options.length > 1) {
+
+                    timeField.disabled = false;
+
+                    timeHelp.textContent =
+                        "Select one of the scheduled times for this tour.";
+
+                } else {
+
+                    timeField.innerHTML =
+                        '<option value="">No scheduled times available</option>';
+
+                    timeField.disabled = true;
+
+                    timeHelp.textContent =
+                        "No valid scheduled times are available for this tour.";
+                }
+
+
+            } else {
+
+                timeField.innerHTML =
+                    '<option value="">No scheduled times available</option>';
+
+                timeField.disabled = true;
+
+                timeHelp.textContent =
+                    "No scheduled times are available for this tour.";
+            }
+
+
+            /*
+            ====================================================
+            GUIDES
+            ====================================================
+            */
+
+            guideField.innerHTML =
+                '<option value="">Select guide</option>';
+
+
+            if (
+                data.guides &&
+                data.guides.length > 0
+            ) {
+
+                data.guides.forEach(function (guide) {
+
+                    addOption(
+                        guideField,
+                        guide.id,
+                        guide.name,
+                        restoreValues &&
+                        String(guide.id) ===
+                        String(initialGuide)
+                    );
+
+                });
+
+
+                guideField.disabled = false;
+
+                guideHelp.textContent =
+                    "Only guides available for this tour's location are shown.";
+
+            } else {
+
+                guideField.innerHTML =
+                    '<option value="">No guides available for this tour location</option>';
+
+                guideField.disabled = true;
+
+                guideHelp.textContent =
+                    "No active guides are available for this tour's location.";
+
+            }
+
+
+            /*
+            ====================================================
+            PRICING
+            ====================================================
+            */
+
+            pricingField.innerHTML =
+                '<option value="">Select group pricing</option>';
+
+
+            if (
+                data.pricing &&
+                data.pricing.length > 0
+            ) {
+
+                data.pricing.forEach(function (price) {
+
+                    let label =
+                        price.label;
+
+                    if (price.price) {
+
+                        label +=
+                            " — ₹" +
+                            price.price;
+
+                    }
+
+
+                    addOption(
+                        pricingField,
+                        price.id,
+                        label,
+                        restoreValues &&
+                        String(price.id) ===
+                        String(initialPricing)
+                    );
+
+                });
+
+
+                pricingField.disabled = false;
+
+                pricingHelp.textContent =
+                    "Select the pricing group for this tour.";
+
+            } else {
+
+                pricingField.innerHTML =
+                    '<option value="">No pricing available</option>';
+
+                pricingField.disabled = true;
+
+                pricingHelp.textContent =
+                    "No active pricing is available for this tour.";
+
+            }
+
+
+            /*
+            ====================================================
+            LOCATION
+            ====================================================
+            */
+
+            if (data.location) {
+
+                locationText.textContent =
+                    "Tour location: " +
+                    data.location;
+
+                locationInfo.classList.remove("hidden");
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Tour options error:",
+                error
+            );
+
+            showError(
+                error.message ||
+                "Unable to load tour options."
+            );
+
+            disableDependentFields();
+
+        } finally {
+
+            loadingBox.classList.add("hidden");
+
+        }
+
+    }
+
+
+    /*
+    ============================================================
+    TOUR CHANGE
+    ============================================================
+    */
+
+    if (tourField) {
+
+        tourField.addEventListener(
+            "change",
+            function () {
+
+                loadTourOptions(false);
+
+            }
+        );
+
+    }
+
+
+    /*
+    ============================================================
+    DATE VALIDATION
+    ============================================================
+    */
+
+    if (dateField) {
+
+        dateField.addEventListener(
+            "change",
+            function () {
+
+                if (!dateField.value) {
+                    return;
+                }
+
+                const selectedDate =
+                    new Date(
+                        dateField.value +
+                        "T00:00:00"
+                    );
+
+                const today =
+                    new Date();
+
+                today.setHours(
+                    0,
+                    0,
+                    0,
+                    0
+                );
+
+
+                if (
+                    selectedDate < today
+                ) {
+
+                    alert(
+                        "Tour date cannot be in the past."
+                    );
+
+                    dateField.value = "";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+    ============================================================
+    INITIAL PAGE LOAD
+    ============================================================
+    */
+
+    if (tourField && tourField.value) {
+
+        loadTourOptions(true);
+
+    } else {
+
+        disableDependentFields();
+
+    }
+
+});
+
+</script>
 
 {% endblock %}
