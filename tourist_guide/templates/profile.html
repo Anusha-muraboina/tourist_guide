@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -7,111 +8,141 @@
     {% csrf_token %}
 </form>
 
-<section class="bg-slate-50/60 min-h-screen py-2 md:py-10 mt-20 antialiased">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+<section class="bg-slate-50 min-h-screen pt-20 pb-10 antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
 
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-3 md:p-10 relative overflow-hidden backdrop-blur-sm">
-            
-            <!-- Header Section -->
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-6 pb-4 md:pb-8 border-b border-slate-100">
-                <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-                    <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-slate-50 shadow-md overflow-hidden bg-slate-100 flex-shrink-0">
-                        <img id="profileImage" src="" alt="Profile Avatar" class="w-full h-full object-cover">
+        <!-- Main Card -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+            <!-- ===== HEADER ===== -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-5 sm:px-8 pt-8 pb-10 text-center relative">
+                <!-- Decorative circles -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full -translate-y-1/2 translate-x-1/3"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-400/10 rounded-full translate-y-1/2 -translate-x-1/4"></div>
+
+                <div class="relative z-10">
+                    <!-- Avatar -->
+                    <div class="mx-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-4 ring-white/20 shadow-xl overflow-hidden bg-slate-700 mb-4">
+                        <img id="profileImage" src="" alt="Profile" class="w-full h-full object-cover">
                     </div>
-                    <div>
-                        <h1 id="username" class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Loading...</h1>
-                        <p id="email" class="text-slate-500 text-sm font-medium mt-0.5"></p>
-                        <div class="flex items-center gap-2 mt-3 justify-center sm:justify-start">
-                            <span id="roleBadge" class="inline-flex items-center bg-cyan-50 text-cyan-700 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">-</span>
-                            <span id="verificationBadge" class="hidden px-3 py-1 rounded-full text-xs font-semibold uppercase"></span>
+
+                    <h1 id="username" class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Loading...</h1>
+                    <p id="email" class="text-slate-300 text-sm mt-1"></p>
+
+                    <div class="flex items-center justify-center gap-2 mt-4">
+                        <span id="roleBadge" class="inline-flex items-center bg-white/10 text-cyan-300 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase backdrop-blur-sm">
+                            -
+                        </span>
+                        <span id="verificationBadge" class="hidden px-3 py-1 rounded-full text-[11px] font-semibold uppercase"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== CONTENT ===== -->
+            <div class="md:px-5 px-2 py-3 sm:py-8 space-y-7">
+
+                <!-- Rejection Banner -->
+                <div id="rejectionBox" class="hidden p-4 rounded-xl bg-red-50 border border-red-200">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500 text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wide text-red-600">Verification Rejected</h4>
+                            <p id="rejectionReason" class="text-sm text-red-700 mt-1 leading-relaxed"></p>
                         </div>
                     </div>
                 </div>
 
-                <button id="updateProfileBtn" type="button" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white px-7 py-3 rounded-xl font-medium shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Save Guide Details</span>
-                </button>
-            </div>
-
-            <!-- Rejection Notice Banner -->
-            <div id="rejectionBox" class="hidden mt-6 p-4 rounded-2xl bg-red-50/80 border border-red-200/60">
-                <div class="flex items-start gap-3">
-                    <i class="fa-solid fa-triangle-exclamation text-red-500 text-base mt-0.5"></i>
-                    <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wide text-red-600">Verification Rejection Reason</h4>
-                        <p id="rejectionReason" class="text-sm text-red-700 mt-1 font-medium"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Form Content -->
-            <div class="md:mt-8 mt-2 md:space-y-8 space-y-2">
-
-                <!-- 1. Read-Only Account Summary -->
+                <!-- 1. Account Info (Read-only) -->
                 <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Account Information (Fixed)</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
-                        <div>
-                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Username</span>
-                            <p id="accountUsername" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center">
+                            <i class="fa-solid fa-user-lock text-slate-500 text-xs"></i>
                         </div>
-                        <div>
-                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Email</span>
-                            <p id="accountEmail" class="text-sm font-bold text-slate-800 mt-0.5 truncate">-</p>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Account Information</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Username</p>
+                            <p id="accountUsername" class="text-sm font-semibold text-slate-800 mt-1 truncate">-</p>
                         </div>
-                        <div>
-                            <span class="text-[11px] font-semibold text-slate-400 uppercase">Phone</span>
-                            <p id="accountPhone" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Email</p>
+                            <p id="accountEmail" class="text-sm font-semibold text-slate-800 mt-1 truncate">-</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Phone</p>
+                            <p id="accountPhone" class="text-sm font-semibold text-slate-800 mt-1">-</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. EDITABLE GUIDE FIELDS -->
-                <div class="md:space-y-6 space-y-2">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-900">Guide Information & Location</h2>
-                        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Edit your operating region, tour details, and verification documents.</p>
-                    </div>
+                <!-- Divider -->
+                <div class="border-t border-slate-100"></div>
 
-                    <!-- Cascading Location Selectors (2x2 Grid) -->
-                    <div class="bg-slate-50/60 border border-slate-200/80 md:p-5 p-3 rounded-2xl space-y-2 md:space-y-4">
-                        <div class="flex items-center justify-between">
+                <!-- 2. Guide Information -->
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-50 flex items-center justify-center">
+                            <i class="fa-solid fa-map-location-dot text-cyan-600 text-xs"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-slate-900">Guide Information</h2>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-5 pl-9">Update your operating region, bio, and verification documents.</p>
+
+                    <!-- Location Card -->
+                    <div class="bg-slate-50/80 border border-slate-200 rounded-2xl md:p-4 p-3 mb-5">
+                        <div class="flex items-center justify-between mb-4">
                             <span class="text-xs font-bold uppercase tracking-wider text-slate-700">
                                 Location <span class="text-rose-500">*</span>
                             </span>
-                            <span class="text-[11px] text-slate-400">Select monument</span>
+                            <span class="text-[10px] text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                                Required
+                            </span>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             <!-- Country -->
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500 uppercase">1. Country</label>
-                                <select id="country" class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">1. Country</label>
+                                <select id="country"
+                                    class="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                           focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition">
                                     <option value="">Select Country</option>
                                 </select>
                             </div>
 
                             <!-- State -->
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500 uppercase">2. State</label>
-                                <select id="state" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">2. State</label>
+                                <select id="state" disabled
+                                    class="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                           focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition
+                                           disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
                                     <option value="">Select State</option>
                                 </select>
                             </div>
 
                             <!-- District -->
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500 uppercase">3. District</label>
-                                <select id="district" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">3. District</label>
+                                <select id="district" disabled
+                                    class="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                           focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition
+                                           disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
                                     <option value="">Select District</option>
                                 </select>
                             </div>
 
                             <!-- City / Monument -->
-                            <div class="space-y-1">
-                                <label class="text-[11px] font-semibold text-slate-500 uppercase">4. Monument / City</label>
-                                <select id="city" disabled class="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">4. Monument / City</label>
+                                <select id="city" disabled
+                                    class="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                           focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition
+                                           disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
                                     <option value="">Select Monument / City</option>
                                 </select>
                             </div>
@@ -119,89 +150,124 @@
                     </div>
 
                     <!-- Bio -->
-                    <div class="space-y-1.5">
-                        <label for="editBio" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">About You</label>
-                        <textarea id="editBio" rows="4" maxlength="5000" placeholder="Tell tourists about yourself, your tour experience, and local expertise..." class="w-full p-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition resize-none"></textarea>
+                    <div class="mb-5">
+                        <label for="editBio" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                            About You
+                        </label>
+                        <textarea id="editBio" rows="4" maxlength="5000"
+                            placeholder="Tell tourists about your experience, expertise, and what makes your tours special..."
+                            class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                   focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition resize-none"></textarea>
                     </div>
 
-                    <!-- Experience & Languages -->
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label for="editExperience" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Experience (Years)</label>
-                            <input id="editExperience" type="number" min="0" max="100" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                    <!-- Experience + Languages -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="editExperience" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                                Experience (Years)
+                            </label>
+                            <input id="editExperience" type="number" min="0" max="100"
+                                class="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                       focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition">
                         </div>
-
-                        <div class="space-y-1.5">
-                            <label for="editLanguages" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Languages <span class="text-rose-500">*</span></label>
-                            <input id="editLanguages" type="text" placeholder="English, Telugu, Hindi" class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition">
+                        <div>
+                            <label for="editLanguages" class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                                Languages <span class="text-rose-500">*</span>
+                            </label>
+                            <input id="editLanguages" type="text" placeholder="English, Hindi, Telugu"
+                                class="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 
+                                       focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition">
                         </div>
                     </div>
 
-                    <!-- Document Uploads Grid -->
-                    <div class="pt-2">
-                        <h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">Verification Documents</h3>
-                        <div class="grid sm:grid-cols-3 gap-4">
-                            
-                            <!-- Identity Document Front -->
-                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-xs font-bold text-slate-700">Adhar Card (Front)</span>
-                                        <span id="aadhaarFrontStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
-                                    </div>
-                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editAadhaarFront').click()">
-                                        <img id="frontPreviewImg" src="" alt="Front Preview" class="hidden w-full h-full object-cover">
-                                        <div id="frontPlaceholder" class="text-center p-2">
-                                            <i class="fa-solid fa-id-card text-slate-300 text-2xl mb-1"></i>
-                                            <p class="text-[11px] text-slate-500">Change front</p>
-                                        </div>
+                    <!-- Documents -->
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center">
+                                <i class="fa-solid fa-file-shield text-violet-600 text-xs"></i>
+                            </div>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">Verification Documents</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+
+                            <!-- Aadhaar Front -->
+                            <div class="group border border-slate-200 rounded-2xl p-3.5 bg-white hover:border-cyan-300 hover:shadow-sm transition">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <span class="text-[12px] font-semibold text-slate-700">Aadhaar (Front)</span>
+                                    <span id="aadhaarFrontStatus" class="text-[10px] font-medium text-slate-400">Missing</span>
+                                </div>
+                                <div class="w-full h-28 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 
+                                            flex flex-col items-center justify-center overflow-hidden cursor-pointer
+                                            group-hover:border-cyan-300 group-hover:bg-cyan-50/30 transition"
+                                     onclick="document.getElementById('editAadhaarFront').click()">
+                                    <img id="frontPreviewImg" src="" alt="Front" class="hidden w-full h-full object-cover">
+                                    <div id="frontPlaceholder" class="text-center p-2">
+                                        <i class="fa-solid fa-id-card text-slate-300 text-xl mb-1"></i>
+                                        <p class="text-[10px] text-slate-400">Upload front</p>
                                     </div>
                                 </div>
-                                <input id="editAadhaarFront" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewFile(this, 'frontPreviewImg', 'frontPlaceholder', 'aadhaarFrontStatus')">
+                                <input id="editAadhaarFront" type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+                                       onchange="previewFile(this, 'frontPreviewImg', 'frontPlaceholder', 'aadhaarFrontStatus')">
                             </div>
 
-                            <!-- Identity Document Back -->
-                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-xs font-bold text-slate-700">Adhar Card(Back)</span>
-                                        <span id="aadhaarBackStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
-                                    </div>
-                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editAadhaarBack').click()">
-                                        <img id="backPreviewImg" src="" alt="Back Preview" class="hidden w-full h-full object-cover">
-                                        <div id="backPlaceholder" class="text-center p-2">
-                                            <i class="fa-regular fa-id-card text-slate-300 text-2xl mb-1"></i>
-                                            <p class="text-[11px] text-slate-500">Change back</p>
-                                        </div>
+                            <!-- Aadhaar Back -->
+                            <div class="group border border-slate-200 rounded-2xl p-3.5 bg-white hover:border-cyan-300 hover:shadow-sm transition">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <span class="text-[12px] font-semibold text-slate-700">Aadhaar (Back)</span>
+                                    <span id="aadhaarBackStatus" class="text-[10px] font-medium text-slate-400">Missing</span>
+                                </div>
+                                <div class="w-full h-28 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 
+                                            flex flex-col items-center justify-center overflow-hidden cursor-pointer
+                                            group-hover:border-cyan-300 group-hover:bg-cyan-50/30 transition"
+                                     onclick="document.getElementById('editAadhaarBack').click()">
+                                    <img id="backPreviewImg" src="" alt="Back" class="hidden w-full h-full object-cover">
+                                    <div id="backPlaceholder" class="text-center p-2">
+                                        <i class="fa-regular fa-id-card text-slate-300 text-xl mb-1"></i>
+                                        <p class="text-[10px] text-slate-400">Upload back</p>
                                     </div>
                                 </div>
-                                <input id="editAadhaarBack" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewFile(this, 'backPreviewImg', 'backPlaceholder', 'aadhaarBackStatus')">
+                                <input id="editAadhaarBack" type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+                                       onchange="previewFile(this, 'backPreviewImg', 'backPlaceholder', 'aadhaarBackStatus')">
                             </div>
 
                             <!-- Certificate -->
-                            <div class="border border-slate-200 rounded-2xl p-4 bg-slate-50/30 flex flex-col justify-between hover:border-slate-300 transition">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-xs font-bold text-slate-700">Certificate</span>
-                                        <span id="certificateStatus" class="text-[11px] font-semibold text-slate-400">Missing</span>
+                            <div class="group border border-slate-200 rounded-2xl p-3.5 bg-white hover:border-violet-300 hover:shadow-sm transition">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <span class="text-[12px] font-semibold text-slate-700">Certificate</span>
+                                    <span id="certificateStatus" class="text-[10px] font-medium text-slate-400">Missing</span>
+                                </div>
+                                <div class="w-full h-28 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 
+                                            flex flex-col items-center justify-center overflow-hidden cursor-pointer
+                                            group-hover:border-violet-300 group-hover:bg-violet-50/30 transition"
+                                     onclick="document.getElementById('editCertificates').click()">
+                                    <img id="certPreviewImg" src="" alt="Cert" class="hidden w-full h-full object-cover">
+                                    <div id="certFileBadge" class="hidden text-center p-2">
+                                        <i class="fa-solid fa-file-pdf text-violet-500 text-xl mb-1"></i>
+                                        <p id="certFileName" class="text-[10px] text-slate-600 font-medium truncate max-w-[120px]"></p>
                                     </div>
-                                    <div class="w-full h-32 rounded-xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('editCertificates').click()">
-                                        <img id="certPreviewImg" src="" alt="Cert Preview" class="hidden w-full h-full object-cover">
-                                        <div id="certFileBadge" class="hidden text-center p-2">
-                                            <i class="fa-solid fa-file-pdf text-purple-600 text-2xl mb-1"></i>
-                                            <p id="certFileName" class="text-[11px] text-slate-700 font-medium truncate max-w-[140px]"></p>
-                                        </div>
-                                        <div id="certPlaceholder" class="text-center p-2">
-                                            <i class="fa-solid fa-award text-slate-300 text-2xl mb-1"></i>
-                                            <p class="text-[11px] text-slate-500">Change cert</p>
-                                        </div>
+                                    <div id="certPlaceholder" class="text-center p-2">
+                                        <i class="fa-solid fa-award text-slate-300 text-xl mb-1"></i>
+                                        <p class="text-[10px] text-slate-400">Upload cert</p>
                                     </div>
                                 </div>
-                                <input id="editCertificates" type="file" accept=".pdf,image/jpeg,image/png" class="hidden" onchange="previewCert(this)">
+                                <input id="editCertificates" type="file" accept=".pdf,image/jpeg,image/png" class="hidden"
+                                       onchange="previewCert(this)">
                             </div>
 
                         </div>
                     </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="pt-2">
+                    <button id="updateProfileBtn" type="button"
+                        class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-[0.98] 
+                               text-white font-semibold text-sm shadow-lg shadow-slate-900/10 
+                               flex items-center justify-center gap-2.5 transition disabled:opacity-60 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Save Guide Details</span>
+                    </button>
                 </div>
 
             </div>
@@ -216,7 +282,7 @@ function getCSRFToken() {
     const input = document.querySelector('#csrfForm input[name="csrfmiddlewaretoken"]');
     return input ? input.value : null;
 }
-21  
+
 function getDefaultAvatar(username) {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(username || "User")}&background=0f172a&color=ffffff`;
 }
@@ -224,8 +290,8 @@ function getDefaultAvatar(username) {
 function setDocStatus(elId, uploaded) {
     const el = document.getElementById(elId);
     if (!el) return;
-    el.innerHTML = uploaded 
-        ? '<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Uploaded</span>'
+    el.innerHTML = uploaded
+        ? '<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check text-[10px]"></i> Uploaded</span>'
         : '<span class="text-slate-400">Missing</span>';
 }
 
@@ -268,11 +334,11 @@ function previewCert(input) {
         };
         reader.readAsDataURL(file);
     }
-    status.innerHTML = '<span class="text-purple-600 font-semibold">New</span>';
+    status.innerHTML = '<span class="text-violet-600 font-semibold">New</span>';
 }
 
 /* ============================================================
-   CASCADING LOCATIONS (Country -> State -> District -> City)
+   CASCADING LOCATIONS
 ============================================================ */
 function resetSelect(el, placeholder) {
     el.innerHTML = `<option value="">${placeholder}</option>`;
@@ -369,7 +435,7 @@ document.getElementById("district")?.addEventListener("change", function () {
 });
 
 /* ============================================================
-   LOAD PROFILE DATA & PRE-FILL LOCATIONS
+   LOAD PROFILE
 ============================================================ */
 async function loadProfile() {
     try {
@@ -381,7 +447,7 @@ async function loadProfile() {
         const result = await res.json();
         const user = result.data || result;
 
-        // Read-only account data
+        // Header
         document.getElementById("profileImage").src = user.profile_image || getDefaultAvatar(user.username);
         document.getElementById("username").innerText = user.username || "User";
         document.getElementById("email").innerText = user.email || "";
@@ -395,40 +461,46 @@ async function loadProfile() {
         const status = (user.verification_status || "pending").toLowerCase();
         badge.classList.remove("hidden");
         badge.innerText = status.toUpperCase();
+
         if (status === "approved") {
-            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 uppercase";
+            badge.className = "px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 uppercase backdrop-blur-sm";
         } else if (status === "rejected") {
-            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 uppercase";
+            badge.className = "px-3 py-1 rounded-full text-[11px] font-semibold bg-red-500/20 text-red-300 uppercase backdrop-blur-sm";
             if (user.rejection_reason) {
                 document.getElementById("rejectionReason").innerText = user.rejection_reason;
                 document.getElementById("rejectionBox").classList.remove("hidden");
             }
         } else {
-            badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 uppercase";
+            badge.className = "px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/20 text-amber-300 uppercase backdrop-blur-sm";
         }
 
-        // Guide Editable Data
+        // Editable fields
         document.getElementById("editBio").value = user.bio || "";
         document.getElementById("editExperience").value = user.experience_years ?? 0;
         document.getElementById("editLanguages").value = user.languages || "";
 
-        // Pre-fill primary location in cascading dropdowns
+        // Pre-fill location
         const primaryLoc = (user.locations && user.locations.length > 0) ? user.locations[0] : null;
         if (primaryLoc) {
             const countryEl = document.getElementById("country");
             countryEl.value = primaryLoc.country;
             countryEl.dispatchEvent(new Event("change"));
 
-            const stateEl = document.getElementById("state");
-            stateEl.value = primaryLoc.state;
-            stateEl.dispatchEvent(new Event("change"));
+            setTimeout(() => {
+                const stateEl = document.getElementById("state");
+                stateEl.value = primaryLoc.state;
+                stateEl.dispatchEvent(new Event("change"));
 
-            const districtEl = document.getElementById("district");
-            districtEl.value = primaryLoc.district;
-            districtEl.dispatchEvent(new Event("change"));
+                setTimeout(() => {
+                    const districtEl = document.getElementById("district");
+                    districtEl.value = primaryLoc.district;
+                    districtEl.dispatchEvent(new Event("change"));
 
-            const cityEl = document.getElementById("city");
-            cityEl.value = primaryLoc.id;
+                    setTimeout(() => {
+                        document.getElementById("city").value = primaryLoc.id;
+                    }, 50);
+                }, 50);
+            }, 50);
         }
 
         // Documents
@@ -468,9 +540,9 @@ async function loadProfile() {
 }
 
 /* ============================================================
-   SAVE ACTION (Submits only Guide fields)
+   SAVE
 ============================================================ */
-document.getElementById("updateProfileBtn").addEventListener("click", async function() {
+document.getElementById("updateProfileBtn").addEventListener("click", async function () {
     const btn = this;
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving...</span>';
@@ -481,13 +553,12 @@ document.getElementById("updateProfileBtn").addEventListener("click", async func
 
         const selectedCity = document.getElementById("city").value;
         if (!selectedCity) {
-            alert("Please select a complete location (Country, State, District, and Monument / City).");
+            alert("Please select a complete location (Country → State → District → Monument/City).");
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i><span>Save Guide Details</span>';
             return;
         }
 
-        // Append only Guide editable data
         formData.append("bio", document.getElementById("editBio").value.trim());
         formData.append("experience_years", document.getElementById("editExperience").value || "0");
         formData.append("languages", document.getElementById("editLanguages").value.trim());
@@ -504,9 +575,9 @@ document.getElementById("updateProfileBtn").addEventListener("click", async func
 
         const res = await fetch("/user/api/profile/", {
             method: "PUT",
-            headers: { 
-                "X-CSRFToken": csrfToken, 
-                "Accept": "application/json" 
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Accept": "application/json"
             },
             credentials: "same-origin",
             body: formData
@@ -530,8 +601,6 @@ document.getElementById("updateProfileBtn").addEventListener("click", async func
 loadProfile();
 </script>
 {% endblock %}
-
-
 
 
 
