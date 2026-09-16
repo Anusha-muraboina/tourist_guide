@@ -1,4 +1,662 @@
 {% extends "tourist_admin/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+<style>
+    /* ===== Clean Flatpickr Calendar ===== */
+    .flatpickr-calendar {
+        border-radius: 16px !important;
+        box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.15) !important;
+        border: 1px solid #e2e8f0 !important;
+        font-family: 'Inter', system-ui, sans-serif !important;
+        overflow: hidden;
+        width: 320px !important;
+    }
+
+    /* Header (Month + Year) */
+    .flatpickr-months {
+        background: #1e40af !important; /* deep blue */
+        border-radius: 16px 16px 0 0;
+        padding: 10px 0 6px;
+    }
+
+    .flatpickr-months .flatpickr-month {
+        background: transparent !important;
+        color: white !important;
+        fill: white !important;
+    }
+
+    .flatpickr-current-month .flatpickr-monthDropdown-months,
+    .flatpickr-current-month input.cur-year {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+    }
+
+    .flatpickr-months .flatpickr-prev-month,
+    .flatpickr-months .flatpickr-next-month {
+        fill: white !important;
+        color: white !important;
+        padding: 8px !important;
+    }
+
+    .flatpickr-months .flatpickr-prev-month:hover svg,
+    .flatpickr-months .flatpickr-next-month:hover svg {
+        fill: #bfdbfe !important;
+    }
+
+    /* ===== Weekdays - NO COLOR ===== */
+    .flatpickr-weekdays {
+        background: #ffffff !important;   /* white background */
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    span.flatpickr-weekday {
+        color: #64748b !important;        /* soft gray text */
+        font-weight: 500 !important;
+        font-size: 12px !important;
+        background: transparent !important;
+    }
+
+    /* Days */
+    .flatpickr-day {
+        border-radius: 10px !important;
+        font-weight: 500;
+        color: #1e293b;
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #2563eb !important;
+        border-color: #2563eb !important;
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .flatpickr-day.today {
+        border-color: #2563eb !important;
+        color: #2563eb !important;
+        font-weight: 600;
+        background: transparent !important;
+    }
+
+    .flatpickr-day:hover {
+        background: #eff6ff !important;
+        border-color: #eff6ff !important;
+        color: #1e40af !important;
+    }
+
+    .flatpickr-day.flatpickr-disabled,
+    .flatpickr-day.flatpickr-disabled:hover {
+        color: #cbd5e1 !important;
+        background: transparent !important;
+        cursor: not-allowed;
+    }
+
+    /* Date input with calendar icon */
+    #id_tour_date {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.9rem center;
+        background-size: 1.1rem;
+        padding-right: 2.5rem !important;
+        cursor: pointer;
+    }
+</style>
+
+<div class="min-h-screen bg-slate-50">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- HEADER -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+            <div>
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'booking_list' %}"
+                       class="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-md sm:text-xl font-bold text-gray-900">
+                            {% if object %}
+                                Edit Booking #{{ object.booking_id }}
+                            {% else %}
+                                Create New Booking
+                            {% endif %}
+                        </h1>
+                        <p class="text-sm text-gray-500 mt-1">
+                            {% if object %}
+                                Update booking information.
+                            {% else %}
+                                Create a booking for a guest.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <form method="post" id="bookingForm">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- TOUR SELECTION -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                            <i class="fa-solid fa-map-location-dot text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Tour & Schedule</h2>
+                            <p class="text-xs text-gray-500">Select a tour, date and available scheduled time.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="grid md:grid-cols-3 gap-6">
+
+                        <!-- TOUR -->
+                        <div>
+                            <label for="{{ form.tour.id_for_label }}" class="form-label">
+                                Tour <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.tour }}
+                            <p class="help-text">Select the tour first.</p>
+                            {% if form.tour.errors %}
+                                <div class="form-error">{{ form.tour.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- DATE with Flatpickr -->
+                        <div>
+                            <label for="{{ form.tour_date.id_for_label }}" class="form-label">
+                                Tour Date <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.tour_date }}
+                            <p class="help-text">Select the booking date from the calendar.</p>
+                            {% if form.tour_date.errors %}
+                                <div class="form-error">{{ form.tour_date.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- TIME -->
+                        <div>
+                            <label for="{{ form.tour_time.id_for_label }}" class="form-label">
+                                Scheduled Time <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.tour_time }}
+                            <p id="timeHelp" class="help-text">Select a tour first to see available times.</p>
+                            {% if form.tour_time.errors %}
+                                <div class="form-error">{{ form.tour_time.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <!-- LOADING -->
+                    <div id="tourLoading" class="hidden mt-5 p-4 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <span>Loading tour schedules, guides and pricing...</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCATION INFO -->
+                    <div id="locationInfo" class="hidden mt-5 p-4 rounded-xl bg-green-50 border border-green-100 text-green-700 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span id="locationText"></span>
+                        </div>
+                    </div>
+
+                    <!-- ERROR -->
+                    <div id="tourOptionsError" class="hidden mt-5 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+                </div>
+            </div>
+
+            <!-- GUIDE & PRICING -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Guide & Pricing</h2>
+                            <p class="text-xs text-gray-500">Guides are filtered according to the selected tour location.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="{{ form.guide.id_for_label }}" class="form-label">Available Guide</label>
+                            {{ form.guide }}
+                            <p id="guideHelp" class="help-text">Select a tour first. Only guides for that tour's location will appear.</p>
+                            {% if form.guide.errors %}
+                                <div class="form-error">{{ form.guide.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.pricing.id_for_label }}" class="form-label">
+                                Group Pricing <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.pricing }}
+                            <p id="pricingHelp" class="help-text">Pricing will be loaded for the selected tour.</p>
+                            {% if form.pricing.errors %}
+                                <div class="form-error">{{ form.pricing.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.group_members.id_for_label }}" class="form-label">
+                                Group Members <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.group_members }}
+                            <p class="help-text">Number of people in this booking.</p>
+                            {% if form.group_members.errors %}
+                                <div class="form-error">{{ form.group_members.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GUEST INFORMATION -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                            <i class="fa-solid fa-user text-indigo-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-gray-900">Guest Information</h2>
+                            <p class="text-xs text-gray-500">Customer contact details.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="{{ form.guest_name.id_for_label }}" class="form-label">
+                                Guest Name <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.guest_name }}
+                            {% if form.guest_name.errors %}
+                                <div class="form-error">{{ form.guest_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.guest_email.id_for_label }}" class="form-label">
+                                Guest Email <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.guest_email }}
+                            {% if form.guest_email.errors %}
+                                <div class="form-error">{{ form.guest_email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.guest_phone.id_for_label }}" class="form-label">
+                                Guest Phone <span class="text-red-500">*</span>
+                            </label>
+                            {{ form.guest_phone }}
+                            {% if form.guest_phone.errors %}
+                                <div class="form-error">{{ form.guest_phone.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAYMENT -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <h2 class="font-bold text-gray-900">Payment & Status</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="form-label">Payment Method</label>
+                            {{ form.payment_method }}
+                            {% if form.payment_method.errors %}
+                                <div class="form-error">{{ form.payment_method.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="form-label">Payment Status</label>
+                            {{ form.payment_status }}
+                            {% if form.payment_status.errors %}
+                                <div class="form-error">{{ form.payment_status.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="form-label">Booking Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="form-error">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SPECIAL REQUEST -->
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm mb-6">
+                <div class="px-6 py-5 border-b border-gray-100">
+                    <h2 class="font-bold text-gray-900">Special Requests</h2>
+                </div>
+                <div class="p-6">
+                    {{ form.special_requests }}
+                    {% if form.special_requests.errors %}
+                        <div class="form-error">{{ form.special_requests.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3">
+                <a href="{% url 'booking_list' %}"
+                   class="px-6 py-3 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold text-center hover:bg-gray-50 transition">
+                    Cancel
+                </a>
+                <button type="submit" id="submitButton"
+                        class="px-7 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm transition">
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
+                    {% if object %} Save Changes {% else %} Create Booking {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- STYLES -->
+<style>
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    color: #111827;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-control:disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.help-text {
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.form-error {
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    color: #dc2626;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+</style>
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ===================== FLATPICKR =====================
+    const dateField = document.getElementById("id_tour_date");
+
+    if (dateField) {
+        flatpickr(dateField, {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            disableMobile: true,          // force desktop calendar even on mobile
+            animate: true,
+            monthSelectorType: "static",
+            prevArrow: "<i class='fa-solid fa-chevron-left text-sm'></i>",
+            nextArrow: "<i class='fa-solid fa-chevron-right text-sm'></i>",
+            onReady: function(selectedDates, dateStr, instance) {
+                // Optional: add custom class
+                instance.calendarContainer.classList.add("shadow-xl");
+            }
+        });
+    }
+
+    // ===================== YOUR EXISTING JS =====================
+    const tourField = document.getElementById("id_tour");
+    const timeField = document.getElementById("id_tour_time");
+    const guideField = document.getElementById("id_guide");
+    const pricingField = document.getElementById("id_pricing");
+
+    const loadingBox = document.getElementById("tourLoading");
+    const errorBox = document.getElementById("tourOptionsError");
+    const locationInfo = document.getElementById("locationInfo");
+    const locationText = document.getElementById("locationText");
+    const timeHelp = document.getElementById("timeHelp");
+    const guideHelp = document.getElementById("guideHelp");
+    const pricingHelp = document.getElementById("pricingHelp");
+
+    const initialTime = "{{ form.tour_time.value|default:''|escapejs }}";
+    const initialGuide = "{{ form.guide.value|default:''|escapejs }}";
+    const initialPricing = "{{ form.pricing.value|default:''|escapejs }}";
+
+    function disableDependentFields() {
+        if (timeField) {
+            timeField.disabled = true;
+            timeField.innerHTML = '<option value="">Select tour first</option>';
+        }
+        if (guideField) {
+            guideField.disabled = true;
+            guideField.innerHTML = '<option value="">Select tour first</option>';
+        }
+        if (pricingField) {
+            pricingField.disabled = true;
+            pricingField.innerHTML = '<option value="">Select tour first</option>';
+        }
+        if (timeHelp) timeHelp.textContent = "Select a tour first to see available times.";
+        if (guideHelp) guideHelp.textContent = "Select a tour first. Only guides for that tour's location will appear.";
+        if (pricingHelp) pricingHelp.textContent = "Pricing will be loaded for the selected tour.";
+        locationInfo.classList.add("hidden");
+    }
+
+    function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.add("hidden");
+    }
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.remove("hidden");
+    }
+
+    function addOption(select, value, text, selected = false) {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = text;
+        option.selected = selected;
+        select.appendChild(option);
+    }
+
+    async function loadTourOptions(restoreValues = false) {
+        const tourId = tourField.value;
+        clearError();
+        locationInfo.classList.add("hidden");
+
+        if (!tourId) {
+            disableDependentFields();
+            return;
+        }
+
+        timeField.disabled = true;
+        guideField.disabled = true;
+        pricingField.disabled = true;
+
+        timeField.innerHTML = '<option value="">Loading scheduled times...</option>';
+        guideField.innerHTML = '<option value="">Loading guides...</option>';
+        pricingField.innerHTML = '<option value="">Loading pricing...</option>';
+
+        loadingBox.classList.remove("hidden");
+
+        try {
+            const url = "{% url 'booking_tour_options' %}?tour_id=" + encodeURIComponent(tourId);
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!response.ok) throw new Error("Unable to load tour information.");
+
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || "Unable to load tour information.");
+
+            // TIMES
+            timeField.innerHTML = '<option value="">Select scheduled time</option>';
+            if (Array.isArray(data.times) && data.times.length > 0) {
+                data.times.forEach(function (item) {
+                    const timeValue = item.value || item.start_time || item.time || "";
+                    const timeDisplay = item.display || item.label || item.start_time || item.time || "";
+                    if (!timeValue) return;
+
+                    let label = timeDisplay;
+                    if (item.available_slots !== undefined && item.available_slots !== null) {
+                        label += " — " + item.available_slots + " slots";
+                    }
+
+                    const option = document.createElement("option");
+                    option.value = timeValue;
+                    option.textContent = label;
+                    if (restoreValues && String(timeValue) === String(initialTime)) {
+                        option.selected = true;
+                    }
+                    timeField.appendChild(option);
+                });
+
+                if (timeField.options.length > 1) {
+                    timeField.disabled = false;
+                    timeHelp.textContent = "Select one of the scheduled times for this tour.";
+                } else {
+                    timeField.innerHTML = '<option value="">No scheduled times available</option>';
+                    timeField.disabled = true;
+                    timeHelp.textContent = "No valid scheduled times are available for this tour.";
+                }
+            } else {
+                timeField.innerHTML = '<option value="">No scheduled times available</option>';
+                timeField.disabled = true;
+                timeHelp.textContent = "No scheduled times are available for this tour.";
+            }
+
+            // GUIDES
+            guideField.innerHTML = '<option value="">Select guide</option>';
+            if (data.guides && data.guides.length > 0) {
+                data.guides.forEach(function (guide) {
+                    addOption(guideField, guide.id, guide.name, restoreValues && String(guide.id) === String(initialGuide));
+                });
+                guideField.disabled = false;
+                guideHelp.textContent = "Only guides available for this tour's location are shown.";
+            } else {
+                guideField.innerHTML = '<option value="">No guides available for this tour location</option>';
+                guideField.disabled = true;
+                guideHelp.textContent = "No active guides are available for this tour's location.";
+            }
+
+            // PRICING
+            pricingField.innerHTML = '<option value="">Select group pricing</option>';
+            if (data.pricing && data.pricing.length > 0) {
+                data.pricing.forEach(function (price) {
+                    let label = price.label;
+                    if (price.price) label += " — ₹" + price.price;
+                    addOption(pricingField, price.id, label, restoreValues && String(price.id) === String(initialPricing));
+                });
+                pricingField.disabled = false;
+                pricingHelp.textContent = "Select the pricing group for this tour.";
+            } else {
+                pricingField.innerHTML = '<option value="">No pricing available</option>';
+                pricingField.disabled = true;
+                pricingHelp.textContent = "No active pricing is available for this tour.";
+            }
+
+            // LOCATION
+            if (data.location) {
+                locationText.textContent = "Tour location: " + data.location;
+                locationInfo.classList.remove("hidden");
+            }
+
+        } catch (error) {
+            console.error("Tour options error:", error);
+            showError(error.message || "Unable to load tour options.");
+            disableDependentFields();
+        } finally {
+            loadingBox.classList.add("hidden");
+        }
+    }
+
+    if (tourField) {
+        tourField.addEventListener("change", function () {
+            loadTourOptions(false);
+        });
+    }
+
+    // Initial load
+    if (tourField && tourField.value) {
+        loadTourOptions(true);
+    } else {
+        disableDependentFields();
+    }
+});
+</script>
+
+{% endblock %}
+
+
+
+
+
+{% comment %} {% extends "tourist_admin/base.html" %}
 
 {% block content %}
 
@@ -1447,4 +2105,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-{% endblock %}
+{% endblock %} {% endcomment %}
