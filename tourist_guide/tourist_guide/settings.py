@@ -194,16 +194,16 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = "anushamuraboina9@gmail.com"
-EMAIL_HOST_PASSWORD = "mpywwnwfrubgkxoe"
+EMAIL_HOST_USER = "getourguide1@gmail.com"
+EMAIL_HOST_PASSWORD = "azjzjdvckhthmpf"
 
-DEFAULT_FROM_EMAIL = "Tourist Guide <anushamuraboina9@gmail.com>"
+DEFAULT_FROM_EMAIL = "Get Our Guide <getourguide1@gmail.com>"
 
 # Admin Email
-ADMIN_EMAIL = "anushamuraboina9@gmail.com"
+ADMIN_EMAIL = "getourguide1@gmail.com"
 
 # Optional: CC emails
-CC_EMAIL = ["anushamuraboina99@gmail.com"]
+CC_EMAIL = ["anushamuraboina9@gmail.com"]
 
 
 
