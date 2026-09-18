@@ -71,7 +71,5 @@ urlpatterns = [
         name="guide_detail",
     ),
     
-    
-    
 
 ]

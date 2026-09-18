@@ -758,3 +758,263 @@ def about_us(request):
         request,
         "pages/about_us.html"
     )
+    
+    
+    
+
+def robots_txt(request):
+    return render(
+        request,
+        "robots.txt",
+        content_type="text/plain"
+    )
+    
+    
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+
+from user.models import NewsletterSubscription
+from user.serializers import NewsletterSubscriptionSerializer
+
+
+# ============================================================
+# NEWSLETTER SUBSCRIBE
+# ============================================================
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from user.models import NewsletterSubscription
+from user.serializers import NewsletterSubscriptionSerializer
+
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from user.models import NewsletterSubscription
+from user.serializers import NewsletterSubscriptionSerializer
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class NewsletterSubscriptionAPIView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def post(self, request):
+
+        print("\n========================================")
+        print("NEWSLETTER SUBSCRIBE REQUEST")
+        print("Request data:", request.data)
+        print("========================================")
+
+        serializer = NewsletterSubscriptionSerializer(
+            data=request.data
+        )
+
+        if not serializer.is_valid():
+
+            print(
+                "VALIDATION ERROR:",
+                serializer.errors
+            )
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Please enter a valid email address.",
+                    "errors": serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        email = serializer.validated_data["email"]
+
+        print("Validated email:", email)
+
+        # --------------------------------------------------
+        # Check existing subscription
+        # --------------------------------------------------
+
+        subscription = (
+            NewsletterSubscription.objects
+            .filter(email=email)
+            .first()
+        )
+
+        # --------------------------------------------------
+        # Already subscribed
+        # --------------------------------------------------
+
+        if subscription and subscription.is_active:
+
+            print(
+                "Already subscribed:",
+                email
+            )
+
+            return Response(
+                {
+                    "success": False,
+                    "message": (
+                        "This email is already "
+                        "subscribed to our newsletter."
+                    ),
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # --------------------------------------------------
+        # Previously unsubscribed
+        # --------------------------------------------------
+
+        if subscription:
+
+            subscription.is_active = True
+            subscription.unsubscribed_at = None
+
+            subscription.save(
+                update_fields=[
+                    "is_active",
+                    "unsubscribed_at",
+                ]
+            )
+
+            print(
+                "Subscription reactivated:",
+                email
+            )
+
+            return Response(
+                {
+                    "success": True,
+                    "message": (
+                        "Welcome back! "
+                        "You are subscribed again."
+                    ),
+                    "data": {
+                        "id": subscription.id,
+                        "email": subscription.email,
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        # --------------------------------------------------
+        # New subscriber
+        # --------------------------------------------------
+
+        subscription = (
+            NewsletterSubscription.objects.create(
+                email=email,
+                is_active=True,
+            )
+        )
+
+        print(
+            "NEW SUBSCRIBER CREATED:",
+            subscription.email
+        )
+
+        print(
+            "DATABASE ID:",
+            subscription.id
+        )
+
+        print("========================================\n")
+
+        return Response(
+            {
+                "success": True,
+                "message": (
+    "Thank you for subscribing to GetOurGuide.in. "
+    "We’ll notify you whenever we have new tours, "
+    "travel guides, and important updates."
+                ),
+                "data": {
+                    "id": subscription.id,
+                    "email": subscription.email,
+                },
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class NewsletterUnsubscribeAPIView(APIView):
+
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+
+        email = request.query_params.get(
+            "email",
+            ""
+        ).strip().lower()
+
+        if not email:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Email address is required.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+
+            subscription = (
+                NewsletterSubscription.objects.get(
+                    email=email
+                )
+            )
+
+        except NewsletterSubscription.DoesNotExist:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": (
+                        "This email is not "
+                        "subscribed."
+                    ),
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        subscription.is_active = False
+        subscription.unsubscribed_at = timezone.now()
+
+        subscription.save(
+            update_fields=[
+                "is_active",
+                "unsubscribed_at",
+            ]
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": (
+                    "You have been unsubscribed "
+                    "successfully."
+                ),
+            },
+            status=status.HTTP_200_OK,
+        )

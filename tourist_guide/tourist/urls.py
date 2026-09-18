@@ -15,6 +15,12 @@ from tourist.views import (
     FAQListAPIView,
     tour_list
 )
+
+from .views import (
+    NewsletterSubscriptionAPIView,
+    NewsletterUnsubscribeAPIView,
+)
+
 urlpatterns = [
     path('', views.home, name='home'),
     
@@ -84,5 +90,18 @@ urlpatterns = [
         views.about_us,
         name="about_us"
     ),
-        
+    
+        # Newsletter
+    path(
+        "api/newsletter/subscribe/",
+        NewsletterSubscriptionAPIView.as_view(),
+        name="newsletter-subscribe",
+    ),
+
+    path(
+        "api/newsletter/unsubscribe/",
+        NewsletterUnsubscribeAPIView.as_view(),
+        name="newsletter-unsubscribe",
+    ),
+   
 ]

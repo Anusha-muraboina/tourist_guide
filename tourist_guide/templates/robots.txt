@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+
+Allow: /tours/
+Allow: /tour-details/
+Allow: /blogs/
+Allow: /blog_list/
+Allow: /about-us/
+Allow: /contact/
+Allow: /faqs/
+Allow: /terms/
+Allow: /policy/
+
+Disallow: /api/
+
+Disallow: /booking/
+Disallow: /create-booking/
+Disallow: /update-booking/
+Disallow: /my-bookings/
+Disallow: /invoice/
+Disallow: /cancel-booking/
+Disallow: /cancel_booking_page/
+Disallow: /create-razorpay-order/
+Disallow: /verify-and-create-booking/
+Disallow: /payments/
+
+Disallow: /login/
+Disallow: /register/
+Disallow: /forgot-password/
+Disallow: /profile/
+Disallow: /payment-details/
+
+# Block guide/private pages
+
+Disallow: /guides/
+Disallow: /api/guide/
+
+
+Sitemap: https://getourguide.in/sitemap.xml

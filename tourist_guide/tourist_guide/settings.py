@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tourist',
+    # 'tourist',
     'user',
     'rating',
     'coupon',
@@ -68,7 +68,28 @@ INSTALLED_APPS = [
     
     # Third Party Apps
     'rest_framework',
+    
+    
+    "tourist.apps.TouristConfig",
 ]
+
+
+
+
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+CELERY_ACCEPT_CONTENT = [
+    "json",
+]
+
+CELERY_TASK_SERIALIZER = "json"
+
+CELERY_RESULT_SERIALIZER = "json"
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -355,3 +376,10 @@ CKEDITOR_CONFIGS = {
 
 #     }
 # }
+
+
+
+
+RECAPTCHA_SITE_KEY = "6LfuTL4tAAAAAF2mylzuDnYXhhMI378VwPcoIDLD"
+RECAPTCHA_SECRET_KEY = "6LfuTL4tAAAAAJfoOGGyedMs_UKmuK3-I9Znmn52"
+

@@ -1110,6 +1110,60 @@ class ProfileUpdateSerializer(
 
 
         return instance
+    
+    
+    
+    
+    
+    
+from rest_framework import serializers
+
+from .models import NewsletterSubscription
+
+from rest_framework import serializers
+from .models import NewsletterSubscription
+from rest_framework import serializers
+
+from .models import NewsletterSubscription
+
+
+class NewsletterSubscriptionSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+
+        model = NewsletterSubscription
+
+        fields = [
+            "id",
+            "email",
+            "is_active",
+            "subscribed_at",
+            "unsubscribed_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "is_active",
+            "subscribed_at",
+            "unsubscribed_at",
+        ]
+
+    def validate_email(self, value):
+
+        value = value.strip().lower()
+
+        if not value:
+            raise serializers.ValidationError(
+                "Email address is required."
+            )
+
+        return value
+    
+    
+    
+    
 # class ProfileUpdateSerializer(
 #     serializers.ModelSerializer
 # ):

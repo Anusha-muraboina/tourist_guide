@@ -29,7 +29,7 @@ from .sitemaps import (
     BlogSitemap,
     
 )
-
+from tourist.views import robots_txt
 sitemaps = {
     "static": StaticViewSitemap,
     "tours": TourSitemap,
@@ -64,6 +64,10 @@ urlpatterns = [
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
+    
+    
+    path("robots.txt", robots_txt, name="robots_txt"),
+     
 ]
 
 if settings.DEBUG:
