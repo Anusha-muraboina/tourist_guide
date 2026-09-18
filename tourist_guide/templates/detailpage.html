@@ -2457,7 +2457,7 @@ let infantPrice = 0;
 // FORMAT LABEL
 // =========================
 
-function formatGroupLabel(item) {
+{% comment %} function formatGroupLabel(item) {
 
     // If group_label already contains a proper custom label, use it
     if (item.group_label) {
@@ -2510,6 +2510,74 @@ function formatGroupLabel(item) {
 
         if (members === "20-50" || members === "20_50") {
             return "20–50";
+        }
+    }
+
+    return "Group Package";
+} {% endcomment %}
+
+
+
+// =========================
+// FORMAT LABEL
+// =========================
+function formatGroupLabel(item) {
+
+    // If group_label already contains a proper custom label, use it
+    if (item.group_label) {
+        return item.group_label;
+    }
+
+    // If group_type contains values such as:
+    // upto_9
+    // 10_20
+    // 21_50
+    if (item.group_type) {
+
+        const type = String(item.group_type)
+            .toLowerCase()
+            .trim();
+
+        if (type.includes("upto") && type.includes("9")) {
+            return "Up to 9";
+        }
+
+        if (
+            (type.includes("10") && type.includes("20")) ||
+            type === "10_20"
+        ) {
+            return "10–20";
+        }
+
+        // Updated to return 21-50 and check for both 20_50 and 21_50 formats
+        if (
+            (type.includes("20") && type.includes("50")) ||
+            (type.includes("21") && type.includes("50")) ||
+            type === "20_50" || 
+            type === "21_50"
+        ) {
+            return "21–50"; 
+        }
+    }
+
+    // If your API sends group_members
+    if (item.group_members) {
+
+        const members = String(item.group_members)
+            .trim()
+            .replace(/\s+/g, "");
+
+        if (members === "9") {
+            return "Up to 9";
+        }
+
+        if (members === "10-20" || members === "10_20") {
+            return "10–20";
+        }
+
+        // Updated to return 21-50
+        if (members === "20-50" || members === "20_50" || members === "21-50" || members === "21_50") {
+            return "21–50";
         }
     }
 

@@ -195,7 +195,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = "getourguide1@gmail.com"
-EMAIL_HOST_PASSWORD = "azjzjdvckhthmpf"
+EMAIL_HOST_PASSWORD = "ohdjcfvlxerkkcjm"
 
 DEFAULT_FROM_EMAIL = "Get Our Guide <getourguide1@gmail.com>"
 
