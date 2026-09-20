@@ -415,7 +415,8 @@ async function loadBookingDetail(id){
                 ` : ``}
 
                 <!-- CONFIRMED -->
-                ${booking.status === "confirmed" ? `
+                {% comment %} ${booking.status === "confirmed" ? ` {% endcomment %}
+                ${CURRENT_USER_ROLE === "guide" && booking.status === "confirmed" ? `
                     <div class="bg-emerald-50/80 border border-emerald-200/60 rounded-2xl p-4 sm:p-5">
                         <div class="flex items-start gap-3 mb-3">
                             <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
@@ -720,6 +721,45 @@ async function declineBooking(bookingId) {
 }
 </script>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

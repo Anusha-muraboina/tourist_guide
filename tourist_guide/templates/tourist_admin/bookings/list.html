@@ -457,6 +457,7 @@
                         >
 
                             <th class="table-head">
+                                
                                 Booking
                             </th>
 
@@ -464,9 +465,9 @@
                                 Tour
                             </th>
 
-                            <th class="table-head">
+                            {% comment %} <th class="table-head">
                                 Guest
-                            </th>
+                            </th> {% endcomment %}
 
                             <th class="table-head">
                                 Guide
@@ -484,9 +485,9 @@
                                 Amount
                             </th>
 
-                            <th class="table-head">
+                            {% comment %} <th class="table-head">
                                 Payment
-                            </th>
+                            </th> {% endcomment %}
 
                             <th class="table-head">
                                 Status
@@ -568,7 +569,7 @@
 
                                     </p>
 
-
+{% comment %} 
                                     {% if booking.tour.location %}
 
                                         <p
@@ -589,7 +590,7 @@
 
                                         </p>
 
-                                    {% endif %}
+                                    {% endif %} {% endcomment %}
 
                                 </div>
 
@@ -601,7 +602,7 @@
                             <!-- GUEST -->
                             <!-- ================================= -->
 
-                            <td class="table-cell">
+                            {% comment %} <td class="table-cell">
 
                                 <div
                                     class="flex items-center
@@ -655,7 +656,7 @@
 
                                 </div>
 
-                            </td>
+                            </td> {% endcomment %}
 
 
 
@@ -926,7 +927,7 @@
                             <!-- PAYMENT -->
                             <!-- ================================= -->
 
-                            <td class="table-cell">
+                            {% comment %} <td class="table-cell">
 
                                 <div class="space-y-1.5">
 
@@ -1000,7 +1001,7 @@
                                 </div>
 
                             </td>
-
+ {% endcomment %}
 
 
                             <!-- ================================= -->

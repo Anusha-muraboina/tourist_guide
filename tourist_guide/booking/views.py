@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from booking.models import CancelReason ,Invoice
 # Create your views here.
 def booking(request):
-    return HttpResponse("Welcome to Tourist Guide")
+    return HttpResponse("Welcome to GetOurGuide")
 
 razorpay_client = razorpay.Client(
     auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
@@ -1232,7 +1232,7 @@ your tour.
 Thank you for booking with us.
 
 Regards,
-{getattr(settings, "SITE_NAME", "Tourist Guide")}
+{getattr(settings, "SITE_NAME", "GetOurGuide")}
 """
 
         email = EmailMultiAlternatives(

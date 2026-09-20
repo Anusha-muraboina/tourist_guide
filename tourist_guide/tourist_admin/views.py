@@ -474,109 +474,397 @@ from .forms import TourForm
 # =====================================
 # TOUR LIST
 # =====================================
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+)
+from django.db import transaction
+
+from tourist.models import (
+    Tour,
+    TourCategory,
+    TourImage,
+)
+
+from .forms import (
+    TourForm,
+)
+
+
+# ============================================================
+# TOUR LIST
+# ============================================================
+
 class TourListView(ListView):
+
     model = Tour
+
     template_name = "tourist_admin/tour/list.html"
+
     context_object_name = "items"
+
     paginate_by = 10
 
     def get_queryset(self):
+
         queryset = (
             Tour.objects
-            .select_related("category")
+            .select_related(
+                "category",
+                "location",
+            )
             .prefetch_related(
+                # IMPORTANT
+                "images",
+
+                # M2M
                 "includes",
                 "excludes",
                 "highlights",
                 "important_information",
                 "amenities",
+
+                # Optional
+                "pricing",
+                "schedules",
             )
         )
 
-        search = self.request.GET.get("search")
-        category = self.request.GET.get("category")
-        status = self.request.GET.get("status")
-        featured = self.request.GET.get("featured")
+        # ====================================================
+        # SEARCH
+        # ====================================================
+
+        search = self.request.GET.get(
+            "search",
+            ""
+        ).strip()
+
+        # ====================================================
+        # FILTERS
+        # ====================================================
+
+        category = self.request.GET.get(
+            "category",
+            ""
+        )
+
+        status = self.request.GET.get(
+            "status",
+            ""
+        )
+
+        featured = self.request.GET.get(
+            "featured",
+            ""
+        )
+
+        # ====================================================
+        # SEARCH
+        # ====================================================
 
         if search:
-            queryset = queryset.filter(title__icontains=search)
+
+            queryset = queryset.filter(
+                title__icontains=search
+            )
+
+        # ====================================================
+        # CATEGORY
+        # ====================================================
 
         if category:
-            queryset = queryset.filter(category_id=category)
+
+            queryset = queryset.filter(
+                category_id=category
+            )
+
+        # ====================================================
+        # ACTIVE STATUS
+        # ====================================================
 
         if status == "1":
-            queryset = queryset.filter(is_active=True)
+
+            queryset = queryset.filter(
+                is_active=True
+            )
 
         elif status == "0":
-            queryset = queryset.filter(is_active=False)
+
+            queryset = queryset.filter(
+                is_active=False
+            )
+
+        # ====================================================
+        # FEATURED
+        # ====================================================
 
         if featured == "1":
-            queryset = queryset.filter(featured=True)
+
+            queryset = queryset.filter(
+                featured=True
+            )
 
         elif featured == "0":
-            queryset = queryset.filter(featured=False)
 
-        return queryset.order_by("slot_position", "-created_at")
+            queryset = queryset.filter(
+                featured=False
+            )
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        # ====================================================
+        # ORDER
+        # ====================================================
 
-        context["categories"] = TourCategory.objects.filter(is_active=True)
+        return queryset.order_by(
+            "slot_position",
+            "-created_at",
+        )
 
-        context["search"] = self.request.GET.get("search", "")
-        context["category"] = self.request.GET.get("category", "")
-        context["status"] = self.request.GET.get("status", "")
-        context["featured"] = self.request.GET.get("featured", "")
+    # ========================================================
+    # CONTEXT
+    # ========================================================
 
-        return context
+    def get_context_data(
+        self,
+        **kwargs
+    ):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(
+            **kwargs
+        )
 
         context["categories"] = (
-            TourCategory.objects.filter(
+            TourCategory.objects
+            .filter(
                 is_active=True
+            )
+            .order_by(
+                "slot_position",
+                "name",
             )
         )
 
-        context["search"] = self.request.GET.get("search", "")
-        context["category"] = self.request.GET.get("category", "")
-        context["status"] = self.request.GET.get("status", "")
-        context["featured"] = self.request.GET.get("featured", "")
+        context["search"] = (
+            self.request.GET.get(
+                "search",
+                ""
+            )
+        )
+
+        context["category"] = (
+            self.request.GET.get(
+                "category",
+                ""
+            )
+        )
+
+        context["status"] = (
+            self.request.GET.get(
+                "status",
+                ""
+            )
+        )
+
+        context["featured"] = (
+            self.request.GET.get(
+                "featured",
+                ""
+            )
+        )
 
         return context
 
 
-# =====================================
+# ============================================================
 # TOUR CREATE
-# =====================================
+# ============================================================
 
 class TourCreateView(CreateView):
+
     model = Tour
+
     form_class = TourForm
-    template_name = "tourist_admin/tour/form.html"
-    success_url = reverse_lazy("tour_list")
+
+    template_name = (
+        "tourist_admin/tour/form.html"
+    )
+
+    success_url = reverse_lazy(
+        "tour_list"
+    )
+
+    def form_valid(self, form):
+
+        # ====================================================
+        # SAVE TOUR
+        # ====================================================
+
+        self.object = form.save()
+
+        # ====================================================
+        # SAVE MULTIPLE IMAGES
+        # ====================================================
+
+        images = self.request.FILES.getlist(
+            "tour_images"
+        )
+
+        for index, image in enumerate(images):
+
+            TourImage.objects.create(
+                tour=self.object,
+                image=image,
+                is_primary=(index == 0),
+            )
+
+        return redirect(
+            self.success_url
+        )
 
 
-# =====================================
+# ============================================================
 # TOUR UPDATE
-# =====================================
+# ============================================================
 
 class TourUpdateView(UpdateView):
+
     model = Tour
+
     form_class = TourForm
-    template_name = "tourist_admin/tour/form.html"
-    success_url = reverse_lazy("tour_list")
+
+    template_name = (
+        "tourist_admin/tour/form.html"
+    )
+
+    success_url = reverse_lazy(
+        "tour_list"
+    )
+
+    def get_context_data(
+        self,
+        **kwargs
+    ):
+
+        context = super().get_context_data(
+            **kwargs
+        )
+
+        context["tour_images"] = (
+            self.object.images.all()
+            .order_by(
+                "-is_primary",
+                "created_at",
+            )
+        )
+
+        return context
+
+    @transaction.atomic
+    def form_valid(self, form):
+
+        # ====================================================
+        # SAVE TOUR
+        # ====================================================
+
+        self.object = form.save()
+
+        # ====================================================
+        # NEW IMAGES
+        # ====================================================
+
+        images = self.request.FILES.getlist(
+            "tour_images"
+        )
+
+        existing_images = self.object.images.exists()
+
+        for index, image in enumerate(images):
+
+            TourImage.objects.create(
+                tour=self.object,
+                image=image,
+                is_primary=(
+                    not existing_images
+                    and index == 0
+                ),
+            )
+
+        return redirect(
+            self.success_url
+        )
 
 
-# =====================================
+# ============================================================
 # TOUR DELETE
-# =====================================
+# ============================================================
 
 class TourDeleteView(BaseDeleteView):
+
     model = Tour
-    success_url = reverse_lazy("tour_list")
-    
+
+    success_url = reverse_lazy(
+        "tour_list"
+    )
+
+
+# ============================================================
+# DELETE TOUR IMAGE
+# ============================================================
+
+def delete_tour_image(
+    request,
+    pk
+):
+
+    image = get_object_or_404(
+        TourImage,
+        pk=pk,
+    )
+
+    tour_id = image.tour_id
+
+    image.delete()
+
+    return redirect(
+        "tour_update",
+        pk=tour_id,
+    )
+
+
+# ============================================================
+# SET PRIMARY IMAGE
+# ============================================================
+
+def set_primary_tour_image(
+    request,
+    pk
+):
+
+    image = get_object_or_404(
+        TourImage,
+        pk=pk,
+    )
+
+    TourImage.objects.filter(
+        tour=image.tour
+    ).update(
+        is_primary=False
+    )
+
+    image.is_primary = True
+
+    image.save(
+        update_fields=[
+            "is_primary"
+        ]
+    )
+
+    return redirect(
+        "tour_update",
+        pk=image.tour_id,
+    )
     
     
     
@@ -2621,3 +2909,72 @@ def booking_tour_options(request):
         "pricing": pricing,
         "location": location,
     })
+    
+    
+    
+
+
+from tourist.models import FAQ
+from .forms import FAQForm
+
+
+class FAQListView(ListView):
+    model = FAQ
+    template_name = "tourist_admin/faq/list.html"
+    context_object_name = "faqs"
+
+    def get_queryset(self):
+        queryset = FAQ.objects.all().order_by("order", "-created_at")
+
+        search = self.request.GET.get("search", "").strip()
+
+        if search:
+            queryset = queryset.filter(
+                question__icontains=search
+            )
+
+        return queryset
+
+
+class FAQCreateView(CreateView):
+    model = FAQ
+    form_class = FAQForm
+    template_name = "tourist_admin/faq/form.html"
+    success_url = reverse_lazy("faq-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "FAQ created successfully."
+        )
+
+        return super().form_valid(form)
+
+
+class FAQUpdateView(UpdateView):
+    model = FAQ
+    form_class = FAQForm
+    template_name = "tourist_admin/faq/form.html"
+    success_url = reverse_lazy("faq-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "FAQ updated successfully."
+        )
+
+        return super().form_valid(form)
+
+
+class FAQDeleteView(DeleteView):
+    model = FAQ
+    success_url = reverse_lazy("faq-list")
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            "FAQ deleted successfully."
+        )
+        return super().form_valid(form)
+    
+    

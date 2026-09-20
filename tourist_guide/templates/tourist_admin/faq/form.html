@@ -1,0 +1,650 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+
+    {% if object %}
+        Edit FAQ
+    {% else %}
+        Add FAQ
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <!-- ============================= -->
+    <!-- PAGE HEADER -->
+    <!-- ============================= -->
+
+    <div class="flex items-center gap-4 mb-6">
+
+        <!-- BACK -->
+
+        <a
+            href="{% url 'faq-list' %}"
+            class="
+                w-11
+                h-11
+                flex
+                items-center
+                justify-center
+                rounded-xl
+                bg-white
+                border
+                border-gray-200
+                text-gray-600
+                hover:bg-gray-50
+                hover:text-gray-900
+                transition
+                shadow-sm
+            "
+        >
+            <i class="fas fa-arrow-left"></i>
+        </a>
+
+
+        <!-- TITLE -->
+
+        <div>
+
+            <h1
+                class="
+                    text-2xl
+                    md:text-3xl
+                    font-bold
+                    text-gray-900
+                "
+            >
+
+                {% if object %}
+                    Edit FAQ
+                {% else %}
+                    Add FAQ
+                {% endif %}
+
+            </h1>
+
+            <p class="text-sm text-gray-500 mt-1">
+
+                {% if object %}
+                    Update the FAQ information below.
+                {% else %}
+                    Add a new frequently asked question.
+                {% endif %}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- FORM -->
+    <!-- ============================= -->
+
+    <form
+        method="POST"
+        action=""
+        novalidate
+        class="
+            bg-white
+            rounded-2xl
+            border
+            border-gray-100
+            shadow-sm
+            overflow-hidden
+        "
+    >
+
+        {% csrf_token %}
+
+
+        <!-- ============================= -->
+        <!-- FORM BODY -->
+        <!-- ============================= -->
+
+        <div class="p-6 md:p-8 space-y-7">
+
+
+            <!-- ============================= -->
+            <!-- QUESTION -->
+            <!-- ============================= -->
+
+            <div>
+
+                <label
+                    for="{{ form.question.id_for_label }}"
+                    class="
+                        block
+                        text-sm
+                        font-semibold
+                        text-gray-800
+                        mb-2
+                    "
+                >
+
+                    Question
+
+                    <span class="text-red-500">
+                        *
+                    </span>
+
+                </label>
+
+
+                <input
+                    type="text"
+                    name="{{ form.question.html_name }}"
+                    id="{{ form.question.id_for_label }}"
+                    value="{{ form.question.value|default:'' }}"
+                    maxlength="255"
+                    placeholder="Enter FAQ question"
+                    class="
+                        w-full
+                        px-4
+                        py-3
+                        rounded-xl
+                        border
+                        {% if form.question.errors %}
+                            border-red-400
+                            bg-red-50
+                        {% else %}
+                            border-gray-300
+                            bg-white
+                        {% endif %}
+                        text-gray-900
+                        placeholder-gray-400
+                        outline-none
+                        transition
+                        focus:ring-2
+                        focus:ring-indigo-500
+                        focus:border-indigo-500
+                    "
+                >
+
+
+                <!-- Question errors -->
+
+                {% if form.question.errors %}
+
+                    <div
+                        class="
+                            mt-2
+                            flex
+                            items-start
+                            gap-2
+                            text-sm
+                            text-red-600
+                        "
+                    >
+
+                        <i class="fas fa-exclamation-circle mt-0.5"></i>
+
+                        <div>
+
+                            {% for error in form.question.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- ANSWER -->
+            <!-- ============================= -->
+
+            <div>
+
+                <label
+                    for="{{ form.answer.id_for_label }}"
+                    class="
+                        block
+                        text-sm
+                        font-semibold
+                        text-gray-800
+                        mb-2
+                    "
+                >
+
+                    Answer
+
+                    <span class="text-red-500">
+                        *
+                    </span>
+
+                </label>
+
+
+                <textarea
+                    name="{{ form.answer.html_name }}"
+                    id="{{ form.answer.id_for_label }}"
+                    rows="8"
+                    placeholder="Enter the answer..."
+                    class="
+                        w-full
+                        px-4
+                        py-3
+                        rounded-xl
+                        border
+                        {% if form.answer.errors %}
+                            border-red-400
+                            bg-red-50
+                        {% else %}
+                            border-gray-300
+                            bg-white
+                        {% endif %}
+                        text-gray-900
+                        placeholder-gray-400
+                        outline-none
+                        resize-y
+                        transition
+                        focus:ring-2
+                        focus:ring-indigo-500
+                        focus:border-indigo-500
+                    "
+                >{{ form.answer.value|default:'' }}</textarea>
+
+
+                <p class="mt-2 text-xs text-gray-500">
+                    Provide a clear and useful answer for visitors.
+                </p>
+
+
+                <!-- Answer errors -->
+
+                {% if form.answer.errors %}
+
+                    <div
+                        class="
+                            mt-2
+                            flex
+                            items-start
+                            gap-2
+                            text-sm
+                            text-red-600
+                        "
+                    >
+
+                        <i class="fas fa-exclamation-circle mt-0.5"></i>
+
+                        <div>
+
+                            {% for error in form.answer.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- DISPLAY ORDER -->
+            <!-- ============================= -->
+
+            <div>
+
+                <label
+                    for="{{ form.order.id_for_label }}"
+                    class="
+                        block
+                        text-sm
+                        font-semibold
+                        text-gray-800
+                        mb-2
+                    "
+                >
+                    Display Order
+                </label>
+
+
+                <input
+                    type="number"
+                    name="{{ form.order.html_name }}"
+                    id="{{ form.order.id_for_label }}"
+                    value="{{ form.order.value|default:'0' }}"
+                    min="0"
+                    class="
+                        w-full
+                        px-4
+                        py-3
+                        rounded-xl
+                        border
+                        {% if form.order.errors %}
+                            border-red-400
+                            bg-red-50
+                        {% else %}
+                            border-gray-300
+                            bg-white
+                        {% endif %}
+                        text-gray-900
+                        outline-none
+                        transition
+                        focus:ring-2
+                        focus:ring-indigo-500
+                        focus:border-indigo-500
+                    "
+                >
+
+
+                <div class="flex items-center gap-2 mt-2">
+
+                    <i
+                        class="
+                            fas
+                            fa-info-circle
+                            text-gray-400
+                        "
+                    ></i>
+
+                    <p class="text-xs text-gray-500">
+                        Lower numbers will appear first.
+                    </p>
+
+                </div>
+
+
+                <!-- Order errors -->
+
+                {% if form.order.errors %}
+
+                    <div
+                        class="
+                            mt-2
+                            flex
+                            items-start
+                            gap-2
+                            text-sm
+                            text-red-600
+                        "
+                    >
+
+                        <i class="fas fa-exclamation-circle mt-0.5"></i>
+
+                        <div>
+
+                            {% for error in form.order.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- ACTIVE STATUS -->
+            <!-- ============================= -->
+
+            <div
+                class="
+                    p-5
+                    rounded-2xl
+                    bg-gray-50
+                    border
+                    border-gray-200
+                "
+            >
+
+                <div
+                    class="
+                        flex
+                        flex-col
+                        sm:flex-row
+                        sm:items-center
+                        sm:justify-between
+                        gap-4
+                    "
+                >
+
+                    <div>
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-2
+                            "
+                        >
+
+                            <div
+                                class="
+                                    w-9
+                                    h-9
+                                    rounded-lg
+                                    bg-green-100
+                                    text-green-600
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+                                <i class="fas fa-eye"></i>
+                            </div>
+
+                            <h3
+                                class="
+                                    font-semibold
+                                    text-gray-900
+                                "
+                            >
+                                Active FAQ
+                            </h3>
+
+                        </div>
+
+
+                        <p
+                            class="
+                                text-sm
+                                text-gray-500
+                                mt-2
+                                sm:ml-11
+                            "
+                        >
+                            Enable this FAQ to display it on the website.
+                        </p>
+
+                    </div>
+
+
+                    <!-- CHECKBOX -->
+
+                    <div class="flex items-center">
+
+                        <label
+                            class="
+                                relative
+                                inline-flex
+                                items-center
+                                cursor-pointer
+                            "
+                        >
+
+                            <input
+                                type="checkbox"
+                                name="{{ form.is_active.html_name }}"
+                                id="{{ form.is_active.id_for_label }}"
+                                {% if form.is_active.value %}
+                                    checked
+                                {% endif %}
+                                class="sr-only peer"
+                            >
+
+                            <div
+                                class="
+                                    w-12
+                                    h-7
+                                    bg-gray-300
+                                    rounded-full
+                                    peer
+                                    peer-checked:bg-indigo-600
+                                    transition
+                                    after:content-['']
+                                    after:absolute
+                                    after:top-[3px]
+                                    after:left-[3px]
+                                    after:bg-white
+                                    after:rounded-full
+                                    after:h-[22px]
+                                    after:w-[22px]
+                                    after:transition-all
+                                    peer-checked:after:translate-x-5
+                                "
+                            ></div>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- NON FIELD ERRORS -->
+            <!-- ============================= -->
+
+            {% if form.non_field_errors %}
+
+                <div
+                    class="
+                        p-4
+                        rounded-xl
+                        bg-red-50
+                        border
+                        border-red-200
+                        text-red-700
+                    "
+                >
+
+                    <div class="flex items-start gap-3">
+
+                        <i class="fas fa-exclamation-circle mt-0.5"></i>
+
+                        <div>
+
+                            {% for error in form.non_field_errors %}
+                                <p class="text-sm">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- FOOTER -->
+        <!-- ============================= -->
+
+        <div
+            class="
+                px-6
+                md:px-8
+                py-5
+                bg-gray-50
+                border-t
+                border-gray-100
+                flex
+                flex-col-reverse
+                sm:flex-row
+                sm:justify-end
+                gap-3
+            "
+        >
+
+            <!-- CANCEL -->
+
+            <a
+                href="{% url 'faq-list' %}"
+                class="
+                    px-6
+                    py-3
+                    rounded-xl
+                    border
+                    border-gray-300
+                    bg-white
+                    text-gray-700
+                    font-semibold
+                    hover:bg-gray-50
+                    transition
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                "
+            >
+                <i class="fas fa-times"></i>
+                Cancel
+            </a>
+
+
+            <!-- SAVE -->
+
+            <button
+                type="submit"
+                class="
+                    px-6
+                    py-3
+                    rounded-xl
+                    bg-indigo-600
+                    text-white
+                    font-semibold
+                    hover:bg-indigo-700
+                    transition
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    shadow-sm
+                "
+            >
+
+                {% if object %}
+
+                    <i class="fas fa-save"></i>
+                    Update FAQ
+
+                {% else %}
+
+                    <i class="fas fa-plus"></i>
+                    Create FAQ
+
+                {% endif %}
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -609,7 +609,7 @@ class Booking(models.Model):
             "confirmed": {
                 "user": "emails/user_booking_email.html",
                 "admin": "emails/admin_booking_email.html",
-                "subject_user": "✅ Booking Confirmed – Tourist guide",
+                "subject_user": "✅ Booking Confirmed – GetOurGuide",
                 "subject_admin": f"Booking Confirmed - {self.booking_id}",
             },
             "cancelled": {
@@ -638,7 +638,7 @@ class Booking(models.Model):
 
         try:
             invoice_path = reverse("view_invoice", args=[self.booking_id])
-            invoice_url = f"http://127.0.0.1:8000{invoice_path}"   # change manually when needed
+            invoice_url = f"https://getourguide.in{invoice_path}"   # change manually when needed
         except:
             invoice_url = None
 

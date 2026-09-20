@@ -238,5 +238,49 @@ urlpatterns = [
     path("bookings/<int:pk>/edit/", BookingUpdateView.as_view(), name="booking_update"),
     path("bookings/<int:pk>/delete/", BookingDeleteView.as_view(), name="booking_delete"),
     path("bookings/<int:pk>/status/", BookingStatusUpdateView.as_view(), name="booking_status"),
+    
+    
+    path(
+        "tour-images/<int:pk>/delete/",
+        views.delete_tour_image,
+        name="delete_tour_image",
+    ),
+
+
+    # ========================================================
+    # SET PRIMARY IMAGE
+    # ========================================================
+
+    path(
+        "tour-images/<int:pk>/primary/",
+        views.set_primary_tour_image,
+        name="set_primary_tour_image",
+    ),
+    
+    
+        path(
+        "faqs/",
+        views.FAQListView.as_view(),
+        name="faq-list"
+    ),
+
+    path(
+        "faqs/add/",
+        views.FAQCreateView.as_view(),
+        name="faq-create"
+    ),
+
+    path(
+        "faqs/<int:pk>/edit/",
+        views.FAQUpdateView.as_view(),
+        name="faq-update"
+    ),
+
+    path(
+        "faqs/<int:pk>/delete/",
+        views.FAQDeleteView.as_view(),
+        name="faq-delete"
+    ),
+
 
 ]
