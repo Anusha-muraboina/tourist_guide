@@ -276,13 +276,20 @@ CKEDITOR_CONFIGS = {
         "height": 500,
         "width": "100%",
         "removePlugins": "stylesheetparser",
-        
     },
 }
 
 
 
+
+
+
 # CKEDITOR_CONFIGS = {
+
+
+
+
+
 
 #     "default": {
 

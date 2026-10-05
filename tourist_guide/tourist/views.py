@@ -269,24 +269,209 @@ class HomeAPIView(APIView):
 
 
 
+# class TourListAPIView(APIView):
+
+#     permission_classes = [AllowAny]
+
+#     def get(self, request):
+
+#         search = request.GET.get("search", "").strip()
+#         location = request.GET.get("location", "").strip()
+#         offset = int(request.GET.get("offset", 0))
+#         limit = 3
+
+#         # ==========================================
+#         # BASE QUERY
+#         # ==========================================
+
+#         tours = (
+#             Tour.objects
+#             .filter(is_active=True)
+#             .select_related(
+#                 "location",
+#                 "category"
+#             )
+#             .prefetch_related(
+#                 "images",
+#                 "pricing"
+#             )
+#             .order_by("-created_at")
+#         )
+
+#         # ==========================================
+#         # SEARCH
+#         # ==========================================
+
+#         if search:
+
+#             tours = tours.filter(
+
+#                 Q(title__icontains=search) |
+
+#                 Q(short_description__icontains=search) |
+
+#                 Q(location__city__icontains=search) |
+
+#                 Q(location__state__icontains=search) |
+
+#                 Q(location__district__icontains=search) |
+
+#                 Q(category__name__icontains=search)
+
+#             ).distinct()
+
+#         # ==========================================
+#         # LOCATION FILTER
+#         # ==========================================
+
+#         if location:
+
+#             tours = tours.filter(
+#                 location_id=location
+#             )
+
+#         # ==========================================
+#         # TOTAL COUNT
+#         # ==========================================
+
+#         total_count = tours.count()
+
+#         # ==========================================
+#         # PAGINATION
+#         # ==========================================
+
+#         paginated_tours = tours[
+#             offset:offset + limit
+#         ]
+
+#         serializer = TourListSerializer(
+#             paginated_tours,
+#             many=True,
+#             context={
+#                 "request": request
+#             }
+#         )
+
+#         # ==========================================
+#         # LOCATIONS DROPDOWN
+#         # ==========================================
+
+#         locations = (
+#             Tour.objects
+#             .filter(
+#                 is_active=True,
+#                 location__isnull=False
+#             )
+#             .select_related("location")
+#             .values(
+#                 "location__id",
+#                 "location__city",
+#                 "location__district",
+#                 "location__state",
+#                 "location__country"
+#             )
+#             .distinct()
+#             .order_by(
+#                 "location__state",
+#                 "location__city"
+#             )
+#         )
+
+#         location_data = []
+
+#         for loc in locations:
+
+#             location_data.append({
+
+#                 "id": loc["location__id"],
+
+#                 "city": loc["location__city"],
+
+#                 "district": loc["location__district"],
+
+#                 "state": loc["location__state"],
+
+#                 "country": loc["location__country"],
+
+#             })
+
+#         # ==========================================
+#         # HAS MORE
+#         # ==========================================
+
+#         next_offset = offset + limit
+
+#         has_more = next_offset < total_count
+
+#         # ==========================================
+#         # RESPONSE
+#         # ==========================================
+
+#         return Response({
+
+#             "success": True,
+
+#             "count": total_count,
+
+#             "offset": offset,
+
+#             "limit": limit,
+
+#             "next_offset": next_offset,
+
+#             "has_more": has_more,
+
+#             "locations": location_data,
+
+#             "results": serializer.data,
+
+#         })
+        
+from django.db.models import Q
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
 class TourListAPIView(APIView):
 
     permission_classes = [AllowAny]
 
     def get(self, request):
 
-        search = request.GET.get("search", "").strip()
-        location = request.GET.get("location", "").strip()
-        offset = int(request.GET.get("offset", 0))
-        limit = 3
+        search = request.GET.get(
+            "search",
+            ""
+        ).strip()
 
-        # ==========================================
+        location = request.GET.get(
+            "location",
+            ""
+        ).strip()
+
+        state = request.GET.get(
+            "state",
+            ""
+        ).strip()
+
+        offset = int(
+            request.GET.get(
+                "offset",
+                0
+            )
+        )
+
+        limit = 9
+
+
+        # ==========================================================
         # BASE QUERY
-        # ==========================================
+        # ==========================================================
 
         tours = (
             Tour.objects
-            .filter(is_active=True)
+            .filter(
+                is_active=True
+            )
             .select_related(
                 "location",
                 "category"
@@ -295,34 +480,102 @@ class TourListAPIView(APIView):
                 "images",
                 "pricing"
             )
-            .order_by("-created_at")
+            .order_by(
+                "-created_at"
+            )
         )
 
-        # ==========================================
-        # SEARCH
-        # ==========================================
 
-        if search:
+        # ==========================================================
+        # STATE FILTER
+        # ==========================================================
+
+        if state:
 
             tours = tours.filter(
+                location__state__iexact=state
+            )
 
-                Q(title__icontains=search) |
 
-                Q(short_description__icontains=search) |
+        # ==========================================================
+        # SEARCH
+        # ==========================================================
 
-                Q(location__city__icontains=search) |
+        elif search:
 
-                Q(location__state__icontains=search) |
+            # ------------------------------------------------------
+            # CHECK WHETHER SEARCH TERM IS A STATE
+            # ------------------------------------------------------
 
-                Q(location__district__icontains=search) |
+            state_exists = (
+                Tour.objects
+                .filter(
+                    is_active=True,
+                    location__state__iexact=search
+                )
+                .exists()
+            )
 
-                Q(category__name__icontains=search)
 
-            ).distinct()
+            # ------------------------------------------------------
+            # IF SEARCH IS A STATE
+            # ------------------------------------------------------
 
-        # ==========================================
+            if state_exists:
+
+                tours = tours.filter(
+                    location__state__iexact=search
+                )
+
+
+            # ------------------------------------------------------
+            # NORMAL SEARCH
+            # ------------------------------------------------------
+
+            else:
+
+                tours = tours.filter(
+
+                    Q(
+                        title__icontains=search
+                    )
+
+                    |
+
+                    Q(
+                        short_description__icontains=search
+                    )
+
+                    |
+
+                    Q(
+                        location__city__icontains=search
+                    )
+
+                    |
+
+                    Q(
+                        location__state__icontains=search
+                    )
+
+                    |
+
+                    Q(
+                        location__district__icontains=search
+                    )
+
+                    |
+
+                    Q(
+                        category__name__icontains=search
+                    )
+
+                ).distinct()
+
+
+        # ==========================================================
         # LOCATION FILTER
-        # ==========================================
+        # ==========================================================
 
         if location:
 
@@ -330,19 +583,27 @@ class TourListAPIView(APIView):
                 location_id=location
             )
 
-        # ==========================================
+
+        # ==========================================================
         # TOTAL COUNT
-        # ==========================================
+        # ==========================================================
 
         total_count = tours.count()
 
-        # ==========================================
+
+        # ==========================================================
         # PAGINATION
-        # ==========================================
+        # ==========================================================
 
         paginated_tours = tours[
-            offset:offset + limit
+            offset:
+            offset + limit
         ]
+
+
+        # ==========================================================
+        # SERIALIZER
+        # ==========================================================
 
         serializer = TourListSerializer(
             paginated_tours,
@@ -352,9 +613,10 @@ class TourListAPIView(APIView):
             }
         )
 
-        # ==========================================
+
+        # ==========================================================
         # LOCATIONS DROPDOWN
-        # ==========================================
+        # ==========================================================
 
         locations = (
             Tour.objects
@@ -362,7 +624,9 @@ class TourListAPIView(APIView):
                 is_active=True,
                 location__isnull=False
             )
-            .select_related("location")
+            .select_related(
+                "location"
+            )
             .values(
                 "location__id",
                 "location__city",
@@ -377,57 +641,75 @@ class TourListAPIView(APIView):
             )
         )
 
+
         location_data = []
+
 
         for loc in locations:
 
             location_data.append({
 
-                "id": loc["location__id"],
+                "id":
+                    loc["location__id"],
 
-                "city": loc["location__city"],
+                "city":
+                    loc["location__city"],
 
-                "district": loc["location__district"],
+                "district":
+                    loc["location__district"],
 
-                "state": loc["location__state"],
+                "state":
+                    loc["location__state"],
 
-                "country": loc["location__country"],
+                "country":
+                    loc["location__country"],
 
             })
 
-        # ==========================================
-        # HAS MORE
-        # ==========================================
 
-        next_offset = offset + limit
+        # ==========================================================
+        # PAGINATION
+        # ==========================================================
 
-        has_more = next_offset < total_count
+        next_offset = (
+            offset + limit
+        )
 
-        # ==========================================
+        has_more = (
+            next_offset < total_count
+        )
+
+
+        # ==========================================================
         # RESPONSE
-        # ==========================================
+        # ==========================================================
 
         return Response({
 
             "success": True,
 
-            "count": total_count,
+            "count":
+                total_count,
 
-            "offset": offset,
+            "offset":
+                offset,
 
-            "limit": limit,
+            "limit":
+                limit,
 
-            "next_offset": next_offset,
+            "next_offset":
+                next_offset,
 
-            "has_more": has_more,
+            "has_more":
+                has_more,
 
-            "locations": location_data,
+            "locations":
+                location_data,
 
-            "results": serializer.data,
+            "results":
+                serializer.data,
 
         })
-        
-        
 
 def tour_list(request):
     return render(

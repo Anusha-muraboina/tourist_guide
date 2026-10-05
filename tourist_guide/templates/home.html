@@ -1820,37 +1820,35 @@ async function fetchHomeTours() {
            DESTINATIONS
         ==================================================== */
 
-        let destinationHTML =
-            "";
-
+        let destinationHTML = "";
 
         destinations.forEach((item) => {
 
             destinationHTML += `
 
                 <a
-                  href="{% url 'tourlist' %}?search=${encodeURIComponent(item.state)}"
+                  href="{% url 'tourlist' %}?state=${encodeURIComponent(item.state)}"
                   class="group block"
                 >
 
                   <div
                     class="overflow-hidden
-                           rounded-2xl
-                           aspect-[4/3]
-                           bg-slate-100
-                           shadow-sm
-                           border
-                           border-slate-100"
+                          rounded-2xl
+                          aspect-[4/3]
+                          bg-slate-100
+                          shadow-sm
+                          border
+                          border-slate-100"
                   >
 
                     <img
                       src="${item.image}"
                       class="w-full
-                             h-full
-                             object-cover
-                             group-hover:scale-105
-                             transition
-                             duration-500"
+                            h-full
+                            object-cover
+                            group-hover:scale-105
+                            transition
+                            duration-500"
                       alt="${escapeHTML(item.state)}"
                       loading="lazy"
                     >
@@ -1860,13 +1858,13 @@ async function fetchHomeTours() {
 
                   <h3
                     class="mt-2.5
-                           text-base
-                           font-bold
-                           text-slate-900
-                           group-hover:text-indigo-600
-                           transition
-                           truncate
-                           px-1"
+                          text-base
+                          font-bold
+                          text-slate-900
+                          group-hover:text-indigo-600
+                          transition
+                          truncate
+                          px-1"
                   >
                     ${escapeHTML(item.state)}
                   </h3>

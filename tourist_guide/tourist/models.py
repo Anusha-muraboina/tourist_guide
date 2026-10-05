@@ -112,7 +112,8 @@ class TourInclude(models.Model):
 class TourExclude(models.Model):
 
     # tour = models.ForeignKey(Tour,on_delete=models.CASCADE,related_name="excludes")
-
+    
+    
     title = models.CharField(
         max_length=255
     )
