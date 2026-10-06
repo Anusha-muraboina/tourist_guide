@@ -6,1049 +6,501 @@ Dashboard
 
 {% block content %}
 
-<div class="min-h-screen bg-slate-50">
+<div class="min-h-screen bg-slate-50/60 pb-12">
 
-    <!-- =========================================================
-         HEADER
-    ========================================================== -->
-    <div class="bg-white border-b border-slate-200">
-
-        <div class="px-4 sm:px-6 py-5">
-
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-
+    <!-- ========================================================= -->
+    <!-- HEADER -->
+    <!-- ========================================================= -->
+    <header class="bg-white border-b border-slate-200/80  top-0 z-10 backdrop-blur-sm bg-white/95">
+        <div class="px-4 sm:px-6 lg:px-8 py-5">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
-
-                    <div class="flex items-center gap-2 text-sm text-slate-500 mb-2">
-
-                        <span>
-                            Admin
-                        </span>
-
-                        <i class="fa-solid fa-angle-right text-xs text-slate-400"></i>
-
-                        <span class="text-slate-700 font-medium">
-                            Dashboard
-                        </span>
-
-                    </div>
-
-                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">
-                        Dashboard
+                    <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-1.5">
+                        <span>Admin</span>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-slate-800 font-semibold">Dashboard</span>
+                    </nav>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                        Tour Management Dashboard
                     </h1>
-
                     <p class="text-sm text-slate-500 mt-1">
-                        Manage your tours, categories and travel experiences.
+                        Monitor bookings, manage inventory schedules, and review travel performances.
                     </p>
-
                 </div>
 
-
-                <!-- Add Tour -->
-                <a
-                    href="{% url 'tour_add' %}"
-                    class="inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-semibold transition shadow-sm"
-                >
-
-                    <i class="fa-solid fa-plus mr-2"></i>
-
-                    Add New Tour
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================================================
-         MAIN CONTENT
-    ========================================================== -->
-
-    <div class="p-4 sm:p-6">
-
-        <!-- =====================================================
-             STATISTICS
-        ====================================================== -->
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-
-            <!-- TOTAL TOURS -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-start justify-between">
-
-                    <div>
-
-                        <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">
-                            Total Tours
-                        </p>
-
-                        <p class="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">
-                            {{ total_tours|default:0 }}
-                        </p>
-
-                        <p class="text-xs text-slate-400 mt-1">
-                            All tours
-                        </p>
-
-                    </div>
-
-
-                    <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
-
-                        <i class="fa-solid fa-route text-lg"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ACTIVE TOURS -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-start justify-between">
-
-                    <div>
-
-                        <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">
-                            Active Tours
-                        </p>
-
-                        <p class="text-2xl sm:text-3xl font-bold text-green-600 mt-2">
-                            {{ active_count|default:0 }}
-                        </p>
-
-                        <p class="text-xs text-slate-400 mt-1">
-                            Currently active
-                        </p>
-
-                    </div>
-
-
-                    <div class="w-11 h-11 rounded-xl bg-green-50 text-green-600 flex items-center justify-center">
-
-                        <i class="fa-solid fa-circle-check text-lg"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- INACTIVE TOURS -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-start justify-between">
-
-                    <div>
-
-                        <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">
-                            Inactive Tours
-                        </p>
-
-                        <p class="text-2xl sm:text-3xl font-bold text-red-500 mt-2">
-                            {{ inactive_count|default:0 }}
-                        </p>
-
-                        <p class="text-xs text-slate-400 mt-1">
-                            Currently disabled
-                        </p>
-
-                    </div>
-
-
-                    <div class="w-11 h-11 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
-
-                        <i class="fa-solid fa-circle-xmark text-lg"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- FEATURED TOURS -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-start justify-between">
-
-                    <div>
-
-                        <p class="text-xs uppercase tracking-wide font-semibold text-slate-500">
-                            Featured Tours
-                        </p>
-
-                        <p class="text-2xl sm:text-3xl font-bold text-amber-500 mt-2">
-                            {{ featured_count|default:0 }}
-                        </p>
-
-                        <p class="text-xs text-slate-400 mt-1">
-                            Featured experiences
-                        </p>
-
-                    </div>
-
-
-                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
-
-                        <i class="fa-solid fa-star text-lg"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             SECONDARY STATISTICS
-        ====================================================== -->
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-
-            <!-- CATEGORIES -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-center justify-between">
-
-                    <div class="flex items-center gap-4">
-
-                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-
-                            <i class="fa-solid fa-layer-group text-lg"></i>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm font-semibold text-slate-700">
-                                Tour Categories
-                            </p>
-
-                            <p class="text-2xl font-bold text-slate-900 mt-1">
-                                {{ total_categories|default:0 }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <a
-                        href="{% url 'tour_category_list' %}"
-                        class="text-sm font-semibold text-teal-600 hover:text-teal-700"
-                    >
-                        View
-                        <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- AVAILABLE SLOTS -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-                <div class="flex items-center justify-between">
-
-                    <div class="flex items-center gap-4">
-
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-
-                            <i class="fa-solid fa-users text-lg"></i>
-
-                        </div>
-
-                        <div>
-
-                            <p class="text-sm font-semibold text-slate-700">
-                                Available Slots
-                            </p>
-
-                            <p class="text-2xl font-bold text-slate-900 mt-1">
-                                {{ available_slots|default:0 }}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <a
-                        href="{% url 'tour_list' %}"
-                        class="text-sm font-semibold text-teal-600 hover:text-teal-700"
-                    >
-                        Manage
-                        <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             RECENT TOURS
-        ====================================================== -->
-
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-
-
-            <!-- SECTION HEADER -->
-
-            <div class="px-5 sm:px-6 py-5 border-b border-slate-200">
-
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-
-                    <div>
-
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">
-                            Recently Added Tours
-                        </h2>
-
-                        <p class="text-sm text-slate-500 mt-1">
-                            Latest tours added to your platform.
-                        </p>
-
-                    </div>
-
-
-                    <a
-                        href="{% url 'tour_list' %}"
-                        class="inline-flex items-center text-sm font-semibold text-teal-600 hover:text-teal-700"
-                    >
-
-                        View All Tours
-
-                        <i class="fa-solid fa-arrow-right ml-2"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 DESKTOP TABLE
-            ================================================== -->
-
-            <div class="hidden md:block overflow-x-auto">
-
-                <table class="w-full">
-
-                    <thead class="bg-slate-50 border-b border-slate-200">
-
-                        <tr>
-
-                            <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Tour
-                            </th>
-
-                            <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Category
-                            </th>
-
-                            <th class="text-left px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Location
-                            </th>
-
-                            <th class="text-center px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Status
-                            </th>
-
-                            <th class="text-right px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-500">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody class="divide-y divide-slate-100">
-
-
-                        {% for tour in recent_tours %}
-
-                        <tr class="hover:bg-slate-50 transition">
-
-
-                            <!-- TOUR -->
-
-                            <td class="px-6 py-4">
-
-                                <div class="flex items-center gap-3">
-
-
-                                    <!-- IMAGE -->
-
-                                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
-
-                                        {% with image=tour.images.first %}
-
-                                            {% if image and image.image %}
-
-                                                <img
-                                                    src="{{ image.image.url }}"
-                                                    alt="{{ tour.title }}"
-                                                    class="w-full h-full object-cover"
-                                                    loading="lazy"
-                                                >
-
-                                            {% else %}
-
-                                                <div class="w-full h-full flex items-center justify-center text-slate-400">
-
-                                                    <i class="fa-solid fa-image text-lg"></i>
-
-                                                </div>
-
-                                            {% endif %}
-
-                                        {% endwith %}
-
-                                    </div>
-
-
-                                    <!-- TITLE -->
-
-                                    <div class="min-w-0">
-
-                                        <p class="font-semibold text-slate-900 truncate max-w-[280px]">
-
-                                            {{ tour.title }}
-
-                                        </p>
-
-
-                                        {% if tour.featured %}
-
-                                            <span class="inline-flex items-center gap-1 text-xs text-amber-600 mt-1">
-
-                                                <i class="fa-solid fa-star"></i>
-
-                                                Featured
-
-                                            </span>
-
-                                        {% else %}
-
-                                            <p class="text-xs text-slate-400 mt-1">
-
-                                                {{ tour.duration|default:"Duration not specified" }}
-
-                                            </p>
-
-                                        {% endif %}
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <!-- CATEGORY -->
-
-                            <td class="px-6 py-4">
-
-                                {% if tour.category %}
-
-                                    <span class="text-sm text-slate-700">
-
-                                        {{ tour.category.name }}
-
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="text-sm text-slate-400">
-
-                                        No category
-
-                                    </span>
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- LOCATION -->
-
-                            <td class="px-6 py-4">
-
-                                {% if tour.location %}
-
-                                    <div class="flex items-start gap-2">
-
-                                        <i class="fa-solid fa-location-dot text-teal-500 mt-1"></i>
-
-                                        <div>
-
-                                            {% if tour.location.architecture %}
-
-                                                <p class="text-sm font-medium text-slate-700">
-
-                                                    {{ tour.location.architecture }}
-
-                                                </p>
-
-                                            {% endif %}
-
-                                            <p class="text-xs text-slate-400 mt-0.5">
-
-                                                {{ tour.location.city }}, {{ tour.location.state }}
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                {% else %}
-
-                                    <span class="text-sm text-slate-400">
-
-                                        Location not available
-
-                                    </span>
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- STATUS -->
-
-                            <td class="px-6 py-4 text-center">
-
-                                {% if tour.is_active %}
-
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-green-50 text-green-700">
-
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-
-                                        Active
-
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-50 text-red-600">
-
-                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-
-                                        Inactive
-
-                                    </span>
-
-                                {% endif %}
-
-                            </td>
-
-
-                            <!-- ACTION -->
-
-                            <td class="px-6 py-4">
-
-                                <div class="flex justify-end items-center gap-2">
-
-
-                                    <!-- EDIT -->
-
-                                    <a
-                                        href="{% url 'tour_edit' tour.pk %}"
-                                        class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-teal-50 text-slate-600 hover:text-teal-600 flex items-center justify-center transition"
-                                        title="Edit Tour"
-                                    >
-
-                                        <i class="fa-solid fa-pen text-sm"></i>
-
-                                    </a>
-
-
-                                    <!-- VIEW -->
-
-                                    <a
-                                        href="#"
-                                        target="_blank"
-                                        class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 flex items-center justify-center transition"
-                                        title="View Tour"
-                                    >
-
-                                        <i class="fa-solid fa-eye text-sm"></i>
-
-                                    </a>
-
-                                </div>
-
-                            </td>
-
-
-                        </tr>
-
-
-                        {% empty %}
-
-                        <!-- EMPTY STATE -->
-
-                        <tr>
-
-                            <td colspan="5" class="px-6 py-16">
-
-                                <div class="text-center">
-
-                                    <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center">
-
-                                        <i class="fa-solid fa-route text-2xl"></i>
-
-                                    </div>
-
-                                    <h3 class="text-lg font-semibold text-slate-800 mt-4">
-
-                                        No tours yet
-
-                                    </h3>
-
-                                    <p class="text-sm text-slate-500 mt-1">
-
-                                        Start by creating your first tour.
-
-                                    </p>
-
-
-                                    <a
-                                        href="{% url 'tour_add' %}"
-                                        class="inline-flex items-center mt-5 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-semibold transition"
-                                    >
-
-                                        <i class="fa-solid fa-plus mr-2"></i>
-
-                                        Add First Tour
-
-                                    </a>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                        {% endfor %}
-
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <!-- =================================================
-                 MOBILE TOUR CARDS
-            ================================================== -->
-
-            <div class="md:hidden divide-y divide-slate-100">
-
-
-                {% for tour in recent_tours %}
-
-                <div class="p-4">
-
-                    <div class="flex gap-3">
-
-
-                        <!-- IMAGE -->
-
-                        <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
-
-                            {% with image=tour.images.first %}
-
-                                {% if image and image.image %}
-
-                                    <img
-                                        src="{{ image.image.url }}"
-                                        alt="{{ tour.title }}"
-                                        class="w-full h-full object-cover"
-                                        loading="lazy"
-                                    >
-
-                                {% else %}
-
-                                    <div class="w-full h-full flex items-center justify-center text-slate-400">
-
-                                        <i class="fa-solid fa-image"></i>
-
-                                    </div>
-
-                                {% endif %}
-
-                            {% endwith %}
-
-                        </div>
-
-
-                        <!-- CONTENT -->
-
-                        <div class="flex-1 min-w-0">
-
-
-                            <div class="flex items-start justify-between gap-2">
-
-                                <h3 class="font-semibold text-slate-900 text-sm leading-5">
-
-                                    {{ tour.title }}
-
-                                </h3>
-
-
-                                {% if tour.is_active %}
-
-                                    <span class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-green-500"></span>
-
-                                {% else %}
-
-                                    <span class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-red-500"></span>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- PLACE -->
-
-                            {% if tour.location %}
-
-                                <div class="flex items-center gap-1.5 mt-1">
-
-                                    <i class="fa-solid fa-location-dot text-teal-500 text-xs"></i>
-
-                                    <p class="text-xs text-slate-500 truncate">
-
-                                        {% if tour.location.architecture %}
-
-                                            {{ tour.location.architecture }},
-
-                                        {% endif %}
-
-                                        {{ tour.location.city }}
-
-                                    </p>
-
-                                </div>
-
-                            {% endif %}
-
-
-                            <!-- CATEGORY -->
-
-                            {% if tour.category %}
-
-                                <p class="text-xs text-slate-400 mt-1">
-
-                                    {{ tour.category.name }}
-
-                                </p>
-
-                            {% endif %}
-
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ACTIONS -->
-
-                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-
-
-                        {% if tour.is_active %}
-
-                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600">
-
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-
-                                Active
-
-                            </span>
-
-                        {% else %}
-
-                            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-red-500">
-
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-
-                                Inactive
-
-                            </span>
-
-                        {% endif %}
-
-
-                        <div class="flex items-center gap-2">
-
-
-                            <a
-                                href="{% url 'tour_edit' tour.pk %}"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-teal-50 text-slate-600 hover:text-teal-600 text-xs font-semibold transition"
-                            >
-
-                                <i class="fa-solid fa-pen"></i>
-
-                                Edit
-
-                            </a>
-
-
-                            <a
-                                href="#"
-                                target="_blank"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 text-xs font-semibold transition"
-                            >
-
-                                <i class="fa-solid fa-eye"></i>
-
-                                View
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {% empty %}
-
-                <div class="px-5 py-14 text-center">
-
-                    <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center">
-
-                        <i class="fa-solid fa-route text-2xl"></i>
-
-                    </div>
-
-                    <h3 class="text-lg font-semibold text-slate-800 mt-4">
-
-                        No tours yet
-
-                    </h3>
-
-                    <p class="text-sm text-slate-500 mt-1">
-
-                        Start by creating your first tour.
-
-                    </p>
-
-
+                <div class="flex items-center gap-3">
                     <a
                         href="{% url 'tour_add' %}"
-                        class="inline-flex items-center mt-5 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-semibold transition"
+                        class="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm shadow-sm transition active:scale-[0.98]"
                     >
-
-                        <i class="fa-solid fa-plus mr-2"></i>
-
-                        Add First Tour
-
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Add New Tour</span>
                     </a>
-
                 </div>
+            </div>
+        </div>
+    </header>
 
-                {% endfor %}
+    <!-- ========================================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================================================= -->
+    <main class="px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-
+        <!-- ===================================================== -->
+        <!-- TOUR OVERVIEW METRICS -->
+        <!-- ===================================================== -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 tracking-tight">Tour Overview</h2>
+                    <p class="text-sm text-slate-500">Inventory and availability breakdown.</p>
+                </div>
+                <a href="{% url 'tour_list' %}" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-teal-600 hover:text-teal-700 transition">
+                    Manage Tours <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
             </div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <!-- TOTAL TOURS -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-3xl font-extrabold text-slate-900">{{ total_tours }}</p>
+                        <p class="text-sm text-slate-500 mt-1">Listed Tours</p>
+                    </div>
+                </div>
 
-            <!-- =================================================
-                 FOOTER
-            ================================================== -->
+                <!-- ACTIVE TOURS -->
+                <div class="bg-white border border-emerald-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">Active</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-3xl font-extrabold text-slate-900">{{ active_tours }}</p>
+                        <p class="text-sm text-slate-500 mt-1">Ready for Booking</p>
+                    </div>
+                </div>
+
+                <!-- INACTIVE -->
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                            <i class="fa-solid fa-pause"></i>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">Inactive</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-3xl font-extrabold text-slate-900">{{ inactive_tours }}</p>
+                        <p class="text-sm text-slate-500 mt-1">Hidden or Paused</p>
+                    </div>
+                </div>
+
+                <!-- FEATURED -->
+                <div class="bg-white border border-amber-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold">Featured</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-3xl font-extrabold text-slate-900">{{ featured_tours }}</p>
+                        <p class="text-sm text-slate-500 mt-1">Highlighted Packages</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- BOOKING OVERVIEW -->
+        <!-- ===================================================== -->
+        <section>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 tracking-tight">Booking Overview</h2>
+                    <p class="text-sm text-slate-500">Real-time status of orders and customer reservations.</p>
+                </div>
+                <a href="#" class="inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition">
+                    <i class="fa-solid fa-calendar-check text-xs"></i>
+                    <span>Manage Bookings</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
+                <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">All</p>
+                    <p class="text-2xl font-bold text-slate-900 mt-2">{{ total_bookings }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Total Bookings</p>
+                </div>
+                <div class="bg-white border border-amber-200/70 rounded-2xl p-4 shadow-sm">
+                    <p class="text-xs font-semibold text-amber-600 uppercase tracking-wide">Pending</p>
+                    <p class="text-2xl font-bold text-slate-900 mt-2">{{ pending_bookings }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Requires Confirmation</p>
+                </div>
+                <div class="bg-white border border-blue-200/70 rounded-2xl p-4 shadow-sm">
+                    <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide">Confirmed</p>
+                    <p class="text-2xl font-bold text-slate-900 mt-2">{{ confirmed_bookings }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Upcoming Departures</p>
+                </div>
+                <div class="bg-white border border-emerald-200/70 rounded-2xl p-4 shadow-sm">
+                    <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Completed</p>
+                    <p class="text-2xl font-bold text-slate-900 mt-2">{{ completed_bookings }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Finished Tours</p>
+                </div>
+                <div class="bg-white border border-red-200/70 rounded-2xl p-4 shadow-sm col-span-2 sm:col-span-1">
+                    <p class="text-xs font-semibold text-red-600 uppercase tracking-wide">Cancelled</p>
+                    <p class="text-2xl font-bold text-slate-900 mt-2">{{ cancelled_bookings }}</p>
+                    <p class="text-xs text-slate-500 mt-1">Refunded / Cancelled</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- RECENT TOURS (ROW-WISE TABLE LAYOUT) -->
+        <!-- ===================================================== -->
+        <section class="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
+            <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white">
+                <div>
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Recently Added Tours</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Catalog overview with quick status checks and direct action shortcuts.</p>
+                </div>
+                <a href="{% url 'tour_list' %}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-teal-600 hover:text-teal-700">
+                    View All Tours <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
 
             {% if recent_tours %}
+            <!-- Desktop Row Table -->
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-6 py-3.5">Tour Info</th>
+                            <th class="px-6 py-3.5">Category</th>
+                            <th class="px-6 py-3.5">Location</th>
+                            <th class="px-6 py-3.5">Base Price</th>
+                            <th class="px-6 py-3.5">Status</th>
+                            <th class="px-6 py-3.5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        {% for tour in recent_tours %}
+                        <tr class="hover:bg-slate-50/70 transition-colors group">
+                            <!-- Tour Image & Title -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-14 h-12 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden border border-slate-200/60 relative">
+                                        {% with image=tour.images.first %}
+                                            {% if image and image.image %}
+                                                <img src="{{ image.image.url }}" alt="{{ tour.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                            {% else %}
+                                                <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                                    <i class="fa-solid fa-image text-lg"></i>
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %}
+                                        {% if tour.featured %}
+                                            <span class="absolute bottom-1 right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white" title="Featured"></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-semibold text-slate-900 truncate max-w-xs group-hover:text-teal-600 transition-colors">
+                                            {{ tour.title }}
+                                        </p>
+                                        <p class="text-xs text-slate-400 mt-0.5">ID: #{{ tour.id|default:tour.pk }}</p>
+                                    </div>
+                                </div>
+                            </td>
 
-            <div class="px-5 sm:px-6 py-4 bg-slate-50 border-t border-slate-200">
+                            <!-- Category -->
+                            <td class="px-6 py-4">
+                                {% if tour.category %}
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 text-xs font-semibold">
+                                        {{ tour.category.name }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-slate-400 text-xs italic">Uncategorized</span>
+                                {% endif %}
+                            </td>
 
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                            <!-- Location -->
+                            <td class="px-6 py-4 text-slate-600">
+                                {% if tour.location %}
+                                    <div class="flex items-center gap-1.5 text-xs">
+                                        <i class="fa-solid fa-location-dot text-slate-400"></i>
+                                        <span class="truncate max-w-[180px]">{{ tour.location.city }}{% if tour.location.architecture %}, {{ tour.location.architecture }}{% endif %}</span>
+                                    </div>
+                                {% else %}
+                                    <span class="text-slate-400 text-xs">—</span>
+                                {% endif %}
+                            </td>
 
-                    <p class="text-xs sm:text-sm text-slate-500">
+                            <!-- Price -->
+                            <td class="px-6 py-4">
+                                <span class="font-bold text-slate-900">₹{{ tour.final_price|floatformat:0 }}</span>
+                            </td>
 
-                        Showing the latest
-                        <span class="font-semibold text-slate-700">
-                            {{ recent_tours|length }}
-                        </span>
-                        tours.
+                            <!-- Status & Badges -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    {% if tour.is_active %}
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Inactive
+                                        </span>
+                                    {% endif %}
+                                    {% if tour.featured %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[11px] font-bold border border-amber-200/50">
+                                            <i class="fa-solid fa-star text-[9px] mr-1"></i> Featured
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </td>
 
-                    </p>
+                            <!-- Action Buttons -->
+                            <td class="px-6 py-4 text-right">
+                                <div class="inline-flex items-center gap-1.5">
+                                    <a
+                                        href="{% url 'tour_edit' tour.pk %}"
+                                        class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-teal-50 hover:text-teal-600 text-slate-600 flex items-center justify-center transition"
+                                        title="Edit Tour"
+                                    >
+                                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-
+            <!-- Mobile Row Cards -->
+            <div class="md:hidden divide-y divide-slate-100">
+                {% for tour in recent_tours %}
+                <div class="p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden border border-slate-200/60 relative">
+                            {% with image=tour.images.first %}
+                                {% if image and image.image %}
+                                    <img src="{{ image.image.url }}" alt="{{ tour.title }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                        <i class="fa-solid fa-image text-sm"></i>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-semibold text-slate-900 text-sm truncate">{{ tour.title }}</p>
+                            <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                                <span class="font-bold text-slate-800">₹{{ tour.final_price|floatformat:0 }}</span>
+                                <span>•</span>
+                                <span>{% if tour.is_active %}<span class="text-emerald-600 font-medium">Active</span>{% else %}<span class="text-slate-400">Inactive</span>{% endif %}</span>
+                            </div>
+                        </div>
+                    </div>
                     <a
-                        href="{% url 'tour_list' %}"
-                        class="text-sm font-semibold text-teal-600 hover:text-teal-700"
+                        href="{% url 'tour_edit' tour.pk %}"
+                        class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center flex-shrink-0"
                     >
-
-                        Manage all tours
-
-                        <i class="fa-solid fa-arrow-right ml-1"></i>
-
+                        <i class="fa-solid fa-pen-to-square text-xs"></i>
                     </a>
-
                 </div>
-
+                {% endfor %}
             </div>
-
+            {% else %}
+            <!-- Empty state -->
+            <div class="py-14 text-center">
+                <div class="w-14 h-14 rounded-2xl bg-slate-100 mx-auto flex items-center justify-center text-slate-400 mb-3">
+                    <i class="fa-solid fa-map-location-dot text-xl"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 text-sm">No tours available</h3>
+                <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">Get started by publishing your first package listing.</p>
+                <a href="{% url 'tour_add' %}" class="inline-flex items-center gap-1.5 mt-4 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition">
+                    <i class="fa-solid fa-plus"></i> Add First Tour
+                </a>
+            </div>
             {% endif %}
+        </section>
 
-
-        </div>
-
-
-        <!-- =====================================================
-             QUICK ACTIONS
-        ====================================================== -->
-
-        <div class="mt-6">
-
-            <div class="flex items-center justify-between mb-4">
-
+        <!-- ===================================================== -->
+        <!-- RECENT BOOKINGS -->
+        <!-- ===================================================== -->
+        <section class="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
+            <div class="px-5 sm:px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-
-                    <h2 class="text-lg font-bold text-slate-900">
-                        Quick Actions
-                    </h2>
-
-                    <p class="text-sm text-slate-500">
-                        Common admin actions.
-                    </p>
-
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Recent Bookings</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Latest incoming reservations and guest orders.</p>
                 </div>
-
+                <a href="#" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-teal-600 hover:text-teal-700">
+                    View all bookings <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
             </div>
 
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-
-                <!-- ADD TOUR -->
-
-                <a
-                    href="{% url 'tour_add' %}"
-                    class="group bg-white border border-slate-200 rounded-2xl p-5 hover:border-teal-300 hover:shadow-md transition"
-                >
-
-                    <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition">
-
-                        <i class="fa-solid fa-plus"></i>
-
-                    </div>
-
-                    <h3 class="font-semibold text-slate-800 mt-4">
-                        Add Tour
-                    </h3>
-
-                    <p class="text-xs text-slate-500 mt-1">
-                        Create a new travel experience.
-                    </p>
-
-                </a>
-
-
-                <!-- TOUR LIST -->
-
-                <a
-                    href="{% url 'tour_list' %}"
-                    class="group bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-300 hover:shadow-md transition"
-                >
-
-                    <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
-
-                        <i class="fa-solid fa-list"></i>
-
-                    </div>
-
-                    <h3 class="font-semibold text-slate-800 mt-4">
-                        Manage Tours
-                    </h3>
-
-                    <p class="text-xs text-slate-500 mt-1">
-                        View and manage all tours.
-                    </p>
-
-                </a>
-
-
-                <!-- CATEGORIES -->
-
-                <a
-                    href="{% url 'tour_category_list' %}"
-                    class="group bg-white border border-slate-200 rounded-2xl p-5 hover:border-indigo-300 hover:shadow-md transition"
-                >
-
-                    <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
-
-                        <i class="fa-solid fa-layer-group"></i>
-
-                    </div>
-
-                    <h3 class="font-semibold text-slate-800 mt-4">
-                        Categories
-                    </h3>
-
-                    <p class="text-xs text-slate-500 mt-1">
-                        Manage tour categories.
-                    </p>
-
-                </a>
-
-
-                <!-- ITINERARY -->
-
-                <a
-                    href="#"
-                    class="group bg-white border border-slate-200 rounded-2xl p-5 hover:border-amber-300 hover:shadow-md transition"
-                >
-
-                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
-
-                        <i class="fa-solid fa-route"></i>
-
-                    </div>
-
-                    <h3 class="font-semibold text-slate-800 mt-4">
-                        Itinerary
-                    </h3>
-
-                    <p class="text-xs text-slate-500 mt-1">
-                        Manage tour itinerary items.
-                    </p>
-
-                </a>
-
-
+            {% if recent_bookings %}
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-6 py-3.5">Booking ID</th>
+                            <th class="px-6 py-3.5">Guest</th>
+                            <th class="px-6 py-3.5">Tour</th>
+                            <th class="px-6 py-3.5">Date</th>
+                            <th class="px-6 py-3.5">Amount</th>
+                            <th class="px-6 py-3.5">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        {% for booking in recent_bookings %}
+                        <tr class="hover:bg-slate-50/70 transition">
+                            <td class="px-6 py-4 font-semibold text-slate-900">#{{ booking.booking_id }}</td>
+                            <td class="px-6 py-4">
+                                <p class="font-medium text-slate-800">{{ booking.guest_name }}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">{{ booking.guest_email }}</p>
+                            </td>
+                            <td class="px-6 py-4 font-medium text-slate-800">{{ booking.tour.title }}</td>
+                            <td class="px-6 py-4 text-xs text-slate-600">
+                                <p>{{ booking.tour_date|date:"d M Y" }}</p>
+                                {% if booking.tour_time %}
+                                    <p class="text-slate-400 mt-0.5">{{ booking.tour_time|time:"g:i A" }}</p>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 font-semibold text-slate-900">₹{{ booking.total_amount|floatformat:2 }}</td>
+                            <td class="px-6 py-4">
+                                {% if booking.status == "pending" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending
+                                    </span>
+                                {% elif booking.status == "confirmed" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Confirmed
+                                    </span>
+                                {% elif booking.status == "completed" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
+                                    </span>
+                                {% elif booking.status == "cancelled" %}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Cancelled
+                                    </span>
+                                {% else %}
+                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">{{ booking.status|title }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
-        </div>
+            <!-- Mobile Booking Cards -->
+            <div class="md:hidden divide-y divide-slate-100">
+                {% for booking in recent_bookings %}
+                <div class="p-4 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-900 text-sm">#{{ booking.booking_id }}</span>
+                        {% if booking.status == "pending" %}
+                            <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold">Pending</span>
+                        {% elif booking.status == "confirmed" %}
+                            <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Confirmed</span>
+                        {% elif booking.status == "completed" %}
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">Completed</span>
+                        {% elif booking.status == "cancelled" %}
+                            <span class="px-2 py-0.5 rounded-full bg-red-50 text-red-700 text-xs font-semibold">Cancelled</span>
+                        {% endif %}
+                    </div>
+                    <p class="font-medium text-slate-800 text-sm">{{ booking.tour.title }}</p>
+                    <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                        <span>{{ booking.guest_name }}</span>
+                        <span class="font-bold text-slate-900">₹{{ booking.total_amount|floatformat:2 }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="py-14 text-center">
+                <div class="w-14 h-14 rounded-2xl bg-slate-100 mx-auto flex items-center justify-center text-slate-400 mb-3">
+                    <i class="fa-solid fa-calendar-xmark text-xl"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 text-sm">No bookings yet</h3>
+                <p class="text-xs text-slate-500 mt-1">Customer bookings will appear here automatically.</p>
+            </div>
+            {% endif %}
+        </section>
 
+        <!-- ===================================================== -->
+        <!-- QUICK MANAGEMENT -->
+        <!-- ===================================================== -->
+        <section>
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-slate-900 tracking-tight">Quick Management</h2>
+                <p class="text-sm text-slate-500">Fast access to admin setup, schedules, and configurations.</p>
+            </div>
 
-    </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <a href="{% url 'tour_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-teal-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-map text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-teal-600 transition">Tours</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Manage catalog</p>
+                </a>
 
+                <a href="{% url 'tour_category_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-violet-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-layer-group text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-violet-600 transition">Categories</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Taxonomy & tags</p>
+                </a>
+
+                <a href="{% url 'tour_itirenary_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-blue-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-route text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-blue-600 transition">Itinerary</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Day plans</p>
+                </a>
+
+                <a href="{% url 'tour_schedule_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-sky-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-clock text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-sky-600 transition">Schedules</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Slot timings</p>
+                </a>
+
+                <a href="{% url 'tour_pricing_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-emerald-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-emerald-600 transition">Pricing</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Fares & seasons</p>
+                </a>
+
+                <a href="{% url 'amenity_list' %}" class="bg-white border border-slate-200/80 rounded-2xl p-4 hover:border-amber-300 hover:shadow-sm transition group">
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-list-check text-sm"></i>
+                    </div>
+                    <p class="font-semibold text-sm text-slate-900 group-hover:text-amber-600 transition">Amenities</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Perks & services</p>
+                </a>
+            </div>
+        </section>
+
+    </main>
 </div>
-
 
 {% endblock %}

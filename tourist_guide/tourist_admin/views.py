@@ -112,13 +112,20 @@ from django.db.models import Sum
 
 from tourist.models import Tour, TourCategory, TourSchedule
 
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.shortcuts import render
+
+from tourist.models import Tour, TourCategory, TourSchedule
+from booking.models import Booking
+
 
 @login_required
 def dashboard(request):
 
-    # ============================================================
-    # TOUR COUNTS
-    # ============================================================
+    # =========================
+    # TOUR STATISTICS
+    # =========================
 
     total_tours = Tour.objects.count()
 
@@ -135,10 +142,9 @@ def dashboard(request):
         is_active=True
     ).count()
 
-
-    # ============================================================
-    # CATEGORIES
-    # ============================================================
+    # =========================
+    # CATEGORY STATISTICS
+    # =========================
 
     total_categories = TourCategory.objects.count()
 
@@ -146,16 +152,11 @@ def dashboard(request):
         is_active=True
     ).count()
 
+    # =========================
+    # AVAILABLE SLOTS
+    # =========================
 
-    # ============================================================
-    # TODAY'S / AVAILABLE SLOTS
-    #
-    # TourSchedule does not have a date field in your current
-    # model, so this represents the total available slots from
-    # active schedules.
-    # ============================================================
-
-    today_slots = (
+    available_slots = (
         TourSchedule.objects
         .filter(
             is_active=True,
@@ -164,59 +165,87 @@ def dashboard(request):
         .aggregate(
             total=Sum("available_slots")
         )
-        .get("total")
-        or 0
+        .get("total") or 0
     )
 
+    # =========================
+    # BOOKING STATISTICS
+    # =========================
 
-    # ============================================================
+    total_bookings = Booking.objects.count()
+
+    pending_bookings = Booking.objects.filter(
+        status="pending"
+    ).count()
+
+    confirmed_bookings = Booking.objects.filter(
+        status="confirmed"
+    ).count()
+
+    cancelled_bookings = Booking.objects.filter(
+        status="cancelled"
+    ).count()
+
+    completed_bookings = Booking.objects.filter(
+        status="completed"
+    ).count()
+
+    # =========================
     # RECENT TOURS
-    # ============================================================
+    # =========================
 
     recent_tours = (
         Tour.objects
-        .select_related(
-            "category",
-            "location",
-        )
+        .select_related("category", "location")
         .prefetch_related(
             "images",
-            "pricing",
+            "pricing"
         )
-        .order_by("-created_at")[:8]
+        .order_by("-created_at")[:3]
     )
 
+    # =========================
+    # RECENT BOOKINGS
+    # =========================
 
-    # ============================================================
-    # CONTEXT
-    # ============================================================
+    recent_bookings = (
+        Booking.objects
+        .select_related("tour", "user")
+        .order_by("-id")[:3]
+    )
 
     context = {
 
-        # Tour statistics
+        # Tours
         "total_tours": total_tours,
         "active_tours": active_tours,
         "inactive_tours": inactive_tours,
         "featured_tours": featured_tours,
 
-        # Category statistics
+        # Categories
         "total_categories": total_categories,
         "active_categories": active_categories,
 
-        # Schedule statistics
-        "today_slots": today_slots,
+        # Slots
+        "available_slots": available_slots,
 
-        # Recent tours
+        # Bookings
+        "total_bookings": total_bookings,
+        "pending_bookings": pending_bookings,
+        "confirmed_bookings": confirmed_bookings,
+        "cancelled_bookings": cancelled_bookings,
+        "completed_bookings": completed_bookings,
+
+        # Recent data
         "recent_tours": recent_tours,
+        "recent_bookings": recent_bookings,
     }
-
 
     return render(
         request,
         "tourist_admin/dashboard.html",
         context
     )
-
 # =====================================
 # Base Delete View
 # =====================================
