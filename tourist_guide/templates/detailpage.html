@@ -512,118 +512,19 @@ Premium Tour Details
 
     <!-- ================= ITINERARY ================= -->
 
-    <div id="itinerary" class="tabContent hidden mt-2 md:mt-8">
+<!-- ================= ITINERARY ================= -->
+<div id="itinerary" class="tabContent hidden mt-2 md:mt-8">
+    <div class="bg-white border border-gray-200 rounded-2xl p-3 md:p-6">
+        <h2 class="text-md md:text-xl font-bold text-[#111827] mb-4 md:mb-6">
+            Itinerary
+        </h2>
 
-
-<div class="md:mt-8 mt-2 grid md:grid-cols-1 gap-2 md:gap-6">
-
-    <div class="bg-white border border-gray-200 rounded-2xl p-2 md:p-6">
-
-        <!-- HEADER -->
-
-        <div class="flex items-center justify-between">
-
-            <h2 class="text-md md:text-xl font-bold text-[#111827]">
-
-                What to bring
-
-            </h2>
-
-            <button
-                onclick="toggleBring()"
-                id="bringBtn"
-                class="text-[#1677e6] font-medium hover:underline"
-            >
-
-                See more
-
-            </button>
-
+        <!-- Dynamic list from API -->
+        <div id="itineraryList" class="space-y-4">
+            <!-- items rendered by JS -->
         </div>
-
-        <!-- CONTENT -->
-
-        <div
-            id="bringContent"
-            class="mt-6 max-h-[180px] overflow-hidden transition-all duration-300"
-        >
-
-            <ul class="space-y-4">
-
-                <li class="flex items-start gap-3">
-
-                    <i class="fa-solid fa-passport text-[#1677e6] mt-1"></i>
-
-                    <span class="text-gray-700">
-
-                        Passport or ID card
-
-                    </span>
-
-                </li>
-
-                <li class="flex items-start gap-3">
-
-                    <i class="fa-solid fa-shoe-prints text-[#1677e6] mt-1"></i>
-
-                    <span class="text-gray-700">
-
-                        Comfortable shoes
-
-                    </span>
-
-                </li>
-
-                <li class="flex items-start gap-3">
-
-                    <i class="fa-solid fa-glasses text-[#1677e6] mt-1"></i>
-
-                    <span class="text-gray-700">
-
-                        Sunglasses
-
-                    </span>
-
-                </li>
-
-                <li class="flex items-start gap-3">
-
-                    <i class="fa-solid fa-hat-cowboy text-[#1677e6] mt-1"></i>
-
-                    <span class="text-gray-700">
-
-                        Sun hat
-
-                    </span>
-
-                </li>
-
-                <li class="flex items-start gap-3">
-
-                    <i class="fa-solid fa-camera text-[#1677e6] mt-1"></i>
-
-                    <span class="text-gray-700">
-
-                        Camera
-
-                    </span>
-
-                </li>
-
-            </ul>
-
-        </div>
-
     </div>
-
-    <!-- ================= KNOW BEFORE YOU GO ================= -->
-
-
-
 </div>
-
-
-    </div>
 
     <!-- ================= REVIEWS ================= -->
 
@@ -2787,6 +2688,8 @@ async function fetchTourDetails(){
         
         renderTopRating(tour);
 
+        renderItinerary(tour);
+
         {% comment %} renderFAQs(tourData); {% endcomment %}
         
         
@@ -4768,6 +4671,50 @@ async function fetchFAQs() {
 
 fetchTourDetails();
 fetchFAQs();
+
+
+
+
+
+
+
+function renderItinerary(tour) {
+    const container = document.getElementById("itineraryList");
+    if (!container) return;
+
+    const items = (tour.itinerary || []).filter(item => item.is_active !== false);
+
+    if (items.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8 text-gray-500 text-sm">
+                No itinerary available for this tour.
+            </div>
+        `;
+        return;
+    }
+
+    items.sort((a, b) => (a.slot_position || 0) - (b.slot_position || 0));
+
+    let html = "";
+    items.forEach((item, index) => {
+        html += `
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 text-blue-600
+                            flex items-center justify-center text-sm font-bold">
+                    ${index + 1}
+                </div>
+                <div class="flex-1 pt-0.5">
+                    <p class="text-gray-800 font-medium leading-6">
+                        ${item.title || ""}
+                    </p>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
 </script>
 
 

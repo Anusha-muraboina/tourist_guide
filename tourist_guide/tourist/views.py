@@ -754,6 +754,7 @@ class TourDetailAPIView(generics.RetrieveAPIView):
             "highlights",
             "includes",
             "excludes",
+            "includes",
             "important_information",
             "schedules",
             "amenities",

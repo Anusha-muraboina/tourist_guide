@@ -470,7 +470,7 @@
 
                 <!-- Excludes -->
 
-                <a
+                {% comment %} <a
                     href="{% url 'tour_exclude_list' %}"
                     class="
                         sidebar-link
@@ -496,7 +496,48 @@
 
                     <span>Excludes</span>
 
+                </a> {% endcomment %}
+
+
+
+
+
+
+
+                
+                <a
+                    href="{% url 'tour_itirenary_list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-circle-xmark
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>Itirenary</span>
+
                 </a>
+
+
+
+
+
+
 
 
                 <!-- Important Information -->
@@ -954,6 +995,38 @@
                     ></i>
 
                     <span>Blogs</span>
+
+                </a>
+
+                {% comment %} faq {% endcomment %}
+
+
+                
+                <a
+                    href="{% url 'faq-list' %}"
+                    class="
+                        sidebar-link
+                        flex items-center gap-3
+                        px-3 py-2.5
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        hover:bg-slate-900
+                        hover:text-white
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-blog
+                            w-5
+                            text-center
+                            text-slate-500
+                        "
+                    ></i>
+
+                    <span>FAQ</span>
 
                 </a>
 

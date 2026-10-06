@@ -11,7 +11,8 @@ from tourist.models import (
     ImportantInformation,
     TourSchedule,
     Amenity,
-    FAQ
+    FAQ,
+    Itinerary,
 )
 
 from user.serializers import LocationSerializer
@@ -25,6 +26,16 @@ from user.models import User
 from rest_framework import serializers
 from tourist.models import TourCategory
 
+class ItinerarySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Itinerary
+
+        fields = [
+            "id",
+            "title",
+            "slot_position",
+        ]
 
 class TourCategorySerializer(
     serializers.ModelSerializer
@@ -409,10 +420,10 @@ class TourDetailSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    excludes = TourExcludeSerializer(
-        many=True,
-        read_only=True
-    )
+    # excludes = TourExcludeSerializer(
+    #     many=True,
+    #     read_only=True
+    # )
 
     important_information = ImportantInformationSerializer(
         many=True,
@@ -420,6 +431,11 @@ class TourDetailSerializer(serializers.ModelSerializer):
     )
 
     schedules = TourScheduleSerializer(
+        many=True,
+        read_only=True
+    )
+    
+    itinerary = ItinerarySerializer(
         many=True,
         read_only=True
     )
@@ -484,14 +500,17 @@ class TourDetailSerializer(serializers.ModelSerializer):
             "images",
             "highlights",
             "includes",
-            "excludes",
+            # "excludes",
             "important_information",
             "schedules",
+            "itinerary",
             "amenities",
             
             "average_rating",
             "total_ratings",
             "reviews",
+            
+            
 
             # "faqs",
 

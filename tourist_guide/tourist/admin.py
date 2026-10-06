@@ -13,6 +13,7 @@ from tourist.models import (
     Amenity,
     TourPricing,
     FAQ,
+    Itinerary,
 )
 
 
@@ -22,7 +23,37 @@ from tourist.models import (
 from django.contrib import admin
 from .models import FAQ
 
+# ==========================================
+# ITINERARY ADMIN
+# ==========================================
 
+@admin.register(Itinerary)
+class ItineraryAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "title",
+        "slot_position",
+        "is_active",
+    )
+
+    list_editable = (
+        "slot_position",
+        "is_active",
+    )
+
+    list_filter = (
+        "is_active",
+    )
+
+    search_fields = (
+        "title",
+    )
+
+    ordering = (
+        "slot_position",
+        "title",
+    )
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
     list_display = (
@@ -431,6 +462,7 @@ class TourAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "includes",
         "excludes",
+        "itinerary",
         "highlights",
         "important_information",
         "amenities",
@@ -516,6 +548,7 @@ class TourAdmin(admin.ModelAdmin):
                     "includes",
                     "excludes",
                     "highlights",
+                    "itinerary",
                     "important_information",
                     "amenities",
                 )

@@ -236,7 +236,31 @@
                                         <span class="text-xs font-medium text-slate-500">{{ user_obj.locations.all|length }} Assigned</span>
                                     </div>
 
-                                    {% if user_obj.locations.all %}
+
+                                    {% if user_locations %}
+    <div class="space-y-3">
+        {% for location in user_locations %}
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                <p class="font-semibold text-gray-900">
+                    {{ location.architecture }}
+                </p>
+
+                <p class="text-sm text-gray-600">
+                    {{ location.city }},
+                    {{ location.district }},
+                    {{ location.state }},
+                    {{ location.country }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-sm text-gray-500">
+        No location selected.
+    </p>
+{% endif %}
+
+                                    {% comment %} {% if user_obj.locations.all %}
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {% for location in user_obj.locations.all %}
                                                 <div class="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200/70 bg-white">
@@ -252,7 +276,7 @@
                                         </div>
                                     {% else %}
                                         <p class="text-xs text-slate-400 italic">No assigned operational regions.</p>
-                                    {% endif %}
+                                    {% endif %} {% endcomment %}
                                 </div>
 
                                 <!-- Documents -->

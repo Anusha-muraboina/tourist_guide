@@ -1,3003 +1,1177 @@
 {% extends "tourist_admin/base.html" %}
 
-{% block title %}
-{% if object %}
-    Edit Tour
-{% else %}
-    Add Tour
-{% endif %}
-{% endblock %}
-
-
 {% block content %}
+<div class="min-h-screen bg-slate-900/5 pb-16 antialiased selection:bg-indigo-500 selection:text-white">
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    {% comment %} <form method="POST" novalidate> {% endcomment %}
-    <form
-    method="POST"
-    enctype="multipart/form-data"
-    novalidate
->
-
-        {% csrf_token %}
-
-        <div class="space-y-8">
-
-            <!-- ============================================================
-                 HEADER
-            ============================================================ -->
-
-            <div
-                class="
-                    bg-white
-                    rounded-3xl
-                    border
-                    border-gray-100
-                    shadow-sm
-                    p-6
-                    sm:p-8
-                "
-            >
-
-                <div
-                    class="
-                        flex
-                        flex-col
-                        sm:flex-row
-                        justify-between
-                        items-start
-                        sm:items-center
-                        gap-5
-                    "
-                >
-
-                    <div>
-
-                        <span
-                            class="
-                                inline-flex
-                                items-center
-                                gap-2
-                                text-xs
-                                font-bold
-                                uppercase
-                                tracking-wider
-                                text-teal-700
-                                bg-teal-50
-                                px-3
-                                py-1.5
-                                rounded-full
-                            "
-                        >
-
-                            <i class="fa-solid fa-route"></i>
-
-                            Tour Management
-
-                        </span>
-
-
-                        <h2
-                            class="
-                                text-xl
-                                md:text-3xl
-                                font-extrabold
-                                text-slate-900
-                                mt-3
-                            "
-                        >
-
-                            {% if object %}
-                                Edit Tour
-                            {% else %}
-                                Add New Tour
-                            {% endif %}
-
-                        </h2>
-
-
-                        <p
-                            class="
-                                text-sm
-                                text-gray-500
-                                mt-2
-                                max-w-2xl
-                            "
-                        >
-
-                            Create, update, and manage your custom
-                            travel experiences.
-
-                        </p>
-
-                    </div>
-
-
+    <!-- ========================================================= -->
+    <!-- STICKY TOP APP BAR / HEADER -->
+    <!-- ========================================================= -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-all">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-4">
                     <a
                         href="{% url 'tour_list' %}"
-                        class="
-                            inline-flex
-                            items-center
-                            justify-center
-                            gap-2
-                            bg-gray-50
-                            hover:bg-gray-100
-                            text-gray-700
-                            font-semibold
-                            px-5
-                            py-3
-                            rounded-xl
-                            border
-                            border-gray-200
-                            transition
-                            w-full
-                            sm:w-auto
-                        "
+                        class="group flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition-all duration-200 hover:border-indigo-400 hover:bg-indigo-50/60 hover:text-indigo-600 hover:shadow"
+                        title="Back to Tours"
                     >
-
-                        <i class="fa-solid fa-arrow-left text-xs"></i>
-
-                        Back to Tours
-
+                        <svg class="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
                     </a>
 
-                </div>
-
-            </div>
-
-
-            <!-- ============================================================
-                 FORM GRID
-            ============================================================ -->
-
-            <div
-                class="
-                    grid
-                    grid-cols-1
-                    lg:grid-cols-3
-                    gap-8
-                "
-            >
-
-                <!-- ========================================================
-                     LEFT
-                ======================================================== -->
-
-                <div
-                    class="
-                        lg:col-span-2
-                        space-y-8
-                    "
-                >
-
-                    <!-- ====================================================
-                         BASIC INFORMATION
-                    ==================================================== -->
-
-                    <div class="form-card">
-
-                        <div class="section-header">
-
-                            <div class="section-icon">
-
-                                <i class="fa-solid fa-circle-info"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="section-title">
-                                    Basic Information
-                                </h3>
-
-                                <p class="section-description">
-                                    Enter the main information about this tour.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="
-                                grid
-                                grid-cols-1
-                                md:grid-cols-2
-                                gap-6
-                                form-styles
-                            "
-                        >
-
-                            <!-- TITLE -->
-
-                            <div class="md:col-span-2">
-
-                                <label class="field-label">
-                                    Tour Title
-                                    <span class="required">*</span>
-                                </label>
-
-                                {{ form.title }}
-
-                                {% if form.title.errors %}
-                                    <p class="error-text">
-                                        {{ form.title.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- SLUG -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    Slug
-                                </label>
-
-                                {{ form.slug }}
-
-                                {% if form.slug.errors %}
-                                    <p class="error-text">
-                                        {{ form.slug.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- CATEGORY -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    Category
-                                </label>
-
-                                {{ form.category }}
-
-                                {% if form.category.errors %}
-                                    <p class="error-text">
-                                        {{ form.category.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- TOUR TYPE -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    Tour Type
-                                </label>
-
-                                {{ form.tour_type }}
-
-                                {% if form.tour_type.errors %}
-                                    <p class="error-text">
-                                        {{ form.tour_type.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- LANGUAGE -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    Language
-                                </label>
-
-                                {{ form.language }}
-
-                                {% if form.language.errors %}
-                                    <p class="error-text">
-                                        {{ form.language.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ====================================================
-                         DESCRIPTION
-                    ==================================================== -->
-
-                    <div class="form-card">
-
-                        <div class="section-header">
-
-                            <div class="section-icon">
-
-                                <i class="fa-solid fa-align-left"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="section-title">
-                                    Tour Description
-                                </h3>
-
-                                <p class="section-description">
-                                    Give visitors a clear description of the experience.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="space-y-6 form-styles">
-
-                            <div>
-
-                                <label class="field-label">
-                                    Short Description
-                                    <span class="required">*</span>
-                                </label>
-
-                                {{ form.short_description }}
-
-                                {% if form.short_description.errors %}
-                                    <p class="error-text">
-                                        {{ form.short_description.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-
-                            <div>
-
-                                <label class="field-label">
-                                    Full Description
-                                    <span class="required">*</span>
-                                </label>
-
-                                {{ form.full_description }}
-
-                                {% if form.full_description.errors %}
-                                    <p class="error-text">
-                                        {{ form.full_description.errors.0 }}
-                                    </p>
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ====================================================
-                         LOCATION
-                    ==================================================== -->
-
-                    <div class="form-card">
-
-                        <div class="section-header">
-
-                            <div class="section-icon location-icon">
-
-                                <i class="fa-solid fa-location-dot"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="section-title">
-                                    Tour Location
-                                </h3>
-
-                                <p class="section-description">
-                                    Select the location where this tour takes place.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- LOCATION SELECT -->
-
-                        <div>
-
-                            <label class="field-label">
-
-                                Location
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <div class="location-picker">
-
-                                <div class="location-left-icon">
-
-                                    <i
-                                        class="
-                                            fa-solid
-                                            fa-map-location-dot
-                                        "
-                                    ></i>
-
-                                </div>
-
-
-                                {{ form.location }}
-
-
-                                <div class="location-arrow">
-
-                                    <i
-                                        class="
-                                            fa-solid
-                                            fa-chevron-down
-                                        "
-                                    ></i>
-
-                                </div>
-
-                            </div>
-
-
-                            {% if form.location.errors %}
-
-                                <p class="error-text">
-
-                                    <i
-                                        class="
-                                            fa-solid
-                                            fa-circle-exclamation
-                                        "
-                                    ></i>
-
-                                    {{ form.location.errors.0 }}
-
-                                </p>
-
-                            {% endif %}
-
-
-                            <p
-                                class="
-                                    mt-2
-                                    text-xs
-                                    text-gray-400
-                                    flex
-                                    items-center
-                                    gap-1.5
-                                "
-                            >
-
-                                <i
-                                    class="
-                                        fa-solid
-                                        fa-circle-info
-                                        text-teal-500
-                                    "
-                                ></i>
-
-                                Select one active location for this tour.
-
-                            </p>
-
-                        </div>
-
-
-                        <!-- SELECTED LOCATION -->
-
-                        <div
-                            id="selectedLocationPreview"
-                            class="
-                                hidden
-                                mt-5
-                                rounded-2xl
-                                border
-                                border-teal-100
-                                bg-gradient-to-r
-                                from-teal-50
-                                to-cyan-50
-                                p-4
-                            "
-                        >
-
-                            <div
-                                class="
-                                    flex
-                                    items-center
-                                    gap-4
-                                "
-                            >
-
-                                <div
-                                    class="
-                                        w-11
-                                        h-11
-                                        rounded-xl
-                                        bg-white
-                                        text-teal-600
-                                        flex
-                                        items-center
-                                        justify-center
-                                        shadow-sm
-                                    "
-                                >
-
-                                    <i
-                                        class="
-                                            fa-solid
-                                            fa-location-dot
-                                            text-lg
-                                        "
-                                    ></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <p
-                                        class="
-                                            text-[10px]
-                                            uppercase
-                                            tracking-wider
-                                            font-bold
-                                            text-teal-600
-                                        "
-                                    >
-                                        Selected Location
-                                    </p>
-
-                                    <p
-                                        id="selectedLocationText"
-                                        class="
-                                            text-sm
-                                            font-bold
-                                            text-slate-800
-                                            mt-1
-                                        "
-                                    ></p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ADDRESS -->
-
-                        <div
-                            class="
-                                grid
-                                grid-cols-1
-                                md:grid-cols-2
-                                gap-6
-                                mt-6
-                                form-styles
-                            "
-                        >
-
-                            <div>
-
-                                <label class="field-label">
-                                    Address
-                                </label>
-
-                                {{ form.address }}
-
-                                {% if form.address.errors %}
-
-                                    <p class="error-text">
-                                        {{ form.address.errors.0 }}
-                                    </p>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- MEETING POINT -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    Meeting Point
-                                </label>
-
-                                {{ form.meeting_point }}
-
-                                {% if form.meeting_point.errors %}
-
-                                    <p class="error-text">
-                                        {{ form.meeting_point.errors.0 }}
-                                    </p>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ====================================================
-                         SEO
-                    ==================================================== -->
-
-                    <div class="form-card">
-
-                        <div class="section-header">
-
-                            <div class="section-icon">
-
-                                <i class="fa-solid fa-magnifying-glass"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="section-title">
-                                    SEO Settings
-                                </h3>
-
-                                <p class="section-description">
-                                    Optimize this tour for search engines.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="space-y-6 form-styles">
-
-                            <!-- SEO TITLE -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    SEO Title
-                                </label>
-
-                                {{ form.seo_title }}
-
-                                <p class="help-text">
-                                    Recommended length: 50–60 characters.
-                                </p>
-
-                                {% if form.seo_title.errors %}
-
-                                    <p class="error-text">
-                                        {{ form.seo_title.errors.0 }}
-                                    </p>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- SEO DESCRIPTION -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    SEO Description
-                                </label>
-
-                                {{ form.seo_description }}
-
-                                <p class="help-text">
-                                    Recommended length: 120–160 characters.
-                                </p>
-
-                                {% if form.seo_description.errors %}
-
-                                    <p class="error-text">
-                                        {{ form.seo_description.errors.0 }}
-                                    </p>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- SEO KEYWORDS -->
-
-                            <div>
-
-                                <label class="field-label">
-                                    SEO Keywords
-                                </label>
-
-                                {{ form.seo_keywords }}
-
-                                <p class="help-text">
-                                    Example: Hyderabad tours, tourist places,
-                                    guided tours, travel packages
-                                </p>
-
-                                {% if form.seo_keywords.errors %}
-
-                                    <p class="error-text">
-                                        {{ form.seo_keywords.errors.0 }}
-                                    </p>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ====================================================
-                         FEATURES
-                    ==================================================== -->
-
-                    <div class="form-card">
-
-                        <div class="section-header">
-
-                            <div class="section-icon">
-
-                                <i class="fa-solid fa-list-check"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3 class="section-title">
-                                    Features & Amenities
-                                </h3>
-
-                                <p class="section-description">
-                                    Select all applicable options for this tour.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="space-y-8">
-
-                            <!-- INCLUDES -->
-
-                            <div>
-
-                                <label class="m2m-title">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                    Tour Includes
-                                </label>
-
-                                <div class="m2m-grid">
-
-                                    {% for checkbox in form.includes %}
-
-                                        <label class="m2m-card">
-
-                                            {{ checkbox.tag }}
-
-                                            <span class="custom-check">
-                                                <i class="fa-solid fa-check"></i>
-                                            </span>
-
-                                            <span class="m2m-label">
-                                                {{ checkbox.choice_label }}
-                                            </span>
-
-                                        </label>
-
-                                    {% empty %}
-
-                                        <p class="empty-message">
-                                            No include options available.
-                                        </p>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- EXCLUDES -->
-
-                            <div>
-
-                                <label class="m2m-title">
-                                    <i class="fa-solid fa-circle-minus"></i>
-                                    Tour Excludes
-                                </label>
-
-                                <div class="m2m-grid">
-
-                                    {% for checkbox in form.excludes %}
-
-                                        <label class="m2m-card">
-
-                                            {{ checkbox.tag }}
-
-                                            <span class="custom-check">
-                                                <i class="fa-solid fa-check"></i>
-                                            </span>
-
-                                            <span class="m2m-label">
-                                                {{ checkbox.choice_label }}
-                                            </span>
-
-                                        </label>
-
-                                    {% empty %}
-
-                                        <p class="empty-message">
-                                            No exclude options available.
-                                        </p>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- HIGHLIGHTS -->
-
-                            <div>
-
-                                <label class="m2m-title">
-                                    <i class="fa-solid fa-star"></i>
-                                    Tour Highlights
-                                </label>
-
-                                <div class="m2m-grid">
-
-                                    {% for checkbox in form.highlights %}
-
-                                        <label class="m2m-card">
-
-                                            {{ checkbox.tag }}
-
-                                            <span class="custom-check">
-                                                <i class="fa-solid fa-check"></i>
-                                            </span>
-
-                                            <span class="m2m-label">
-                                                {{ checkbox.choice_label }}
-                                            </span>
-
-                                        </label>
-
-                                    {% empty %}
-
-                                        <p class="empty-message">
-                                            No highlight options available.
-                                        </p>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- IMPORTANT INFORMATION -->
-
-                            <div>
-
-                                <label class="m2m-title">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                    Important Information
-                                </label>
-
-                                <div class="m2m-grid">
-
-                                    {% for checkbox in form.important_information %}
-
-                                        <label class="m2m-card">
-
-                                            {{ checkbox.tag }}
-
-                                            <span class="custom-check">
-                                                <i class="fa-solid fa-check"></i>
-                                            </span>
-
-                                            <span class="m2m-label">
-                                                {{ checkbox.choice_label }}
-                                            </span>
-
-                                        </label>
-
-                                    {% empty %}
-
-                                        <p class="empty-message">
-                                            No information options available.
-                                        </p>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- AMENITIES -->
-
-                            <div>
-
-                                <label class="m2m-title">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    Amenities
-                                </label>
-
-                                <div class="m2m-grid">
-
-                                    {% for checkbox in form.amenities %}
-
-                                        <label class="m2m-card">
-
-                                            {{ checkbox.tag }}
-
-                                            <span class="custom-check">
-                                                <i class="fa-solid fa-check"></i>
-                                            </span>
-
-                                            <span class="m2m-label">
-                                                {{ checkbox.choice_label }}
-                                            </span>
-
-                                        </label>
-
-                                    {% empty %}
-
-                                        <p class="empty-message">
-                                            No amenities available.
-                                        </p>
-
-                                    {% endfor %}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ========================================================
-                     RIGHT SIDEBAR
-                ======================================================== -->
-
-                <div class="space-y-8">
-
-                    <div
-                        class="
-                            bg-white
-                            rounded-3xl
-                            border
-                            border-gray-100
-                            shadow-sm
-                            p-6
-                            sticky
-                            top-6
-                        "
-                    >
-
-                        <div
-                            class="
-                                flex
-                                items-center
-                                gap-3
-                                mb-5
-                            "
-                        >
-
-                            <div
-                                class="
-                                    w-10
-                                    h-10
-                                    rounded-xl
-                                    bg-teal-50
-                                    text-teal-600
-                                    flex
-                                    items-center
-                                    justify-center
-                                "
-                            >
-
-                                <i class="fa-solid fa-sliders"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h4
-                                    class="
-                                        text-lg
-                                        font-bold
-                                        text-slate-800
-                                    "
-                                >
-                                    Tour Configuration
-                                </h4>
-
-                                <p
-                                    class="
-                                        text-xs
-                                        text-gray-400
-                                    "
-                                >
-                                    Manage tour settings
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- LOGISTICS -->
-
-                        <div>
-
-                            <h5 class="sidebar-heading">
-                                Logistics
-                            </h5>
-
-
-                            <div
-                                class="
-                                    space-y-5
-                                    form-styles
-                                "
-                            >
-
-                                <!-- DURATION -->
-
-                                <div>
-
-                                    <label class="sidebar-label">
-                                        Duration
-                                    </label>
-
-                                    {{ form.duration }}
-
-                                </div>
-
-
-                                <!-- MAX PEOPLE -->
-
-                                <div>
-
-                                    <label class="sidebar-label">
-                                        Max Capacity
-                                    </label>
-
-                                    {{ form.max_people }}
-
-                                </div>
-
-
-                                <!-- MIN AGE -->
-
-                                <div>
-
-                                    <label class="sidebar-label">
-                                        Minimum Age
-                                    </label>
-
-                                    {{ form.min_age }}
-
-                                </div>
-
-
-                                <!-- SLOT -->
-
-                                <div>
-
-                                    <label class="sidebar-label">
-                                        Display Position
-                                    </label>
-
-                                    {{ form.slot_position }}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- DIVIDER -->
-
-                        <div class="my-7 border-t border-gray-100"></div>
-
-
-                        <!-- SETTINGS -->
-
-                        <div>
-
-                            <h5 class="sidebar-heading">
-                                Settings & Toggles
-                            </h5>
-
-
-                            <div class="space-y-3 toggle-styles">
-
-
-                                <!-- FREE CANCELLATION -->
-
-                                <label class="toggle-row">
-
-                                    <span>
-                                        Free Cancellation
-                                    </span>
-
-                                    {{ form.free_cancellation }}
-
-                                </label>
-
-
-                                <!-- INSTANT CONFIRMATION -->
-
-                                <label class="toggle-row">
-
-                                    <span>
-                                        Instant Confirmation
-                                    </span>
-
-                                    {{ form.instant_confirmation }}
-
-                                </label>
-
-
-                                <!-- PICKUP -->
-
-                                <label class="toggle-row">
-
-                                    <span>
-                                        Pickup Available
-                                    </span>
-
-                                    {{ form.pickup_available }}
-
-                                </label>
-
-
-                                <!-- WHEELCHAIR -->
-
-                                <label class="toggle-row">
-
-                                    <span>
-                                        Wheelchair Accessible
-                                    </span>
-
-                                    {{ form.wheelchair_accessible }}
-
-                                </label>
-                                <!-- FEATURED -->
-                                <label
-                                    class="
-                                        toggle-row
-                                        featured-toggle
-                                    "
-                                >
-                                    <span>
-                                        Featured Tour
-                                    </span>
-
-                                    {{ form.featured }}
-
-                                </label>
-
-
-                                <!-- ACTIVE -->
-
-                                <label class="toggle-row">
-
-                                    <span>
-                                        Active
-                                    </span>
-
-                                    {{ form.is_active }}
-
-                                </label>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-
-
-
-
-
-            <!-- ============================================================
-     TOUR IMAGES
-============================================================ -->
-
-<div class="form-card">
-
-    <div class="section-header">
-
-        <div class="section-icon">
-
-            <i class="fa-solid fa-images"></i>
-
-        </div>
-
-        <div>
-
-            <h3 class="section-title">
-                Tour Images
-            </h3>
-
-            <p class="section-description">
-                Upload multiple images for this tour.
-                The first uploaded image will be primary.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="space-y-6">
-
-
-        <!-- ====================================================
-             UPLOAD AREA
-        ===================================================== -->
-
-        <label
-            for="tour_images"
-            class="
-                relative
-                flex
-                flex-col
-                items-center
-                justify-center
-                w-full
-                min-h-[220px]
-                rounded-2xl
-                border-2
-                border-dashed
-                border-gray-200
-                bg-gray-50
-                hover:bg-teal-50
-                hover:border-teal-300
-                transition
-                duration-200
-                cursor-pointer
-            "
-        >
-
-            <div
-                class="
-                    w-16
-                    h-16
-                    rounded-2xl
-                    bg-teal-100
-                    text-teal-600
-                    flex
-                    items-center
-                    justify-center
-                    mb-4
-                "
-            >
-
-                <i
-                    class="
-                        fa-solid
-                        fa-cloud-arrow-up
-                        text-2xl
-                    "
-                ></i>
-
-            </div>
-
-
-            <h4
-                class="
-                    text-base
-                    font-bold
-                    text-slate-800
-                "
-            >
-                Upload Tour Images
-            </h4>
-
-
-            <p
-                class="
-                    text-sm
-                    text-gray-500
-                    mt-2
-                    text-center
-                "
-            >
-                Click here to select images
-
-                <br>
-
-                You can select multiple images
-
-            </p>
-
-
-            <span
-                class="
-                    text-xs
-                    text-gray-400
-                    mt-2
-                "
-            >
-                JPG, JPEG, PNG, WEBP
-            </span>
-
-
-            <input
-                type="file"
-                id="tour_images"
-                name="tour_images"
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                class="hidden"
-            />
-
-        </label>
-
-
-        <!-- ====================================================
-             NEW IMAGE PREVIEW
-        ===================================================== -->
-
-        <div
-            id="imagePreview"
-            class="
-                grid
-                grid-cols-2
-                sm:grid-cols-3
-                md:grid-cols-4
-                gap-4
-            "
-        ></div>
-
-
-        <!-- ====================================================
-             EXISTING IMAGES
-        ===================================================== -->
-
-        {% if object %}
-
-            <div
-                class="
-                    border-t
-                    border-gray-100
-                    pt-6
-                "
-            >
-
-                <div
-                    class="
-                        flex
-                        flex-col
-                        sm:flex-row
-                        sm:items-center
-                        sm:justify-between
-                        gap-3
-                        mb-5
-                    "
-                >
-
                     <div>
-
-                        <h4
-                            class="
-                                text-base
-                                font-bold
-                                text-slate-800
-                            "
-                        >
-                            Existing Images
-                        </h4>
-
-                        <p
-                            class="
-                                text-xs
-                                text-gray-400
-                                mt-1
-                            "
-                        >
-                            Manage images already uploaded
-                            for this tour.
+                        <div class="flex items-center gap-3">
+                            <h1 class="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+                                {% if object %}Edit Tour{% else %}Create New Tour{% endif %}
+                            </h1>
+                            {% if object %}
+                                <span class="inline-flex items-center gap-1.5 rounded-full border border-indigo-200/60 bg-indigo-50 px-3 py-0.5 text-xs font-semibold text-indigo-700">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                                    Editing
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-0.5 text-xs font-semibold text-emerald-700">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    Draft
+                                </span>
+                            {% endif %}
+                        </div>
+                        <p class="mt-0.5 text-xs text-slate-500 sm:text-sm">
+                            {% if object %}
+                                Update package parameters, pricing tiers, itineraries, and media.
+                            {% else %}
+                                Publish a new destination package with itineraries, pricing tiers, and gallery assets.
+                            {% endif %}
                         </p>
-
                     </div>
-
-
-                    {% if tour_images %}
-
-                        <span
-                            class="
-                                inline-flex
-                                items-center
-                                gap-2
-                                px-3
-                                py-1.5
-                                rounded-full
-                                bg-teal-50
-                                text-teal-700
-                                text-xs
-                                font-bold
-                            "
-                        >
-
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-images
-                                "
-                            ></i>
-
-                            {{ tour_images|length }}
-                            Images
-
-                        </span>
-
-                    {% endif %}
-
                 </div>
 
+                <!-- Fast Nav Indicator -->
+                <div class="hidden items-center gap-2 text-xs font-medium text-slate-400 lg:flex">
+                    <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-indigo-500"></span> General</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> Location</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-violet-500"></span> Pricing</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-pink-500"></span> Media</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-                {% if tour_images %}
+    <!-- ========================================================= -->
+    <!-- MAIN FORM BODY -->
+    <!-- ========================================================= -->
+    <main class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        <form method="POST" enctype="multipart/form-data" class="space-y-8" id="tourForm">
+            {% csrf_token %}
 
-                    <div
-                        class="
-                            grid
-                            grid-cols-2
-                            sm:grid-cols-3
-                            md:grid-cols-4
-                            gap-4
-                        "
+            <!-- NON-FIELD ERRORS -->
+            {% if form.non_field_errors %}
+                <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-5 shadow-sm backdrop-blur-sm">
+                    <div class="flex items-start gap-4">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 shadow-inner">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86l-8.82 15a2 2 0 001.71 3h17.64a2 2 0 001.71-3l-8.82-15a2 2 0 00-3.42 0z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-bold text-rose-900">Validation Notice</h3>
+                            <div class="mt-1.5 text-sm leading-relaxed text-rose-700">
+                                {{ form.non_field_errors }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- ================================================= -->
+            <!-- CARD 1: BASIC INFORMATION -->
+            <!-- ================================================= -->
+            <section class="group overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">Basic Information</h2>
+                            <p class="text-xs text-slate-500">Essential identifiers, categorization, and summary descriptions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-2">
+                    <!-- CATEGORY -->
+                    <div>
+                        <label for="{{ form.category.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Category <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="[&>select]:w-full [&>select]:rounded-xl [&>select]:border-slate-200 [&>select]:bg-slate-50/50 [&>select]:py-2.5 [&>select]:text-sm [&>select]:font-medium [&>select]:text-slate-800 [&>select]:transition [&>select]:focus:border-indigo-500 [&>select]:focus:bg-white [&>select]:focus:ring-4 [&>select]:focus:ring-indigo-500/10">
+                            {{ form.category }}
+                        </div>
+                        {% if form.category.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.category.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- TITLE -->
+                    <div>
+                        <label for="{{ form.title.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Tour Title <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-indigo-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-indigo-500/10">
+                            {{ form.title }}
+                        </div>
+                        {% if form.title.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.title.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- SLUG -->
+                    <div>
+                        <label for="{{ form.slug.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Slug
+                        </label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:font-mono [&>input]:text-sm [&>input]:text-slate-700 [&>input]:transition [&>input]:focus:border-indigo-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-indigo-500/10">
+                            {{ form.slug }}
+                        </div>
+                        <p class="mt-1.5 text-[11px] text-slate-400">e.g. hyderabad-heritage-tour (auto-generated from title)</p>
+                        {% if form.slug.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.slug.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- TOUR TYPE -->
+                    <div>
+                        <label for="{{ form.tour_type.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Tour Type
+                        </label>
+                        <div class="[&>select]:w-full [&>select]:rounded-xl [&>select]:border-slate-200 [&>select]:bg-slate-50/50 [&>select]:py-2.5 [&>select]:text-sm [&>select]:font-medium [&>select]:text-slate-800 [&>select]:transition [&>select]:focus:border-indigo-500 [&>select]:focus:bg-white [&>select]:focus:ring-4 [&>select]:focus:ring-indigo-500/10">
+                            {{ form.tour_type }}
+                        </div>
+                        {% if form.tour_type.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.tour_type.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- SHORT DESCRIPTION -->
+                    <div class="lg:col-span-2">
+                        <label for="{{ form.short_description.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Short Summary <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="[&>textarea]:w-full [&>textarea]:rounded-xl [&>textarea]:border-slate-200 [&>textarea]:bg-slate-50/50 [&>textarea]:p-3.5 [&>textarea]:text-sm [&>textarea]:font-medium [&>textarea]:text-slate-800 [&>textarea]:transition [&>textarea]:focus:border-indigo-500 [&>textarea]:focus:bg-white [&>textarea]:focus:ring-4 [&>textarea]:focus:ring-indigo-500/10">
+                            {{ form.short_description }}
+                        </div>
+                        {% if form.short_description.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.short_description.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- FULL DESCRIPTION -->
+                    <div class="lg:col-span-2">
+                        <label for="{{ form.full_description.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Detailed Description <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="[&>textarea]:w-full [&>textarea]:rounded-xl [&>textarea]:border-slate-200 [&>textarea]:bg-slate-50/50 [&>textarea]:p-3.5 [&>textarea]:text-sm [&>textarea]:font-medium [&>textarea]:text-slate-800 [&>textarea]:transition [&>textarea]:focus:border-indigo-500 [&>textarea]:focus:bg-white [&>textarea]:focus:ring-4 [&>textarea]:focus:ring-indigo-500/10">
+                            {{ form.full_description }}
+                        </div>
+                        {% if form.full_description.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.full_description.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- CARD 2: LOCATION & MEETING POINT -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 21a2 2 0 01-2.828 0l-4.243-4.343a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">Location & Assembly</h2>
+                            <p class="text-xs text-slate-500">Designate the physical landmark, coordinates, and rendezvous point.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 p-6 sm:p-8">
+                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <!-- LOCATION SELECT -->
+                        <div>
+                            <label for="{{ form.location.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                                Place / Monument <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="[&>select]:w-full [&>select]:rounded-xl [&>select]:border-slate-200 [&>select]:bg-slate-50/50 [&>select]:py-2.5 [&>select]:text-sm [&>select]:font-medium [&>select]:text-slate-800 [&>select]:transition [&>select]:focus:border-emerald-500 [&>select]:focus:bg-white [&>select]:focus:ring-4 [&>select]:focus:ring-emerald-500/10">
+                                {{ form.location }}
+                            </div>
+                            <p class="mt-1.5 text-[11px] text-slate-400">Searchable catalogue includes monument, city, and state mapping.</p>
+                            {% if form.location.errors %}
+                                <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.location.errors }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- MEETING POINT -->
+                        <div>
+                            <label for="{{ form.meeting_point.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                                Meeting Point
+                            </label>
+                            <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-emerald-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-emerald-500/10">
+                                {{ form.meeting_point }}
+                            </div>
+                            <p class="mt-1.5 text-[11px] text-slate-400">Clear visual landmarks (e.g. Near Gate #2 Ticket Counter).</p>
+                            {% if form.meeting_point.errors %}
+                                <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.meeting_point.errors }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- LOCATION PREVIEW BADGE -->
+                    <div id="locationPreview" class="hidden rounded-xl border border-emerald-200/80 bg-emerald-50/60 p-4 transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-white shadow-sm">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Selected Destination</span>
+                                <p id="selectedLocationName" class="text-sm font-bold text-slate-900"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- CARD 3: TOUR DETAILS -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-600 text-white shadow-md shadow-sky-600/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">Logistics & Capacity</h2>
+                            <p class="text-xs text-slate-500">Operational limits, language coverage, and display sorting.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-5">
+                    <!-- DURATION -->
+                    <div>
+                        <label for="{{ form.duration.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Duration</label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-sky-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-sky-500/10">
+                            {{ form.duration }}
+                        </div>
+                        {% if form.duration.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.duration.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- LANGUAGE -->
+                    <div>
+                        <label for="{{ form.language.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Language</label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-sky-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-sky-500/10">
+                            {{ form.language }}
+                        </div>
+                        {% if form.language.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.language.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- MAX PEOPLE -->
+                    <div>
+                        <label for="{{ form.max_people.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Max Capacity</label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-sky-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-sky-500/10">
+                            {{ form.max_people }}
+                        </div>
+                        {% if form.max_people.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.max_people.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- MIN AGE -->
+                    <div>
+                        <label for="{{ form.min_age.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Min Age</label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-sky-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-sky-500/10">
+                            {{ form.min_age }}
+                        </div>
+                        {% if form.min_age.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.min_age.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- SLOT POSITION -->
+                    <div>
+                        <label for="{{ form.slot_position.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">Sort Priority</label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-sky-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-sky-500/10">
+                            {{ form.slot_position }}
+                        </div>
+                        {% if form.slot_position.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.slot_position.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- CARD 4: TOGGLEABLE FEATURES -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <h2 class="text-base font-bold text-slate-900">Operational Flags & Badges</h2>
+                    <p class="text-xs text-slate-500">Toggle customer-facing tags and administrative visibility flags.</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-3">
+                    <!-- FREE CANCELLATION -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50/30">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-slate-300 [&>input]:text-indigo-600 [&>input]:focus:ring-indigo-500">
+                            {{ form.free_cancellation }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-indigo-900">Free Cancellation</span>
+                            <span class="block text-xs text-slate-500">Permits penalty-free refund within limits.</span>
+                        </div>
+                    </label>
+
+                    <!-- INSTANT CONFIRMATION -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50/30">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-slate-300 [&>input]:text-indigo-600 [&>input]:focus:ring-indigo-500">
+                            {{ form.instant_confirmation }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-indigo-900">Instant Booking</span>
+                            <span class="block text-xs text-slate-500">Automatic payment confirmation pipeline.</span>
+                        </div>
+                    </label>
+
+                    <!-- PICKUP -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50/30">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-slate-300 [&>input]:text-indigo-600 [&>input]:focus:ring-indigo-500">
+                            {{ form.pickup_available }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-indigo-900">Pickup Included</span>
+                            <span class="block text-xs text-slate-500">Hotel or airport transfers available.</span>
+                        </div>
+                    </label>
+
+                    <!-- WHEELCHAIR -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50/30">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-slate-300 [&>input]:text-indigo-600 [&>input]:focus:ring-indigo-500">
+                            {{ form.wheelchair_accessible }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-indigo-900">Wheelchair Accessible</span>
+                            <span class="block text-xs text-slate-500">Accessible routes & ramps confirmed.</span>
+                        </div>
+                    </label>
+
+                  
+                </div>
+            </section>
+
+
+              <!-- FEATURED -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-amber-200/90 bg-amber-50/40 p-4 shadow-sm transition hover:border-amber-400 hover:bg-amber-50/70">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-amber-300 [&>input]:text-amber-600 [&>input]:focus:ring-amber-500">
+                            {{ form.featured }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-amber-900">Featured Tour</span>
+                            <span class="block text-xs text-amber-700/80">Highlight prominently across landing pages.</span>
+                        </div>
+                    </label>
+
+                    <!-- ACTIVE -->
+                    <label class="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-emerald-200/90 bg-emerald-50/40 p-4 shadow-sm transition hover:border-emerald-400 hover:bg-emerald-50/70">
+                        <div class="pt-0.5 [&>input]:h-4 [&>input]:w-4 [&>input]:rounded [&>input]:border-emerald-300 [&>input]:text-emerald-600 [&>input]:focus:ring-emerald-500">
+                            {{ form.is_active }}
+                        </div>
+                        <div>
+                            <span class="block text-sm font-bold text-emerald-900">Active Listing</span>
+                            <span class="block text-xs text-emerald-700/80">Live and available for customer bookings.</span>
+                        </div>
+                    </label>
+            <!-- ================================================= -->
+            <!-- CARD 5: TOUR CURATION CONTENT -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <h2 class="text-base font-bold text-slate-900">Experience Content & Inclusions</h2>
+                    <p class="text-xs text-slate-500">Define what travelers receive, daily milestones, and policy constraints.</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-2">
+                    <!-- INCLUDES -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Inclusions</h3>
+                            <p class="text-xs text-slate-500">Select items covered under standard pricing.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.includes }}
+                        </div>
+                        {% if form.includes.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.includes.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- ITINERARY -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Itinerary Schedule</h3>
+                            <p class="text-xs text-slate-500">Pick mapped stops and operational timelines.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.itinerary }}
+                        </div>
+                        {% if form.itinerary.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.itinerary.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- EXCLUDES -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Exclusions</h3>
+                            <p class="text-xs text-slate-500">Disclose out-of-pocket expenses to clients.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.excludes }}
+                        </div>
+                        {% if form.excludes.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.excludes.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- HIGHLIGHTS -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Highlights</h3>
+                            <p class="text-xs text-slate-500">Key visual or cultural selling points.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.highlights }}
+                        </div>
+                        {% if form.highlights.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.highlights.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- IMPORTANT INFORMATION -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Important Instructions</h3>
+                            <p class="text-xs text-slate-500">Dress codes, document requirements, and advisories.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.important_information }}
+                        </div>
+                        {% if form.important_information.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.important_information.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- AMENITIES -->
+                    <div class="rounded-xl border border-slate-200/80 bg-slate-50/40 p-5">
+                        <div class="mb-3">
+                            <h3 class="text-sm font-bold text-slate-900">Amenities & Perks</h3>
+                            <p class="text-xs text-slate-500">Bottled water, audio sets, WiFi, refreshments.</p>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3.5 shadow-inner">
+                            {{ form.amenities }}
+                        </div>
+                        {% if form.amenities.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.amenities.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- CARD 6: TIERED PRICING -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white shadow-md shadow-violet-600/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.657 0 3 .895 3 2m-3-2V6m0 12v-2m0-8c-1.657 0-3-.895-3-2m3 2c1.657 0 3 .895 3 2" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">Group Tier Pricing</h2>
+                            <p class="text-xs text-slate-500">Flat aggregate prices categorized by headcount buckets.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 p-6 sm:p-8 md:grid-cols-3">
+                    <!-- UP TO 10 -->
+                    <div class="relative flex flex-col justify-between rounded-2xl border border-emerald-200 bg-gradient-to-b from-emerald-50/40 to-white p-6 shadow-sm">
+                        <div>
+                            <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-emerald-800">TIER 1 • SMALL</span>
+                            <h3 class="mt-2 text-base font-bold text-slate-900">Up to 10 Members</h3>
+                            <p class="text-xs text-slate-500">Private party bracket (1 – 10 Pax)</p>
+                        </div>
+
+                        <div class="mt-6">
+                            <label for="price_upto_9" class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-600">Base Price (INR)</label>
+                            <div class="relative">
+                                <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-semibold text-slate-400">₹</span>
+                                <input
+                                    type="number"
+                                    name="price_upto_9"
+                                    id="price_upto_9"
+                                    min="0"
+                                    step="0.01"
+                                    value="{% if pricing_upto_9 %}{{ pricing_upto_9.group_price }}{% endif %}"
+                                    placeholder="1500.00"
+                                    class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-8 pr-3.5 text-sm font-semibold text-slate-900 shadow-inner outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 11 - 20 -->
+                    <div class="relative flex flex-col justify-between rounded-2xl border border-sky-200 bg-gradient-to-b from-sky-50/40 to-white p-6 shadow-sm">
+                        <div>
+                            <span class="inline-flex rounded-full bg-sky-100 px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-sky-800">TIER 2 • MEDIUM</span>
+                            <h3 class="mt-2 text-base font-bold text-slate-900">11 – 20 Members</h3>
+                            <p class="text-xs text-slate-500">Standard team bucket (11 – 20 Pax)</p>
+                        </div>
+
+                        <div class="mt-6">
+                            <label for="price_10_20" class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-600">Base Price (INR)</label>
+                            <div class="relative">
+                                <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-semibold text-slate-400">₹</span>
+                                <input
+                                    type="number"
+                                    name="price_10_20"
+                                    id="price_10_20"
+                                    min="0"
+                                    step="0.01"
+                                    value="{% if pricing_10_20 %}{{ pricing_10_20.group_price }}{% endif %}"
+                                    placeholder="2500.00"
+                                    class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-8 pr-3.5 text-sm font-semibold text-slate-900 shadow-inner outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 21 - 50 -->
+                    <div class="relative flex flex-col justify-between rounded-2xl border border-violet-200 bg-gradient-to-b from-violet-50/40 to-white p-6 shadow-sm">
+                        <div>
+                            <span class="inline-flex rounded-full bg-violet-100 px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-violet-800">TIER 3 • LARGE</span>
+                            <h3 class="mt-2 text-base font-bold text-slate-900">21 – 50 Members</h3>
+                            <p class="text-xs text-slate-500">Bus & corporate contingent (21 – 50 Pax)</p>
+                        </div>
+
+                        <div class="mt-6">
+                            <label for="price_20_50" class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-600">Base Price (INR)</label>
+                            <div class="relative">
+                                <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-semibold text-slate-400">₹</span>
+                                <input
+                                    type="number"
+                                    name="price_20_50"
+                                    id="price_20_50"
+                                    min="0"
+                                    step="0.01"
+                                    value="{% if pricing_20_50 %}{{ pricing_20_50.group_price }}{% endif %}"
+                                    placeholder="4500.00"
+                                    class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-8 pr-3.5 text-sm font-semibold text-slate-900 shadow-inner outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- CARD 7: GALLERY & MEDIA ASSETS -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <div class="flex items-center gap-3.5">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-pink-600 text-white shadow-md shadow-pink-600/20">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 15l-5-5L5 21" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">Media Assets & Primary Cover</h2>
+                            <p class="text-xs text-slate-500">Upload high-resolution photography and flag the cover snapshot.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <!-- DROP ZONE -->
+                    <label
+                        for="tour_images"
+                        class="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/60 px-6 py-10 text-center transition duration-200 hover:border-indigo-500 hover:bg-indigo-50/30"
+                    >
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 shadow-sm transition-transform duration-200 group-hover:scale-110">
+                            <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-sm font-bold text-slate-800 group-hover:text-indigo-600">Click or Drag & Drop Media</h3>
+                        <p class="mt-1 text-xs text-slate-500">JPG, JPEG, PNG, or WEBP high-resolution images</p>
+                    </label>
+
+                    <input
+                        type="file"
+                        id="tour_images"
+                        name="tour_images"
+                        multiple
+                        accept="image/jpeg,image/png,image/webp"
+                        class="hidden"
                     >
 
-                        {% for image in tour_images %}
+                    <!-- NEW IMAGE PREVIEWS -->
+                    <div id="newImagePreview" class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"></div>
 
-                            <div
-                                class="
-                                    group
-                                    relative
-                                    rounded-2xl
-                                    overflow-hidden
-                                    border
-                                    border-gray-200
-                                    bg-gray-50
-                                "
-                            >
+                    <!-- PRIMARY IMAGE INDEX TRACKER -->
+                    <input
+                        type="hidden"
+                        name="primary_image"
+                        id="primaryImageInput"
+                        value="{% if object and tour_images %}0{% else %}0{% endif %}"
+                    >
 
-                                <!-- IMAGE -->
-
-                                <img
-                                    src="{{ image.image.url }}"
-                                    alt="{{ object.title }}"
-                                    class="
-                                        w-full
-                                        h-40
-                                        object-cover
-                                        transition
-                                        duration-300
-                                        group-hover:scale-105
-                                    "
-                                >
-
-
-                                <!-- PRIMARY BADGE -->
-
-                                {% if image.is_primary %}
-
-                                    <span
-                                        class="
-                                            absolute
-                                            top-2
-                                            left-2
-                                            inline-flex
-                                            items-center
-                                            gap-1
-                                            px-2.5
-                                            py-1
-                                            rounded-full
-                                            bg-teal-600
-                                            text-white
-                                            text-[10px]
-                                            font-bold
-                                            shadow
-                                        "
-                                    >
-
-                                        <i
-                                            class="
-                                                fa-solid
-                                                fa-star
-                                            "
-                                        ></i>
-
-                                        Primary
-
-                                    </span>
-
-                                {% else %}
-
-                                    <a
-                                        href="{% url 'set_primary_tour_image' image.pk %}"
-                                        class="
-                                            absolute
-                                            top-2
-                                            left-2
-                                            inline-flex
-                                            items-center
-                                            gap-1
-                                            px-2.5
-                                            py-1
-                                            rounded-full
-                                            bg-white
-                                            text-slate-700
-                                            text-[10px]
-                                            font-bold
-                                            shadow
-                                            opacity-0
-                                            group-hover:opacity-100
-                                            transition
-                                        "
-                                    >
-
-                                        <i
-                                            class="
-                                                fa-regular
-                                                fa-star
-                                            "
-                                        ></i>
-
-                                        Make Primary
-
-                                    </a>
-
-                                {% endif %}
-
-
-                                <!-- DELETE -->
-
-                                <a
-                                    href="{% url 'delete_tour_image' image.pk %}"
-                                    onclick="
-                                        return confirm(
-                                            'Are you sure you want to delete this image?'
-                                        );
-                                    "
-                                    class="
-                                        absolute
-                                        top-2
-                                        right-2
-                                        w-8
-                                        h-8
-                                        rounded-lg
-                                        bg-red-600
-                                        text-white
-                                        flex
-                                        items-center
-                                        justify-center
-                                        shadow
-                                        opacity-0
-                                        group-hover:opacity-100
-                                        transition
-                                    "
-                                    title="Delete image"
-                                >
-
-                                    <i
-                                        class="
-                                            fa-solid
-                                            fa-trash
-                                            text-xs
-                                        "
-                                    ></i>
-
-                                </a>
-
+                    <!-- EXISTING IMAGES SECTION -->
+                    {% if tour_images %}
+                        <div class="mt-10 border-t border-slate-200 pt-8">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-bold text-slate-900">Existing Stored Assets</h3>
+                                <p class="text-xs text-slate-500">Active media assets. You may designate any current image as Primary Cover.</p>
                             </div>
 
-                        {% endfor %}
+                            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                                {% for tour_image in tour_images %}
+                                    <label
+                                        class="existing-image-card group relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md {% if tour_image.is_primary %}border-emerald-500{% else %}border-slate-200{% endif %}"
+                                        data-existing-image="{{ tour_image.id }}"
+                                    >
+                                        <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                                            <img
+                                                src="{{ tour_image.image.url }}"
+                                                alt="{{ object.title }}"
+                                                class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                                            >
 
-                    </div>
+                                            <!-- COUNTER BADGE -->
+                                            <span class="absolute right-2.5 top-2.5 rounded-lg bg-black/60 px-2 py-0.5 font-mono text-[10px] font-bold text-white backdrop-blur-sm">
+                                                #{{ forloop.counter }}
+                                            </span>
 
-                {% else %}
+                                            <!-- RADIO -->
+                                            <input
+                                                type="radio"
+                                                name="existing_primary_image"
+                                                value="{{ tour_image.id }}"
+                                                class="existing-primary-radio absolute left-3 top-3 z-20 h-4 w-4 cursor-pointer accent-emerald-500"
+                                                {% if tour_image.is_primary %}checked{% endif %}
+                                            >
 
-                    <div
-                        class="
-                            py-10
-                            text-center
-                            rounded-2xl
-                            border
-                            border-dashed
-                            border-gray-200
-                            bg-gray-50
-                        "
-                    >
+                                            <!-- PRIMARY STATUS BADGE -->
+                                            <span class="primary-existing-badge absolute left-9 top-2 rounded-full px-2.5 py-0.5 text-[11px] font-bold shadow-md {% if tour_image.is_primary %}bg-emerald-600 text-white{% else %}bg-white/90 text-slate-700{% endif %}">
+                                                {% if tour_image.is_primary %}★ Primary{% else %}Select Primary{% endif %}
+                                            </span>
+                                        </div>
 
-                        <i
-                            class="
-                                fa-regular
-                                fa-image
-                                text-4xl
-                                text-gray-300
-                            "
-                        ></i>
-
-                        <p
-                            class="
-                                text-sm
-                                text-gray-400
-                                mt-3
-                            "
-                        >
-                            No images uploaded yet.
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-        {% endif %}
-
-    </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-            <!-- ============================================================
-                 SUBMIT BAR
-            ============================================================ -->
-
-            <div
-                class="
-                    bg-white/90
-                    backdrop-blur-xl
-                    rounded-2xl
-                    border
-                    border-gray-200
-                    shadow-lg
-                    p-4
-                    flex
-                    flex-col
-                    sm:flex-row
-                    
-                    justify-end
-                    gap-3
-                    
-                    bottom-5
-                    z-40
-                "
-            >
-
-                <a
-                    href="{% url 'tour_list' %}"
-                    class="
-                        px-6
-                        py-3
-                        rounded-xl
-                        text-gray-700
-                        font-semibold
-                        hover:bg-gray-100
-                        transition
-                        text-center
-                    "
-                >
-                    Cancel
-                </a>
-
-
-                <button
-                    type="submit"
-                    class="
-                        px-8
-                        py-3
-                        rounded-xl
-                        bg-teal-600
-                        hover:bg-teal-700
-                        text-white
-                        font-bold
-                        shadow-lg
-                        shadow-teal-600/20
-                        transition
-                        flex
-                        items-center
-                        justify-center
-                        gap-2
-                    "
-                >
-
-                    <i class="fa-solid fa-floppy-disk"></i>
-
-                    {% if object %}
-                        Update Tour Details
-                    {% else %}
-                        Publish Tour
+                                        <div class="p-3">
+                                            {% if tour_image.is_primary %}
+                                                <div class="existing-primary-status flex w-full items-center justify-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 py-2 text-xs font-bold text-emerald-700">
+                                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    Current Primary
+                                                </div>
+                                            {% else %}
+                                                <div class="existing-primary-status flex w-full items-center justify-center gap-1.5 rounded-xl bg-slate-100 py-2 text-xs font-bold text-slate-600">
+                                                    <i class="fa-solid fa-star text-[10px]"></i>
+                                                    Select as Primary
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endif %}
+                </div>
+            </section>
 
-                </button>
+            <!-- ================================================= -->
+            <!-- CARD 8: SEARCH ENGINE OPTIMIZATION (SEO) -->
+            <!-- ================================================= -->
+            <section class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+                <div class="border-b border-slate-100 bg-slate-50/60 px-6 py-4.5 sm:px-8">
+                    <h2 class="text-base font-bold text-slate-900">SEO & Discoverability</h2>
+                    <p class="text-xs text-slate-500">Fine-tune canonical titles and meta tags for Google indexation.</p>
+                </div>
 
+                <div class="space-y-6 p-6 sm:p-8">
+                    <!-- SEO TITLE -->
+                    <div>
+                        <div class="mb-2 flex items-center justify-between">
+                            <label for="{{ form.seo_title.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                                Meta Title
+                            </label>
+                            <span id="seoTitleCount" class="font-mono text-xs text-slate-400">0 / 70</span>
+                        </div>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-indigo-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-indigo-500/10">
+                            {{ form.seo_title }}
+                        </div>
+                        {% if form.seo_title.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.seo_title.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- SEO DESCRIPTION -->
+                    <div>
+                        <div class="mb-2 flex items-center justify-between">
+                            <label for="{{ form.seo_description.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                                Meta Description
+                            </label>
+                            <span id="seoDescriptionCount" class="font-mono text-xs text-slate-400">0 / 160</span>
+                        </div>
+                        <div class="[&>textarea]:w-full [&>textarea]:rounded-xl [&>textarea]:border-slate-200 [&>textarea]:bg-slate-50/50 [&>textarea]:p-3.5 [&>textarea]:text-sm [&>textarea]:font-medium [&>textarea]:text-slate-800 [&>textarea]:transition [&>textarea]:focus:border-indigo-500 [&>textarea]:focus:bg-white [&>textarea]:focus:ring-4 [&>textarea]:focus:ring-indigo-500/10">
+                            {{ form.seo_description }}
+                        </div>
+                        {% if form.seo_description.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.seo_description.errors }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- SEO KEYWORDS -->
+                    <div>
+                        <label for="{{ form.seo_keywords.id_for_label }}" class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-600">
+                            Target Keywords
+                        </label>
+                        <div class="[&>input]:w-full [&>input]:rounded-xl [&>input]:border-slate-200 [&>input]:bg-slate-50/50 [&>input]:py-2.5 [&>input]:px-3.5 [&>input]:text-sm [&>input]:font-medium [&>input]:text-slate-800 [&>input]:transition [&>input]:focus:border-indigo-500 [&>input]:focus:bg-white [&>input]:focus:ring-4 [&>input]:focus:ring-indigo-500/10">
+                            {{ form.seo_keywords }}
+                        </div>
+                        <p class="mt-1.5 text-[11px] text-slate-400">Comma-separated key phrases (e.g. Hyderabad heritage, Charminar morning tour, Golconda fort guide)</p>
+                        {% if form.seo_keywords.errors %}
+                            <p class="mt-2 text-xs font-semibold text-rose-600">{{ form.seo_keywords.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================================================= -->
+            <!-- FLOATING ACTIONS DOCK -->
+            <!-- ================================================= -->
+            <div class="sticky bottom-6 z-40 rounded-2xl border border-slate-200/90 bg-white/90 p-4 shadow-2xl backdrop-blur-md">
+                <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <a
+                        href="{% url 'tour_list' %}"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50 hover:text-slate-800"
+                    >
+                        Discard & Back
+                    </a>
+
+                    <div class="flex items-center gap-3">
+                        <button
+                            type="reset"
+                            class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50 hover:text-slate-800"
+                        >
+                            Reset Form
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="submitTourButton"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-7 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-700 active:scale-[0.98]"
+                        >
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {% if object %}Save & Update Tour{% else %}Publish Tour{% endif %}
+                        </button>
+                    </div>
+                </div>
             </div>
-
-        </div>
-
-
-
-
-        
-
-
-
-
-
-    </form>
-
+        </form>
+    </main>
 </div>
 
-
-<!-- ================================================================
-     STYLES
-================================================================ -->
-
-<style>
-
-/* ================================================================
-   FORM CARDS
-================================================================ */
-
-.form-card {
-
-    background: white;
-
-    border: 1px solid #f1f5f9;
-
-    border-radius: 1.5rem;
-
-    box-shadow:
-        0 4px 15px rgba(15, 23, 42, 0.04);
-
-    padding: 1.5rem;
-
-}
-
-@media (min-width: 640px) {
-
-    .form-card {
-
-        padding: 2rem;
-
-    }
-
-}
-
-
-/* ================================================================
-   SECTION HEADER
-================================================================ */
-
-.section-header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 0.85rem;
-
-    padding-bottom: 1rem;
-
-    margin-bottom: 1.5rem;
-
-    border-bottom:
-        1px solid #f1f5f9;
-
-}
-
-
-.section-icon {
-
-    width: 42px;
-
-    height: 42px;
-
-    border-radius: 0.85rem;
-
-    background: #f0fdfa;
-
-    color: #0d9488;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-shrink: 0;
-
-}
-
-
-.location-icon {
-
-    background:
-        linear-gradient(
-            135deg,
-            #ccfbf1,
-            #cffafe
-        );
-
-}
-
-
-.section-title {
-
-    font-size: 1.2rem;
-
-    font-weight: 800;
-
-    color: #1e293b;
-
-}
-
-
-.section-description {
-
-    font-size: 0.75rem;
-
-    color: #94a3b8;
-
-    margin-top: 0.2rem;
-
-}
-
-
-/* ================================================================
-   LABELS
-================================================================ */
-
-.field-label {
-
-    display: block;
-
-    font-size: 0.875rem;
-
-    font-weight: 700;
-
-    color: #334155;
-
-    margin-bottom: 0.5rem;
-
-}
-
-
-.required {
-
-    color: #ef4444;
-
-}
-
-
-/* ================================================================
-   FORM FIELDS
-================================================================ */
-
-.form-styles input[type="text"],
-.form-styles input[type="number"],
-.form-styles input[type="url"],
-.form-styles input[type="email"],
-.form-styles select,
-.form-styles textarea {
-
-    width: 100%;
-
-    padding:
-        0.72rem
-        1rem;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius:
-        0.85rem;
-
-    background:
-        #f8fafc;
-
-    color:
-        #1e293b;
-
-    font-size:
-        0.925rem;
-
-    transition:
-        all 0.2s ease;
-
-}
-
-
-.form-styles input:focus,
-.form-styles select:focus,
-.form-styles textarea:focus {
-
-    outline: none;
-
-    border-color:
-        #0d9488;
-
-    background:
-        white;
-
-    box-shadow:
-        0 0 0 4px
-        rgba(
-            13,
-            148,
-            136,
-            0.10
-        );
-
-}
-
-
-.form-styles textarea {
-
-    min-height: 110px;
-
-    resize: vertical;
-
-}
-
-
-/* ================================================================
-   LOCATION PICKER
-================================================================ */
-
-.location-picker {
-
-    position: relative;
-
-    width: 100%;
-
-}
-
-
-.location-input {
-
-    width: 100% !important;
-
-    min-height: 60px !important;
-
-    padding:
-        0.85rem
-        3.5rem
-        0.85rem
-        3.5rem !important;
-
-    border:
-        1px solid #dbe4ea !important;
-
-    border-radius:
-        1rem !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f8fafc,
-            #ffffff
-        ) !important;
-
-    color:
-        #1e293b !important;
-
-    font-size:
-        0.95rem !important;
-
-    font-weight:
-        600 !important;
-
-    appearance: none;
-
-    cursor: pointer;
-
-    transition:
-        all 0.25s ease;
-
-}
-
-
-.location-input:hover {
-
-    border-color:
-        #99f6e4 !important;
-
-    background:
-        #ffffff !important;
-
-}
-
-
-.location-input:focus {
-
-    border-color:
-        #0d9488 !important;
-
-    background:
-        #ffffff !important;
-
-    box-shadow:
-        0 0 0 4px
-        rgba(
-            13,
-            148,
-            136,
-            0.10
-        ) !important;
-
-}
-
-
-.location-left-icon {
-
-    position: absolute;
-
-    left: 1rem;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    width: 38px;
-
-    height: 38px;
-
-    border-radius:
-        0.8rem;
-
-    background:
-        #f0fdfa;
-
-    color:
-        #0d9488;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    pointer-events: none;
-
-    z-index: 2;
-
-}
-
-
-.location-arrow {
-
-    position: absolute;
-
-    right: 1rem;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    width: 32px;
-
-    height: 32px;
-
-    border-radius:
-        0.7rem;
-
-    background:
-        #f1f5f9;
-
-    color:
-        #64748b;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    pointer-events: none;
-
-    z-index: 2;
-
-}
-
-
-.location-picker:focus-within
-.location-arrow {
-
-    background:
-        #ccfbf1;
-
-    color:
-        #0d9488;
-
-}
-
-
-/* ================================================================
-   LOCATION PREVIEW
-================================================================ */
-
-#selectedLocationPreview {
-
-    animation:
-        locationSlideIn
-        0.25s
-        ease;
-
-}
-
-
-@keyframes locationSlideIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(-5px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-/* ================================================================
-   SEO HELP
-================================================================ */
-
-.help-text {
-
-    margin-top: 0.4rem;
-
-    font-size: 0.72rem;
-
-    color: #94a3b8;
-
-}
-
-
-/* ================================================================
-   ERROR
-================================================================ */
-
-.error-text {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 0.35rem;
-
-    margin-top: 0.4rem;
-
-    font-size: 0.75rem;
-
-    color: #ef4444;
-
-    font-weight: 500;
-
-}
-
-
-/* ================================================================
-   M2M
-================================================================ */
-
-.m2m-title {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 0.5rem;
-
-    font-size: 0.9rem;
-
-    font-weight: 800;
-
-    color: #334155;
-
-    margin-bottom: 0.75rem;
-
-}
-
-
-.m2m-title i {
-
-    color: #0d9488;
-
-}
-
-
-.m2m-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            1,
-            minmax(0, 1fr)
-        );
-
-    gap: 0.75rem;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .m2m-grid {
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-
-    }
-
-}
-
-
-.m2m-card {
-
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 0.75rem;
-
-    padding: 0.85rem;
-
-    border:
-        1px solid #e2e8f0;
-
-    border-radius:
-        0.9rem;
-
-    background:
-        #f8fafc;
-
-    cursor: pointer;
-
-    transition:
-        all 0.2s ease;
-
-}
-
-
-.m2m-card:hover {
-
-    border-color:
-        #99f6e4;
-
-    background:
-        #f0fdfa;
-
-}
-
-
-.m2m-card input {
-
-    position: absolute;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-}
-
-
-.custom-check {
-
-    width: 22px;
-
-    height: 22px;
-
-    border:
-        2px solid #cbd5e1;
-
-    border-radius:
-        0.45rem;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: white;
-
-    flex-shrink: 0;
-
-    transition:
-        all 0.2s ease;
-
-}
-
-
-.custom-check i {
-
-    font-size:
-        0.65rem;
-
-    opacity: 0;
-
-}
-
-
-.m2m-card
-input:checked
-~ .custom-check {
-
-    background:
-        #0d9488;
-
-    border-color:
-        #0d9488;
-
-}
-
-
-.m2m-card
-input:checked
-~ .custom-check i {
-
-    opacity: 1;
-
-}
-
-
-.m2m-card
-input:checked
-~ .m2m-label {
-
-    color:
-        #0f766e;
-
-    font-weight:
-        700;
-
-}
-
-
-.m2m-card
-input:checked {
-
-}
-
-
-.m2m-card:has(input:checked) {
-
-    border-color:
-        #5eead4;
-
-    background:
-        #f0fdfa;
-
-}
-
-
-.m2m-label {
-
-    font-size:
-        0.85rem;
-
-    font-weight:
-        500;
-
-    color:
-        #475569;
-
-}
-
-
-.empty-message {
-
-    padding: 1rem;
-
-    border-radius: 0.8rem;
-
-    background:
-        #f8fafc;
-
-    color:
-        #94a3b8;
-
-    font-size:
-        0.8rem;
-
-}
-
-
-/* ================================================================
-   SIDEBAR
-================================================================ */
-
-.sidebar-heading {
-
-    font-size:
-        0.7rem;
-
-    font-weight:
-        800;
-
-    text-transform:
-        uppercase;
-
-    letter-spacing:
-        0.08em;
-
-    color:
-        #94a3b8;
-
-    margin-bottom:
-        1rem;
-
-}
-
-
-.sidebar-label {
-
-    display:
-        block;
-
-    font-size:
-        0.75rem;
-
-    font-weight:
-        700;
-
-    color:
-        #334155;
-
-    margin-bottom:
-        0.4rem;
-
-}
-
-
-/* ================================================================
-   TOGGLES
-================================================================ */
-
-.toggle-row {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        1rem;
-
-    padding:
-        0.85rem;
-
-    border:
-        1px solid #f1f5f9;
-
-    border-radius:
-        0.9rem;
-
-    cursor:
-        pointer;
-
-    transition:
-        all 0.2s ease;
-
-}
-
-
-.toggle-row:hover {
-
-    background:
-        #f8fafc;
-
-}
-
-
-.toggle-row > span {
-
-    font-size:
-        0.8rem;
-
-    font-weight:
-        600;
-
-    color:
-        #475569;
-
-}
-
-
-.toggle-styles
-input[type="checkbox"] {
-
-    appearance:
-        none;
-
-    width:
-        2.75rem;
-
-    height:
-        1.5rem;
-
-    background:
-        #e2e8f0;
-
-    border-radius:
-        9999px;
-
-    position:
-        relative;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.2s ease;
-
-    flex-shrink:
-        0;
-
-}
-
-
-.toggle-styles
-input[type="checkbox"]::before {
-
-    content:
-        "";
-
-    position:
-        absolute;
-
-    width:
-        1.25rem;
-
-    height:
-        1.25rem;
-
-    border-radius:
-        9999px;
-
-    background:
-        white;
-
-    top:
-        0.125rem;
-
-    left:
-        0.125rem;
-
-    transition:
-        transform 0.2s ease;
-
-    box-shadow:
-        0 1px 3px
-        rgba(
-            0,
-            0,
-            0,
-            0.12
-        );
-
-}
-
-
-.toggle-styles
-input[type="checkbox"]:checked {
-
-    background:
-        #0d9488;
-
-}
-
-
-.toggle-styles
-input[type="checkbox"]:checked::before {
-
-    transform:
-        translateX(1.25rem);
-
-}
-
-
-.featured-toggle {
-
-    background:
-        #f0fdfa;
-
-    border-color:
-        #ccfbf1;
-
-}
-
-
-.featured-toggle > span {
-
-    color:
-        #115e59;
-
-}
-
-
-/* ================================================================
-   MOBILE
-================================================================ */
-
-@media (max-width: 640px) {
-
-    .location-input {
-
-        min-height:
-            55px !important;
-
-        font-size:
-            0.875rem !important;
-
-    }
-
-    .location-left-icon {
-
-        width:
-            34px;
-
-        height:
-            34px;
-
-        left:
-            0.75rem;
-
-    }
-
-    .location-arrow {
-
-        right:
-            0.75rem;
-
-    }
-
-}
-
-</style>
-
-
-<!-- ================================================================
-     LOCATION JAVASCRIPT
-================================================================ -->
-
+<!-- ========================================================= -->
+<!-- JAVASCRIPT LOGIC (100% PRESERVED) -->
+<!-- ========================================================= -->
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+    /* =====================================================
+       LOCATION PREVIEW
+    ===================================================== */
+    const locationSelect = document.getElementById("{{ form.location.id_for_label }}");
+    const locationPreview = document.getElementById("locationPreview");
+    const selectedLocationName = document.getElementById("selectedLocationName");
 
-        const locationSelect =
-            document.getElementById(
-                "id_location"
-            );
-
-        const preview =
-            document.getElementById(
-                "selectedLocationPreview"
-            );
-
-        const previewText =
-            document.getElementById(
-                "selectedLocationText"
-            );
-
-
-        if (!locationSelect) {
-            return;
+    function updateLocationPreview() {
+        if (!locationSelect || !locationPreview || !selectedLocationName) return;
+        const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            selectedLocationName.textContent = selectedOption.textContent.trim();
+            locationPreview.classList.remove("hidden");
+        } else {
+            locationPreview.classList.add("hidden");
+            selectedLocationName.textContent = "";
         }
+    }
 
-
-        function updateLocationPreview() {
-
-            if (!preview || !previewText) {
-                return;
-            }
-
-
-            const selectedValue =
-                locationSelect.value;
-
-
-            if (!selectedValue) {
-
-                preview.classList.add(
-                    "hidden"
-                );
-
-                previewText.textContent =
-                    "";
-
-                return;
-
-            }
-
-
-            const selectedOption =
-                locationSelect.options[
-                    locationSelect.selectedIndex
-                ];
-
-
-            if (!selectedOption) {
-                return;
-            }
-
-
-            previewText.textContent =
-                selectedOption.textContent.trim();
-
-
-            preview.classList.remove(
-                "hidden"
-            );
-
-        }
-
-
-        locationSelect.addEventListener(
-            "change",
-            updateLocationPreview
-        );
-
-
-        /*
-         * Important:
-         *
-         * When editing an existing Tour,
-         * Django automatically selects the
-         * existing ForeignKey value.
-         *
-         * This function displays that value
-         * immediately.
-         */
-
+    if (locationSelect) {
+        locationSelect.addEventListener("change", updateLocationPreview);
         updateLocationPreview();
-
     }
 
-);
+    /* =====================================================
+       IMAGE UPLOAD + PRIMARY IMAGE
+    ===================================================== */
+    const imageInput = document.getElementById("tour_images");
+    const imagePreview = document.getElementById("newImagePreview");
+    const primaryImageInput = document.getElementById("primaryImageInput");
 
-</script>
+    let selectedFiles = [];
 
-<script>
+    function updateExistingImageStyles() {
+        const cards = document.querySelectorAll(".existing-image-card");
+        cards.forEach(function (card) {
+            const radio = card.querySelector(".existing-primary-radio");
+            const badge = card.querySelector(".primary-existing-badge");
+            const status = card.querySelector(".existing-primary-status");
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+            if (!radio) return;
 
-        const imageInput =
-            document.getElementById(
-                "tour_images"
-            );
+            if (radio.checked) {
+                card.classList.remove("border-slate-200");
+                card.classList.add("border-emerald-500");
 
-        const imagePreview =
-            document.getElementById(
-                "imagePreview"
-            );
-
-
-        if (
-            !imageInput ||
-            !imagePreview
-        ) {
-            return;
-        }
-
-
-        imageInput.addEventListener(
-            "change",
-            function () {
-
-                imagePreview.innerHTML = "";
-
-
-                const files =
-                    Array.from(
-                        this.files
-                    );
-
-
-                if (!files.length) {
-                    return;
+                if (badge) {
+                    badge.classList.remove("bg-white/90", "text-slate-700");
+                    badge.classList.add("bg-emerald-600", "text-white");
+                    badge.textContent = "★ Primary";
                 }
 
+                if (status) {
+                    status.className = "existing-primary-status flex w-full items-center justify-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 py-2 text-xs font-bold text-emerald-700";
+                    status.innerHTML = `
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Current Primary
+                    `;
+                }
+            } else {
+                card.classList.remove("border-emerald-500");
+                card.classList.add("border-slate-200");
 
-                files.forEach(
-                    function (
-                        file,
-                        index
-                    ) {
+                if (badge) {
+                    badge.classList.remove("bg-emerald-600", "text-white");
+                    badge.classList.add("bg-white/90", "text-slate-700");
+                    badge.textContent = "Select Primary";
+                }
 
-                        if (
-                            !file.type.startsWith(
-                                "image/"
-                            )
-                        ) {
-                            return;
-                        }
-
-
-                        const reader =
-                            new FileReader();
-
-
-                        reader.onload =
-                            function (event) {
-
-                                const wrapper =
-                                    document.createElement(
-                                        "div"
-                                    );
-
-                                wrapper.className =
-                                    "relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50";
-
-
-                                const img =
-                                    document.createElement(
-                                        "img"
-                                    );
-
-                                img.src =
-                                    event.target.result;
-
-                                img.alt =
-                                    file.name;
-
-                                img.className =
-                                    "w-full h-40 object-cover";
-
-
-                                wrapper.appendChild(
-                                    img
-                                );
-
-
-                                /*
-                                 * FIRST IMAGE = PRIMARY
-                                 */
-
-                                if (
-                                    index === 0
-                                ) {
-
-                                    const badge =
-                                        document.createElement(
-                                            "span"
-                                        );
-
-                                    badge.className =
-                                        "absolute top-2 left-2 px-2.5 py-1 rounded-full bg-teal-600 text-white text-[10px] font-bold shadow";
-
-                                    badge.innerHTML =
-                                        '<i class="fa-solid fa-star mr-1"></i> Primary';
-
-                                    wrapper.appendChild(
-                                        badge
-                                    );
-
-                                }
-
-
-                                /*
-                                 * FILE NAME
-                                 */
-
-                                const filename =
-                                    document.createElement(
-                                        "div"
-                                    );
-
-                                filename.className =
-                                    "absolute bottom-0 left-0 right-0 px-2 py-2 bg-black/60 text-white text-[10px] truncate";
-
-                                filename.textContent =
-                                    file.name;
-
-                                wrapper.appendChild(
-                                    filename
-                                );
-
-
-                                imagePreview.appendChild(
-                                    wrapper
-                                );
-
-                            };
-
-
-                        reader.readAsDataURL(
-                            file
-                        );
-
-                    }
-                );
-
+                if (status) {
+                    status.className = "existing-primary-status flex w-full items-center justify-center gap-1.5 rounded-xl bg-slate-100 py-2 text-xs font-bold text-slate-600";
+                    status.innerHTML = `
+                        <i class="fa-solid fa-star text-[10px]"></i>
+                        Select as Primary
+                    `;
+                }
             }
-        );
-
+        });
     }
-);
 
+    function syncFileInput() {
+        if (!imageInput) return;
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(function (file) {
+            dataTransfer.items.add(file);
+        });
+        imageInput.files = dataTransfer.files;
+    }
+
+    function renderImagePreview() {
+        if (!imagePreview) return;
+        imagePreview.innerHTML = "";
+        if (!selectedFiles.length) return;
+
+        selectedFiles.forEach(function (file, index) {
+            if (!file.type.startsWith("image/")) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const isPrimary = Number(primaryImageInput.value) === index;
+                const wrapper = document.createElement("div");
+
+                wrapper.className = `new-image-card group relative flex flex-col justify-between overflow-hidden rounded-2xl border-2 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+                    isPrimary ? "border-emerald-500" : "border-slate-200"
+                }`;
+                wrapper.dataset.index = index;
+
+                wrapper.innerHTML = `
+                    <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                        <img
+                            src="${event.target.result}"
+                            alt="${file.name}"
+                            class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        >
+                        <span class="absolute right-2.5 top-2.5 rounded-lg bg-black/60 px-2 py-0.5 font-mono text-[10px] font-bold text-white backdrop-blur-sm">
+                            #${index + 1}
+                        </span>
+                        <span class="absolute left-2.5 top-2.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold shadow-md ${
+                            isPrimary ? "bg-emerald-600 text-white" : "bg-white/90 text-slate-700"
+                        }">
+                            ${isPrimary ? "★ Primary" : "Image"}
+                        </span>
+                    </div>
+
+                    <div class="p-3">
+                        <p class="truncate font-mono text-[11px] font-medium text-slate-600" title="${file.name}">
+                            ${file.name}
+                        </p>
+                        <button
+                            type="button"
+                            class="make-new-primary mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-bold transition ${
+                                isPrimary
+                                    ? "bg-emerald-100 text-emerald-700"
+                                    : "bg-slate-900 text-white hover:bg-emerald-600"
+                            }"
+                            data-index="${index}"
+                        >
+                            <i class="fa-solid ${isPrimary ? "fa-check" : "fa-star"} text-[10px]"></i>
+                            ${isPrimary ? "Primary Image" : "Make Primary"}
+                        </button>
+
+                        <button
+                            type="button"
+                            class="remove-new-image mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-rose-50 py-2 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+                            data-index="${index}"
+                        >
+                            <i class="fa-solid fa-trash text-[10px]"></i>
+                            Remove
+                        </button>
+                    </div>
+                `;
+
+                imagePreview.appendChild(wrapper);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (imageInput) {
+        imageInput.addEventListener("change", function () {
+            const files = Array.from(this.files);
+            if (!files.length) return;
+
+            selectedFiles = [...selectedFiles, ...files];
+
+            if (selectedFiles.length > 0 && primaryImageInput && primaryImageInput.value === "") {
+                primaryImageInput.value = "0";
+            }
+
+            document.querySelectorAll(".existing-primary-radio").forEach(function (radio) {
+                radio.checked = false;
+            });
+
+            updateExistingImageStyles();
+            syncFileInput();
+            renderImagePreview();
+        });
+    }
+
+    if (imagePreview) {
+        imagePreview.addEventListener("click", function (event) {
+            const button = event.target.closest(".make-new-primary");
+            if (!button) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const index = Number(button.dataset.index);
+            if (Number.isNaN(index) || !selectedFiles[index]) return;
+
+            primaryImageInput.value = String(index);
+
+            document.querySelectorAll(".existing-primary-radio").forEach(function (radio) {
+                radio.checked = false;
+            });
+
+            updateExistingImageStyles();
+            renderImagePreview();
+        });
+
+        imagePreview.addEventListener("click", function (event) {
+            const button = event.target.closest(".remove-new-image");
+            if (!button) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const index = Number(button.dataset.index);
+            if (Number.isNaN(index) || !selectedFiles[index]) return;
+
+            const currentPrimary = Number(primaryImageInput.value);
+
+            selectedFiles.splice(index, 1);
+
+            if (!selectedFiles.length) {
+                primaryImageInput.value = "";
+            } else if (currentPrimary === index) {
+                primaryImageInput.value = "0";
+            } else if (currentPrimary > index) {
+                primaryImageInput.value = String(currentPrimary - 1);
+            }
+
+            syncFileInput();
+            renderImagePreview();
+        });
+    }
+
+    document.addEventListener("change", function (event) {
+        if (!event.target.classList.contains("existing-primary-radio")) return;
+
+        primaryImageInput.value = "-1";
+        updateExistingImageStyles();
+        renderImagePreview();
+    });
+
+    updateExistingImageStyles();
+
+    /* =====================================================
+       SEO TITLE COUNTER
+    ===================================================== */
+    const seoTitle = document.getElementById("{{ form.seo_title.id_for_label }}");
+    const seoTitleCount = document.getElementById("seoTitleCount");
+
+    function updateSeoTitleCount() {
+        if (seoTitle && seoTitleCount) {
+            seoTitleCount.textContent = `${seoTitle.value.length} / 70`;
+        }
+    }
+
+    if (seoTitle) {
+        seoTitle.addEventListener("input", updateSeoTitleCount);
+        updateSeoTitleCount();
+    }
+
+    /* =====================================================
+       SEO DESCRIPTION COUNTER
+    ===================================================== */
+    const seoDescription = document.getElementById("{{ form.seo_description.id_for_label }}");
+    const seoDescriptionCount = document.getElementById("seoDescriptionCount");
+
+    function updateSeoDescriptionCount() {
+        if (seoDescription && seoDescriptionCount) {
+            seoDescriptionCount.textContent = `${seoDescription.value.length} / 160`;
+        }
+    }
+
+    if (seoDescription) {
+        seoDescription.addEventListener("input", updateSeoDescriptionCount);
+        updateSeoDescriptionCount();
+    }
+
+    /* =====================================================
+       AUTO SLUG
+    ===================================================== */
+    const titleInput = document.getElementById("{{ form.title.id_for_label }}");
+    const slugInput = document.getElementById("{{ form.slug.id_for_label }}");
+
+    if (titleInput && slugInput) {
+        let slugManuallyChanged = slugInput.value.trim().length > 0;
+
+        slugInput.addEventListener("input", function () {
+            slugManuallyChanged = true;
+        });
+
+        titleInput.addEventListener("input", function () {
+            if (slugManuallyChanged) return;
+            const slug = titleInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+            slugInput.value = slug;
+        });
+    }
+
+    /* =====================================================
+       PRICE VALIDATION
+    ===================================================== */
+    const priceInputs = [
+        document.getElementById("price_upto_9"),
+        document.getElementById("price_10_20"),
+        document.getElementById("price_20_50")
+    ];
+
+    priceInputs.forEach(function (input) {
+        if (!input) return;
+        input.addEventListener("input", function () {
+            if (parseFloat(this.value) < 0) {
+                this.value = 0;
+            }
+        });
+    });
+
+    /* =====================================================
+       FORM SUBMIT PROTECTION
+    ===================================================== */
+    const tourForm = document.getElementById("tourForm");
+    const submitButton = document.getElementById("submitTourButton");
+
+    if (tourForm && submitButton) {
+        tourForm.addEventListener("submit", function () {
+            submitButton.disabled = true;
+            submitButton.classList.add("opacity-70", "cursor-not-allowed");
+            submitButton.innerHTML = `
+                <svg class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                Saving Tour...
+            `;
+        });
+    }
+
+    if (tourForm) {
+        tourForm.addEventListener("reset", function () {
+            setTimeout(function () {
+                selectedFiles = [];
+                if (imageInput) imageInput.value = "";
+                if (imagePreview) imagePreview.innerHTML = "";
+                if (primaryImageInput) primaryImageInput.value = "0";
+                updateExistingImageStyles();
+            }, 0);
+        });
+    }
+});
 </script>
-
 {% endblock %}

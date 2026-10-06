@@ -58,7 +58,8 @@ def new_tour_created(sender, instance, created, **kwargs):
     site_url = get_site_url()
 
     if slug:
-        tour_url = f"{site_url}/tours/{slug}/"
+        # tour_url = f"{site_url}/tours/{slug}/"
+        tour_url = f"{site_url}/tour-details/{slug}/"
     else:
         tour_url = f"{site_url}/tours/"
 

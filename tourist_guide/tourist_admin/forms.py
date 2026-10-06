@@ -4,6 +4,7 @@ from tourist.models import (
     TourHighlight,
     TourInclude,
     TourExclude,
+    Itinerary,
     ImportantInformation,
     Amenity,
     Tour
@@ -25,6 +26,12 @@ class TourHighlightForm(forms.ModelForm):
 class TourIncludeForm(forms.ModelForm):
     class Meta:
         model = TourInclude
+        fields = "__all__"
+
+
+class TourItineraryForm(forms.ModelForm):
+    class Meta:
+        model = Itinerary
         fields = "__all__"
 
 
@@ -476,6 +483,7 @@ from tourist.models import (
     TourCategory,
     TourInclude,
     TourExclude,
+    Itinerary,
     TourHighlight,
     ImportantInformation,
     Amenity,
@@ -488,6 +496,274 @@ from user.models import Location
 # TOUR FORM
 # ============================================================
 
+# class TourForm(forms.ModelForm):
+
+#     class Meta:
+
+#         model = Tour
+
+#         fields = [
+#             "category",
+#             "title",
+#             "slug",
+
+#             "short_description",
+#             "full_description",
+
+#             "location",
+#             "address",
+#             "meeting_point",
+
+#             "duration",
+#             "language",
+#             "tour_type",
+
+#             "max_people",
+#             "min_age",
+
+#             "free_cancellation",
+#             "instant_confirmation",
+#             "pickup_available",
+#             "wheelchair_accessible",
+
+#             "featured",
+#             "slot_position",
+
+#             "includes",
+#             "excludes",
+#             "highlights",
+#             "important_information",
+#             "amenities",
+
+#             "is_active",
+
+#             "seo_title",
+#             "seo_description",
+#             "seo_keywords",
+#         ]
+
+#         widgets = {
+
+#             # ------------------------------------------------
+#             # LOCATION
+#             # ------------------------------------------------
+
+#             "location": forms.Select(
+#                 attrs={
+#                     "class": "location-input",
+#                     "data-placeholder":
+#                         "Choose a tour location",
+#                 }
+#             ),
+
+#             # ------------------------------------------------
+#             # TEXT AREAS
+#             # ------------------------------------------------
+
+#             "short_description": forms.Textarea(
+#                 attrs={
+#                     "rows": 4,
+#                     "placeholder":
+#                         "Write a short description...",
+#                 }
+#             ),
+
+#             "full_description": forms.Textarea(
+#                 attrs={
+#                     "rows": 7,
+#                     "placeholder":
+#                         "Write the complete tour description...",
+#                 }
+#             ),
+
+#             "address": forms.Textarea(
+#                 attrs={
+#                     "rows": 3,
+#                     "placeholder":
+#                         "Enter the complete tour address...",
+#                 }
+#             ),
+
+#             "meeting_point": forms.Textarea(
+#                 attrs={
+#                     "rows": 3,
+#                     "placeholder":
+#                         "Example: Main entrance of Charminar...",
+#                 }
+#             ),
+
+#             # ------------------------------------------------
+#             # MANY TO MANY
+#             # ------------------------------------------------
+
+#             "includes":
+#                 forms.CheckboxSelectMultiple(),
+
+#             "excludes":
+#                 forms.CheckboxSelectMultiple(),
+
+#             "highlights":
+#                 forms.CheckboxSelectMultiple(),
+
+#             "important_information":
+#                 forms.CheckboxSelectMultiple(),
+
+#             "amenities":
+#                 forms.CheckboxSelectMultiple(),
+#         }
+
+#     # ========================================================
+#     # INIT
+#     # ========================================================
+
+#     def __init__(
+#         self,
+#         *args,
+#         **kwargs
+#     ):
+
+#         super().__init__(
+#             *args,
+#             **kwargs
+#         )
+
+#         # ----------------------------------------------------
+#         # ACTIVE LOCATIONS
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "location"
+#         ].queryset = (
+#             Location.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "state",
+#                 "district",
+#                 "city",
+#                 "architecture",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # ACTIVE CATEGORIES
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "category"
+#         ].queryset = (
+#             TourCategory.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "name",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # INCLUDES
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "includes"
+#         ].queryset = (
+#             TourInclude.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "title",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # EXCLUDES
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "excludes"
+#         ].queryset = (
+#             TourExclude.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "title",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # HIGHLIGHTS
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "highlights"
+#         ].queryset = (
+#             TourHighlight.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "title",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # IMPORTANT INFORMATION
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "important_information"
+#         ].queryset = (
+#             ImportantInformation.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "title",
+#             )
+#         )
+
+#         # ----------------------------------------------------
+#         # AMENITIES
+#         # ----------------------------------------------------
+
+#         self.fields[
+#             "amenities"
+#         ].queryset = (
+#             Amenity.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .order_by(
+#                 "slot_position",
+#                 "name",
+#             )
+#         )
+
+
+
+from django import forms
+
+from tourist.models import (
+    Tour,
+    Location,
+    TourCategory,
+    TourInclude,
+    TourExclude,
+    TourHighlight,
+    ImportantInformation,
+    Amenity,
+)
+
+
 class TourForm(forms.ModelForm):
 
     class Meta:
@@ -496,6 +772,7 @@ class TourForm(forms.ModelForm):
 
         fields = [
             "category",
+
             "title",
             "slug",
 
@@ -503,6 +780,7 @@ class TourForm(forms.ModelForm):
             "full_description",
 
             "location",
+
             "address",
             "meeting_point",
 
@@ -522,6 +800,8 @@ class TourForm(forms.ModelForm):
             "slot_position",
 
             "includes",
+            
+            "itinerary",
             "excludes",
             "highlights",
             "important_information",
@@ -536,209 +816,503 @@ class TourForm(forms.ModelForm):
 
         widgets = {
 
-            # ------------------------------------------------
-            # LOCATION
-            # ------------------------------------------------
+            # =================================================
+            # CATEGORY
+            # =================================================
 
-            "location": forms.Select(
+            "category": forms.Select(
                 attrs={
-                    "class": "location-input",
-                    "data-placeholder":
-                        "Choose a tour location",
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
                 }
             ),
 
-            # ------------------------------------------------
-            # TEXT AREAS
-            # ------------------------------------------------
+            # =================================================
+            # TITLE
+            # =================================================
+
+            "title": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "Example: Hyderabad Heritage Tour"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SLUG
+            # =================================================
+
+            "slug": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "hyderabad-heritage-tour"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SHORT DESCRIPTION
+            # =================================================
 
             "short_description": forms.Textarea(
                 attrs={
                     "rows": 4,
-                    "placeholder":
-                        "Write a short description...",
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "Write a short description of the tour..."
+                    ),
                 }
             ),
 
+            # =================================================
+            # FULL DESCRIPTION
+            # =================================================
+
             "full_description": forms.Textarea(
                 attrs={
-                    "rows": 7,
-                    "placeholder":
-                        "Write the complete tour description...",
+                    "rows": 8,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "Write the complete tour description..."
+                    ),
                 }
             ),
+
+            # =================================================
+            # LOCATION
+            # =================================================
+
+            "location": forms.Select(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # ADDRESS
+            # =================================================
 
             "address": forms.Textarea(
                 attrs={
                     "rows": 3,
-                    "placeholder":
-                        "Enter the complete tour address...",
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "Enter the complete tour address..."
+                    ),
                 }
             ),
+
+            # =================================================
+            # MEETING POINT
+            # =================================================
 
             "meeting_point": forms.Textarea(
                 attrs={
                     "rows": 3,
-                    "placeholder":
-                        "Example: Main entrance of Charminar...",
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "Example: Main entrance of Charminar..."
+                    ),
                 }
             ),
 
-            # ------------------------------------------------
+            # =================================================
+            # DURATION
+            # =================================================
+
+            "duration": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": "Example: 3.5 Hours",
+                }
+            ),
+
+            # =================================================
+            # LANGUAGE
+            # =================================================
+
+            "language": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "English, Telugu, Hindi"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # TOUR TYPE
+            # =================================================
+
+            "tour_type": forms.Select(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # MAX PEOPLE
+            # =================================================
+
+            "max_people": forms.NumberInput(
+                attrs={
+                    "min": 1,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # MIN AGE
+            # =================================================
+
+            "min_age": forms.NumberInput(
+                attrs={
+                    "min": 0,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SLOT POSITION
+            # =================================================
+
+            "slot_position": forms.NumberInput(
+                attrs={
+                    "min": 0,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SEO TITLE
+            # =================================================
+
+            "seo_title": forms.TextInput(
+                attrs={
+                    "maxlength": 70,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SEO DESCRIPTION
+            # =================================================
+
+            "seo_description": forms.Textarea(
+                attrs={
+                    "rows": 4,
+                    "maxlength": 160,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                }
+            ),
+
+            # =================================================
+            # SEO KEYWORDS
+            # =================================================
+
+            "seo_keywords": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "class": (
+                        "w-full rounded-xl border "
+                        "border-slate-200 bg-white px-4 py-3 "
+                        "text-sm text-slate-800 "
+                        "outline-none resize-none "
+                        "transition "
+                        "focus:border-indigo-500 "
+                        "focus:ring-4 "
+                        "focus:ring-indigo-500/10"
+                    ),
+                    "placeholder": (
+                        "hyderabad tours, charminar tour, "
+                        "telangana tourism"
+                    ),
+                }
+            ),
+
+            # =================================================
             # MANY TO MANY
-            # ------------------------------------------------
+            # =================================================
 
-            "includes":
-                forms.CheckboxSelectMultiple(),
+            "includes": forms.CheckboxSelectMultiple(),
+            
+            "itinerary" : forms.CheckboxSelectMultiple(),
 
-            "excludes":
-                forms.CheckboxSelectMultiple(),
+            "excludes": forms.CheckboxSelectMultiple(),
 
-            "highlights":
-                forms.CheckboxSelectMultiple(),
+            "highlights": forms.CheckboxSelectMultiple(),
 
-            "important_information":
-                forms.CheckboxSelectMultiple(),
+            "important_information": (
+                forms.CheckboxSelectMultiple()
+            ),
 
-            "amenities":
-                forms.CheckboxSelectMultiple(),
+            "amenities": forms.CheckboxSelectMultiple(),
         }
 
-    # ========================================================
+    # =========================================================
     # INIT
-    # ========================================================
+    # =========================================================
 
-    def __init__(
-        self,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
 
-        super().__init__(
-            *args,
-            **kwargs
-        )
+        super().__init__(*args, **kwargs)
 
-        # ----------------------------------------------------
-        # ACTIVE LOCATIONS
-        # ----------------------------------------------------
+        # -----------------------------------------------------
+        # LOCATION
+        # -----------------------------------------------------
 
-        self.fields[
-            "location"
-        ].queryset = (
+        self.fields["location"].queryset = (
             Location.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
+                "country",
                 "state",
                 "district",
                 "city",
+                "architecture",
             )
         )
 
-        # ----------------------------------------------------
-        # ACTIVE CATEGORIES
-        # ----------------------------------------------------
+        # -----------------------------------------------------
+        # LOCATION LABEL
+        # -----------------------------------------------------
 
-        self.fields[
-            "category"
-        ].queryset = (
-            TourCategory.objects
-            .filter(
-                is_active=True
+        self.fields["location"].label_from_instance = (
+            lambda location:
+            (
+                f"{location.architecture} — "
+                f"{location.city}, "
+                f"{location.district}, "
+                f"{location.state}"
             )
+        )
+
+        # -----------------------------------------------------
+        # CATEGORY
+        # -----------------------------------------------------
+
+        self.fields["category"].queryset = (
+            TourCategory.objects
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "name",
             )
         )
 
-        # ----------------------------------------------------
+        # -----------------------------------------------------
         # INCLUDES
-        # ----------------------------------------------------
+        # -----------------------------------------------------
 
-        self.fields[
-            "includes"
-        ].queryset = (
+        self.fields["includes"].queryset = (
             TourInclude.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "title",
             )
         )
+        
+        self.fields["includes"].queryset = (
+            Itinerary.objects
+            .filter(is_active=True)
+            .order_by(
+                "slot_position",
+                "title",
+            )
+        )
+        
+        
+        
 
-        # ----------------------------------------------------
+        # -----------------------------------------------------
         # EXCLUDES
-        # ----------------------------------------------------
+        # -----------------------------------------------------
 
-        self.fields[
-            "excludes"
-        ].queryset = (
+        self.fields["excludes"].queryset = (
             TourExclude.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "title",
             )
         )
 
-        # ----------------------------------------------------
+        # -----------------------------------------------------
         # HIGHLIGHTS
-        # ----------------------------------------------------
+        # -----------------------------------------------------
 
-        self.fields[
-            "highlights"
-        ].queryset = (
+        self.fields["highlights"].queryset = (
             TourHighlight.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "title",
             )
         )
 
-        # ----------------------------------------------------
+        # -----------------------------------------------------
         # IMPORTANT INFORMATION
-        # ----------------------------------------------------
+        # -----------------------------------------------------
 
         self.fields[
             "important_information"
         ].queryset = (
             ImportantInformation.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "title",
             )
         )
 
-        # ----------------------------------------------------
+        # -----------------------------------------------------
         # AMENITIES
-        # ----------------------------------------------------
+        # -----------------------------------------------------
 
-        self.fields[
-            "amenities"
-        ].queryset = (
+        self.fields["amenities"].queryset = (
             Amenity.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .order_by(
                 "slot_position",
                 "name",
             )
         )
-
 
 from django import forms
 
@@ -1382,6 +1956,24 @@ from django import forms
 from user.models import Location
 
 
+# class LocationForm(forms.ModelForm):
+
+#     class Meta:
+
+#         model = Location
+
+#         fields = [
+#             "country",
+#             "state",
+#             "district",
+#             "city",
+#             "architecture",
+#             "is_active",
+#         ]
+      
+      
+
+
 class LocationForm(forms.ModelForm):
 
     class Meta:
@@ -1393,15 +1985,111 @@ class LocationForm(forms.ModelForm):
             "state",
             "district",
             "city",
+            "architecture",
             "is_active",
         ]
-        
+
+        widgets = {
+
+            "country": forms.TextInput(
+                attrs={
+                    "placeholder": "India",
+                }
+            ),
+
+            "state": forms.TextInput(
+                attrs={
+                    "placeholder": "Telangana",
+                }
+            ),
+
+            "district": forms.TextInput(
+                attrs={
+                    "placeholder": "Hyderabad",
+                }
+            ),
+
+            "city": forms.TextInput(
+                attrs={
+                    "placeholder": "Hyderabad",
+                }
+            ),
+
+            "architecture": forms.TextInput(
+                attrs={
+                    "placeholder": "Charminar",
+                }
+            ),
+
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "location-status-toggle",
+                }
+            ),
+        }
+
+
+    def clean_architecture(self):
+
+        architecture = self.cleaned_data.get(
+            "architecture",
+            ""
+        ).strip()
+
+        if not architecture:
+
+            raise forms.ValidationError(
+                "Please enter the place or monument name."
+            )
+
+        return architecture  
         
 
 from django import forms
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+# class UserForm(forms.ModelForm):
+
+#     class Meta:
+#         model = User
+#         fields = [
+#             "username",
+#             "email",
+#             "phone_number",
+#             "role",
+#             "locations",
+#             "profile_image",
+#             "is_verified",
+#             "is_active",
+#         ]
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#         for name, field in self.fields.items():
+
+#             if name == "locations":
+#                 field.widget.attrs.update({
+#                     "class": "w-full rounded-xl border border-slate-300 p-3 h-64"
+#                 })
+
+#             elif isinstance(field.widget, forms.CheckboxInput):
+#                 field.widget.attrs.update({
+#                     "class": "w-5 h-5 rounded text-indigo-600"
+#                 })
+
+#             elif isinstance(field.widget, forms.FileInput):
+#                 field.widget.attrs.update({
+#                     "class": "block w-full text-sm border rounded-xl p-2"
+#                 })
+
+#             else:
+#                 field.widget.attrs.update({
+#                     "class": "w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+#                 })
+
 
 class UserForm(forms.ModelForm):
 
@@ -1421,29 +2109,69 @@ class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # ------------------------------------------
+        # Location field
+        # ------------------------------------------
+        if "locations" in self.fields:
+
+            self.fields["locations"].queryset = (
+                self.fields["locations"]
+                .queryset
+                .filter(is_active=True)
+                .order_by(
+                    "state",
+                    "district",
+                    "city",
+                    "architecture",
+                )
+            )
+
+            self.fields["locations"].widget = forms.MultipleHiddenInput()
+
+        # ------------------------------------------
+        # Common styling
+        # ------------------------------------------
         for name, field in self.fields.items():
 
             if name == "locations":
-                field.widget.attrs.update({
-                    "class": "w-full rounded-xl border border-slate-300 p-3 h-64"
-                })
+                continue
 
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({
-                    "class": "w-5 h-5 rounded text-indigo-600"
+                    "class": (
+                        "w-5 h-5 rounded border-slate-300 "
+                        "text-indigo-600 focus:ring-indigo-500"
+                    )
                 })
 
             elif isinstance(field.widget, forms.FileInput):
                 field.widget.attrs.update({
-                    "class": "block w-full text-sm border rounded-xl p-2"
+                    "class": (
+                        "block w-full text-sm text-slate-600 "
+                        "border border-slate-200 rounded-xl p-2 "
+                        "bg-white"
+                    )
+                })
+
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "bg-white px-4 py-3 "
+                        "focus:ring-2 focus:ring-indigo-500 "
+                        "focus:border-indigo-500"
+                    )
                 })
 
             else:
                 field.widget.attrs.update({
-                    "class": "w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                })
-                
-                
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 "
+                        "focus:ring-2 focus:ring-indigo-500 "
+                        "focus:border-indigo-500"
+                    )
+                })              
                 
 
 from booking.models import Booking

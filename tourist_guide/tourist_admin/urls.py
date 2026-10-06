@@ -29,6 +29,7 @@ from .views import (
     BookingDeleteView,
     BookingStatusUpdateView,
     
+
 )
 
 from .views import (
@@ -37,6 +38,12 @@ from .views import (
     CancelReasonCreateView,
     CancelReasonUpdateView,
     CancelReasonDeleteView,
+    
+    
+    TourItineraryListView,
+    TourItineraryCreateView,
+    TourItineraryUpdateView,
+    TourItineraryDeleteView,
 
 )
 
@@ -92,6 +99,30 @@ urlpatterns = [
     path( "tour-exclude/add/", views.TourExcludeCreateView.as_view(), name="tour_exclude_add"),
     path( "tour-exclude/<int:pk>/edit/", views.TourExcludeUpdateView.as_view(), name="tour_exclude_edit"),
     path( "tour-exclude/<int:pk>/delete/",  views.TourExcludeDeleteView.as_view(),  name="tour_exclude_delete"),
+    
+    path(
+        "tour-itirenary/",
+        TourItineraryListView.as_view(),
+        name="tour_itirenary_list",
+    ),
+
+    path(
+        "tour-itirenary/add/",
+        TourItineraryCreateView.as_view(),
+        name="tour_itirenary_add",
+    ),
+
+    path(
+        "tour-itirenary/<int:pk>/edit/",
+        TourItineraryUpdateView.as_view(),
+        name="tour_itirenary_edit",
+    ),
+
+    path(
+        "tour-itirenary/<int:pk>/delete/",
+        TourItineraryDeleteView.as_view(),
+        name="tour_itirenary_delete",
+    ),
 
     # ==========================
     # Important Information
@@ -130,6 +161,7 @@ urlpatterns = [
     path("tour/add/", views.TourCreateView.as_view(), name="tour_add",),
     path( "tour/<int:pk>/edit/", views.TourUpdateView.as_view(), name="tour_edit",),
     path( "tour/<int:pk>/delete/", views.TourDeleteView.as_view(), name="tour_delete",),
+
     
     
     # Contact Us
@@ -232,13 +264,44 @@ urlpatterns = [
     ),
     
     
-    path("bookings/", BookingListView.as_view(), name="booking_list"),
-    path("bookings/create/", BookingCreateView.as_view(), name="booking_create"),
-    path("bookings/<int:pk>/", BookingDetailView.as_view(), name="booking_detail"),
-    path("bookings/<int:pk>/edit/", BookingUpdateView.as_view(), name="booking_update"),
-    path("bookings/<int:pk>/delete/", BookingDeleteView.as_view(), name="booking_delete"),
-    path("bookings/<int:pk>/status/", BookingStatusUpdateView.as_view(), name="booking_status"),
+    # path("bookings/", BookingListView.as_view(), name="booking_list"),
+    # path("bookings/create/", BookingCreateView.as_view(), name="booking_create"),
+    # path("bookings/<int:pk>/", BookingDetailView.as_view(), name="booking_detail"),
+    # path("bookings/<int:pk>/edit/", BookingUpdateView.as_view(), name="booking_update"),
+    # path("bookings/<int:pk>/delete/", BookingDeleteView.as_view(), name="booking_delete"),
+    # path("bookings/<int:pk>/status/", BookingStatusUpdateView.as_view(), name="booking_status"),
     
+    
+    path(
+        "bookings/",
+        BookingListView.as_view(),
+        name="booking_list",
+    ),
+    path(
+        "bookings/create/",
+        BookingCreateView.as_view(),
+        name="booking_create",
+    ),
+    path(
+        "bookings/<int:pk>/",
+        BookingDetailView.as_view(),
+        name="booking_detail",
+    ),
+    path(
+        "bookings/<int:pk>/edit/",
+        BookingUpdateView.as_view(),
+        name="booking_update",
+    ),
+    path(
+        "bookings/<int:pk>/delete/",
+        BookingDeleteView.as_view(),
+        name="booking_delete",
+    ),
+    path(
+        "bookings/<int:pk>/status/",
+        BookingStatusUpdateView.as_view(),
+        name="booking_status",
+    ),
     
     path(
         "tour-images/<int:pk>/delete/",

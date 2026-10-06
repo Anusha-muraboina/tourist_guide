@@ -431,9 +431,11 @@ class VerifyRegistrationOTPAPIView(APIView):
         # data again together with the OTP.
         # -----------------------------------------
 
-        registration_data = request.data.copy()
+        # registration_data = request.data.copy()
 
-        registration_data.pop("otp", None)
+        # registration_data.pop("otp", None)
+        
+        registration_data = request.data
 
         # -----------------------------------------
         # CREATE USER
@@ -1016,7 +1018,9 @@ class LocationListAPIView(APIView):
         ).order_by(
             "state",
             "district",
-            "city"
+            "city",
+            "architecture",
+            
         )
 
         serializer = LocationSerializer(

@@ -23,6 +23,11 @@ class Location(models.Model):
     city = models.CharField(
         max_length=100
     )
+    
+    # architecture = models.TextField()
+    architecture = models.CharField(
+        max_length=200
+    )
 
     is_active = models.BooleanField(
         default=True
@@ -33,8 +38,8 @@ class Location(models.Model):
     )
 
     class Meta:
-        ordering = ["state", "district", "city"]
-        unique_together = ("state", "district", "city")
+        ordering = ["state", "district", "city" ,"architecture"]
+        unique_together = ("state", "district", "city","architecture")
 
     def __str__(self):
         return f"{self.city}, {self.district}, {self.state}"

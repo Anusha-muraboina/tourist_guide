@@ -133,6 +133,26 @@ class TourExclude(models.Model):
         return self.title
 
 
+
+class Itinerary(models.Model):
+    title = models.CharField(
+        max_length=255
+    )
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    slot_position = models.PositiveIntegerField(
+        default=0
+    )
+
+    class Meta:
+        ordering = ['slot_position']
+
+    def __str__(self):
+
+        return self.title
+
 # =========================
 # IMPORTANT INFORMATION
 # =========================
@@ -315,6 +335,11 @@ class Tour(models.Model):
         related_name="tours"
     )
 
+    itinerary = models.ManyToManyField(
+        Itinerary,
+        blank=True,
+        related_name="tours"
+    )
     highlights = models.ManyToManyField(
         TourHighlight,
         blank=True,

@@ -397,3 +397,8 @@ CKEDITOR_CONFIGS = {
 RECAPTCHA_SITE_KEY = "6LfuTL4tAAAAAF2mylzuDnYXhhMI378VwPcoIDLD"
 RECAPTCHA_SECRET_KEY = "6LfuTL4tAAAAAJfoOGGyedMs_UKmuK3-I9Znmn52"
 
+
+
+LOGIN_URL = "/tourist_admin/login/"
+LOGIN_REDIRECT_URL = "/tourist_admin/"
+LOGOUT_REDIRECT_URL = "/tourist_admin/login/"

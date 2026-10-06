@@ -9,7 +9,8 @@ from tourist.models import (
     TourInclude,
     TourExclude,
     ImportantInformation,
-    Amenity
+    Amenity,
+    Itinerary
 )
 
 from blog.models import (
@@ -24,7 +25,8 @@ from .forms import (
     TourIncludeForm,
     TourExcludeForm,
     ImportantInformationForm,
-    AmenityForm
+    AmenityForm,
+    TourItineraryForm
 )
 from tourist.models import TourSchedule, TourPricing
 from .forms import TourScheduleForm, TourPricingForm
@@ -99,9 +101,121 @@ def admin_logout(request):
 # Dashboard
 # =====================================
 
-def dashboard(request):
-    return render(request, "tourist_admin/dashboard.html")
+# def dashboard(request):
+#     return render(request, "tourist_admin/dashboard.html")
 
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.db.models import Sum
+
+from tourist.models import Tour, TourCategory, TourSchedule
+
+
+@login_required
+def dashboard(request):
+
+    # ============================================================
+    # TOUR COUNTS
+    # ============================================================
+
+    total_tours = Tour.objects.count()
+
+    active_tours = Tour.objects.filter(
+        is_active=True
+    ).count()
+
+    inactive_tours = Tour.objects.filter(
+        is_active=False
+    ).count()
+
+    featured_tours = Tour.objects.filter(
+        featured=True,
+        is_active=True
+    ).count()
+
+
+    # ============================================================
+    # CATEGORIES
+    # ============================================================
+
+    total_categories = TourCategory.objects.count()
+
+    active_categories = TourCategory.objects.filter(
+        is_active=True
+    ).count()
+
+
+    # ============================================================
+    # TODAY'S / AVAILABLE SLOTS
+    #
+    # TourSchedule does not have a date field in your current
+    # model, so this represents the total available slots from
+    # active schedules.
+    # ============================================================
+
+    today_slots = (
+        TourSchedule.objects
+        .filter(
+            is_active=True,
+            tour__is_active=True
+        )
+        .aggregate(
+            total=Sum("available_slots")
+        )
+        .get("total")
+        or 0
+    )
+
+
+    # ============================================================
+    # RECENT TOURS
+    # ============================================================
+
+    recent_tours = (
+        Tour.objects
+        .select_related(
+            "category",
+            "location",
+        )
+        .prefetch_related(
+            "images",
+            "pricing",
+        )
+        .order_by("-created_at")[:8]
+    )
+
+
+    # ============================================================
+    # CONTEXT
+    # ============================================================
+
+    context = {
+
+        # Tour statistics
+        "total_tours": total_tours,
+        "active_tours": active_tours,
+        "inactive_tours": inactive_tours,
+        "featured_tours": featured_tours,
+
+        # Category statistics
+        "total_categories": total_categories,
+        "active_categories": active_categories,
+
+        # Schedule statistics
+        "today_slots": today_slots,
+
+        # Recent tours
+        "recent_tours": recent_tours,
+    }
+
+
+    return render(
+        request,
+        "tourist_admin/dashboard.html",
+        context
+    )
 
 # =====================================
 # Base Delete View
@@ -231,6 +345,35 @@ class TourExcludeUpdateView(UpdateView):
 class TourExcludeDeleteView(BaseDeleteView):
     model = TourExclude
     success_url = reverse_lazy("tour_exclude_list")
+
+
+# =====================================
+# TOUR Itinerary
+# =====================================
+
+class TourItineraryListView(ListView):
+    model = Itinerary
+    template_name = "tourist_admin/tour_itirenary/list.html"
+    context_object_name = "items"
+
+
+class TourItineraryCreateView(CreateView):
+    model = Itinerary
+    form_class = TourItineraryForm
+    template_name = "tourist_admin/tour_itirenary/form.html"
+    success_url = reverse_lazy("tour_itirenary_list")
+
+
+class TourItineraryUpdateView(UpdateView):
+    model = Itinerary
+    form_class = TourItineraryForm
+    template_name = "tourist_admin/tour_itirenary/form.html"
+    success_url = reverse_lazy("tour_itirenary_list")
+
+
+class TourItineraryDeleteView(BaseDeleteView):
+    model = Itinerary
+    success_url = reverse_lazy("tour_itirenary_list")
 
 
 # =====================================
@@ -495,8 +638,16 @@ from .forms import (
 
 
 # ============================================================
-# TOUR LIST
-# ============================================================
+# TOUR LIST# ============================================================
+from django.db.models import Q, Prefetch
+from django.views.generic import ListView
+
+# from .models import (
+#     Tour,
+#     TourCategory,
+#     TourImage,
+# )
+
 
 class TourListView(ListView):
 
@@ -508,6 +659,10 @@ class TourListView(ListView):
 
     paginate_by = 10
 
+    # ========================================================
+    # QUERYSET
+    # ========================================================
+
     def get_queryset(self):
 
         queryset = (
@@ -517,63 +672,153 @@ class TourListView(ListView):
                 "location",
             )
             .prefetch_related(
-                # IMPORTANT
-                "images",
 
+                # ==================================================
+                # IMAGES
+                # Primary image first
+                # ==================================================
+
+                Prefetch(
+                    "images",
+                    queryset=(
+                        TourImage.objects
+                        .order_by(
+                            "-is_primary",
+                            "created_at",
+                        )
+                    ),
+                ),
+
+                # ==================================================
                 # M2M
+                # ==================================================
+
                 "includes",
                 "excludes",
+                "itinerary",
                 "highlights",
                 "important_information",
                 "amenities",
 
-                # Optional
+                # ==================================================
+                # PRICING
+                # ==================================================
+
                 "pricing",
+
+                # ==================================================
+                # SCHEDULES
+                # ==================================================
+
                 "schedules",
             )
         )
 
-        # ====================================================
+        # ========================================================
         # SEARCH
-        # ====================================================
+        # ========================================================
 
-        search = self.request.GET.get(
-            "search",
-            ""
-        ).strip()
+        search = (
+            self.request.GET.get(
+                "search",
+                "",
+            )
+            .strip()
+        )
 
-        # ====================================================
+        # ========================================================
         # FILTERS
-        # ====================================================
+        # ========================================================
 
-        category = self.request.GET.get(
-            "category",
-            ""
+        category = (
+            self.request.GET.get(
+                "category",
+                "",
+            )
+            .strip()
         )
 
-        status = self.request.GET.get(
-            "status",
-            ""
+        status = (
+            self.request.GET.get(
+                "status",
+                "",
+            )
+            .strip()
         )
 
-        featured = self.request.GET.get(
-            "featured",
-            ""
+        featured = (
+            self.request.GET.get(
+                "featured",
+                "",
+            )
+            .strip()
         )
 
-        # ====================================================
+        # ========================================================
         # SEARCH
-        # ====================================================
+        # ========================================================
+        #
+        # Search supports:
+        #
+        # 1. Tour title
+        # 2. Place / Monument
+        # 3. City
+        # 4. District
+        # 5. State
+        # 6. Country
+        #
+        # Location.architecture = actual place/monument name
+        #
+        # Example:
+        #
+        # Charminar
+        # Golconda Fort
+        # Hyderabad
+        # Telangana
+        #
+        # ========================================================
 
         if search:
 
             queryset = queryset.filter(
-                title__icontains=search
+
+                Q(title__icontains=search)
+
+                |
+
+                Q(
+                    location__architecture__icontains=search
+                )
+
+                |
+
+                Q(
+                    location__city__icontains=search
+                )
+
+                |
+
+                Q(
+                    location__district__icontains=search
+                )
+
+                |
+
+                Q(
+                    location__state__icontains=search
+                )
+
+                |
+
+                Q(
+                    location__country__icontains=search
+                )
+
             )
 
-        # ====================================================
+        # ========================================================
         # CATEGORY
-        # ====================================================
+        # ========================================================
 
         if category:
 
@@ -581,9 +826,9 @@ class TourListView(ListView):
                 category_id=category
             )
 
-        # ====================================================
+        # ========================================================
         # ACTIVE STATUS
-        # ====================================================
+        # ========================================================
 
         if status == "1":
 
@@ -597,9 +842,9 @@ class TourListView(ListView):
                 is_active=False
             )
 
-        # ====================================================
+        # ========================================================
         # FEATURED
-        # ====================================================
+        # ========================================================
 
         if featured == "1":
 
@@ -613,9 +858,15 @@ class TourListView(ListView):
                 featured=False
             )
 
-        # ====================================================
+        # ========================================================
+        # REMOVE DUPLICATES
+        # ========================================================
+
+        queryset = queryset.distinct()
+
+        # ========================================================
         # ORDER
-        # ====================================================
+        # ========================================================
 
         return queryset.order_by(
             "slot_position",
@@ -628,12 +879,16 @@ class TourListView(ListView):
 
     def get_context_data(
         self,
-        **kwargs
+        **kwargs,
     ):
 
         context = super().get_context_data(
             **kwargs
         )
+
+        # ========================================================
+        # CATEGORIES
+        # ========================================================
 
         context["categories"] = (
             TourCategory.objects
@@ -646,33 +901,85 @@ class TourListView(ListView):
             )
         )
 
+        # ========================================================
+        # CURRENT SEARCH
+        # ========================================================
+
         context["search"] = (
             self.request.GET.get(
                 "search",
-                ""
+                "",
             )
         )
+
+        # ========================================================
+        # CURRENT CATEGORY
+        # ========================================================
 
         context["category"] = (
             self.request.GET.get(
                 "category",
-                ""
+                "",
             )
         )
+
+        # ========================================================
+        # CURRENT STATUS
+        # ========================================================
 
         context["status"] = (
             self.request.GET.get(
                 "status",
-                ""
+                "",
             )
         )
+
+        # ========================================================
+        # CURRENT FEATURED
+        # ========================================================
 
         context["featured"] = (
             self.request.GET.get(
                 "featured",
-                ""
+                "",
             )
         )
+
+        # ========================================================
+        # STATISTICS
+        # ========================================================
+
+        context["total_tours"] = (
+            Tour.objects.count()
+        )
+
+        context["active_count"] = (
+            Tour.objects
+            .filter(
+                is_active=True
+            )
+            .count()
+        )
+
+        context["inactive_count"] = (
+            Tour.objects
+            .filter(
+                is_active=False
+            )
+            .count()
+        )
+
+        context["featured_count"] = (
+            Tour.objects
+            .filter(
+                featured=True
+            )
+            .count()
+        )
+
+        # ========================================================
+        # RETURN
+        # ========================================================
 
         return context
 
@@ -681,120 +988,445 @@ class TourListView(ListView):
 # TOUR CREATE
 # ============================================================
 
+# class TourCreateView(CreateView):
+
+#     model = Tour
+
+#     form_class = TourForm
+
+#     template_name = (
+#         "tourist_admin/tour/form.html"
+#     )
+
+#     success_url = reverse_lazy(
+#         "tour_list"
+#     )
+
+#     def form_valid(self, form):
+
+#         # ====================================================
+#         # SAVE TOUR
+#         # ====================================================
+
+#         self.object = form.save()
+
+#         # ====================================================
+#         # SAVE MULTIPLE IMAGES
+#         # ====================================================
+
+#         images = self.request.FILES.getlist(
+#             "tour_images"
+#         )
+
+#         for index, image in enumerate(images):
+
+#             TourImage.objects.create(
+#                 tour=self.object,
+#                 image=image,
+#                 is_primary=(index == 0),
+#             )
+
+#         return redirect(
+#             self.success_url
+#         )
+
+
+# # ============================================================
+# # TOUR UPDATE
+# # ============================================================
+
+# class TourUpdateView(UpdateView):
+
+#     model = Tour
+
+#     form_class = TourForm
+
+#     template_name = (
+#         "tourist_admin/tour/form.html"
+#     )
+
+#     success_url = reverse_lazy(
+#         "tour_list"
+#     )
+
+#     def get_context_data(
+#         self,
+#         **kwargs
+#     ):
+
+#         context = super().get_context_data(
+#             **kwargs
+#         )
+
+#         context["tour_images"] = (
+#             self.object.images.all()
+#             .order_by(
+#                 "-is_primary",
+#                 "created_at",
+#             )
+#         )
+
+#         return context
+
+#     @transaction.atomic
+#     def form_valid(self, form):
+
+#         # ====================================================
+#         # SAVE TOUR
+#         # ====================================================
+
+#         self.object = form.save()
+
+#         # ====================================================
+#         # NEW IMAGES
+#         # ====================================================
+
+#         images = self.request.FILES.getlist(
+#             "tour_images"
+#         )
+
+#         existing_images = self.object.images.exists()
+
+#         for index, image in enumerate(images):
+
+#             TourImage.objects.create(
+#                 tour=self.object,
+#                 image=image,
+#                 is_primary=(
+#                     not existing_images
+#                     and index == 0
+#                 ),
+#             )
+
+#         return redirect(
+#             self.success_url
+#         )
+from decimal import Decimal
+
+from django.contrib import messages
+from django.db import transaction
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView
+
+
+
 class TourCreateView(CreateView):
-
     model = Tour
-
     form_class = TourForm
+    template_name = "tourist_admin/tour/form.html"
+    success_url = reverse_lazy("tour_list")
 
-    template_name = (
-        "tourist_admin/tour/form.html"
-    )
-
-    success_url = reverse_lazy(
-        "tour_list"
-    )
-
+    @transaction.atomic
     def form_valid(self, form):
-
-        # ====================================================
-        # SAVE TOUR
-        # ====================================================
-
         self.object = form.save()
 
-        # ====================================================
-        # SAVE MULTIPLE IMAGES
-        # ====================================================
+        # Save pricing
+        self.save_pricing()
 
-        images = self.request.FILES.getlist(
-            "tour_images"
+        # Save all uploaded images
+        self.save_images()
+
+        messages.success(
+            self.request,
+            "Tour created successfully."
         )
+
+        return redirect(self.success_url)
+
+    def save_pricing(self):
+        pricing_data = [
+            {
+                "group_type": "upto_9",
+                "group_members": "Up to 9 members",
+                "field": "price_upto_9",
+            },
+            {
+                "group_type": "10_20",
+                "group_members": "10 - 20 members",
+                "field": "price_10_20",
+            },
+            {
+                "group_type": "20_50",
+                "group_members": "20 - 50 members",
+                "field": "price_20_50",
+            },
+        ]
+
+        for data in pricing_data:
+            value = self.request.POST.get(data["field"], "").strip()
+
+            if not value:
+                continue
+
+            try:
+                price = Decimal(value)
+            except Exception:
+                continue
+
+            if price < 0:
+                continue
+
+            TourPricing.objects.create(
+                tour=self.object,
+                group_type=data["group_type"],
+                group_members=data["group_members"],
+                group_price=price,
+                is_active=True,
+            )
+
+    def save_images(self):
+        """
+        Save ALL selected images.
+
+        Frontend sends:
+            primary_image = index of selected primary image
+
+        Example:
+            primary_image = 2
+
+        means the third uploaded image becomes primary.
+        """
+
+        images = self.request.FILES.getlist("tour_images")
+
+        if not images:
+            return
+
+        primary_index = self.request.POST.get("primary_image", "0")
+
+        try:
+            primary_index = int(primary_index)
+        except (TypeError, ValueError):
+            primary_index = 0
+
+        # Safety check
+        if primary_index < 0 or primary_index >= len(images):
+            primary_index = 0
 
         for index, image in enumerate(images):
 
             TourImage.objects.create(
                 tour=self.object,
                 image=image,
-                is_primary=(index == 0),
+                is_primary=(index == primary_index),
             )
 
-        return redirect(
-            self.success_url
-        )
-
-
-# ============================================================
-# TOUR UPDATE
-# ============================================================
 
 class TourUpdateView(UpdateView):
-
     model = Tour
-
     form_class = TourForm
+    template_name = "tourist_admin/tour/form.html"
+    success_url = reverse_lazy("tour_list")
 
-    template_name = (
-        "tourist_admin/tour/form.html"
-    )
-
-    success_url = reverse_lazy(
-        "tour_list"
-    )
-
-    def get_context_data(
-        self,
-        **kwargs
-    ):
-
-        context = super().get_context_data(
-            **kwargs
-        )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
         context["tour_images"] = (
-            self.object.images.all()
-            .order_by(
-                "-is_primary",
-                "created_at",
-            )
+            self.object.images
+            .all()
+            .order_by("-is_primary", "created_at")
+        )
+
+        pricing = self.object.pricing.filter(is_active=True)
+
+        context["pricing_upto_9"] = (
+            pricing.filter(group_type="upto_9").first()
+        )
+
+        context["pricing_10_20"] = (
+            pricing.filter(group_type="10_20").first()
+        )
+
+        context["pricing_20_50"] = (
+            pricing.filter(group_type="20_50").first()
         )
 
         return context
 
     @transaction.atomic
     def form_valid(self, form):
-
-        # ====================================================
-        # SAVE TOUR
-        # ====================================================
-
         self.object = form.save()
 
-        # ====================================================
-        # NEW IMAGES
-        # ====================================================
+        # Update pricing
+        self.update_pricing()
 
-        images = self.request.FILES.getlist(
-            "tour_images"
+        # Save newly uploaded images
+        self.save_new_images()
+
+        # Change primary image if selected
+        self.update_primary_image()
+
+        messages.success(
+            self.request,
+            "Tour updated successfully."
         )
 
-        existing_images = self.object.images.exists()
+        return redirect(self.success_url)
+
+    def update_pricing(self):
+        pricing_data = [
+            {
+                "group_type": "upto_9",
+                "group_members": "Up to 9 members",
+                "field": "price_upto_9",
+            },
+            {
+                "group_type": "10_20",
+                "group_members": "10 - 20 members",
+                "field": "price_10_20",
+            },
+            {
+                "group_type": "20_50",
+                "group_members": "20 - 50 members",
+                "field": "price_20_50",
+            },
+        ]
+
+        for data in pricing_data:
+
+            value = self.request.POST.get(
+                data["field"],
+                ""
+            ).strip()
+
+            existing = TourPricing.objects.filter(
+                tour=self.object,
+                group_type=data["group_type"]
+            ).first()
+
+            if not value:
+
+                if existing:
+                    existing.is_active = False
+                    existing.save(
+                        update_fields=["is_active"]
+                    )
+
+                continue
+
+            try:
+                price = Decimal(value)
+            except Exception:
+                continue
+
+            if price < 0:
+                continue
+
+            if existing:
+
+                existing.group_members = data["group_members"]
+                existing.group_price = price
+                existing.is_active = True
+
+                existing.save()
+
+            else:
+
+                TourPricing.objects.create(
+                    tour=self.object,
+                    group_type=data["group_type"],
+                    group_members=data["group_members"],
+                    group_price=price,
+                    is_active=True,
+                )
+
+    def save_new_images(self):
+        """
+        Save all newly uploaded images.
+
+        Do NOT automatically make the first new image primary
+        when an existing primary image already exists.
+        """
+
+        images = self.request.FILES.getlist("tour_images")
+
+        if not images:
+            return
+
+        existing_primary = self.object.images.filter(
+            is_primary=True
+        ).exists()
+
+        primary_index = self.request.POST.get(
+            "primary_image",
+            ""
+        )
+
+        try:
+            primary_index = int(primary_index)
+        except (TypeError, ValueError):
+            primary_index = None
 
         for index, image in enumerate(images):
+
+            make_primary = False
+
+            # User selected one of the NEW images as primary
+            if (
+                primary_index is not None
+                and index == primary_index
+            ):
+                make_primary = True
+
+                # Remove primary from old image
+                TourImage.objects.filter(
+                    tour=self.object
+                ).update(is_primary=False)
+
+            # If there is no primary image at all,
+            # first uploaded image becomes primary.
+            elif (
+                not existing_primary
+                and index == 0
+            ):
+                make_primary = True
 
             TourImage.objects.create(
                 tour=self.object,
                 image=image,
-                is_primary=(
-                    not existing_images
-                    and index == 0
-                ),
+                is_primary=make_primary,
             )
 
-        return redirect(
-            self.success_url
+            if make_primary:
+                existing_primary = True
+
+    def update_primary_image(self):
+        """
+        Handles selecting an EXISTING image as primary
+        from the same tour form.
+
+        No separate URL.
+        No separate page.
+        No redirect until the normal Update button.
+        """
+
+        existing_primary_id = self.request.POST.get(
+            "existing_primary_image"
         )
 
+        if not existing_primary_id:
+            return
+
+        try:
+            existing_primary_id = int(existing_primary_id)
+        except (TypeError, ValueError):
+            return
+
+        image = TourImage.objects.filter(
+            id=existing_primary_id,
+            tour=self.object
+        ).first()
+
+        if not image:
+            return
+
+        TourImage.objects.filter(
+            tour=self.object
+        ).update(is_primary=False)
+
+        image.is_primary = True
+        image.save(update_fields=["is_primary"])
 
 # ============================================================
 # TOUR DELETE
@@ -1966,6 +2598,17 @@ from .forms import LocationForm
 # ==========================================
 # List
 # ==========================================
+from django.db.models import Q
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView
+
+# from .models import Location
+# from .forms import LocationForm
+
+
+# ============================================================
+# LOCATION LIST
+# ============================================================
 
 class LocationListView(ListView):
 
@@ -1979,19 +2622,42 @@ class LocationListView(ListView):
 
     def get_queryset(self):
 
-        queryset = Location.objects.all()
+        queryset = (
+            Location.objects
+            .all()
+            .order_by(
+                "country",
+                "state",
+                "district",
+                "city",
+                "architecture",
+            )
+        )
 
-        search = self.request.GET.get("search")
+        search = self.request.GET.get(
+            "search",
+            ""
+        ).strip()
 
-        state = self.request.GET.get("state")
+        state = self.request.GET.get(
+            "state",
+            ""
+        ).strip()
 
         if search:
 
             queryset = queryset.filter(
-                Q(country__icontains=search) |
-                Q(state__icontains=search) |
-                Q(district__icontains=search) |
+
+                Q(country__icontains=search)
+                |
+                Q(state__icontains=search)
+                |
+                Q(district__icontains=search)
+                |
                 Q(city__icontains=search)
+                |
+                Q(architecture__icontains=search)
+
             )
 
         if state:
@@ -2018,17 +2684,36 @@ class LocationListView(ListView):
 
         context["states"] = (
             Location.objects
-            .values_list("state", flat=True)
+            .values_list(
+                "state",
+                flat=True
+            )
             .distinct()
             .order_by("state")
+        )
+
+        context["active_count"] = (
+            Location.objects
+            .filter(is_active=True)
+            .count()
+        )
+
+        context["inactive_count"] = (
+            Location.objects
+            .filter(is_active=False)
+            .count()
+        )
+
+        context["total_locations"] = (
+            Location.objects.count()
         )
 
         return context
 
 
-# ==========================================
-# Create
-# ==========================================
+# ============================================================
+# LOCATION CREATE
+# ============================================================
 
 class LocationCreateView(CreateView):
 
@@ -2043,9 +2728,9 @@ class LocationCreateView(CreateView):
     )
 
 
-# ==========================================
-# Update
-# ==========================================
+# ============================================================
+# LOCATION UPDATE
+# ============================================================
 
 class LocationUpdateView(UpdateView):
 
@@ -2165,6 +2850,35 @@ from django.views.generic import DetailView
 User = get_user_model()
 
 
+# class UserDetailView(DetailView):
+#     model = User
+#     template_name = "tourist_admin/users/detail.html"
+#     context_object_name = "user_obj"
+
+#     def get_queryset(self):
+#         return (
+#             User.objects
+#             .prefetch_related("locations")
+#             .select_related("guide_profile")
+#         )
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+
+#         user_obj = self.object
+
+#         # GuideProfile exists only for guide users
+#         if user_obj.role == "guide":
+#             try:
+#                 context["guide_profile"] = user_obj.guide_profile
+#             except user_obj.guide_profile.RelatedObjectDoesNotExist:
+#                 context["guide_profile"] = None
+#         else:
+#             context["guide_profile"] = None
+
+#         return context
+
+
 class UserDetailView(DetailView):
     model = User
     template_name = "tourist_admin/users/detail.html"
@@ -2182,7 +2896,6 @@ class UserDetailView(DetailView):
 
         user_obj = self.object
 
-        # GuideProfile exists only for guide users
         if user_obj.role == "guide":
             try:
                 context["guide_profile"] = user_obj.guide_profile
@@ -2191,24 +2904,19 @@ class UserDetailView(DetailView):
         else:
             context["guide_profile"] = None
 
+        # Selected locations / architecture
+        context["user_locations"] = user_obj.locations.all()
+
         return context
 
-
-# class UserDetailView(DetailView):
-
-#     model = User
-
-#     template_name = "tourist_admin/users/detail.html"
-
-#     context_object_name = "user_obj"
-
+    
 from django.contrib.auth import get_user_model
 from django.views.generic import UpdateView
 from django.urls import reverse_lazy
 from django.db import transaction
 
 from .forms import UserForm
-from user.models import GuideProfile
+from user.models import GuideProfile, Location
 
 User = get_user_model()
 
@@ -2229,6 +2937,16 @@ class UserUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # All active locations for architecture/place selection
+        context["locations"] = Location.objects.filter(
+            is_active=True
+        ).order_by(
+            "state",
+            "district",
+            "city",
+            "architecture",
+        )
+
         if self.object.role == "guide":
             try:
                 context["guide_profile"] = self.object.guide_profile
@@ -2246,7 +2964,29 @@ class UserUpdateView(UpdateView):
         form = self.get_form()
 
         if form.is_valid():
+
             user = form.save()
+
+            # ==========================================
+            # UPDATE USER LOCATIONS / ARCHITECTURE
+            # ==========================================
+
+            location_ids = request.POST.getlist("locations")
+
+            if location_ids:
+                locations = Location.objects.filter(
+                    id__in=location_ids,
+                    is_active=True
+                )
+
+                user.locations.set(locations)
+
+            else:
+                user.locations.clear()
+
+            # ==========================================
+            # GUIDE PROFILE
+            # ==========================================
 
             if user.role == "guide":
 
@@ -2255,47 +2995,66 @@ class UserUpdateView(UpdateView):
                 except GuideProfile.DoesNotExist:
                     guide_profile = GuideProfile(user=user)
 
-                guide_profile.bio = request.POST.get("bio", "").strip()
+                # Bio
+                guide_profile.bio = request.POST.get(
+                    "bio",
+                    ""
+                ).strip()
 
-                experience = request.POST.get("experience_years", "0")
+                # Experience
+                experience = request.POST.get(
+                    "experience_years",
+                    "0"
+                )
 
                 try:
-                    guide_profile.experience_years = int(experience or 0)
+                    guide_profile.experience_years = int(
+                        experience or 0
+                    )
                 except (ValueError, TypeError):
                     guide_profile.experience_years = 0
 
+                # Languages
                 guide_profile.languages = request.POST.get(
-                    "languages", ""
+                    "languages",
+                    ""
                 ).strip()
 
+                # Aadhaar Front
                 if "aadhaar_front" in request.FILES:
-                    guide_profile.aadhaar_front = request.FILES["aadhaar_front"]
+                    guide_profile.aadhaar_front = (
+                        request.FILES["aadhaar_front"]
+                    )
 
+                # Aadhaar Back
                 if "aadhaar_back" in request.FILES:
-                    guide_profile.aadhaar_back = request.FILES["aadhaar_back"]
+                    guide_profile.aadhaar_back = (
+                        request.FILES["aadhaar_back"]
+                    )
 
+                # Certificates
                 if "certificates" in request.FILES:
-                    guide_profile.certificates = request.FILES["certificates"]
+                    guide_profile.certificates = (
+                        request.FILES["certificates"]
+                    )
 
+                # Verification status
                 guide_profile.verification_status = request.POST.get(
                     "verification_status",
                     guide_profile.verification_status or "pending"
                 )
 
+                # Rejection reason
                 guide_profile.rejection_reason = request.POST.get(
-                    "rejection_reason", ""
+                    "rejection_reason",
+                    ""
                 ).strip()
 
                 guide_profile.save()
 
-            else:
-                # If role is changed from guide to another role,
-                # keep the GuideProfile in database but don't edit it.
-                pass
-
             return self.form_valid(form)
 
-        return self.form_invalid(form)
+        return self.form_invalid(form)  
     
     
     
@@ -2306,16 +3065,13 @@ class UserUpdateView(UpdateView):
     
     
     
-    
-    
-    
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from django.db.models import Q
+# from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+# from django.urls import reverse_lazy
+# from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.utils import timezone
+# from django.contrib import messages
+# from django.shortcuts import redirect
+# from django.utils import timezone
 
 from booking.models import Booking
 from .forms import BookingForm

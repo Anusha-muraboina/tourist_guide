@@ -129,6 +129,2112 @@
     <!-- CITY -->
     <div class="space-y-1.5">
         <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            City
+        </label>
+
+        <select
+            id="city"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select City</option>
+        </select>
+    </div>
+
+    <!-- ARCHITECTURE / PLACE -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Place / Monument (Architecture)
+            <span class="text-rose-500">*</span>
+        </label>
+
+        <select
+            id="architecture"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select Place / Monument</option>
+        </select>
+
+        <p class="text-xs text-slate-400">
+            Select the actual place or monument you guide tourists around.
+        </p>
+    </div>
+
+</div>
+
+            <!-- PROFILE IMAGE -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Profile Image</label>
+                <div class="flex items-center justify-center w-full">
+                    <label class="w-full flex flex-col items-center px-4 py-4 bg-white text-slate-500 rounded-xl border border-slate-200 tracking-wide cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition-all text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i>
+                            <span id="fileNameText" class="text-slate-600 font-medium">Choose avatar image</span>
+                        </div>
+                        <input
+                            type="file"
+                            id="profile_image"
+                            accept="image/*"
+                            class="hidden"
+                        >
+                    </label>
+                </div>
+
+                <!-- PROFILE IMAGE PREVIEW -->
+                <div id="profileImagePreviewWrapper" class="hidden mt-3 flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <img
+                        id="profileImagePreview"
+                        src=""
+                        alt="Profile preview"
+                        class="w-16 h-16 rounded-xl object-cover border border-slate-200"
+                    >
+                    <div class="min-w-0">
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Preview</p>
+                        <p id="profileImagePreviewName" class="text-sm text-slate-700 truncate mt-1"></p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ================= GUIDE DETAILS ================= -->
+<!-- =========================================================
+     GUIDE DETAILS
+========================================================= -->
+<div
+    id="guideFields"
+  
+    class="mt-7"
+>
+
+    <!-- SECTION HEADER -->
+    <div class="flex items-center gap-3 mb-6">
+
+        <div class="w-10 h-10 rounded-xl
+                    bg-slate-100
+                    border border-slate-200
+                    flex items-center justify-center">
+
+            <i class="fa-solid fa-user-tie text-slate-500"></i>
+
+        </div>
+
+        <div>
+            <h3 class="text-lg font-bold text-slate-800">
+                Guide Details
+            </h3>
+
+            <p class="text-sm text-slate-400 mt-0.5">
+                Tell tourists a little about yourself
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ABOUT YOU
+    ====================================================== -->
+
+    <div class="mb-5">
+
+        <label
+            for="bio"
+            class="block text-xs font-semibold
+                   text-slate-600
+                   uppercase tracking-wider mb-2"
+        >
+            ABOUT YOU
+        </label>
+
+        <div class="relative">
+
+            <textarea
+                id="bio"
+                name="bio"
+                rows="5"
+                placeholder="Tell tourists about yourself..."
+                class="w-full
+                       px-4 py-3.5
+                       pr-11
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       text-slate-800
+                       placeholder-slate-400
+                       text-sm
+                       resize-y
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-1
+                       focus:ring-indigo-600
+                       transition-all"
+            ></textarea>
+
+            <i class="fa-solid fa-pen
+                      absolute
+                      right-4
+                      top-4
+                      text-slate-300
+                      text-sm">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXPERIENCE + LANGUAGES
+    ====================================================== -->
+
+    <div class="grid md:grid-cols-2 gap-4">
+
+
+        <!-- EXPERIENCE -->
+
+        <div class="mb-5">
+
+            <label
+                for="experience_years"
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                EXPERIENCE
+            </label>
+
+            <div class="relative">
+
+                <input
+                    type="number"
+                    id="experience_years"
+                    name="experience_years"
+                    min="0"
+                    max="100"
+                    placeholder="Years of experience"
+                    class="w-full
+                           h-12
+                           px-4
+                           pr-20
+                           rounded-xl
+                           border border-slate-200
+                           bg-white
+                           text-slate-800
+                           placeholder-slate-400
+                           text-sm
+                           focus:outline-none
+                           focus:border-indigo-600
+                           focus:ring-1
+                           focus:ring-indigo-600
+                           transition-all"
+                >
+
+                <span
+                    class="absolute
+                           right-4
+                           top-1/2
+                           -translate-y-1/2
+                           text-xs
+                           text-slate-400"
+                >
+                    Years
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- LANGUAGES -->
+
+        <div class="mb-5">
+
+            <label
+                for="languages"
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                LANGUAGES
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <input
+                type="text"
+                id="languages"
+                name="languages"
+                placeholder="Example: Telugu, Hindi, English"
+                class="w-full
+                       h-12
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       text-slate-800
+                       placeholder-slate-400
+                       text-sm
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-1
+                       focus:ring-indigo-600
+                       transition-all"
+            >
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Enter the languages you can speak with tourists.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VERIFICATION DOCUMENTS
+    ====================================================== -->
+
+    <div class="mt-4 mb-5">
+
+        <div class="flex items-center justify-between
+                    border-b border-slate-100
+                    pb-3">
+
+            <div>
+
+                <h4 class="text-sm font-bold
+                           text-slate-700
+                           uppercase tracking-wider">
+
+                    Verification Documents
+
+                </h4>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Required for guide verification
+                </p>
+
+            </div>
+
+            <i class="fa-solid fa-shield-halved
+                      text-slate-300">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AADHAAR FRONT + BACK
+    ====================================================== -->
+
+    <div class="grid md:grid-cols-2 gap-4">
+
+
+        <!-- AADHAAR FRONT -->
+
+        <div class="mb-5">
+
+            <label
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                AADHAAR FRONT
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <label
+                for="aadhaar_front"
+                class="flex items-center
+                       gap-3
+                       w-full
+                       min-h-[68px]
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       cursor-pointer
+                       hover:bg-slate-50
+                       hover:border-slate-300
+                       transition-all"
+            >
+
+                <div class="w-10 h-10
+                            rounded-lg
+                            bg-slate-100
+                            flex items-center
+                            justify-center
+                            flex-shrink-0">
+
+                    <i class="fa-solid fa-cloud-arrow-up
+                              text-slate-400">
+                    </i>
+
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div
+                        id="aadhaarFrontText"
+                        class="text-sm font-medium
+                               text-slate-600
+                               truncate"
+                    >
+                        Choose Aadhaar front
+                    </div>
+
+                    <div class="text-xs text-slate-400 mt-0.5">
+                        JPG, JPEG or PNG
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right
+                          text-xs text-slate-300">
+                </i>
+
+            </label>
+
+            <input
+                type="file"
+                id="aadhaar_front"
+                name="aadhaar_front"
+                accept="image/jpeg,image/png,image/webp"
+                class="hidden"
+            >
+
+            <!-- AADHAAR FRONT PREVIEW -->
+            <div id="aadhaarFrontPreviewWrapper" class="hidden mt-3">
+                <img
+                    id="aadhaarFrontPreview"
+                    src=""
+                    alt="Aadhaar front preview"
+                    class="w-full max-h-56 object-contain rounded-xl border border-slate-200 bg-slate-50 p-2"
+                >
+                <p id="aadhaarFrontPreviewName" class="text-xs text-slate-500 mt-1.5 truncate"></p>
+            </div>
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Upload the front side of your Aadhaar card.
+            </p>
+
+        </div>
+
+
+        <!-- AADHAAR BACK -->
+
+        <div class="mb-5">
+
+            <label
+                class="block text-xs font-semibold
+                       text-slate-600
+                       uppercase tracking-wider mb-2"
+            >
+                AADHAAR BACK
+                <span class="text-rose-500">*</span>
+            </label>
+
+            <label
+                for="aadhaar_back"
+                class="flex items-center
+                       gap-3
+                       w-full
+                       min-h-[68px]
+                       px-4
+                       rounded-xl
+                       border border-slate-200
+                       bg-white
+                       cursor-pointer
+                       hover:bg-slate-50
+                       hover:border-slate-300
+                       transition-all"
+            >
+
+                <div class="w-10 h-10
+                            rounded-lg
+                            bg-slate-100
+                            flex items-center
+                            justify-center
+                            flex-shrink-0">
+
+                    <i class="fa-solid fa-cloud-arrow-up
+                              text-slate-400">
+                    </i>
+
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                    <div
+                        id="aadhaarBackText"
+                        class="text-sm font-medium
+                               text-slate-600
+                               truncate"
+                    >
+                        Choose Aadhaar back
+                    </div>
+
+                    <div class="text-xs text-slate-400 mt-0.5">
+                        JPG, JPEG or PNG
+                    </div>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right
+                          text-xs text-slate-300">
+                </i>
+
+            </label>
+
+            <input
+                type="file"
+                id="aadhaar_back"
+                name="aadhaar_back"
+                accept="image/jpeg,image/png,image/webp"
+                class="hidden"
+            >
+
+            <!-- AADHAAR BACK PREVIEW -->
+            <div id="aadhaarBackPreviewWrapper" class="hidden mt-3">
+                <img
+                    id="aadhaarBackPreview"
+                    src=""
+                    alt="Aadhaar back preview"
+                    class="w-full max-h-56 object-contain rounded-xl border border-slate-200 bg-slate-50 p-2"
+                >
+                <p id="aadhaarBackPreviewName" class="text-xs text-slate-500 mt-1.5 truncate"></p>
+            </div>
+
+            <p class="text-xs text-slate-400 mt-1.5">
+                Upload the back side of your Aadhaar card.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CERTIFICATE
+    ====================================================== -->
+
+    <div class="mb-5">
+
+        <label
+            class="block text-xs font-semibold
+                   text-slate-600
+                   uppercase tracking-wider mb-2"
+        >
+            CERTIFICATES
+            <span class="text-slate-400 normal-case tracking-normal">
+                (Optional)
+            </span>
+        </label>
+
+        <label
+            for="certificates"
+            class="flex items-center
+                   gap-3
+                   w-full
+                   min-h-[68px]
+                   px-4
+                   rounded-xl
+                   border border-slate-200
+                   bg-white
+                   cursor-pointer
+                   hover:bg-slate-50
+                   hover:border-slate-300
+                   transition-all"
+        >
+
+            <div class="w-10 h-10
+                        rounded-lg
+                        bg-slate-100
+                        flex items-center
+                        justify-center
+                        flex-shrink-0">
+
+                <i class="fa-solid fa-file-arrow-up
+                          text-slate-400">
+                </i>
+
+            </div>
+
+            <div class="min-w-0 flex-1">
+
+                <div
+                    id="certificateText"
+                    class="text-sm font-medium
+                           text-slate-600
+                           truncate"
+                >
+                    Choose certificate
+                </div>
+
+                <div class="text-xs text-slate-400 mt-0.5">
+                    PDF, JPG, JPEG or PNG
+                </div>
+
+            </div>
+
+            <i class="fa-solid fa-chevron-right
+                      text-xs text-slate-300">
+            </i>
+
+        </label>
+
+        <input
+            type="file"
+            id="certificates"
+            name="certificates"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            class="hidden"
+        >
+
+        <p class="text-xs text-slate-400 mt-1.5">
+            Upload experience, training, tourism or other relevant certificates.
+        </p>
+
+    </div>
+
+</div>
+
+            <!-- PASSWORDS -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('password', 'passwordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i id="passwordIcon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" placeholder="••••••••"
+                            class="w-full h-11 px-4 pr-11 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                        <button type="button" onclick="togglePassword('confirmPassword', 'confirmPasswordIcon')"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i id="confirmPasswordIcon" class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="pt-2">
+                <button type="submit"
+                    class="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold tracking-wide transition shadow-sm active:scale-[0.99]">
+                    Create Account
+                </button>.
+            </div>
+
+            <p class="text-center text-sm text-slate-500 pt-2">
+                Already have an account?
+                <a href="/user/login/" class="text-indigo-600 hover:text-indigo-700 font-bold ml-0.5 underline underline-offset-4">
+                    Sign in
+                </a>
+            </p>
+        </form>
+    </div>
+</section>
+<!-- =========================================================
+     EMAIL OTP VERIFICATION MODAL
+========================================================= -->
+
+<div
+    id="otpModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm px-4"
+>
+
+    <div
+        class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-7 md:p-8 relative"
+    >
+
+        <!-- CLOSE BUTTON -->
+        <button
+            type="button"
+            id="closeOtpModal"
+            class="absolute top-5 right-5 w-9 h-9 rounded-full
+                   bg-slate-100 hover:bg-slate-200
+                   text-slate-500 hover:text-slate-800
+                   flex items-center justify-center
+                   transition"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <!-- ICON -->
+        <div class="flex justify-center mb-5">
+
+            <div
+                class="w-16 h-16 rounded-2xl
+                       bg-indigo-50 text-indigo-600
+                       flex items-center justify-center"
+            >
+                <i class="fa-solid fa-envelope-circle-check text-2xl"></i>
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+        <div class="text-center">
+
+            <h3 class="text-2xl font-extrabold text-slate-950">
+                Verify Your Email
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-2 leading-6">
+                We've sent a 6-digit verification code to
+            </p>
+
+            <p
+                id="otpEmail"
+                class="font-bold text-slate-900 mt-1 break-all"
+            >
+                your@email.com
+            </p>
+
+        </div>
+
+
+        <!-- OTP ERROR -->
+        <div
+            id="otpError"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-rose-50 text-rose-700
+                   border border-rose-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP SUCCESS -->
+        <div
+            id="otpSuccess"
+            class="hidden mt-5 px-4 py-3 rounded-xl
+                   bg-emerald-50 text-emerald-700
+                   border border-emerald-200
+                   text-sm font-medium
+                   flex items-center gap-2"
+        >
+            <i class="fa-solid fa-circle-check"></i>
+
+            <span></span>
+        </div>
+
+
+        <!-- OTP INPUTS -->
+        <div class="flex justify-center gap-2 sm:gap-3 mt-7">
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+            <input
+                type="text"
+                maxlength="1"
+                inputmode="numeric"
+                class="otp-input w-11 h-13 sm:w-12 sm:h-14
+                       text-center text-xl font-extrabold
+                       rounded-xl border border-slate-200
+                       text-slate-900
+                       focus:outline-none
+                       focus:border-indigo-600
+                       focus:ring-2 focus:ring-indigo-100
+                       transition"
+            >
+
+        </div>
+
+
+        <!-- VERIFY BUTTON -->
+        <button
+            type="button"
+            id="verifyOtpBtn"
+            class="w-full h-12 mt-7 rounded-xl
+                   bg-slate-900 hover:bg-slate-800
+                   text-white font-bold
+                   tracking-wide
+                   transition
+                   disabled:opacity-50
+                   disabled:cursor-not-allowed"
+        >
+            <span id="verifyOtpText">
+                Verify Email
+            </span>
+
+            <span
+                id="verifyOtpLoader"
+                class="hidden"
+            >
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                Verifying...
+            </span>
+        </button>
+
+
+        <!-- RESEND -->
+        <div class="text-center mt-5">
+
+            <p class="text-sm text-slate-500">
+                Didn't receive the code?
+            </p>
+
+            <button
+                type="button"
+                id="resendOtpBtn"
+                class="mt-1 text-indigo-600 hover:text-indigo-700
+                       font-bold text-sm
+                       disabled:text-slate-400
+                       disabled:cursor-not-allowed"
+                disabled
+            >
+                Resend OTP
+            </button>
+
+            <p
+                id="otpTimer"
+                class="text-xs text-slate-400 mt-2"
+            >
+                Resend available in 30 seconds
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<script>
+/* =========================================================
+   REGISTER PAGE - GUIDE DETAILS + LOCATION + EMAIL OTP
+   ========================================================= */
+
+let allLocations = [];
+let registrationFormData = null;
+let registrationEmail = "";
+let resendTimer = null;
+let resendSeconds = 30;
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function showFormError(message) {
+    const box = $("errorMessage");
+    const span = box?.querySelector("span");
+    if (span) span.textContent = message;
+    box?.classList.remove("hidden");
+    $("successMessage")?.classList.add("hidden");
+}
+
+function showFormSuccess(message) {
+    const box = $("successMessage");
+    const span = box?.querySelector("span");
+    if (span) span.textContent = message;
+    box?.classList.remove("hidden");
+    $("errorMessage")?.classList.add("hidden");
+}
+
+function hideFormMessages() {
+    $("successMessage")?.classList.add("hidden");
+    $("errorMessage")?.classList.add("hidden");
+}
+
+/* ====================== PASSWORD ====================== */
+
+function togglePassword(inputId, iconId) {
+    const input = $(inputId);
+    const icon = $(iconId);
+    if (!input || !icon) return;
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
+/* ====================== GUIDE DETAILS ====================== */
+
+function toggleGuideFields() {
+
+    const selectedRole =
+        document.querySelector('input[name="role"]:checked');
+
+    const guideFields =
+        document.getElementById("guideFields");
+
+    const locationsWrapper =
+        document.getElementById("locationsWrapper");
+
+    if (!selectedRole) {
+        console.log("No role selected");
+        return;
+    }
+
+    const role = selectedRole.value;
+
+    console.log("ROLE SELECTED:", role);
+
+
+    /* =====================================================
+       GUIDE
+    ===================================================== */
+
+    if (role === "guide") {
+
+        console.log("SHOW GUIDE FIELDS");
+
+        /* Show Guide Details */
+        if (guideFields) {
+            guideFields.style.display = "block";
+        }
+
+        /* Show Location */
+        if (locationsWrapper) {
+            locationsWrapper.style.display = "block";
+        }
+
+        /* Required fields */
+
+        const languages =
+            document.getElementById("languages");
+
+        const aadhaarFront =
+            document.getElementById("aadhaar_front");
+
+        const aadhaarBack =
+            document.getElementById("aadhaar_back");
+
+        if (languages) {
+            languages.required = true;
+        }
+
+        if (aadhaarFront) {
+            aadhaarFront.required = true;
+        }
+
+        if (aadhaarBack) {
+            aadhaarBack.required = true;
+        }
+
+    }
+
+
+    /* =====================================================
+       TOURIST
+    ===================================================== */
+
+    else {
+
+        console.log("HIDE GUIDE FIELDS");
+
+        /* Hide Guide Details */
+        if (guideFields) {
+            guideFields.style.display = "none";
+        }
+
+        /* Hide Location */
+        if (locationsWrapper) {
+            locationsWrapper.style.display = "none";
+        }
+
+        /* Remove required */
+
+        const languages =
+            document.getElementById("languages");
+
+        const aadhaarFront =
+            document.getElementById("aadhaar_front");
+
+        const aadhaarBack =
+            document.getElementById("aadhaar_back");
+
+        if (languages) {
+            languages.required = false;
+        }
+
+        if (aadhaarFront) {
+            aadhaarFront.required = false;
+        }
+
+        if (aadhaarBack) {
+            aadhaarBack.required = false;
+        }
+    }
+}
+
+
+/* =========================================================
+   ROLE CHANGE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const roleInputs =
+        document.querySelectorAll('input[name="role"]');
+
+    roleInputs.forEach(function (radio) {
+
+        radio.addEventListener(
+            "change",
+            toggleGuideFields
+        );
+
+    });
+
+    /* Set correct initial state */
+    toggleGuideFields();
+
+});
+
+{% comment %} function toggleGuideFields() {
+    const role = document.querySelector('input[name="role"]:checked')?.value;
+    const guideFields = $("guideFields");
+    const locationsWrapper = $("locationsWrapper");
+
+    if (!guideFields || !locationsWrapper) return;
+
+    if (role === "guide") {
+        guideFields.classList.remove("hidden");
+        locationsWrapper.classList.remove("hidden");
+
+        $("languages")?.setAttribute("required", "required");
+        $("aadhaar_front")?.setAttribute("required", "required");
+        $("aadhaar_back")?.setAttribute("required", "required");
+    } else {
+        guideFields.classList.add("hidden");
+        locationsWrapper.classList.add("hidden");
+
+        $("languages")?.removeAttribute("required");
+        $("aadhaar_front")?.removeAttribute("required");
+        $("aadhaar_back")?.removeAttribute("required");
+
+        if ($("bio")) $("bio").value = "";
+        if ($("experience_years")) $("experience_years").value = "";
+        if ($("languages")) $("languages").value = "";
+        if ($("aadhaar_front")) $("aadhaar_front").value = "";
+        if ($("aadhaar_back")) $("aadhaar_back").value = "";
+        if ($("certificates")) $("certificates").value = "";
+
+        resetLocationSelects();
+    }
+} {% endcomment %}
+
+document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener("change", toggleGuideFields);
+});
+
+/* ====================== LOCATION ====================== */
+
+function resetLocationSelects() {
+    const country = $("country");
+    const state = $("state");
+    const district = $("district");
+    const city = $("city");
+    const architecture = $("architecture");
+
+    if (!country || !state || !district || !city || !architecture) return;
+
+    country.value = "";
+    state.innerHTML = '<option value="">Select State</option>';
+    district.innerHTML = '<option value="">Select District</option>';
+    city.innerHTML = '<option value="">Select City</option>';
+    architecture.innerHTML = '<option value="">Select Place / Monument</option>';
+
+    state.disabled = true;
+    district.disabled = true;
+    city.disabled = true;
+    architecture.disabled = true;
+}
+
+function fillSelect(select, values, placeholder) {
+    if (!select) return;
+
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+
+    values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+    });
+}
+
+async function loadLocations() {
+    try {
+        const response = await fetch("/user/api/locations/");
+
+        if (!response.ok) {
+            throw new Error(`Location API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            console.error("Location API did not return an array:", data);
+            showFormError("Unable to load guide locations.");
+            return;
+        }
+
+        allLocations = data;
+        loadCountries();
+
+    } catch (error) {
+        console.error("Failed to load locations:", error);
+        showFormError("Unable to load guide locations. Please refresh the page.");
+    }
+}
+
+function loadCountries() {
+    const countrySelect = $("country");
+    if (!countrySelect) return;
+
+    const countries = [
+        ...new Set(
+            allLocations
+                .map(location => location.country)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(countrySelect, countries, "Select Country");
+}
+
+$("country")?.addEventListener("change", function () {
+    const country = this.value;
+    const stateSelect = $("state");
+    const districtSelect = $("district");
+    const citySelect = $("city");
+    const architectureSelect = $("architecture");
+
+    stateSelect.innerHTML = '<option value="">Select State</option>';
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+    citySelect.innerHTML = '<option value="">Select City</option>';
+    architectureSelect.innerHTML = '<option value="">Select Place / Monument</option>';
+
+    districtSelect.disabled = true;
+    citySelect.disabled = true;
+    architectureSelect.disabled = true;
+
+    if (!country) {
+        stateSelect.disabled = true;
+        return;
+    }
+
+    const states = [
+        ...new Set(
+            allLocations
+                .filter(location => location.country === country)
+                .map(location => location.state)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(stateSelect, states, "Select State");
+    stateSelect.disabled = false;
+});
+
+$("state")?.addEventListener("change", function () {
+    const country = $("country").value;
+    const state = this.value;
+    const districtSelect = $("district");
+    const citySelect = $("city");
+    const architectureSelect = $("architecture");
+
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+    citySelect.innerHTML = '<option value="">Select City</option>';
+    architectureSelect.innerHTML = '<option value="">Select Place / Monument</option>';
+
+    citySelect.disabled = true;
+    architectureSelect.disabled = true;
+
+    if (!country || !state) {
+        districtSelect.disabled = true;
+        return;
+    }
+
+    const districts = [
+        ...new Set(
+            allLocations
+                .filter(
+                    location =>
+                        location.country === country &&
+                        location.state === state
+                )
+                .map(location => location.district)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(districtSelect, districts, "Select District");
+    districtSelect.disabled = false;
+});
+
+$("district")?.addEventListener("change", function () {
+    const country = $("country").value;
+    const state = $("state").value;
+    const district = this.value;
+    const citySelect = $("city");
+    const architectureSelect = $("architecture");
+
+    citySelect.innerHTML = '<option value="">Select City</option>';
+    architectureSelect.innerHTML = '<option value="">Select Place / Monument</option>';
+
+    citySelect.disabled = true;
+    architectureSelect.disabled = true;
+
+    if (!country || !state || !district) return;
+
+    const cities = [
+        ...new Set(
+            allLocations
+                .filter(
+                    location =>
+                        location.country === country &&
+                        location.state === state &&
+                        location.district === district
+                )
+                .map(location => location.city)
+                .filter(Boolean)
+        )
+    ];
+
+    fillSelect(citySelect, cities, "Select City");
+    citySelect.disabled = cities.length === 0;
+});
+
+$("city")?.addEventListener("change", function () {
+    const country = $("country").value;
+    const state = $("state").value;
+    const district = $("district").value;
+    const city = this.value;
+    const architectureSelect = $("architecture");
+
+    architectureSelect.innerHTML =
+        '<option value="">Select Place / Monument</option>';
+    architectureSelect.disabled = true;
+
+    if (!country || !state || !district || !city) return;
+
+    const places = allLocations.filter(
+        location =>
+            location.country === country &&
+            location.state === state &&
+            location.district === district &&
+            location.city === city
+    );
+
+    places.forEach(location => {
+        const option = document.createElement("option");
+
+        // Submit Location.id while displaying the actual place/monument name.
+        option.value = location.id;
+        option.textContent = location.architecture;
+
+        architectureSelect.appendChild(option);
+    });
+
+    architectureSelect.disabled = places.length === 0;
+});
+
+/* ====================== OTP ELEMENTS ====================== */
+
+const registerForm = $("registerForm");
+const otpModal = $("otpModal");
+const otpEmail = $("otpEmail");
+const otpError = $("otpError");
+const otpSuccess = $("otpSuccess");
+const verifyOtpBtn = $("verifyOtpBtn");
+const verifyOtpText = $("verifyOtpText");
+const verifyOtpLoader = $("verifyOtpLoader");
+const resendOtpBtn = $("resendOtpBtn");
+const otpTimer = $("otpTimer");
+const closeOtpModal = $("closeOtpModal");
+const otpInputs = document.querySelectorAll(".otp-input");
+
+/* ====================== RESPONSE HELPER ====================== */
+
+async function readResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+        return await response.json();
+    }
+
+    const text = await response.text();
+
+    return {
+        detail: text || `Server returned status ${response.status}.`
+    };
+}
+
+/* ====================== OTP MODAL ====================== */
+
+function showOtpModal(email) {
+    registrationEmail = email;
+
+    if (otpEmail) otpEmail.textContent = email;
+
+    otpModal.classList.remove("hidden");
+    otpModal.classList.add("flex");
+
+    clearOtpInputs();
+    hideOtpMessages();
+    startResendTimer();
+
+    setTimeout(() => otpInputs[0]?.focus(), 200);
+}
+
+function closeOtp() {
+    otpModal.classList.add("hidden");
+    otpModal.classList.remove("flex");
+}
+
+closeOtpModal?.addEventListener("click", closeOtp);
+
+/* ====================== OTP INPUTS ====================== */
+
+otpInputs.forEach((input, index) => {
+
+    input.addEventListener("input", function (event) {
+        let value = event.target.value.replace(/\D/g, "");
+
+        if (value.length > 1) {
+            const digits = value.slice(0, 6);
+
+            digits.split("").forEach((digit, i) => {
+                if (otpInputs[i]) otpInputs[i].value = digit;
+            });
+
+            if (digits.length === 6) otpInputs[5].focus();
+
+            updateVerifyButton();
+            return;
+        }
+
+        event.target.value = value;
+
+        if (value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+
+        updateVerifyButton();
+    });
+
+    input.addEventListener("keydown", function (event) {
+        if (event.key === "Backspace" && !input.value && index > 0) {
+            otpInputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index > 0) {
+            otpInputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+        }
+    });
+
+    input.addEventListener("paste", function (event) {
+        event.preventDefault();
+
+        const pastedData = event.clipboardData
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        pastedData.split("").forEach((digit, i) => {
+            if (otpInputs[i]) otpInputs[i].value = digit;
+        });
+
+        updateVerifyButton();
+
+        if (pastedData.length === 6) otpInputs[5].focus();
+    });
+});
+
+function getOtpValue() {
+    return Array.from(otpInputs)
+        .map(input => input.value)
+        .join("");
+}
+
+function clearOtpInputs() {
+    otpInputs.forEach(input => {
+        input.value = "";
+        input.disabled = false;
+    });
+
+    updateVerifyButton();
+}
+
+function updateVerifyButton() {
+    if (verifyOtpBtn) {
+        verifyOtpBtn.disabled = getOtpValue().length !== 6;
+    }
+}
+
+function hideOtpMessages() {
+    otpError?.classList.add("hidden");
+    otpSuccess?.classList.add("hidden");
+}
+
+function showOtpError(message) {
+    otpSuccess?.classList.add("hidden");
+
+    if (otpError) {
+        otpError.querySelector("span").textContent = message;
+        otpError.classList.remove("hidden");
+    }
+}
+
+function showOtpSuccess(message) {
+    otpError?.classList.add("hidden");
+
+    if (otpSuccess) {
+        otpSuccess.querySelector("span").textContent = message;
+        otpSuccess.classList.remove("hidden");
+    }
+}
+
+/* =========================================================
+   IMAGE PREVIEWS
+   ========================================================= */
+
+function setupImagePreview(inputId, imageId, wrapperId, nameId) {
+    const input = $(inputId);
+    const image = $(imageId);
+    const wrapper = $(wrapperId);
+    const name = $(nameId);
+
+    if (!input || !image || !wrapper) return;
+
+    input.addEventListener("change", function () {
+        const file = this.files?.[0];
+
+        if (!file) {
+            wrapper.classList.add("hidden");
+            image.removeAttribute("src");
+            if (name) name.textContent = "";
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            wrapper.classList.add("hidden");
+            image.removeAttribute("src");
+            if (name) name.textContent = "";
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(file);
+
+        image.onload = function () {
+            URL.revokeObjectURL(objectUrl);
+        };
+
+        image.src = objectUrl;
+        wrapper.classList.remove("hidden");
+
+        if (name) {
+            name.textContent = file.name;
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    setupImagePreview(
+        "profile_image",
+        "profileImagePreview",
+        "profileImagePreviewWrapper",
+        "profileImagePreviewName"
+    );
+
+    setupImagePreview(
+        "aadhaar_front",
+        "aadhaarFrontPreview",
+        "aadhaarFrontPreviewWrapper",
+        "aadhaarFrontPreviewName"
+    );
+
+    setupImagePreview(
+        "aadhaar_back",
+        "aadhaarBackPreview",
+        "aadhaarBackPreviewWrapper",
+        "aadhaarBackPreviewName"
+    );
+
+    const certificateInput = $("certificates");
+    const certificateText = $("certificateText");
+
+    certificateInput?.addEventListener("change", function () {
+        const file = this.files?.[0];
+
+        if (certificateText) {
+            certificateText.textContent =
+                file?.name || "Choose certificate";
+        }
+    });
+});
+
+/* =========================================================
+   BUILD COMPLETE REGISTRATION FORMDATA
+   ========================================================= */
+
+function buildRegistrationFormData() {
+    const role =
+        document.querySelector('input[name="role"]:checked')?.value || "tourist";
+
+    const username = $("username").value.trim();
+    const email = $("email").value.trim();
+    const phoneNumber = $("phone_number").value.trim();
+    const password = $("password").value;
+    const confirmPassword = $("confirmPassword").value;
+
+    if (!username) {
+        showFormError("Please enter your username.");
+        return null;
+    }
+
+    if (!email) {
+        showFormError("Please enter your email address.");
+        return null;
+    }
+
+    if (!phoneNumber) {
+        showFormError("Please enter your phone number.");
+        return null;
+    }
+
+    if (!password) {
+        showFormError("Please enter a password.");
+        return null;
+    }
+
+    if (password !== confirmPassword) {
+        showFormError("Passwords do not match.");
+        return null;
+    }
+
+    const formData = new FormData();
+
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("phone_number", phoneNumber);
+    formData.append("password", password);
+    formData.append("confirm_password", confirmPassword);
+    formData.append("role", role);
+
+    /* Profile image */
+    const profileImage = $("profile_image")?.files?.[0];
+
+    if (profileImage) {
+        formData.append("profile_image", profileImage);
+    }
+
+    /* =====================================================
+       GUIDE DETAILS
+       ===================================================== */
+
+    if (role === "guide") {
+        const bio = $("bio")?.value.trim() || "";
+        const experienceYears = $("experience_years")?.value || "0";
+        const languages = $("languages")?.value.trim() || "";
+
+        const selectedLocationId = $("architecture")?.value || "";
+
+        const aadhaarFront = $("aadhaar_front")?.files?.[0];
+        const aadhaarBack = $("aadhaar_back")?.files?.[0];
+        const certificates = $("certificates")?.files?.[0];
+
+        if (!selectedLocationId) {
+            showFormError(
+                "Please select Country, State, District, City and Place / Monument."
+            );
+            return null;
+
+
+            
+        }
+
+        if (!languages) {
+            showFormError("Please enter the languages you can speak.");
+            $("languages")?.focus();
+            return null;
+        }
+
+        if (!aadhaarFront) {
+            showFormError("Please upload the Aadhaar front image.");
+            return null;
+        }
+
+        if (!aadhaarBack) {
+            showFormError("Please upload the Aadhaar back image.");
+            return null;
+        }
+
+        /* GuideProfile data */
+        formData.append("bio", bio);
+        formData.append("experience_years", experienceYears);
+        formData.append("languages", languages);
+
+        /* User.locations ManyToMany field */
+        formData.append("locations", selectedLocationId);
+
+        /* Guide documents */
+        formData.append("aadhaar_front", aadhaarFront);
+        formData.append("aadhaar_back", aadhaarBack);
+
+        if (certificates) {
+            formData.append("certificates", certificates);
+        }
+    }
+
+    return formData;
+}
+
+/* =========================================================
+   REGISTER -> SEND OTP
+   ========================================================= */
+
+registerForm?.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    hideFormMessages();
+
+    const formData = buildRegistrationFormData();
+
+    if (!formData) return;
+
+    registrationEmail = formData.get("email");
+
+    const submitButton =
+        registerForm.querySelector('button[type="submit"]');
+
+    const originalButtonText = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Sending OTP...';
+
+    try {
+        const response = await fetch("/user/api/register/", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            /*
+             * Keep COMPLETE FormData until OTP verification.
+             * This preserves Guide Details + documents.
+             */
+            registrationFormData = formData;
+
+            showFormSuccess(
+                data.message || "OTP sent successfully to your email."
+            );
+
+            showOtpModal(registrationEmail);
+
+        } else {
+            let errorText = "Unable to start registration.";
+
+            if (data && typeof data === "object") {
+                if (data.detail) {
+                    errorText = String(data.detail);
+                } else {
+                    errorText = Object.entries(data)
+                        .map(([key, value]) => {
+                            if (Array.isArray(value)) {
+                                return `${key}: ${value.join(", ")}`;
+                            }
+
+                            if (typeof value === "object" && value !== null) {
+                                return `${key}: ${JSON.stringify(value)}`;
+                            }
+
+                            return `${key}: ${value}`;
+                        })
+                        .join("\n");
+                }
+            }
+
+            showFormError(errorText);
+            registrationFormData = null;
+        }
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        showFormError(
+            "Unable to connect to the server. Please try again."
+        );
+        registrationFormData = null;
+
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
+});
+
+/* =========================================================
+   VERIFY OTP
+   ========================================================= */
+
+verifyOtpBtn?.addEventListener("click", async function () {
+    const otp = getOtpValue();
+
+    if (otp.length !== 6) {
+        showOtpError("Please enter the complete 6-digit OTP.");
+        return;
+    }
+
+    if (!registrationFormData) {
+        showOtpError(
+            "Registration information is missing. Please register again."
+        );
+        return;
+    }
+
+    hideOtpMessages();
+
+    verifyOtpBtn.disabled = true;
+    verifyOtpText?.classList.add("hidden");
+    verifyOtpLoader?.classList.remove("hidden");
+
+    try {
+        const verifyData = new FormData();
+
+        /*
+         * Copy EVERY field from the original registration.
+         * Guide details and uploaded files are therefore retained.
+         */
+        for (const [key, value] of registrationFormData.entries()) {
+            verifyData.append(key, value);
+        }
+
+        verifyData.append("otp", otp);
+
+        const response = await fetch(
+            "/user/api/register/verify-otp/",
+            {
+                method: "POST",
+                body: verifyData
+            }
+        );
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            showOtpSuccess(
+                data.message ||
+                "Email verified successfully. Registration completed."
+            );
+
+            if (resendTimer) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+            }
+
+            otpInputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            verifyOtpBtn.disabled = true;
+            resendOtpBtn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = data.redirect_url || "/";
+            }, 1500);
+
+        } else {
+            let errorText = "Invalid OTP. Please try again.";
+
+            if (data?.error) {
+                errorText = data.error;
+            } else if (data?.detail) {
+                errorText = data.detail;
+            } else if (data && typeof data === "object") {
+                errorText = Object.entries(data)
+                    .map(([key, value]) => {
+                        if (Array.isArray(value)) {
+                            return `${key}: ${value.join(", ")}`;
+                        }
+                        return `${key}: ${String(value)}`;
+                    })
+                    .join(" ");
+            }
+
+            showOtpError(errorText);
+            clearOtpInputs();
+            otpInputs[0]?.focus();
+        }
+
+    } catch (error) {
+        console.error("OTP verification error:", error);
+        showOtpError("Unable to verify OTP. Please try again.");
+
+    } finally {
+        verifyOtpText?.classList.remove("hidden");
+        verifyOtpLoader?.classList.add("hidden");
+
+        if (getOtpValue().length !== 6) {
+            updateVerifyButton();
+        }
+    }
+});
+
+/* =========================================================
+   RESEND OTP
+   ========================================================= */
+
+resendOtpBtn?.addEventListener("click", async function () {
+    if (!registrationEmail) {
+        showOtpError("Email address is missing.");
+        return;
+    }
+
+    hideOtpMessages();
+
+    resendOtpBtn.disabled = true;
+    resendOtpBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Sending...';
+
+    try {
+        const response = await fetch(
+            "/user/api/register/resend-otp/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: registrationEmail
+                })
+            }
+        );
+
+        const data = await readResponse(response);
+
+        if (response.ok) {
+            showOtpSuccess(
+                data.message ||
+                "A new OTP has been sent to your email."
+            );
+
+            clearOtpInputs();
+            otpInputs[0]?.focus();
+            startResendTimer();
+
+        } else {
+            showOtpError(
+                data?.error ||
+                data?.detail ||
+                "Unable to resend OTP."
+            );
+
+            resendOtpBtn.disabled = false;
+        }
+
+    } catch (error) {
+        console.error("Resend OTP error:", error);
+
+        showOtpError(
+            "Unable to resend OTP. Please try again."
+        );
+
+        resendOtpBtn.disabled = false;
+
+    } finally {
+        resendOtpBtn.innerHTML = "Resend OTP";
+    }
+});
+
+/* =========================================================
+   RESEND TIMER
+   ========================================================= */
+
+function startResendTimer() {
+    if (resendTimer) {
+        clearInterval(resendTimer);
+    }
+
+    resendSeconds = 30;
+    resendOtpBtn.disabled = true;
+
+    otpTimer.textContent =
+        `Resend available in ${resendSeconds} seconds`;
+
+    resendTimer = setInterval(() => {
+        resendSeconds--;
+
+        if (resendSeconds <= 0) {
+            clearInterval(resendTimer);
+            resendTimer = null;
+
+            resendOtpBtn.disabled = false;
+            otpTimer.textContent =
+                "You can request a new OTP now.";
+
+            return;
+        }
+
+        otpTimer.textContent =
+            `Resend available in ${resendSeconds} seconds`;
+
+    }, 1000);
+}
+
+/* =========================================================
+   ESCAPE KEY
+   ========================================================= */
+
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        otpModal &&
+        !otpModal.classList.contains("hidden")
+    ) {
+        closeOtp();
+    }
+});
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    toggleGuideFields();
+    loadLocations();
+});
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+<section class="min-h-screen pt-24 md:pt-24 pb-8 md:pb-18 bg-slate-50 flex items-center justify-center px-4 antialiased">
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 md:p-10">
+
+        <!-- HEADER -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-950">
+                Create Account
+            </h2>
+            <p class="text-slate-500 text-sm mt-2">
+                Join our community today. Please fill in your credentials below.
+            </p>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <div id="successMessage" class="hidden mb-6 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium text-sm flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+            <span class="inline-block"></span>
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        <div id="errorMessage" class="hidden mb-6 px-4 py-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 font-medium text-sm flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
+            <span class="inline-block"></span>
+        </div>
+
+        <!-- FORM -->
+        <form id="registerForm" class="space-y-5">
+
+            <!-- ROLE SELECTOR -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                    I want to register as a:
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="role" value="tourist" class="peer hidden" checked>
+                        <div class="h-12 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-slate-600 peer-checked:bg-slate-900 peer-checked:border-slate-900 peer-checked:text-white hover:bg-slate-50 transition-all duration-200">
+                            <i class="fa-solid fa-passport mr-2 text-sm"></i> Tourist
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer">
+                        <input type="radio" name="role" value="guide" class="peer hidden">
+                        <div class="h-12 rounded-xl border border-slate-200 flex items-center justify-center font-bold text-slate-600 peer-checked:bg-slate-900 peer-checked:border-slate-900 peer-checked:text-white hover:bg-slate-50 transition-all duration-200">
+                            <i class="fa-solid fa-map-location-dot mr-2 text-sm"></i> Guide
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- USERNAME & EMAIL -->
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Username</label>
+                    <input type="text" id="username" placeholder="e.g. johndoe"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Email Address</label>
+                    <input type="email" id="email" placeholder="name@example.com"
+                        class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+                </div>
+            </div>
+
+            <!-- PHONE -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Phone Number</label>
+                <input type="text" id="phone_number" placeholder="Contact number"
+                    class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all">
+            </div>
+
+            <!-- LOCATIONS (ONLY FOR GUIDE) -->
+
+<!-- GUIDE LOCATION -->
+<div id="locationsWrapper" class="space-y-4 hidden">
+
+    <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+        Guide Location <span class="text-rose-500">*</span>
+    </label>
+
+    <!-- COUNTRY -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            Country
+        </label>
+
+        <select
+            id="country"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all"
+        >
+    
+        </select>
+    </div>
+
+    <!-- STATE -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            State
+        </label>
+
+        <select
+            id="state"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select State</option>
+        </select>
+    </div>
+
+    <!-- DISTRICT -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            District
+        </label>
+
+        <select
+            id="district"
+            disabled
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-sm transition-all disabled:bg-slate-100 disabled:text-slate-400"
+        >
+            <option value="">Select District</option>
+        </select>
+    </div>
+
+    <!-- CITY -->
+    <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">
             Monument
 
         </label>
@@ -1116,38 +3222,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-{% comment %} function toggleGuideFields() {
-    const role = document.querySelector('input[name="role"]:checked')?.value;
-    const guideFields = $("guideFields");
-    const locationsWrapper = $("locationsWrapper");
-
-    if (!guideFields || !locationsWrapper) return;
-
-    if (role === "guide") {
-        guideFields.classList.remove("hidden");
-        locationsWrapper.classList.remove("hidden");
-
-        $("languages")?.setAttribute("required", "required");
-        $("aadhaar_front")?.setAttribute("required", "required");
-        $("aadhaar_back")?.setAttribute("required", "required");
-    } else {
-        guideFields.classList.add("hidden");
-        locationsWrapper.classList.add("hidden");
-
-        $("languages")?.removeAttribute("required");
-        $("aadhaar_front")?.removeAttribute("required");
-        $("aadhaar_back")?.removeAttribute("required");
-
-        if ($("bio")) $("bio").value = "";
-        if ($("experience_years")) $("experience_years").value = "";
-        if ($("languages")) $("languages").value = "";
-        if ($("aadhaar_front")) $("aadhaar_front").value = "";
-        if ($("aadhaar_back")) $("aadhaar_back").value = "";
-        if ($("certificates")) $("certificates").value = "";
-
-        resetLocationSelects();
-    }
-} {% endcomment %}
 
 document.querySelectorAll('input[name="role"]').forEach(radio => {
     radio.addEventListener("change", toggleGuideFields);
@@ -1556,6 +3630,9 @@ function buildRegistrationFormData() {
                 "Please select Country, State, District and Monument / City."
             );
             return null;
+
+
+            
         }
 
         if (!languages) {
@@ -1911,7 +3988,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 
 

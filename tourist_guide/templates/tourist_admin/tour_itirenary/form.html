@@ -1,0 +1,563 @@
+{% extends "tourist_admin/base.html" %}
+
+{% block title %}
+
+{% if object %}
+    Edit Itinerary
+{% else %}
+    Add Itinerary
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="min-h-screen bg-slate-50">
+
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <div class="bg-white border-b border-slate-200">
+
+        <div class="px-4 sm:px-6 py-5">
+
+            <div class="flex items-center gap-2 text-sm text-slate-500 mb-3">
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="hover:text-teal-600 transition"
+                >
+                    Dashboard
+                </a>
+
+                <i class="fa-solid fa-angle-right text-xs"></i>
+
+                <a
+                    href="{% url 'tour_itirenary_list' %}"
+                    class="hover:text-teal-600 transition"
+                >
+                    Itinerary
+                </a>
+
+                <i class="fa-solid fa-angle-right text-xs"></i>
+
+                <span class="text-slate-700 font-medium">
+
+                    {% if object %}
+                        Edit
+                    {% else %}
+                        Add
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row
+                        justify-between
+                        sm:items-center gap-4">
+
+                <div>
+
+                    <h1 class="text-2xl sm:text-3xl
+                               font-bold text-slate-900">
+
+                        {% if object %}
+                            Edit Itinerary
+                        {% else %}
+                            Add Itinerary
+                        {% endif %}
+
+                    </h1>
+
+                    <p class="text-sm text-slate-500 mt-1">
+
+                        {% if object %}
+
+                            Update this itinerary item.
+
+                        {% else %}
+
+                            Create a new itinerary item
+                            that can be attached to tours.
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         FORM
+    ========================================================== -->
+
+    <div class="p-4 sm:p-6">
+
+        <div class="max-w-3xl mx-auto">
+
+
+            <form
+                method="POST"
+                class="space-y-6"
+                id="itineraryForm"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     BASIC INFORMATION
+                ================================================== -->
+
+                <div class="bg-white
+                            rounded-2xl
+                            border border-slate-200
+                            shadow-sm
+                            overflow-hidden">
+
+
+                    <!-- HEADER -->
+
+                    <div class="px-5 sm:px-6 py-5
+                                border-b border-slate-200">
+
+                        <div class="flex items-center gap-3">
+
+                            <div class="w-11 h-11
+                                        rounded-xl
+                                        bg-teal-50
+                                        text-teal-600
+                                        flex items-center justify-center">
+
+                                <i class="fa-solid fa-route"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2 class="text-lg font-bold
+                                           text-slate-900">
+
+                                    Itinerary Information
+
+                                </h2>
+
+                                <p class="text-sm text-slate-500">
+
+                                    Enter the itinerary details below.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM BODY -->
+
+                    <div class="p-5 sm:p-6 space-y-6">
+
+
+                        <!-- TITLE -->
+
+                        <div>
+
+                            <label
+                                for="{{ form.title.id_for_label }}"
+                                class="block text-sm
+                                       font-semibold
+                                       text-slate-700 mb-2"
+                            >
+
+                                Itinerary Title
+
+                                <span class="text-red-500">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.title }}
+
+
+                            {% if form.title.errors %}
+
+                                <div class="mt-2 text-sm
+                                            text-red-600">
+
+                                    {% for error in form.title.errors %}
+
+                                        <p>{{ error }}</p>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <p class="text-xs text-slate-400 mt-2">
+
+                                Example:
+                                Arrival at Charminar,
+                                Explore Golconda Fort,
+                                Visit Local Market
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- SLOT POSITION -->
+
+                        <div>
+
+                            <label
+                                for="{{ form.slot_position.id_for_label }}"
+                                class="block text-sm
+                                       font-semibold
+                                       text-slate-700 mb-2"
+                            >
+
+                                Display Position
+
+                            </label>
+
+
+                            {{ form.slot_position }}
+
+
+                            {% if form.slot_position.errors %}
+
+                                <div class="mt-2 text-sm
+                                            text-red-600">
+
+                                    {% for error in form.slot_position.errors %}
+
+                                        <p>{{ error }}</p>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <p class="text-xs text-slate-400 mt-2">
+
+                                Lower numbers appear first.
+                                Example: 1, 2, 3, 4.
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- ACTIVE -->
+
+                        <div class="rounded-xl
+                                    border border-slate-200
+                                    bg-slate-50
+                                    p-4">
+
+                            <div class="flex items-center
+                                        justify-between gap-4">
+
+
+                                <div>
+
+                                    <p class="text-sm
+                                              font-semibold
+                                              text-slate-800">
+
+                                        Active Itinerary
+
+                                    </p>
+
+                                    <p class="text-xs
+                                              text-slate-500 mt-1">
+
+                                        Inactive itinerary items
+                                        will not be available
+                                        for selection in tours.
+
+                                    </p>
+
+                                </div>
+
+
+                                <label class="relative
+                                              inline-flex
+                                              items-center
+                                              cursor-pointer">
+
+                                    {{ form.is_active }}
+
+                                </label>
+
+                            </div>
+
+
+                            {% if form.is_active.errors %}
+
+                                <div class="mt-2 text-sm
+                                            text-red-600">
+
+                                    {% for error in form.is_active.errors %}
+
+                                        <p>{{ error }}</p>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- NON FIELD ERRORS -->
+
+                        {% if form.non_field_errors %}
+
+                            <div class="rounded-xl
+                                        bg-red-50
+                                        border border-red-200
+                                        p-4">
+
+                                {% for error in form.non_field_errors %}
+
+                                    <p class="text-sm
+                                              text-red-600">
+
+                                        {{ error }}
+
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PREVIEW
+                ================================================== -->
+
+               
+
+                    {% comment %} </div>
+
+                </div> {% endcomment %}
+
+
+                <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                <div class="flex flex-col-reverse
+                            sm:flex-row
+                            justify-end
+                            gap-3">
+
+
+                    <a
+                        href="{% url 'tour_itirenary_list' %}"
+                        class="inline-flex
+                               items-center
+                               justify-center
+                               px-5 py-2.5
+                               rounded-xl
+                               border border-slate-300
+                               bg-white
+                               text-slate-700
+                               font-semibold
+                               hover:bg-slate-50
+                               transition"
+                    >
+
+                        <i class="fa-solid fa-xmark mr-2"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="inline-flex
+                               items-center
+                               justify-center
+                               px-6 py-2.5
+                               rounded-xl
+                               bg-teal-600
+                               hover:bg-teal-700
+                               text-white
+                               font-semibold
+                               shadow-sm
+                               transition"
+                    >
+
+                        <i class="fa-solid fa-check mr-2"></i>
+
+                        {% if object %}
+
+                            Update Itinerary
+
+                        {% else %}
+
+                            Create Itinerary
+
+                        {% endif %}
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     FORM FIELD STYLING
+============================================================= -->
+
+<style>
+
+    #itineraryForm input[type="text"],
+    #itineraryForm input[type="number"] {
+
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: #ffffff;
+        color: #0f172a;
+        outline: none;
+        transition: all 0.2s ease;
+
+    }
+
+
+    #itineraryForm input[type="text"]:focus,
+    #itineraryForm input[type="number"]:focus {
+
+        border-color: #14b8a6;
+
+        box-shadow:
+            0 0 0 3px
+            rgba(20, 184, 166, 0.12);
+
+    }
+
+
+    #itineraryForm input[type="checkbox"] {
+
+        width: 1.25rem;
+        height: 1.25rem;
+
+        accent-color: #0d9488;
+
+        cursor: pointer;
+
+    }
+
+</style>
+
+
+<!-- =============================================================
+     PREVIEW JS
+============================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const titleInput =
+            document.getElementById(
+                "{{ form.title.id_for_label }}"
+            );
+
+        const positionInput =
+            document.getElementById(
+                "{{ form.slot_position.id_for_label }}"
+            );
+
+        const previewTitle =
+            document.getElementById(
+                "previewTitle"
+            );
+
+        const previewPosition =
+            document.getElementById(
+                "previewPosition"
+            );
+
+
+        if (titleInput && previewTitle) {
+
+            titleInput.addEventListener(
+                "input",
+                function () {
+
+                    const value =
+                        this.value.trim();
+
+                    previewTitle.textContent =
+                        value ||
+                        "Itinerary title";
+
+                }
+            );
+
+        }
+
+
+        if (positionInput && previewPosition) {
+
+            positionInput.addEventListener(
+                "input",
+                function () {
+
+                    previewPosition.textContent =
+                        this.value ||
+                        "1";
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -14,6 +14,7 @@ class LocationSerializer(serializers.ModelSerializer):
             "state",
             "district",
             "city",
+            "architecture",
         ]
 
 
@@ -417,6 +418,7 @@ class LocationSerializer(
             "state",
             "district",
             "city",
+            "architecture",
         ]
 
 
@@ -436,6 +438,7 @@ class ProfileSerializer(
     state = serializers.SerializerMethodField()
     district = serializers.SerializerMethodField()
     city = serializers.SerializerMethodField()
+    architecture = serializers.SerializerMethodField()
 
 
 
@@ -471,6 +474,7 @@ class ProfileSerializer(
             "state",
             "district",
             "city",
+            "architecture",
             
             
             # Guide details
@@ -664,6 +668,19 @@ class ProfileSerializer(
 
             return location.city
 
+
+        return None
+    
+    
+    def get_architecture(self, obj):
+
+        if obj.role != "guide":
+            return None
+
+        location = obj.locations.first()
+
+        if location:
+            return location.architecture
 
         return None
     
