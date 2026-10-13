@@ -336,7 +336,7 @@ Home
         <div class="relative">
 
             <!-- DESKTOP PREVIOUS -->
-            <button
+            {% comment %} <button
                 id="homeToursPrev"
                 type="button"
                 aria-label="Previous tours"
@@ -367,7 +367,7 @@ Home
                         d="M15 19l-7-7 7-7"
                     />
                 </svg>
-            </button>
+            </button> {% endcomment %}
 
 
             <!-- VIEWPORT -->
@@ -389,7 +389,7 @@ Home
 
 
             <!-- DESKTOP NEXT -->
-            <button
+            {% comment %} <button
                 id="homeToursNext"
                 type="button"
                 aria-label="Next tours"
@@ -420,11 +420,11 @@ Home
                         d="M9 5l7 7-7 7"
                     />
                 </svg>
-            </button>
+            </button> {% endcomment %}
 
 
             <!-- MOBILE PREVIOUS -->
-            <button
+            {% comment %} <button
                 id="homeToursPrevMobile"
                 type="button"
                 aria-label="Previous tours"
@@ -455,11 +455,11 @@ Home
                         d="M15 19l-7-7 7-7"
                     />
                 </svg>
-            </button>
+            </button> {% endcomment %}
 
 
             <!-- MOBILE NEXT -->
-            <button
+            {% comment %} <button
                 id="homeToursNextMobile"
                 type="button"
                 aria-label="Next tours"
@@ -490,7 +490,7 @@ Home
                         d="M9 5l7 7-7-7"
                     />
                 </svg>
-            </button>
+            </button> {% endcomment %}
 
         </div>
 
@@ -834,7 +834,7 @@ Home
             </div>
 
             <a
-                href="/blogs/"
+                href="{% url 'bloglisting' %}"
                 class="group inline-flex w-fit items-center gap-3 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-800 shadow-sm transition-all duration-300 hover:border-indigo-600 hover:bg-indigo-600 hover:text-white hover:shadow-lg"
             >
                 <span>View all blogs</span>
@@ -1756,20 +1756,25 @@ function createHomeToursDots() {
 
                 return `
 
-                    <button
-                        type="button"
-                        data-home-tour-dot="${index}"
-                        aria-label="Go to tour page ${index + 1}"
-                        class="
-                            home-tour-dot
-                            h-2.5
-                            w-2.5
-                            rounded-full
-                            bg-slate-300
-                            transition-all
-                            duration-300
-                        "
-                    ></button>
+    <button
+        type="button"
+        data-home-tour-dot="${index}"
+        aria-label="Go to tour page ${index + 1}"
+        class="
+            home-tour-dot
+            rounded-full
+            shrink-0
+            border-0
+            p-0
+            cursor-pointer
+        "
+        style="
+            width:10px;
+            height:10px;
+            background-color:#cbd5e1;
+            transition:all 300ms ease;
+        "
+    ></button>
 
                 `;
 
@@ -1831,21 +1836,20 @@ function createHomeToursDots() {
 /* ============================================================
    UPDATE DOTS
 ============================================================ */
+/* ============================================================
+   UPDATE DOTS
+   ============================================================ */
 
 function updateHomeToursDots() {
 
     const elements =
         getHomeToursElements();
 
-
     const dots =
         elements.dots;
 
-
     if (!dots) {
-
         return;
-
     }
 
 
@@ -1853,6 +1857,13 @@ function updateHomeToursDots() {
         getHomeToursVisibleCount();
 
 
+    /*
+     * Current page
+     *
+     * Example desktop:
+     * index 0 → page 0
+     * index 2 → page 1
+     */
     const currentPage =
         Math.floor(
             homeToursSliderIndex /
@@ -1860,46 +1871,76 @@ function updateHomeToursDots() {
         );
 
 
-    dots
-        .querySelectorAll(
+    const allDots =
+        dots.querySelectorAll(
             ".home-tour-dot"
-        )
-        .forEach(
-            (dot, index) => {
-
-                if (
-                    index === currentPage
-                ) {
-
-                    dot.classList.remove(
-                        "bg-slate-300"
-                    );
-
-                    dot.classList.add(
-                        "bg-indigo-600",
-                        "w-7"
-                    );
-
-                }
-
-                else {
-
-                    dot.classList.remove(
-                        "bg-indigo-600",
-                        "w-7"
-                    );
-
-                    dot.classList.add(
-                        "bg-slate-300"
-                    );
-
-                }
-
-            }
         );
 
-}
 
+    allDots.forEach(
+        function (dot, index) {
+
+            /*
+             * Remove Tailwind color classes
+             * so there is no conflict.
+             */
+            dot.classList.remove(
+                "bg-indigo-600",
+                "bg-slate-300",
+                "w-7",
+                "w-2.5"
+            );
+
+
+            if (index === currentPage) {
+
+                /*
+                 * ACTIVE DOT
+                 */
+                dot.style.backgroundColor =
+                    "#4f46e5";
+
+                dot.style.width =
+                    "28px";
+
+                dot.style.height =
+                    "10px";
+
+                dot.style.opacity =
+                    "1";
+
+            }
+
+            else {
+
+                /*
+                 * INACTIVE DOT
+                 */
+                dot.style.backgroundColor =
+                    "#cbd5e1";
+
+                dot.style.width =
+                    "10px";
+
+                dot.style.height =
+                    "10px";
+
+                dot.style.opacity =
+                    "1";
+
+            }
+
+
+            /*
+             * Smooth animation
+             */
+            dot.style.transition =
+                "all 300ms ease";
+
+        }
+    );
+
+}
 
 /* ============================================================
    RENDER NORMAL TOURS SLIDER
@@ -2057,37 +2098,58 @@ function renderHomeToursSlider() {
 /* ============================================================
    NEXT TOUR
 ============================================================ */
-
 function nextHomeTours() {
 
     const visibleCount =
         getHomeToursVisibleCount();
 
+    const totalTours =
+        homeToursSliderData.length;
 
     const maxIndex =
         Math.max(
             0,
-            homeToursSliderData.length -
-            visibleCount
+            totalTours - visibleCount
         );
 
 
+    /*
+     * Move one FULL PAGE at a time.
+     *
+     * Desktop:
+     * 4 cards visible
+     * 6 total
+     *
+     * 0 → 2
+     *
+     * Tablet:
+     * 2 cards visible
+     *
+     * 0 → 2 → 4
+     *
+     * Mobile:
+     * 1 card visible
+     *
+     * 0 → 1 → 2 → ...
+     */
     if (
         homeToursSliderIndex <
         maxIndex
     ) {
 
-        homeToursSliderIndex++;
+        homeToursSliderIndex =
+            Math.min(
+                homeToursSliderIndex +
+                visibleCount,
+                maxIndex
+            );
 
-    }
-
-    else {
+    } else {
 
         /*
-         * Loop to beginning.
+         * Loop back to first page
          */
-        homeToursSliderIndex =
-            0;
+        homeToursSliderIndex = 0;
 
     }
 
@@ -2100,34 +2162,39 @@ function nextHomeTours() {
 /* ============================================================
    PREVIOUS TOUR
 ============================================================ */
-
 function previousHomeTours() {
 
     const visibleCount =
         getHomeToursVisibleCount();
 
+    const totalTours =
+        homeToursSliderData.length;
 
     const maxIndex =
         Math.max(
             0,
-            homeToursSliderData.length -
-            visibleCount
+            totalTours - visibleCount
         );
 
 
+    /*
+     * Move one FULL PAGE backward.
+     */
     if (
-        homeToursSliderIndex >
-        0
+        homeToursSliderIndex > 0
     ) {
 
-        homeToursSliderIndex--;
+        homeToursSliderIndex =
+            Math.max(
+                homeToursSliderIndex -
+                visibleCount,
+                0
+            );
 
-    }
-
-    else {
+    } else {
 
         /*
-         * Loop to last position.
+         * Loop to the last page
          */
         homeToursSliderIndex =
             maxIndex;
