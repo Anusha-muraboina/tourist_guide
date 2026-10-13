@@ -6,14 +6,17 @@ from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from tourist.models import Tour
 
+from tourist.models import Tour
+from blog.models import Blog
 from .serializers import (
     TourListSerializer,
     TourDetailSerializer,
     FAQSerializer
 )
 
+
+from blog.serializers import BlogListSerializer
 
 
 from tourist.serializers import CategorySerializer
@@ -88,72 +91,72 @@ class HomeListAPIView(
     ).order_by("-id")
 
 
+from django.db.models import Q, Count
+
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+from .models import Tour
+# from blog.models import Blog
+# from .serializers import TourListSerializer, BlogListSerializer
+
 
 class HomeAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
 
-        search = request.GET.get("search")
+        search = request.GET.get("search", "").strip()
+
+        # ============================================================
+        # BASE / SEARCH TOURS
+        # ============================================================
 
         tours = (
             Tour.objects
             .filter(is_active=True)
-            .select_related("location")
+            .select_related(
+                "location",
+                "category",
+            )
             .prefetch_related(
                 "images",
-                "pricing"
+                "pricing",
             )
         )
 
-        # =====================
-        # SEARCH
-        # =====================
-
+        # Search filtering
         if search:
-
             tours = tours.filter(
-
-                Q(title__icontains=search) |
-
-                Q(short_description__icontains=search) |
-                
-                Q(location__city__icontains=search) |
-                Q(location__state__icontains=search) |
-                Q(location__district__icontains=search) |
-
-                # Q(city__icontains=search) |
-
-                # Q(state__icontains=search) |
-
-                Q(category__name__icontains=search)
-
-            )
-
-        # =====================
-        # TOURS
-        # =====================
+                Q(title__icontains=search)
+                | Q(short_description__icontains=search)
+                | Q(location__city__icontains=search)
+                | Q(location__state__icontains=search)
+                | Q(location__district__icontains=search)
+                | Q(category__name__icontains=search)
+            ).distinct()
 
         tours_data = TourListSerializer(
-            tours[:4],
+            tours[:6],
             many=True,
-            context={
-                "request": request
-            }
+            context={"request": request},
         ).data
+
+        # ============================================================
+        # RECENT TOURS
+        # ============================================================
 
         recent_tours = (
             Tour.objects
-            .filter(
-                is_active=True
-            )
+            .filter(is_active=True)
             .select_related(
                 "location",
-                "category"
+                "category",
             )
             .prefetch_related(
                 "images",
-                "pricing"
+                "pricing",
             )
             .order_by("-created_at")[:3]
         )
@@ -161,54 +164,112 @@ class HomeAPIView(APIView):
         recent_tours_data = TourListSerializer(
             recent_tours,
             many=True,
-            context={
-                "request": request
-            }
+            context={"request": request},
         ).data
 
+        # ============================================================
+        # POPULAR TOURS
+        #
+        # HOME PAGE = ONLY 4
+        #
+        # Popularity is based on:
+        # confirmed
+        # on_process
+        # completed
+        # ============================================================
 
+        popular_tours = (
+            Tour.objects
+            .filter(is_active=True)
+            .annotate(
+                booking_count=Count(
+                    "bookings",
+                    filter=Q(
+                        bookings__status__in=[
+                            "confirmed",
+                            "on_process",
+                            "completed",
+                        ]
+                    ),
+                    distinct=True,
+                )
+            )
+            .select_related(
+                "location",
+                "category",
+            )
+            .prefetch_related(
+                "images",
+                "pricing",
+            )
+            .order_by(
+                "-booking_count",
+                "-created_at",
+            )[:4]
+        )
 
-        #         # =====================
-#         # UNFORGETTABLE
-#         # =====================
+        popular_tours_data = TourListSerializer(
+            popular_tours,
+            many=True,
+            context={"request": request},
+        ).data
+
+        # ============================================================
+        # FEATURED / UNFORGETTABLE EXPERIENCES
+        # ============================================================
 
         unforgettable = (
             Tour.objects
             .filter(
                 featured=True,
-                is_active=True
+                is_active=True,
+            )
+            .select_related(
+                "location",
+                "category",
             )
             .prefetch_related(
                 "images",
-                "pricing"
+                "pricing",
+            )
+            .order_by(
+                "slot_position",
+                "-created_at",
             )[:8]
         )
 
-        unforgettable_data = (
-            TourListSerializer(
-                unforgettable,
-                many=True,
-                context={
-                    "request": request
-                }
-            ).data
-        )
+        unforgettable_data = TourListSerializer(
+            unforgettable,
+            many=True,
+            context={"request": request},
+        ).data
 
-
-
-
-
-        # =====================
+        # ============================================================
         # DESTINATIONS
-        # =====================
+        # ============================================================
 
         destinations = []
 
         states = (
             Tour.objects
-            .filter(is_active=True , location__isnull=False)
-            .values_list("location__state", flat=True)
+            .filter(
+                is_active=True,
+                location__isnull=False,
+            )
+            .exclude(
+                location__state__isnull=True,
+            )
+            .exclude(
+                location__state__exact="",
+            )
+            .values_list(
+                "location__state",
+                flat=True,
+            )
             .distinct()
+            .order_by(
+                "location__state",
+            )
         )
 
         for state in states:
@@ -216,47 +277,258 @@ class HomeAPIView(APIView):
             first_tour = (
                 Tour.objects
                 .filter(
+                    is_active=True,
                     location__state=state,
-                    is_active=True
                 )
                 .select_related("location")
-                .prefetch_related(
-                    "images"
-                )
+                .prefetch_related("images")
                 .first()
             )
 
             image = None
 
-            if (
-                first_tour and
-                first_tour.images.first()
-            ):
+            if first_tour:
 
-                image = request.build_absolute_uri(
-                    first_tour.images.first().image.url
-                )
+                first_image = first_tour.images.first()
+
+                if first_image and first_image.image:
+                    image = request.build_absolute_uri(
+                        first_image.image.url
+                    )
 
             destinations.append({
-
                 "state": state,
-
-                "image": image
-
+                "image": image,
             })
 
-        return Response({
+        # ============================================================
+        # LATEST BLOGS
+        # ============================================================
 
+        latest_blogs = (
+            Blog.objects
+            .filter(is_active=True)
+            .select_related("category")
+            .order_by("-created_at")[:3]
+        )
+
+        latest_blogs_data = BlogListSerializer(
+            latest_blogs,
+            many=True,
+            context={"request": request},
+        ).data
+
+        # ============================================================
+        # RESPONSE
+        # ============================================================
+
+        return Response({
             "tours": tours_data,
-            
+
             "recent_tours": recent_tours_data,
 
+            # ONLY 4 POPULAR TOURS
+            "popular_tours": popular_tours_data,
+
             "destinations": destinations,
-                        "unforgettable":
-                unforgettable_data
 
+            "unforgettable": unforgettable_data,
 
+            "latest_blogs": latest_blogs_data,
         })
+
+
+# class HomeAPIView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def get(self, request):
+
+#         search = request.GET.get("search")
+
+#         tours = (
+#             Tour.objects
+#             .filter(is_active=True)
+#             .select_related("location")
+#             .prefetch_related(
+#                 "images",
+#                 "pricing"
+#             )
+#         )
+
+#         # =====================
+#         # SEARCH
+#         # =====================
+
+#         if search:
+
+#             tours = tours.filter(
+
+#                 Q(title__icontains=search) |
+
+#                 Q(short_description__icontains=search) |
+                
+#                 Q(location__city__icontains=search) |
+#                 Q(location__state__icontains=search) |
+#                 Q(location__district__icontains=search) |
+
+#                 # Q(city__icontains=search) |
+
+#                 # Q(state__icontains=search) |
+
+#                 Q(category__name__icontains=search)
+
+#             )
+
+#         # =====================
+#         # TOURS
+#         # =====================
+
+#         tours_data = TourListSerializer(
+#             tours[:4],
+#             many=True,
+#             context={
+#                 "request": request
+#             }
+#         ).data
+
+#         recent_tours = (
+#             Tour.objects
+#             .filter(
+#                 is_active=True
+#             )
+#             .select_related(
+#                 "location",
+#                 "category"
+#             )
+#             .prefetch_related(
+#                 "images",
+#                 "pricing"
+#             )
+#             .order_by("-created_at")[:3]
+#         )
+
+#         recent_tours_data = TourListSerializer(
+#             recent_tours,
+#             many=True,
+#             context={
+#                 "request": request
+#             }
+#         ).data
+
+
+
+#         #         # =====================
+# #         # UNFORGETTABLE
+# #         # =====================
+
+#         unforgettable = (
+#             Tour.objects
+#             .filter(
+#                 featured=True,
+#                 is_active=True
+#             )
+#             .prefetch_related(
+#                 "images",
+#                 "pricing"
+#             )[:8]
+#         )
+
+#         unforgettable_data = (
+#             TourListSerializer(
+#                 unforgettable,
+#                 many=True,
+#                 context={
+#                     "request": request
+#                 }
+#             ).data
+#         )
+
+
+
+
+
+#         # =====================
+#         # DESTINATIONS
+#         # =====================
+
+#         destinations = []
+
+#         states = (
+#             Tour.objects
+#             .filter(is_active=True , location__isnull=False)
+#             .values_list("location__state", flat=True)
+#             .distinct()
+#         )
+
+#         for state in states:
+
+#             first_tour = (
+#                 Tour.objects
+#                 .filter(
+#                     location__state=state,
+#                     is_active=True
+#                 )
+#                 .select_related("location")
+#                 .prefetch_related(
+#                     "images"
+#                 )
+#                 .first()
+#             )
+
+#             image = None
+
+#             if (
+#                 first_tour and
+#                 first_tour.images.first()
+#             ):
+
+#                 image = request.build_absolute_uri(
+#                     first_tour.images.first().image.url
+#                 )
+
+#             destinations.append({
+
+#                 "state": state,
+
+#                 "image": image
+
+#             })
+            
+            
+#         # =====================
+#         # LATEST BLOGS - 3
+#         # =====================
+
+#         latest_blogs = (
+#             Blog.objects
+#             .filter(is_active=True)
+#             .select_related("category")
+#             .order_by("-created_at")[:3]
+#         )
+
+#         latest_blogs_data = BlogListSerializer(
+#             latest_blogs,
+#             many=True,
+#             context={
+#                 "request": request
+#             }
+#         ).data
+
+
+#         return Response({
+
+#             "tours": tours_data,
+            
+#             "recent_tours": recent_tours_data,
+
+#             "destinations": destinations,
+#                         "unforgettable":
+#                 unforgettable_data ,
+                
+#             "latest_blogs": latest_blogs_data,
+
+
+#         })
 
 
 

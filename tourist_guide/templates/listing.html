@@ -478,7 +478,7 @@ Tours | Explore Tours & Experiences
                 </span>
 
 
-                <h2
+                {% comment %} <h2
                     class="
                         text-2xl
                         md:text-3xl
@@ -488,7 +488,21 @@ Tours | Explore Tours & Experiences
                     "
                 >
                     All Tours
-                </h2>
+                </h2> {% endcomment %}
+
+
+                <h2
+    id="tourHeading"
+    class="
+        text-2xl
+        md:text-3xl
+        font-black
+        text-slate-950
+        mt-1
+    "
+>
+    All Tours
+</h2>
 
 
                 <p
@@ -1183,6 +1197,28 @@ Tours | Explore Tours & Experiences
     // ==========================================================
     // PAGE LOAD
     // ==========================================================
+function updateTourHeading() {
+    const heading = document.getElementById("tourHeading");
+
+    if (!heading) return;
+
+    if (currentState) {
+        heading.textContent = `${currentState} Tours`;
+        return;
+    }
+
+    if (currentLocation) {
+        heading.textContent = "Tours in Selected Location";
+        return;
+    }
+
+    if (currentSearch) {
+        heading.textContent = `Tours for "${currentSearch}"`;
+        return;
+    }
+
+    heading.textContent = "All Tours";
+}
 
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -1203,6 +1239,8 @@ Tours | Explore Tours & Experiences
         currentSearch   = urlSearch.trim();
         currentLocation = urlLocation.trim();
         currentState    = urlState.trim();
+
+        updateTourHeading();
 
         // Load tours with the filters
         loadTours(true);

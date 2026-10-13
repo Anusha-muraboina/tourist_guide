@@ -687,7 +687,6 @@ class TourListView(ListView):
     context_object_name = "items"
 
     paginate_by = 10
-
     # ========================================================
     # QUERYSET
     # ========================================================

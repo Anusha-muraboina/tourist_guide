@@ -1248,7 +1248,7 @@ class TourForm(forms.ModelForm):
             )
         )
         
-        self.fields["includes"].queryset = (
+        self.fields["itinerary"].queryset = (
             Itinerary.objects
             .filter(is_active=True)
             .order_by(
